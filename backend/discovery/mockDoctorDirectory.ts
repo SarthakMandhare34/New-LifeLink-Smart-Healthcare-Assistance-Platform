@@ -45,18 +45,35 @@ type ControlledDirectoryDefinition = {
  * examples, not live availability or verified practitioner identities.
  */
 const CONTROLLED_DIRECTORY_DEFINITIONS: readonly ControlledDirectoryDefinition[] = [
+  // --- Central Line Specialties ---
   { id: "mock-central-cardiology-csmt", specialty: "Cardiology", station: "CSMT", railLine: "Central" },
   { id: "mock-central-dermatology-ghatkopar", specialty: "Dermatology", station: "Ghatkopar", railLine: "Central" },
   { id: "mock-central-orthopedics-bhandup", specialty: "Orthopedics", station: "Bhandup", railLine: "Central" },
   { id: "mock-central-neurology-thane", specialty: "Neurology", station: "Thane", railLine: "Central" },
+  { id: "mock-central-general-practice-mulund", specialty: "General Practice", station: "Mulund", railLine: "Central" },
+  { id: "mock-central-general-practice-thane", specialty: "General Practice", station: "Thane", railLine: "Central" },
+  { id: "mock-central-general-practice-diva", specialty: "General Practice", station: "Diva Junction", railLine: "Central" },
+  { id: "mock-central-general-practice-kopar", specialty: "General Practice", station: "Kopar", railLine: "Central" },
+  { id: "mock-central-general-practice-dombivli", specialty: "General Practice", station: "Dombivli", railLine: "Central" },
+  { id: "mock-central-general-practice-thakurli", specialty: "General Practice", station: "Thakurli", railLine: "Central" },
+
+  // --- Western Line Specialties ---
   { id: "mock-western-general-practice-churchgate", specialty: "General Practice", station: "Churchgate", railLine: "Western" },
+  { id: "mock-western-general-practice-dadar", specialty: "General Practice", station: "Dadar", railLine: "Western" },
   { id: "mock-western-pediatrics-andheri", specialty: "Pediatrics", station: "Andheri", railLine: "Western" },
   { id: "mock-western-ophthalmology-goregaon", specialty: "Ophthalmology", station: "Goregaon", railLine: "Western" },
   { id: "mock-western-gastroenterology-borivali", specialty: "Gastroenterology", station: "Borivali", railLine: "Western" },
+  { id: "mock-western-general-practice-borivali", specialty: "General Practice", station: "Borivali", railLine: "Western" },
+
+  // --- Harbour Line Specialties ---
   { id: "mock-harbour-psychiatry-sewri", specialty: "Psychiatry", station: "Sewri", railLine: "Harbour" },
   { id: "mock-harbour-endocrinology-chembur", specialty: "Endocrinology", station: "Chembur", railLine: "Harbour" },
+  { id: "mock-harbour-general-practice-chembur", specialty: "General Practice", station: "Chembur", railLine: "Harbour" },
   { id: "mock-harbour-pulmonology-vashi", specialty: "Pulmonology", station: "Vashi", railLine: "Harbour" },
+  { id: "mock-harbour-general-practice-vashi", specialty: "General Practice", station: "Vashi", railLine: "Harbour" },
+  { id: "mock-harbour-general-practice-nerul", specialty: "General Practice", station: "Nerul", railLine: "Harbour" },
   { id: "mock-harbour-gynecology-panvel", specialty: "Gynecology", station: "Panvel", railLine: "Harbour" },
+  { id: "mock-harbour-general-practice-panvel", specialty: "General Practice", station: "Panvel", railLine: "Harbour" },
 ];
 
 // Assembles the live doctor directory by joining definitions with railway stations and GPS coordinates

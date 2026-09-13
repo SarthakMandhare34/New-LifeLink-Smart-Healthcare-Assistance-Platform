@@ -30,6 +30,7 @@ vi.mock("./authUtil", () => ({ authSession: { createSessionToken: mocks.createSe
 
 import { ENV } from "../_core/env";
 import { doctorAuthRouter } from "./doctorAuth";
+import { mockDoctorDirectory } from "../discovery/mockDoctorDirectory";
 
 function context() {
   const cookie = vi.fn();
@@ -94,9 +95,9 @@ describe("synthetic doctor credentials", () => {
 
     const result = await doctorAuthRouter.createCaller(context().ctx).refreshDirectoryCredentials({ provisioningCode: provisioningCode! });
 
-    expect(result.refreshed).toHaveLength(12);
+    expect(result.refreshed).toHaveLength(mockDoctorDirectory.length);
     expect(result.refreshed.every((credential) => credential.email.endsWith("@accounts.lifelink.test") && credential.password.startsWith("LL-"))).toBe(true);
-    expect(mocks.refreshSyntheticDoctorCredentialByDoctorId).toHaveBeenCalledTimes(12);
+    expect(mocks.refreshSyntheticDoctorCredentialByDoctorId).toHaveBeenCalledTimes(mockDoctorDirectory.length);
     expect(JSON.stringify(result)).not.toContain(provisioningCode!);
   });
 

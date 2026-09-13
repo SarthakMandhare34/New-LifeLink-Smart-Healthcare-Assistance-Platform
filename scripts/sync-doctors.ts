@@ -5,20 +5,52 @@ import { hashPatientPassword, verifyPatientPassword } from "../backend/auth/nati
 import { syntheticDoctorCredentials, users } from "../database/schema";
 import { eq } from "drizzle-orm";
 
-const EXPECTED_DOCTORS = [
-  { specialty: "Cardiology", email: "cardiology@lifelink.com", password: "cardio@lifelink" },
-  { specialty: "Orthopedics", email: "orthopedics@lifelink.com", password: "ortho@lifelink" },
-  { specialty: "Dermatology", email: "dermatology@lifelink.com", password: "derma@lifelink" },
-  { specialty: "Neurology", email: "neurology@lifelink.com", password: "neuro@lifelink" },
-  { specialty: "Pediatrics", email: "pediatrics@lifelink.com", password: "pedia@lifelink" },
-  { specialty: "General Practice", email: "generalpractice@lifelink.com", password: "general@lifelink" },
-  { specialty: "Ophthalmology", email: "ophthalmology@lifelink.com", password: "ophthal@lifelink" },
-  { specialty: "Gastroenterology", email: "gastroenterology@lifelink.com", password: "gastro@lifelink" },
-  { specialty: "Psychiatry", email: "psychiatry@lifelink.com", password: "psych@lifelink" },
-  { specialty: "Endocrinology", email: "endocrinology@lifelink.com", password: "endo@lifelink" },
-  { specialty: "Pulmonology", email: "pulmonology@lifelink.com", password: "pulmo@lifelink" },
-  { specialty: "Gynecology", email: "gynecology@lifelink.com", password: "gynae@lifelink" },
-];
+const SPECIALTY_PASSWORDS: Record<string, string> = {
+  cardiology: "cardio@lifelink",
+  orthopedics: "ortho@lifelink",
+  dermatology: "derma@lifelink",
+  neurology: "neuro@lifelink",
+  pediatrics: "pedia@lifelink",
+  generalpractice: "general@lifelink",
+  ophthalmology: "ophthal@lifelink",
+  gastroenterology: "gastro@lifelink",
+  psychiatry: "psych@lifelink",
+  endocrinology: "endo@lifelink",
+  pulmonology: "pulmo@lifelink",
+  gynecology: "gynae@lifelink",
+};
+
+const EXPECTED_DOCTORS = mockDoctorDirectory.map((doctor) => {
+  const specialtySlug = doctor.specialty.toLowerCase().replace(/[^a-z]/g, "");
+  const stationSlug = doctor.station.toLowerCase().replace(/[^a-z]/g, "");
+  const isSharedSpecialty = mockDoctorDirectory.filter((d) => d.specialty === doctor.specialty).length > 1;
+  const email = isSharedSpecialty
+    ? `${specialtySlug}.${stationSlug}@lifelink.com`
+    : `${specialtySlug}@lifelink.com`;
+  const basePassword = SPECIALTY_PASSWORDS[specialtySlug] || `${specialtySlug}@lifelink`;
+  const shortSlugMap: Record<string, string> = {
+    generalpractice: "general",
+    pediatrics: "pedia",
+    cardiology: "cardio",
+    dermatology: "derma",
+    orthopedics: "ortho",
+    neurology: "neuro",
+    ophthalmology: "ophthal",
+    gastroenterology: "gastro",
+    psychiatry: "psych",
+    endocrinology: "endo",
+    pulmonology: "pulmo",
+    gynecology: "gynae",
+  };
+  const shortSlug = shortSlugMap[specialtySlug] || specialtySlug;
+  const password = isSharedSpecialty ? `${shortSlug}.${stationSlug}@lifelink` : basePassword;
+  return {
+    doctorId: doctor.id,
+    specialty: `${doctor.specialty} (${doctor.station})`,
+    email,
+    password,
+  };
+});
 
 async function syncDoctors() {
   console.log("Connecting to database...");
@@ -52,9 +84,7 @@ async function syncDoctors() {
   }> = [];
 
   for (const expected of EXPECTED_DOCTORS) {
-    const doctorDef = mockDoctorDirectory.find(
-      (d) => d.specialty.toLowerCase() === expected.specialty.toLowerCase()
-    );
+    const doctorDef = mockDoctorDirectory.find((d) => d.id === expected.doctorId);
 
     if (!doctorDef) {
       console.warn(`⚠️ Doctor definition not found for specialty: ${expected.specialty}`);

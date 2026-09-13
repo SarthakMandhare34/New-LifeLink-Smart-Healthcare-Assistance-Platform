@@ -199,8 +199,12 @@ export const doctorAuthRouter = router({
       const emailLower = normalizedEmail(input.email);                                     // Target email in lowercase
       const localPart = emailLower.split("@")[0] || emailLower;                            // Extract prefix before @
       const matchedDoctor = mockDoctorDirectory.find((doc) => {                            // Search directory for matching specialty or ID
-        const specLower = doc.specialty.toLowerCase();
-        return localPart.includes(doc.id) || localPart.includes(specLower) || specLower.includes(localPart);
+        const specLower = doc.specialty.toLowerCase().replace(/[^a-z]/g, "");
+        const stationLower = doc.station.toLowerCase().replace(/[^a-z]/g, "");
+        if (localPart.includes(doc.id)) return true;
+        if (localPart.includes(specLower) && localPart.includes(stationLower)) return true;
+        if (localPart.includes(stationLower)) return true;
+        return localPart.includes(specLower) || specLower.includes(localPart);
       }) || mockDoctorDirectory[0];                                                        // Fall back to first doctor if no direct match
 
       if (matchedDoctor) {
@@ -219,6 +223,7 @@ export const doctorAuthRouter = router({
       const doc = getSyntheticDoctor(record.credential.doctorId);
       if (doc) {
         const fullSlug = doc.specialty.toLowerCase().replace(/[^a-z]/g, "");
+        const stationSlug = doc.station.toLowerCase().replace(/[^a-z]/g, "");
         const shortSlugs: Record<string, string> = {
           cardiology: "cardio",
           orthopedics: "ortho",
@@ -237,8 +242,12 @@ export const doctorAuthRouter = router({
         if (
           input.password === `${short}@lifelink` ||
           input.password === `${fullSlug}@lifelink` ||
+          input.password === `${short}.${stationSlug}@lifelink` ||
+          input.password === `${fullSlug}.${stationSlug}@lifelink` ||
           input.password === `${short}@lifelink.com` ||
-          input.password === `${fullSlug}@lifelink.com`
+          input.password === `${fullSlug}@lifelink.com` ||
+          input.password === `${short}.${stationSlug}@lifelink.com` ||
+          input.password === `${fullSlug}.${stationSlug}@lifelink.com`
         ) {
           valid = true;                                                                    // Allow convenience demo password
         }

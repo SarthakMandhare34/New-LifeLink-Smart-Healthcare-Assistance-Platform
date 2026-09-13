@@ -4,8 +4,8 @@ import { MUMBAI_RAIL_LINES, getMumbaiRailStation } from "@shared/mumbaiRailNetwo
 import { MUMBAI_STATION_COORDINATES } from "@shared/mumbaiStationCoordinates";
 
 describe("controlled Mumbai specialist directory", () => {
-  it("keeps a compact, explicitly controlled 12-specialty catalog", () => {
-    expect(mockDoctorDirectory).toHaveLength(12);
+  it("keeps a comprehensive, explicitly controlled catalog with multi-route pediatrician coverage", () => {
+    expect(mockDoctorDirectory).toHaveLength(24);
     expect(new Set(mockDoctorDirectory.map((entry) => entry.specialty))).toHaveLength(12);
     mockDoctorDirectory.forEach((entry) => {
       expect(entry.isMock).toBe(true);
@@ -15,13 +15,32 @@ describe("controlled Mumbai specialist directory", () => {
     });
   });
 
-  it("spreads controlled specialties across distinct Mumbai locations while retaining three-corridor coverage", () => {
-    expect(new Set(mockDoctorDirectory.map((entry) => entry.station))).toEqual(new Set(["CSMT", "Ghatkopar", "Bhandup", "Thane", "Churchgate", "Andheri", "Goregaon", "Borivali", "Sewri", "Chembur", "Vashi", "Panvel"]));
+  it("spreads general practitioners and specialists across distinct Mumbai transit corridors", () => {
+    const expectedStations = [
+      "CSMT", "Ghatkopar", "Bhandup", "Thane", "Mulund", "Diva Junction", "Kopar", "Dombivli", "Thakurli",
+      "Churchgate", "Dadar", "Andheri", "Goregaon", "Borivali",
+      "Sewri", "Chembur", "Vashi", "Nerul", "Panvel"
+    ];
+    expect(new Set(mockDoctorDirectory.map((entry) => entry.station))).toEqual(new Set(expectedStations));
+
+    const gps = filterMockDoctorDirectory({ specialty: "General Practice" });
+    expect(gps).toHaveLength(13);
+
+    const pediatricians = filterMockDoctorDirectory({ specialty: "Pediatrics" });
+    expect(pediatricians).toHaveLength(1);
+    expect(pediatricians[0].station).toBe("Andheri");
+
+    // Verify General Practitioners exist across all 3 major rail corridors
+    MUMBAI_RAIL_LINES.forEach((railLine) => {
+      const lineGps = gps.filter((doc) => doc.railLine === railLine);
+      expect(lineGps.length).toBeGreaterThanOrEqual(3);
+    });
+
     MUMBAI_RAIL_LINES.forEach((railLine) => {
       const primaryEntries = mockDoctorDirectory.filter((entry) => entry.railLine === railLine);
       const specialties = new Set(filterMockDoctorDirectory({ railLine }).map((entry) => entry.specialty));
-      expect(primaryEntries).toHaveLength(4);
-      expect(specialties.size).toBeGreaterThanOrEqual(3);
+      expect(primaryEntries.length).toBeGreaterThanOrEqual(6);
+      expect(specialties.size).toBeGreaterThanOrEqual(4);
     });
   });
 
@@ -34,9 +53,9 @@ describe("controlled Mumbai specialist directory", () => {
     expect(getMumbaiRailStation("Panvel")?.lines).toEqual(["Harbour"]);
   });
 
-  it("publishes only supported station facets and specialty-only free-text matching", () => {
+  it("publishes supported station facets and specialty-only free-text matching", () => {
     const facets = getMockDoctorDirectoryFacets();
-    expect(facets.stations).toHaveLength(12);
+    expect(facets.stations).toHaveLength(19);
     expect(facets).toMatchObject({
       city: "Mumbai",
       specialties: expect.arrayContaining(["Cardiology", "Dermatology", "General Practice", "Pediatrics"]),

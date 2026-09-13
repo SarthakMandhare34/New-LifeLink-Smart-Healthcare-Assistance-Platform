@@ -1,5 +1,5 @@
 import "dotenv/config";
-import { getDb, createNativePatient, createSyntheticDoctorCredential } from "../backend/db";
+import { getDb, createSyntheticDoctorCredential } from "../backend/db";
 import { mockDoctorDirectory } from "../backend/discovery/mockDoctorDirectory";
 import { hashPatientPassword } from "../backend/auth/nativePatientAuth";
 
@@ -32,37 +32,8 @@ async function resetAndSeedDatabase() {
   await db.execute("SET FOREIGN_KEY_CHECKS = 1;");
   console.log("✅ All existing users and related data deleted successfully.");
 
-  // 1. Create Patient Accounts with email, username, and password
-  console.log("\nSeeding Patient Accounts with username, email, and password...");
-
-  const samplePatients = [
-    { username: "patient", name: "Demo Patient", email: "patient@lifelink.com", password: "patient@lifelink" },
-    { username: "sarthak", name: "Sarthak Mishra", email: "sarthak@lifelink.com", password: "sarthak@lifelink" },
-    { username: "aarav", name: "Aarav Sharma", email: "aarav.sharma@lifelink.com", password: "aarav@lifelink" },
-    { username: "priya", name: "Priya Patel", email: "priya.patel@lifelink.com", password: "priya@lifelink" },
-  ];
-
-  const seededPatients: { Username: string; Email: string; Password: string; Role: string }[] = [];
-
-  for (const patient of samplePatients) {
-    const passwordHash = await hashPatientPassword(patient.password);
-    const user = await createNativePatient({
-      name: patient.name,
-      email: patient.email,
-      passwordHash,
-    });
-    if (user) {
-      seededPatients.push({
-        Username: patient.username,
-        Email: patient.email,
-        Password: patient.password,
-        Role: "patient",
-      });
-    }
-  }
-
-  // 2. Create Doctor Accounts with email and password only (consistent naming convention)
-  console.log("\nSeeding Doctor Accounts with clean emails and identical simple password pattern...");
+  // Doctor Accounts with email and password (dynamic real users will register and sign in live)
+  console.log("\nSeeding Doctor Accounts with clean emails and unique passwords...");
 
   const SPECIALTY_PASSWORDS: Record<string, { short: string; password: string }> = {
     cardiology: { short: "cardio", password: "cardio@lifelink" },
@@ -83,9 +54,13 @@ async function resetAndSeedDatabase() {
 
   for (const doctor of mockDoctorDirectory) {
     const specialtySlug = doctor.specialty.toLowerCase().replace(/[^a-z]/g, "");
-    const doctorEmail = `${specialtySlug}@lifelink.com`;
+    const stationSlug = doctor.station.toLowerCase().replace(/[^a-z]/g, "");
+    const isSharedSpecialty = mockDoctorDirectory.filter((d) => d.specialty === doctor.specialty).length > 1;
+    const doctorEmail = isSharedSpecialty
+      ? `${specialtySlug}.${stationSlug}@lifelink.com`
+      : `${specialtySlug}@lifelink.com`;
     const config = SPECIALTY_PASSWORDS[specialtySlug] || { short: specialtySlug, password: `${specialtySlug}@lifelink` };
-    const doctorPassword = config.password;
+    const doctorPassword = isSharedSpecialty ? `${config.short}.${stationSlug}@lifelink` : config.password;
     const doctorPasswordHash = await hashPatientPassword(doctorPassword);
 
     try {
@@ -96,10 +71,10 @@ async function resetAndSeedDatabase() {
       });
 
       seededDoctors.push({
-        Specialty: doctor.specialty,
+        Specialty: `${doctor.specialty} (${doctor.station})`,
         Email: doctorEmail,
         Password: doctorPassword,
-        "Alias Login": `${config.short}@lifelink.com or ${config.short}`,
+        "Alias Login": `${config.short}@lifelink.com or ${doctorEmail}`,
       });
     } catch (e: any) {
       console.error(`Failed to seed ${doctor.name}: ${e.message}`);
@@ -107,16 +82,13 @@ async function resetAndSeedDatabase() {
   }
 
   console.log("\n========================================================");
-  console.log("   LIFELINK — FRESH DATABASE RESET & SEEDING REPORT");
+  console.log("   LIFELINK — DOCTORS SEEDING REPORT (ZERO PRE-STORED PATIENTS)");
   console.log("========================================================\n");
-
-  console.log("--- PATIENT ACCOUNTS (Email, Username & Password) ---");
-  console.table(seededPatients);
-  console.log("👉 Login at http://localhost:5173/login using any Email or Username above.\n");
 
   console.log("--- DOCTOR ACCOUNTS (Email & Password) ---");
   console.table(seededDoctors);
-  console.log("👉 Login at http://localhost:5173/doctor/login using any Doctor Email and Password above.\n");
+  console.log("👉 Login at http://localhost:5173/doctor/login using any Doctor Email and Password above.");
+  console.log("ℹ️ Zero pre-stored patient accounts. Patients register dynamically in real time.\n");
 
   process.exit(0);
 }
