@@ -12,6 +12,14 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
   - Configured Rollup `manualChunks` in `vite.config.ts` to cleanly partition vendor code (`vendor-react`, `vendor-maps`, `vendor-charts`, `vendor-ui`, `vendor-query`) for maximum browser cacheability.
   - Implemented liquid-glass `RouteLoader` fallback inside `<Suspense>` within `AppShell` and `DoctorAppShell`, preventing navigation flicker and keeping navigation headers and sidebars stationary.
   - Resolved all Vite bundle size warnings (`(!) Some chunks are larger than 500 kB`).
+- **Tactile UI Interactivity & Micro-Animations Overhaul**:
+  - Implemented `.clinical-glass-card` and `.interactive-surface` across all patient and clinician dashboards.
+  - Added button shimmer effects, tactile elevation (`translateY(-2px)`), scale compression (`scale(0.99)`), and high-contrast glowing focus rings.
+  - Added arrow translation micro-animations (`.btn-arrow-hover`) on interactive navigation elements.
+  - Enhanced `Card.tsx` to automatically inject interactive keyboard handling (`Enter`, `Space`) for accessible card selection without prop drilling.
+- **Comprehensive Multi-Tier Documentation**:
+  - Added dedicated architectural documentation guides in `frontend/README.md` and `backend/README.md` explaining client and server lifecycles in clear, detailed language.
+  - Updated root `README.md` with complete 12-specialty clinician directory, administrative secret key specifications, and system diagram links.
 - **Client-Side Query Caching for Instant Tab Switching**:
   - Configured TanStack `QueryClient` in `frontend/src/main.tsx` with `staleTime: 60_000` (1 minute) and `gcTime: 300_000` (5 minutes).
   - Page navigation between Dashboard, Appointments, Prescriptions, and Settings now serves data from memory with **0ms latency** while preserving real-time SSE updates.
