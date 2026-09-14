@@ -13,6 +13,7 @@
  * 2. Express middleware invokes `createContext(opts)` before calling the procedure.
  * 3. `authSession.authenticateRequest` inspects cookies / Authorization Bearer tokens.
  * 4. If valid, the authenticated `User` record from the database is attached.
+ * 5. Supports simultaneous dual sessions: patient session (`app_session_id`) and clinician session (`doctor_session_id`).
  * 5. If invalid or unauthenticated, `user` is set to `null` (allowing public routes).
  * 6. tRPC middleware/procedures can now safely check `ctx.user` for role-based access.
  */
