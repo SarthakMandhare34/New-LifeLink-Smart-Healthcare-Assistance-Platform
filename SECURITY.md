@@ -59,6 +59,10 @@ To prevent medical hallucinations, dangerous clinical advice, or AI prompt injec
 4. **Layer 4 — Pediatric & Adolescent Safeguards**: Patients <18 years are strictly routed to pediatric specialists, and non-medical input queries return structured `ERROR` statuses.
 5. **Layer 5 — Offline Deterministic Fallback**: In the event of network partition or upstream AI quota exhaustion, the engine falls back to pre-defined clinical safety recommendations.
 
+### 3.5. Clinician Master Key & Provisioning Safeguards
+- Initial setup and credential resetting for doctor workstations (`/doctor/setup`, `/doctor/reset`) require the administrative master secret code `lifelink-controlled-clinician-secret-key-2026`.
+- Doctor accounts are strictly tied to `@lifelink.com` work domain emails; informal accounts and email updates without master key validation are rejected.
+
 ### 3.5. Cryptographic Digital Prescription Integrity
 - When a clinician issues a prescription, the server generates a SHA-256 hash incorporating the issuing doctor ID, patient ID, canonicalized medication list, and authorization timestamp.
 - The resulting `integrityReference` hash is stored alongside the prescription, ensuring tamper evidence across the complete prescription lifecycle.
