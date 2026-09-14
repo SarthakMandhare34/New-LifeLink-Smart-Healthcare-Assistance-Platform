@@ -15,8 +15,8 @@
  *    Pre-empts the AI model if life-threatening keywords (chest pain, stroke symptoms, severe bleeding)
  *    are detected, returning an immediate EMERGENCY recommendation without API latency.
  * 3. Layer 3: Structured Gemini AI Execution (`invokeGemini`)
- *    Calls Google Gemini REST API using structured JSON schema output (`GEMINI_ASSESSMENT_RESPONSE_SCHEMA`).
- *    Features automated fallback cascading across candidate models if one is throttled or deprecated.
+ *    Calls Google Gemini Flash REST API with structured JSON schema output (`GEMINI_ASSESSMENT_RESPONSE_SCHEMA`).
+ *    Features automated fallback cascading across candidate models (`gemini-2.5-flash`, `gemini-1.5-flash`).
  * 4. Layer 4: Post-Processing Safeguards (`parseModelContent`)
  *    Enforces pediatric protections for patients under 18 and ensures guidance remains non-diagnostic.
  */
