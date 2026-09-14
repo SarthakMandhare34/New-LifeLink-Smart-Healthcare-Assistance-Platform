@@ -11,9 +11,25 @@ interface CardProps {
 }
 
 // =========================================================================================
-// REUSABLE CARD CONTAINER COMPONENT
-// Foundational visual container supporting liquid-glass, solid clinical, and emergency styles.
-// Features full keyboard accessibility (Enter/Space triggers onClick when interactive).
+// REUSABLE CARD CONTAINER COMPONENT (frontend/src/components/ui/Card.tsx)
+// =========================================================================================
+//
+// WHAT THIS COMPONENT DOES:
+// This is the universal visual card container used across all patient and doctor views.
+// It wraps medical records, dashboard stats, triage recommendations, and action buttons.
+//
+// KEY DESIGN & ACCESSIBILITY FEATURES:
+// 1. Multiple Surface Variants:
+//    - 'glass': Liquid-glass surface with blur and translucent background.
+//    - 'solid' / 'default': High-contrast solid clinical background.
+//    - 'emergency': Red-accented alert styling for urgent triage and SOS dialogs.
+// 2. Automatic Interactivity:
+//    If an `onClick` function is passed (or `interactive=true`), the card automatically
+//    becomes focusable (`tabIndex={0}`), announces itself as a button to screen readers
+//    (`role="button"`), and responds to tactile hover/elevation effects (`.interactive-surface`).
+// 3. Accessible Keyboard Navigation (WCAG 2.1 AA):
+//    Users navigating with a keyboard can press Enter or Space to activate the card,
+//    ensuring complete accessibility without needing a mouse.
 // =========================================================================================
 export const Card: React.FC<CardProps> = ({ 
   children, 
@@ -24,6 +40,7 @@ export const Card: React.FC<CardProps> = ({
   style,
   onClick
 }) => {
+  // Step 1: Select the CSS base surface class based on the requested variant
   let baseClass = 'glass-surface';                                                              // Default translucent glassmorphism
   if (variant === 'solid' || variant === 'default') {
     baseClass = 'solid-clinical-surface';                                                       // Opaque clinical surface
@@ -31,14 +48,15 @@ export const Card: React.FC<CardProps> = ({
     baseClass = 'emergency-panel';                                                              // Urgent red-accented emergency surface
   }
 
+  // Step 2: Automatically detect if this card can be clicked
   const isInteractive = interactive || Boolean(onClick);
   const interactiveClass = isInteractive ? 'interactive-surface' : '';
   const selectedClass = selected ? 'selected' : '';
 
-  // Accessible keyboard activation
+  // Step 3: Keyboard handler — activates onClick when the user presses Enter or Space
   const handleKeyDown = (e: React.KeyboardEvent<HTMLDivElement>) => {
     if (isInteractive && (e.key === 'Enter' || e.key === ' ')) {
-      e.preventDefault();
+      e.preventDefault(); // Prevent accidental page scrolling on Space press
       if (onClick) onClick(e as any);
     }
   };
@@ -49,8 +67,8 @@ export const Card: React.FC<CardProps> = ({
       style={style}
       onClick={onClick}
       onKeyDown={handleKeyDown}
-      tabIndex={isInteractive ? 0 : undefined}                                                  // Focusable when clickable
-      role={isInteractive ? 'button' : undefined}
+      tabIndex={isInteractive ? 0 : undefined}                                                  // Allows keyboard tabbing into this card
+      role={isInteractive ? 'button' : undefined}                                               // Informs screen readers this is an interactive button
     >
       {children}
     </div>
