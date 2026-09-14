@@ -1,3 +1,15 @@
+/**
+ * ============================================================================
+ * TRPC CORE FOUNDATION & PROCEDURE GUARDS (backend/_core/trpc.ts)
+ * ============================================================================
+ * 
+ * WHAT THIS FILE DOES:
+ * Configures the base tRPC instance with SuperJSON transformation and provides
+ * procedure builders:
+ * 1. publicProcedure: Open routes (no authentication required).
+ * 2. protectedProcedure: Guards patient routes and binds `ctx.user.id`.
+ * 3. doctorProcedure: Guards clinician routes and validates `ctx.user.openId`.
+ */
 import { NOT_ADMIN_ERR_MSG, UNAUTHED_ERR_MSG } from '@shared/const';                    // Standard error messages for forbidden and unauthorized responses
 import { initTRPC, TRPCError } from "@trpc/server";                                        // Core tRPC initialization and typed error constructors
 import superjson from "superjson";                                                         // Serializer/deserializer preserving Dates, Maps, Sets over JSON
