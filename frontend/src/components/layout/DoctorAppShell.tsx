@@ -236,6 +236,9 @@ export const DoctorAppShell = () => {
 
         {/* Dynamic nested doctor view content */}
         <div className="app-content">
+          {/* Nested Suspense Boundary: Displays RouteLoader while doctor feature pages 
+              (Consultations, Prescriptions, Queue) load dynamically in the background, 
+              preventing visual jumps in the clinical header or navigation bar. */}
           <React.Suspense fallback={<RouteLoader />}>
             <Outlet />
           </React.Suspense>
