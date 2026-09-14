@@ -12,13 +12,13 @@
  *    - Frontend: Checks range 5173-5177 (preferred 5173).
  * 2. Independent Two-Process Spawning:
  *    - Backend API: Spawns `cross-env NODE_ENV=development tsx watch backend/_core/index.ts`.
- *    - Frontend Dev Server: Spawns `npx vite --port <FRONTEND_PORT>`.
- *    (Note: Drizzle Studio is NOT spawned by this script; use `npm run db:studio` separately).
+ *    - Frontend Dev Server: Spawns `node node_modules/vite/bin/vite.js --port <FRONTEND_PORT>`.
+ *      (Direct local execution eliminates npx cache lookup latency and Windows batch job prompts).
+ *    - Note: Drizzle Studio is decoupled; run `npm run db:studio` separately when needed.
  * 3. Dynamic Port Passing:
- *    - Passes selected backend port via PORT and VITE_API_PORT to processes.
+ *    - Automatically passes the discovered backend port via PORT and VITE_API_PORT.
  * 4. Safe Child Process Lifecycle:
- *    - Clean Ctrl+C shutdown targeting only spawned child processes.
- *    - No global taskkill on node.exe.
+ *    - Clean Ctrl+C shutdown targeting only spawned child processes without global taskkill.
  */
 import { execSync, spawn } from "node:child_process";
 import path from "node:path";
