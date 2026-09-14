@@ -1,8 +1,18 @@
+/**
+ * ============================================================================
+ * LIFELINK RELATIONAL DATABASE SCHEMA (database/schema.ts)
+ * ============================================================================
+ * 
+ * WHAT THIS FILE DOES:
+ * Defines the complete relational database architecture using Drizzle ORM for MySQL.
+ * Contains 13 tables covering:
+ * - User identities and credentials (users, patientCredentials, syntheticDoctorCredentials)
+ * - Patient medical profiles & emergency contacts (patientProfiles, patientEmergencyContacts)
+ * - Clinical operations (patientAssessments, patientAppointments, patientMedicines)
+ * - Cryptographic prescriptions (patientPrescriptions, patientPrescriptionItems)
+ * - Real-time event streams (patientEvents, doctorEvents)
+ */
 import { foreignKey, int, mysqlEnum, mysqlTable, text, timestamp, unique, varchar } from "drizzle-orm/mysql-core";
-
-// ============================================================================
-// LIFELINK DATABASE SCHEMA (Drizzle ORM for MySQL)
-// ============================================================================
 
 // --- Table 1: Core Users (Patient, Doctor, Admin) ---
 export const users = mysqlTable("users", {
