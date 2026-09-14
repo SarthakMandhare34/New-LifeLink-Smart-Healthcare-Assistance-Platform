@@ -1,3 +1,14 @@
+/**
+ * ============================================================================
+ * SHARED SYSTEM CONSTANTS (shared/const.ts)
+ * ============================================================================
+ * 
+ * WHAT THIS FILE DOES:
+ * Defines universal constants shared between frontend and backend:
+ * - Cookie names for dual sessions (app_session_id vs doctor_session_id)
+ * - Session timeouts, CSRF cookie names, and security error codes
+ * - Google OAuth state encoders and decoders
+ */
 // --- Cluster: Session & Cookie Identifiers ---
 export const COOKIE_NAME = "app_session_id";                     // Name of the secure HTTP cookie storing patient login sessions
 export const DOCTOR_COOKIE_NAME = "doctor_session_id";           // Name of the secure HTTP cookie storing clinician workstation sessions
