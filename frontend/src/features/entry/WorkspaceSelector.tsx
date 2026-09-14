@@ -62,7 +62,9 @@ export const WorkspaceSelector = () => {
 
       <section className="workspace-entry-shell">
         <header className="workspace-entry-header">
-          <LifeLinkLogo className="lifelink-logo-auth workspace-entry-logo" />
+          <div className="workspace-entry-logo-wrap">
+            <LifeLinkLogo className="lifelink-logo-auth workspace-entry-logo" />
+          </div>
           <span className="workspace-entry-kicker">LifeLink connected care</span>
           <h1 id="workspace-entry-heading">Choose your care workspace</h1>
           <p>Select the secure account space that matches your care task.</p>

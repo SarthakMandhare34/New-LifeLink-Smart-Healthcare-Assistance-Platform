@@ -41,13 +41,13 @@ export const DoctorAppointments = () => {
   // Error boundary state
   if (appointments.isError) return <p role="alert">Unable to load assigned appointments. Please try again.</p>;
 
-  // Dynamic left border indicator color matching appointment lifecycle
+  // Dynamic left border indicator color matching appointment lifecycle - No Blue/Green/Purple
   const getBorderColor = (status: string) => {
     switch (status) {
-      case "Completed": return "4px solid #10b981";                                             // Green for completed visit
-      case "Confirmed": return "4px solid var(--color-primary)";                                // Brand blue for active confirmed booking
-      case "Cancelled": return "4px solid var(--color-danger, #ef4444)";                        // Red for cancelled session
-      default: return "4px solid #f59e0b";                                                      // Amber for pending requested visit
+      case "Completed": return "4px solid #B45309";                                             // Honey Amber for completed visit
+      case "Confirmed": return "4px solid #27272A";                                             // Technical Graphite Slate for active confirmed booking
+      case "Cancelled": return "4px solid #991B1B";                                             // Crimson for cancelled session
+      default: return "4px solid #B45309";                                                      // Amber for pending requested visit
     }
   };
 
@@ -55,13 +55,13 @@ export const DoctorAppointments = () => {
   const getStatusBadge = (status: string) => {
     switch (status) {
       case "Completed":
-        return <span style={{ display: "inline-flex", alignItems: "center", gap: 4, background: "#ecfdf5", color: "#065f46", padding: "3px 10px", borderRadius: 12, fontSize: 13, fontWeight: 600 }}><CheckCheck size={14} /> Completed</span>;
+        return <span style={{ display: "inline-flex", alignItems: "center", gap: 4, background: "#F4F4F5", color: "#27272A", border: "1px solid #D4D4D8", padding: "3px 10px", borderRadius: 12, fontSize: 13, fontWeight: 600 }}><CheckCheck size={14} /> Completed</span>;
       case "Confirmed":
-        return <span style={{ display: "inline-flex", alignItems: "center", gap: 4, background: "#eff6ff", color: "#1e40af", padding: "3px 10px", borderRadius: 12, fontSize: 13, fontWeight: 600 }}><CheckCircle2 size={14} /> Confirmed (Active)</span>;
+        return <span style={{ display: "inline-flex", alignItems: "center", gap: 4, background: "rgba(180, 83, 9, 0.12)", color: "#B45309", border: "1px solid rgba(180, 83, 9, 0.25)", padding: "3px 10px", borderRadius: 12, fontSize: 13, fontWeight: 600 }}><CheckCircle2 size={14} /> Confirmed (Active)</span>;
       case "Cancelled":
-        return <span style={{ display: "inline-flex", alignItems: "center", gap: 4, background: "#fef2f2", color: "#991b1b", padding: "3px 10px", borderRadius: 12, fontSize: 13, fontWeight: 600 }}><XCircle size={14} /> Cancelled</span>;
+        return <span style={{ display: "inline-flex", alignItems: "center", gap: 4, background: "rgba(153, 27, 27, 0.12)", color: "#991B1B", border: "1px solid rgba(153, 27, 27, 0.25)", padding: "3px 10px", borderRadius: 12, fontSize: 13, fontWeight: 600 }}><XCircle size={14} /> Cancelled</span>;
       default:
-        return <span style={{ display: "inline-flex", alignItems: "center", gap: 4, background: "#fffbeb", color: "#92400e", padding: "3px 10px", borderRadius: 12, fontSize: 13, fontWeight: 600 }}><Clock size={14} /> {status}</span>;
+        return <span style={{ display: "inline-flex", alignItems: "center", gap: 4, background: "#F4F4F5", color: "#B45309", border: "1px solid #D4D4D8", padding: "3px 10px", borderRadius: 12, fontSize: 13, fontWeight: 600 }}><Clock size={14} /> {status}</span>;
     }
   };
 
@@ -77,9 +77,9 @@ export const DoctorAppointments = () => {
 
       {/* Dismissible feedback notification message */}
       {feedbackMessage && (
-        <div style={{ background: "#ecfdf5", border: "1px solid #10b981", color: "#065f46", padding: "var(--spacing-3)", borderRadius: "var(--border-radius-md)", display: "flex", justifyContent: "space-between", alignItems: "center" }}>
+        <div style={{ background: "#F4F4F5", border: "1px solid #B45309", color: "#27272A", padding: "var(--spacing-3)", borderRadius: "var(--border-radius-md)", display: "flex", justifyContent: "space-between", alignItems: "center" }}>
           <span><strong>Status updated:</strong> {feedbackMessage}</span>
-          <button type="button" aria-label="Dismiss status notification" onClick={() => setFeedbackMessage(null)} style={{ background: "none", border: "none", cursor: "pointer", color: "#065f46", fontWeight: "bold", fontSize: "1.2rem", padding: "4px 8px" }}>×</button>
+          <button type="button" aria-label="Dismiss status notification" onClick={() => setFeedbackMessage(null)} style={{ background: "none", border: "none", cursor: "pointer", color: "#27272A", fontWeight: "bold", fontSize: "1.2rem", padding: "4px 8px" }}>×</button>
         </div>
       )}
 
@@ -154,7 +154,7 @@ export const DoctorAppointments = () => {
                     <>
                       <Button
                         variant="primary"
-                        style={{ background: "#10b981", borderColor: "#10b981" }}
+                        style={{ background: "#27272A", borderColor: "#18181B", color: "#F4F4F5" }}
                         disabled={updateStatus.isPending}
                         onClick={() => updateStatus.mutate({ id: appointment.id, status: "Completed" })} // Mark consultation finished
                       >

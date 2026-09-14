@@ -163,7 +163,7 @@ export const Appointments = () => {
                     </p>
                   )}
                   {appointment.status === 'Completed' && (
-                    <p className="caption" style={{ margin: '4px 0 0', color: 'var(--color-success, #10b981)', fontWeight: 600 }}>
+                    <p className="caption" style={{ margin: '4px 0 0', color: '#B45309', fontWeight: 600 }}>
                       ✓ Consultation completed with your specialist.
                     </p>
                   )}

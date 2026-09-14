@@ -127,7 +127,7 @@ export const AppShell = () => {
 
   return (
     <div className="app-layout">
-      {/* Mobile backdrop dim overlay */}
+      {/* Mobile backdrop dim overlay - dismisses drawer on outside tap */}
       {isMobileNavigationOpen && (
         <button
           type="button"
@@ -137,21 +137,49 @@ export const AppShell = () => {
         />
       )}
 
-      {/* Navigation Sidebar */}
+      {/* Navigation Sidebar: Classic American Healthcare Portal Frame */}
       <aside
         id="patient-sidebar"
         className={`app-sidebar ${isMobileNavigationOpen ? 'is-open' : ''}`}
         aria-label="Patient navigation"
       >
-        {/* Brand logo header */}
-        <div className="app-sidebar-header" style={{ padding: '20px 24px', borderBottom: '1px solid var(--color-border)' }}>
-          <NavLink to="/patient/dashboard" onClick={closeMobileNavigation} className="app-sidebar-brand-link" aria-label={PATIENT_SIDEBAR_BRAND_LABEL} style={{ display: 'flex', alignItems: 'center' }}>
-            <LifeLinkLogo className="lifelink-logo-sidebar lifelink-logo-sidebar-patient" style={{ width: '165px', height: 'auto' }} />
+        {/* Brand logo header: Institutional white mount with clear LifeLink lockup and EHR subtitle */}
+        <div 
+          className="app-sidebar-header" 
+          style={{ 
+            padding: '16px 18px', 
+            borderBottom: '2px solid var(--color-border)', 
+            display: 'flex', 
+            flexDirection: 'column', 
+            alignItems: 'center', 
+            gap: '8px', 
+            background: 'var(--color-surface-white)' 
+          }}
+        >
+          <NavLink 
+            to="/patient/dashboard" 
+            onClick={closeMobileNavigation} 
+            className="app-sidebar-brand-link" 
+            aria-label={PATIENT_SIDEBAR_BRAND_LABEL} 
+            style={{ display: 'inline-flex', alignItems: 'center', justifyContent: 'center' }}
+          >
+            {/* The official LifeLink logo is rendered on a crisp structured mount for maximum contrast and legibility */}
+            <LifeLinkLogo className="lifelink-logo-sidebar lifelink-logo-sidebar-patient" />
           </NavLink>
         </div>
 
-        {/* Navigation links */}
-        <nav className="app-sidebar-nav" style={{ padding: '16px 12px', display: 'flex', flexDirection: 'column', gap: '4px', flex: 1, overflowY: 'auto' }}>
+        {/* Navigation links: Classic American institutional list layout with 4px corners and active left-border indicator */}
+        <nav 
+          className="app-sidebar-nav" 
+          style={{ 
+            padding: '12px 10px', 
+            display: 'flex', 
+            flexDirection: 'column', 
+            gap: '3px', 
+            flex: 1, 
+            overflowY: 'auto' 
+          }}
+        >
           {patientNavigation.map(({ to, label, icon: Icon }) => (
             <NavLink 
               key={to} 
@@ -162,23 +190,24 @@ export const AppShell = () => {
                 display: 'flex',
                 alignItems: 'center',
                 gap: '12px',
-                padding: '10px 14px',
-                borderRadius: '10px',
-                fontSize: '0.92rem',
+                padding: '9px 12px',
+                borderRadius: '4px',
+                fontSize: '0.88rem',
                 fontWeight: isActive ? 600 : 500,
-                color: isActive ? 'var(--color-primary)' : 'var(--color-text-muted)',
-                background: isActive ? 'var(--color-primary-muted)' : 'transparent',
+                color: isActive ? '#581825' : 'var(--color-text-muted)',
+                background: isActive ? '#F5ECEE' : 'transparent',
+                borderLeft: isActive ? '3px solid #581825' : '3px solid transparent',
                 textDecoration: 'none',
-                transition: 'background 0.15s, color 0.15s'
+                transition: 'background 0.15s, color 0.15s, border-color 0.15s'
               })}
             >
-              <Icon size={19} /> <span>{label}</span>
+              <Icon size={18} /> <span>{label}</span>
             </NavLink>
           ))}
         </nav>
 
-        {/* Logout button at bottom of sidebar */}
-        <div style={{ padding: '16px 12px', borderTop: '1px solid var(--color-border)' }}>
+        {/* Institutional logout action button at bottom of sidebar */}
+        <div style={{ padding: '12px 10px', borderTop: '1px solid var(--color-border)' }}>
           <button
             type="button"
             onClick={handleLogout}
@@ -187,18 +216,19 @@ export const AppShell = () => {
               alignItems: 'center',
               gap: '12px',
               width: '100%',
-              padding: '10px 14px',
-              borderRadius: '10px',
+              padding: '9px 12px',
+              borderRadius: '4px',
               border: 'none',
               background: 'transparent',
               color: 'var(--color-text-muted)',
-              fontSize: '0.92rem',
+              fontSize: '0.88rem',
               fontWeight: 500,
               cursor: 'pointer',
-              textAlign: 'left'
+              textAlign: 'left',
+              transition: 'background 0.15s, color 0.15s'
             }}
           >
-            <LogOut size={19} />
+            <LogOut size={18} />
             <span>Log Out</span>
           </button>
         </div>
@@ -206,7 +236,7 @@ export const AppShell = () => {
 
       {/* Main Viewport Content Area */}
       <main className="app-main" style={{ flex: 1, display: 'flex', flexDirection: 'column' }}>
-        {/* Top App Header */}
+        {/* Top App Header: Classic Healthcare Network Utility Bar */}
         <header className="app-header">
           <div className="app-header-context">
             {/* Mobile hamburger menu toggle */}
@@ -220,38 +250,107 @@ export const AppShell = () => {
             >
               {isMobileNavigationOpen ? <X size={20} /> : <Menu size={20} />}
             </button>
+
+            {/* Mobile compact brand emblem */}
             <NavLink to="/patient/dashboard" className="app-mobile-brand" aria-label={PATIENT_SIDEBAR_BRAND_LABEL}>
               <LifeLinkLogo variant="symbol" className="app-mobile-brand-symbol" />
               <span>LifeLink</span>
             </NavLink>
+
+            {/* Institutional System Status Indicator: Automatically responsive via .app-header-system-tag */}
+            <div className="app-header-system-tag" style={{ display: 'flex', alignItems: 'center', gap: '8px', marginLeft: '12px' }}>
+              <span 
+                className="badge" 
+                style={{ 
+                  background: '#581825', 
+                  color: '#FAF7F2', 
+                  fontSize: '0.70rem', 
+                  fontWeight: 700, 
+                  padding: '3px 8px', 
+                  letterSpacing: '0.04em',
+                  borderRadius: '4px'
+                }}
+              >
+                LIFELINK EHR
+              </span>
+              <span style={{ fontSize: '0.82rem', fontWeight: 600, color: 'var(--color-text-muted)' }}>
+                Patient Ambulatory Portal
+              </span>
+            </div>
           </div>
 
-          {/* Header controls: theme toggle, notifications, profile pill */}
+          {/* Header controls: Theme toggle, notifications, and structured patient profile badge */}
           <div className="app-header-controls">
-            <button className="icon-btn" aria-label="Toggle theme" onClick={toggleTheme} title="Toggle theme">
-              {theme === 'light' ? <Moon size={20} /> : <Sun size={20} />}
+            {/* Theme switcher */}
+            <button 
+              className="icon-btn" 
+              aria-label="Toggle theme" 
+              onClick={toggleTheme} 
+              title="Toggle theme"
+              style={{ borderRadius: '4px', border: '1px solid var(--color-border)', width: '36px', height: '36px', display: 'grid', placeItems: 'center' }}
+            >
+              {theme === 'light' ? <Moon size={18} /> : <Sun size={18} />}
             </button>
 
-            {/* Notification bell */}
-            <button className="icon-btn" aria-label="Notifications" style={{ position: 'relative', background: 'var(--color-background)', width: '40px', height: '40px', borderRadius: '50%', display: 'grid', placeItems: 'center', border: '1px solid var(--color-border)', cursor: 'pointer' }}>
-              <Bell size={19} color="var(--color-text-muted)" />
+            {/* Notification alert center */}
+            <button 
+              className="icon-btn" 
+              aria-label="Notifications" 
+              style={{ 
+                position: 'relative', 
+                background: 'var(--color-background)', 
+                width: '36px', 
+                height: '36px', 
+                borderRadius: '4px', 
+                display: 'grid', 
+                placeItems: 'center', 
+                border: '1px solid var(--color-border)', 
+                cursor: 'pointer' 
+              }}
+            >
+              <Bell size={18} color="var(--color-text-muted)" />
             </button>
 
-            {/* User Profile avatar badge */}
+            {/* User Profile Monogram Badge: Responsive chip with collapsible text metadata on small phones */}
             <button 
               type="button" 
               onClick={() => navigate('/patient/profile')} 
-              style={{ display: 'flex', alignItems: 'center', gap: '8px', background: 'transparent', border: 'none', cursor: 'pointer', padding: 0 }}
+              style={{ 
+                display: 'flex', 
+                alignItems: 'center', 
+                gap: '8px', 
+                background: 'var(--color-surface-white)', 
+                border: '1px solid var(--color-border)', 
+                borderRadius: '4px', 
+                padding: '4px 8px 4px 4px', 
+                cursor: 'pointer' 
+              }}
               aria-label="Open your profile"
             >
-              <div style={{ width: '40px', height: '40px', borderRadius: '50%', background: 'var(--color-primary-muted)', color: 'var(--color-primary)', fontWeight: 700, fontSize: '0.88rem', display: 'grid', placeItems: 'center', border: '1px solid var(--color-glass-border)', boxShadow: 'var(--shadow-sm)' }}>
+              <div 
+                style={{ 
+                  width: '32px', 
+                  height: '32px', 
+                  borderRadius: '3px', 
+                  background: '#581825', 
+                  color: '#FAF7F2', 
+                  fontWeight: 700, 
+                  fontSize: '0.80rem', 
+                  display: 'grid', 
+                  placeItems: 'center' 
+                }}
+              >
                 {profileQuery.data?.avatarUrl ? (
-                  <img src={profileQuery.data.avatarUrl} alt="" style={{ width: '100%', height: '100%', borderRadius: '50%', objectFit: 'cover' }} />
+                  <img src={profileQuery.data.avatarUrl} alt="" style={{ width: '100%', height: '100%', borderRadius: '3px', objectFit: 'cover' }} />
                 ) : (
                   initials
                 )}
               </div>
-              <ChevronDown size={16} color="var(--color-text-muted)" />
+              <div className="app-header-user-meta" style={{ display: 'flex', flexDirection: 'column', alignItems: 'flex-start', lineHeight: 1.2 }}>
+                <span style={{ fontSize: '0.82rem', fontWeight: 600, color: 'var(--color-text)' }}>{displayName}</span>
+                <span style={{ fontSize: '0.68rem', color: 'var(--color-text-muted)' }}>Patient Record</span>
+              </div>
+              <ChevronDown size={14} color="var(--color-text-muted)" />
             </button>
           </div>
         </header>
@@ -259,8 +358,8 @@ export const AppShell = () => {
         {/* Dynamic nested page content rendered via React Router */}
         <div className="app-content">
           {/* Nested Suspense Boundary: While child pages (e.g. Assessment, Medicines) are 
-              being loaded on-demand over the network, RouteLoader displays a liquid-glass 
-              spinner. The outer sidebar and header stay fully stationary and responsive. */}
+              being loaded on-demand over the network, RouteLoader displays a loading indicator. 
+              The outer sidebar and header stay fully stationary and responsive. */}
           <React.Suspense fallback={<RouteLoader />}>
             <Outlet />
           </React.Suspense>

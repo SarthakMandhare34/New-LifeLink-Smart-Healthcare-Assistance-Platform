@@ -89,45 +89,135 @@ export const PatientLogin = () => {
       </header>
 
       <div className="doctor-setup-layout auth-split-layout" style={{ flex: 1, display: 'flex', width: '100%', position: 'relative', zIndex: 1 }}>
-        {/* Ambient background ECG wave decoration */}
-        <div className="ambient-ecg-decoration" style={{ position: 'absolute', bottom: '2%', left: '4%', opacity: 0.15, color: '#00C4CC' }}>
-          <Activity size={320} strokeWidth={1} />
+        {/* Ambient background clinical grid watermark */}
+        <div className="ambient-ecg-decoration" style={{ position: 'absolute', bottom: '2%', left: '4%', opacity: 0.08, color: '#581825', pointerEvents: 'none' }}>
+          <Activity size={340} strokeWidth={1} />
         </div>
 
-        {/* Branding Panel (Left Column) */}
+        {/* Branding Panel (Left Column): Structured Institutional Showcase */}
         <div className="auth-branding-panel" style={{ flex: 1, display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems: 'center', padding: 'var(--spacing-6)', zIndex: 1 }}>
-          <div style={{ textAlign: 'center', maxWidth: '420px', display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
-            <LifeLinkLogo className="lifelink-logo-auth" style={{ width: '280px', height: 'auto', marginBottom: '24px' }} />
+          <div style={{ textAlign: 'center', maxWidth: '440px', display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
             
-            <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '12px', marginTop: '40px' }}>
-              <div style={{ width: '48px', height: '48px', borderRadius: '50%', border: '2px solid #00C4CC', display: 'grid', placeItems: 'center', color: '#00C4CC', background: 'rgba(0, 196, 204, 0.15)' }}>
-                <HeartPulse size={24} strokeWidth={2} />
+            {/* Structured Institutional Logo Mount: Crisp, elevated soft bone plate guaranteeing high contrast and sharp brand visibility */}
+            <div 
+              style={{ 
+                background: '#FAF7F2', 
+                border: '2px solid #E0D8CE', 
+                borderRadius: '6px', 
+                padding: '16px 28px', 
+                boxShadow: '0 4px 12px rgba(43, 21, 25, 0.08)',
+                marginBottom: '28px',
+                display: 'inline-flex',
+                alignItems: 'center',
+                justifyContent: 'center'
+              }}
+            >
+              <LifeLinkLogo className="lifelink-logo-auth" style={{ width: '280px', height: 'auto', margin: 0, padding: 0, border: 'none', background: 'transparent', boxShadow: 'none' }} />
+            </div>
+            
+            {/* Institutional System Subtitle & Motto */}
+            <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '14px' }}>
+              <span 
+                style={{ 
+                  background: '#581825', 
+                  color: '#FAF7F2', 
+                  fontSize: '0.74rem', 
+                  fontWeight: 700, 
+                  letterSpacing: '0.08em', 
+                  textTransform: 'uppercase', 
+                  padding: '4px 12px', 
+                  borderRadius: '4px' 
+                }}
+              >
+                Healthcare Assistance & EHR Platform
+              </span>
+
+              <h2 className="font-display" style={{ fontSize: '1.5rem', fontWeight: 700, margin: '6px 0 0', color: '#2B1519', letterSpacing: '-0.01em', fontFamily: 'Outfit, sans-serif' }}>
+                Care. Connect. Cure.
+              </h2>
+              <p style={{ fontSize: '0.92rem', color: '#6E585B', margin: 0, lineHeight: 1.5, maxWidth: '380px' }}>
+                Verified institutional EHR portal for patient-owned health records, triage, and direct specialist consultations.
+              </p>
+
+              {/* Institutional feature highlights in classic American enterprise list */}
+              <div style={{ display: 'flex', flexDirection: 'column', gap: '8px', marginTop: '16px', textAlign: 'left', width: '100%', maxWidth: '340px' }}>
+                <div style={{ display: 'flex', alignItems: 'center', gap: '10px', fontSize: '0.84rem', color: '#4B3539', fontWeight: 500 }}>
+                  <ShieldCheck size={18} color="#581825" />
+                  <span>HIPAA-Compliant Encrypted Medical Passport</span>
+                </div>
+                <div style={{ display: 'flex', alignItems: 'center', gap: '10px', fontSize: '0.84rem', color: '#4B3539', fontWeight: 500 }}>
+                  <Activity size={18} color="#581825" />
+                  <span>Integrated Clinical AI Symptom Triage</span>
+                </div>
+                <div style={{ display: 'flex', alignItems: 'center', gap: '10px', fontSize: '0.84rem', color: '#4B3539', fontWeight: 500 }}>
+                  <HeartPulse size={18} color="#581825" />
+                  <span>Direct Ambulatory Care & Tele-Consultations</span>
+                </div>
               </div>
-              <h2 className="font-display" style={{ fontSize: '1.4rem', fontWeight: 700, margin: '8px 0 0', color: '#00C4CC', letterSpacing: '-0.01em', fontFamily: 'Outfit, sans-serif' }}>Care. Connect. Cure.</h2>
-              <p className="caption" style={{ fontSize: '0.9rem', color: '#2D9D9C', letterSpacing: '0.5px' }}>Empowering Patients, Enhancing Lives.</p>
             </div>
           </div>
         </div>
 
-        {/* Form Container (Right Column) */}
+        {/* Form Container (Right Column): Classic American Institutional Card */}
         <div style={{ flex: 1.1, display: 'flex', justifyContent: 'center', alignItems: 'center', padding: 'var(--spacing-4)', zIndex: 1 }}>
-          <Card className="clinical-glass-card" style={{ width: '100%', maxWidth: '520px', maxHeight: '90vh', overflowY: 'auto', padding: 'clamp(24px, 5vw, 40px) clamp(18px, 4vw, 36px)' }}>
+          <Card 
+            className="clinical-glass-card" 
+            style={{ 
+              width: '100%', 
+              maxWidth: '500px', 
+              maxHeight: '90vh', 
+              overflowY: 'auto', 
+              padding: 'clamp(24px, 4vw, 36px)',
+              background: '#FAF7F2',
+              border: '1px solid #E0D8CE',
+              borderRadius: '4px',
+              boxShadow: '0 4px 16px rgba(43, 21, 25, 0.06)'
+            }}
+          >
+            {/* Form Card Header */}
             <header className="auth-card-header" style={{ textAlign: 'center', marginBottom: '24px' }}>
-              <h1 id="patient-login-heading" className="font-display" style={{ fontSize: '1.75rem', fontWeight: 700, marginBottom: '6px', color: '#102B2D', letterSpacing: '-0.02em', fontFamily: 'Outfit, sans-serif' }}>Patient Sign In</h1>
-              <p style={{ color: '#2D9D9C', fontSize: '0.92rem', margin: 0 }}>Access your health passport securely</p>
+              {/* Responsive Mobile Logo Showcase: Guarantees full brand visibility on mobile devices where left branding column is hidden */}
+              <div className="auth-card-mobile-logo-wrap">
+                <LifeLinkLogo className="lifelink-logo-auth auth-card-mobile-logo" />
+              </div>
+
+              <h1 id="patient-login-heading" className="font-display" style={{ fontSize: '1.65rem', fontWeight: 700, marginBottom: '6px', color: '#2B1519', letterSpacing: '-0.02em', fontFamily: 'Outfit, sans-serif' }}>
+                Patient Sign In
+              </h1>
+              <p style={{ color: '#6E585B', fontSize: '0.90rem', margin: 0 }}>
+                Enter your credentials to access your secure health portal
+              </p>
             </header>
 
+            {/* Error banner */}
             {error && (
-              <div className="alert-panel auth-message" role="alert" style={{ marginBottom: '20px', color: 'var(--color-semantic-emergency)', textAlign: 'center' }}>
+              <div 
+                className="alert-panel auth-message" 
+                role="alert" 
+                style={{ 
+                  marginBottom: '20px', 
+                  color: 'var(--color-semantic-emergency)', 
+                  textAlign: 'center',
+                  background: '#FEF2F2',
+                  border: '1px solid #FECACA',
+                  borderRadius: '4px',
+                  padding: '10px 14px',
+                  fontSize: '0.88rem'
+                }}
+              >
                 {error}
               </div>
             )}
 
+            {/* Login form */}
             <form onSubmit={handleLogin} className="auth-form" style={{ display: 'grid', gap: '16px' }}>
+              {/* Username/Email Input Field */}
               <div style={{ display: 'flex', flexDirection: 'column', gap: '6px' }}>
-                <label htmlFor="patient-email" style={{ fontWeight: 600, fontSize: '0.88rem', color: '#102B2D' }}>Email or Username</label>
+                <label htmlFor="patient-email" style={{ fontWeight: 600, fontSize: '0.86rem', color: '#2B1519' }}>
+                  Email or Username
+                </label>
                 <div style={{ position: 'relative', display: 'flex', alignItems: 'center' }}>
-                  <UserIcon size={18} style={{ position: 'absolute', left: '14px', color: '#2D9D9C', pointerEvents: 'none' }} />
+                  <UserIcon size={18} style={{ position: 'absolute', left: '14px', color: '#6E585B', pointerEvents: 'none' }} />
                   <Input
                     id="patient-email"
                     type="text"
@@ -136,15 +226,27 @@ export const PatientLogin = () => {
                     onChange={(event) => setEmail(event.target.value)}
                     autoComplete="username"
                     required
-                    style={{ width: '100%', paddingLeft: '44px', borderRadius: '10px', height: '44px', fontSize: '0.92rem' }}
+                    style={{ 
+                      width: '100%', 
+                      paddingLeft: '42px', 
+                      borderRadius: '4px', 
+                      minHeight: '44px', 
+                      fontSize: '0.90rem',
+                      border: '1px solid #E0D8CE',
+                      background: '#FBF9F7',
+                      color: '#2B1519'
+                    }}
                   />
                 </div>
               </div>
 
+              {/* Password Input Field */}
               <div style={{ display: 'flex', flexDirection: 'column', gap: '6px' }}>
-                <label htmlFor="patient-password" style={{ fontWeight: 600, fontSize: '0.88rem', color: '#102B2D' }}>Password</label>
+                <label htmlFor="patient-password" style={{ fontWeight: 600, fontSize: '0.86rem', color: '#2B1519' }}>
+                  Password
+                </label>
                 <div style={{ position: 'relative', display: 'flex', alignItems: 'center' }}>
-                  <Lock size={18} style={{ position: 'absolute', left: '14px', color: '#2D9D9C', pointerEvents: 'none' }} />
+                  <Lock size={18} style={{ position: 'absolute', left: '14px', color: '#6E585B', pointerEvents: 'none' }} />
                   <Input
                     id="patient-password"
                     type={showPassword ? 'text' : 'password'}
@@ -152,12 +254,22 @@ export const PatientLogin = () => {
                     onChange={(event) => setPassword(event.target.value)}
                     autoComplete="current-password"
                     required
-                    style={{ width: '100%', paddingLeft: '44px', paddingRight: '44px', borderRadius: '10px', height: '44px', fontSize: '0.92rem' }}
+                    style={{ 
+                      width: '100%', 
+                      paddingLeft: '42px', 
+                      paddingRight: '42px', 
+                      borderRadius: '4px', 
+                      minHeight: '44px', 
+                      fontSize: '0.90rem',
+                      border: '1px solid #E0D8CE',
+                      background: '#FBF9F7',
+                      color: '#2B1519'
+                    }}
                   />
                   <button
                     type="button"
                     onClick={() => setShowPassword(!showPassword)}
-                    style={{ position: 'absolute', right: '14px', background: 'none', border: 'none', color: '#2D9D9C', cursor: 'pointer', padding: 0 }}
+                    style={{ position: 'absolute', right: '14px', background: 'none', border: 'none', color: '#6E585B', cursor: 'pointer', padding: 0 }}
                     aria-label={showPassword ? 'Hide password' : 'Show password'}
                   >
                     {showPassword ? <EyeOff size={18} /> : <Eye size={18} />}
@@ -165,74 +277,88 @@ export const PatientLogin = () => {
                 </div>
               </div>
 
+              {/* Submit Button: Classic American Enterprise Primary Button */}
               <Button
                 type="submit"
                 variant="primary"
                 disabled={isLoading}
-                style={{ width: '100%', padding: '12px', fontSize: '1rem', fontWeight: 600, borderRadius: '10px', marginTop: '4px', cursor: 'pointer', opacity: isLoading ? 0.7 : 1 }}
+                style={{ 
+                  width: '100%', 
+                  minHeight: '44px', 
+                  padding: '11px', 
+                  fontSize: '0.96rem', 
+                  fontWeight: 600, 
+                  borderRadius: '4px', 
+                  marginTop: '4px', 
+                  cursor: 'pointer', 
+                  opacity: isLoading ? 0.7 : 1,
+                  background: 'linear-gradient(180deg, #6E1E2E 0%, #581825 100%)',
+                  border: '1px solid #45121C',
+                  color: '#FAF7F2'
+                }}
               >
-                {isLoading ? 'Signing in…' : 'Sign In'}
+                {isLoading ? 'Authenticating…' : 'Sign In to Portal'}
               </Button>
             </form>
 
+            {/* Alternative authentication provider divider */}
             <div className="social-auth" style={{ marginTop: '20px' }}>
-              <div className="social-auth-divider" style={{ display: 'flex', alignItems: 'center', gap: '12px', color: '#2D9D9C', fontSize: '0.82rem' }}>
-                <div style={{ flex: 1, height: '1px', background: 'var(--color-border)' }} />
-                <span>OR</span>
-                <div style={{ flex: 1, height: '1px', background: 'var(--color-border)' }} />
+              <div className="social-auth-divider" style={{ display: 'flex', alignItems: 'center', gap: '12px', color: '#6E585B', fontSize: '0.80rem' }}>
+                <div style={{ flex: 1, height: '1px', background: '#E0D8CE' }} />
+                <span>OR CONTINUE WITH</span>
+                <div style={{ flex: 1, height: '1px', background: '#E0D8CE' }} />
               </div>
-              <div className="social-auth-actions" style={{ marginTop: '14px' }}>
+              <div className="social-auth-actions" style={{ marginTop: '12px' }}>
                 <Button
                   type="button"
                   variant="outline"
                   className="btn w-full"
                   onClick={handleGoogleClick}
                   title="Continue with Google"
-                  style={{ borderRadius: '10px', height: '44px', fontSize: '0.92rem', width: '100%', display: 'flex', justifyContent: 'center', alignItems: 'center', gap: '10px', cursor: 'pointer', fontWeight: 600 }}
+                  style={{ 
+                    borderRadius: '4px', 
+                    minHeight: '44px', 
+                    fontSize: '0.90rem', 
+                    width: '100%', 
+                    display: 'flex', 
+                    justifyContent: 'center', 
+                    alignItems: 'center', 
+                    gap: '10px', 
+                    cursor: 'pointer', 
+                    fontWeight: 600,
+                    border: '1px solid #E0D8CE',
+                    background: '#FAF7F2',
+                    color: '#2B1519'
+                  }}
                 >
-                  <GoogleIcon /> Continue with Google
+                  <GoogleIcon /> Continue with Google SSO
                 </Button>
               </div>
             </div>
 
-            <div style={{ textAlign: 'center', marginTop: '20px', fontSize: '0.88rem', display: 'flex', flexDirection: 'column', gap: '8px' }}>
+            {/* Auxiliary workspace navigation links */}
+            <div style={{ textAlign: 'center', marginTop: '20px', fontSize: '0.86rem', display: 'flex', flexDirection: 'column', gap: '8px' }}>
               <div>
-                <span style={{ color: '#2D9D9C' }}>Don't have an account? </span>
+                <span style={{ color: '#6E585B' }}>Don't have an account? </span>
                 <button
                   type="button"
                   onClick={() => navigate('/register')}
-                  style={{ background: 'none', border: 'none', color: '#00C4CC', fontWeight: 600, cursor: 'pointer', padding: 0 }}
+                  style={{ background: 'none', border: 'none', color: '#581825', fontWeight: 700, cursor: 'pointer', padding: 0 }}
                 >
                   Create one
                 </button>
               </div>
               <div>
-                <span style={{ color: '#2D9D9C' }}>Are you a clinician? </span>
+                <span style={{ color: '#6E585B' }}>Are you a clinician? </span>
                 <button
                   type="button"
                   onClick={() => navigate('/doctor/login')}
-                  style={{ background: 'none', border: 'none', color: '#00C4CC', fontWeight: 600, cursor: 'pointer', padding: 0 }}
+                  style={{ background: 'none', border: 'none', color: '#581825', fontWeight: 700, cursor: 'pointer', padding: 0 }}
                 >
                   Doctor sign in
                 </button>
               </div>
             </div>
-
-            {/* 3 Trust Badges */}
-            <footer style={{ display: 'flex', justifyContent: 'space-between', marginTop: '28px', paddingTop: '18px', borderTop: '1px solid #9FFBFF' }}>
-              <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '6px', color: '#2D9D9C' }}>
-                <ShieldCheck size={20} color="#00C4CC" />
-                <span style={{ fontSize: '0.72rem', fontWeight: 600 }}>Secure Login</span>
-              </div>
-              <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '6px', color: '#2D9D9C' }}>
-                <ShieldCheck size={20} color="#00C4CC" />
-                <span style={{ fontSize: '0.72rem', fontWeight: 600 }}>Verified Identity</span>
-              </div>
-              <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '6px', color: '#2D9D9C' }}>
-                <Lock size={20} color="#00C4CC" />
-                <span style={{ fontSize: '0.72rem', fontWeight: 600 }}>Protected Access</span>
-              </div>
-            </footer>
           </Card>
         </div>
       </div>
