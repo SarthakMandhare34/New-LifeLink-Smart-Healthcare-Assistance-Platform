@@ -1,12 +1,12 @@
 /**
- * LifeLink Backend API Server Entry Point
+ * ============================================================================
+ * LIFELINK BACKEND: HTTP & TRPC SERVER BOOTSTRAP (backend/_core/index.ts)
+ * ============================================================================
  * 
- * This file initializes the Express server, HTTP server, and all essential middlewares.
- * It is responsible for wiring up:
- * 1. Express body parsers for handling JSON and URL-encoded payloads.
- * 2. Specialized routes (e.g., OAuth authentication, realtime WebSockets, profile photo uploads).
- * 3. The tRPC API layer which serves as the primary data exchange protocol between frontend and backend.
- * 4. Development/Production Vite setups for serving frontend assets.
+ * WHAT THIS FILE DOES:
+ * This is the main server process entry point. It initializes Express, attaches
+ * tRPC API middleware at /api/trpc, registers SSE real-time streaming routes,
+ * mounts OAuth endpoints, and binds to the dynamically assigned backend port.
  */
 import "dotenv/config";                                          // Load secret environment variables from .env into process.env
 import express from "express";                                   // Express web framework for routing and middleware
