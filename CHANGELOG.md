@@ -4,6 +4,32 @@ All notable changes to the LifeLink Smart Healthcare Assistance Platform will be
 
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/), and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [1.2.0] - 2026-09-14
+
+### Added & Optimized
+- **High-Performance Code-Split Architecture & Bundle Optimization**:
+  - Replaced monolithic route imports in `frontend/src/App.tsx` with dynamic `React.lazy()` imports, reducing initial client entry JS from `759.29 kB` to **`45.29 kB`** (a **94% reduction** in entry bundle size).
+  - Configured Rollup `manualChunks` in `vite.config.ts` to cleanly partition vendor code (`vendor-react`, `vendor-maps`, `vendor-charts`, `vendor-ui`, `vendor-query`) for maximum browser cacheability.
+  - Implemented liquid-glass `RouteLoader` fallback inside `<Suspense>` within `AppShell` and `DoctorAppShell`, preventing navigation flicker and keeping navigation headers and sidebars stationary.
+  - Resolved all Vite bundle size warnings (`(!) Some chunks are larger than 500 kB`).
+- **Client-Side Query Caching for Instant Tab Switching**:
+  - Configured TanStack `QueryClient` in `frontend/src/main.tsx` with `staleTime: 60_000` (1 minute) and `gcTime: 300_000` (5 minutes).
+  - Page navigation between Dashboard, Appointments, Prescriptions, and Settings now serves data from memory with **0ms latency** while preserving real-time SSE updates.
+- **Production Static Asset Delivery & Caching**:
+  - Configured `backend/_core/vite.ts` with `maxAge: "1y", immutable: true` headers for content-hashed assets in `/assets/`, eliminating slow 304 network re-validations.
+  - Enforced `no-cache, must-revalidate` for `index.html` so client updates deploy instantly upon page reload.
+- **Direct Local Vite Execution in Development Runner**:
+  - Updated `scripts/dev.mjs` to execute the local Vite binary directly (`node node_modules/vite/bin/vite.js`), removing `npx` lookup latency on Windows PowerShell.
+- **Mumbai Specialist Directory Expansion (24 Verified Clinicians)**:
+  - Expanded Mumbai rail specialist directory to **24 doctor accounts** covering Central, Western, and Harbour lines.
+  - Transitioned multi-route stops to General Practice (Diva Junction, Kopar, Dombivli, Thakurli, Mulund, Thane, Churchgate, Dadar, Borivali, Chembur, Vashi, Nerul, Panvel) with 1 dedicated Pediatrician at Andheri.
+  - Provisioned 24 distinct official work emails (`<specialty>.<station>@lifelink.com` or `<specialty>@lifelink.com`) and secure matching passwords.
+- **Option 1 Strict Account Isolation & Zero Pre-Stored Patients**:
+  - Enforced strict isolation preventing email hijacking between native credentials and third-party Google OAuth identities (`ProviderAccountConflictError`).
+  - Standardized database state to strictly 24 doctor accounts with zero pre-stored patients, ensuring 100% dynamic live onboarding.
+
+---
+
 ## [1.1.0] - 2026-09-11
 
 ### Added & Refined

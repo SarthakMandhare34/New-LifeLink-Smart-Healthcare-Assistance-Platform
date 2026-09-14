@@ -26,7 +26,7 @@ LifeLink-Smart-Healthcare-Assistance-Platform/
 │   ├── backend/ai/assessmentService.ts    <-- [EDIT] 5-layer AI symptom triage & Gemini Flash cascade engine
 │   ├── backend/realtime/eventBus.ts       <-- [EDIT] Scoped Server-Sent Events (SSE) notification broadcaster
 │   ├── backend/storage.ts                 <-- [READ] Cloud S3 / local profile asset storage adapter
-│   ├── backend/syntheticDoctor.ts        <-- [READ] 12 Mumbai specialist accounts provisioning helpers
+│   ├── backend/syntheticDoctor.ts        <-- [READ] 24 Mumbai specialist accounts provisioning helpers
 │   └── backend/auth/                      <-- [READ] Native bcrypt hashing, JWT issuance, Google OAuth
 │
 ├── 💻 FRONTEND CLIENT INTERFACE LAYER [Related to: Section 3 Component & Section 4 Activity Diagrams]

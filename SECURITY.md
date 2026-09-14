@@ -6,7 +6,8 @@ We provide security updates and patches for the following versions of the LifeLi
 
 | Version | Supported          | Status |
 | :--- | :---: | :--- |
-| **1.1.x** | :white_check_mark: | Active production release |
+| **1.2.x** | :white_check_mark: | Active production release |
+| **1.1.x** | :white_check_mark: | Supported maintenance release |
 | **1.0.x** | :white_check_mark: | Supported maintenance release |
 | **< 1.0** | :x:                | End of life (development milestones) |
 
