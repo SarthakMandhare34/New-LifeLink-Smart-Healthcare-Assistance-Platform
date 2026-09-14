@@ -1,3 +1,24 @@
+/**
+ * ============================================================================
+ * VITE SERVER BRIDGE & STATIC ASSET PIPELINE (backend/_core/vite.ts)
+ * ============================================================================
+ * 
+ * WHAT THIS FILE DOES:
+ * This file connects Vite (our frontend tool) with Express (our backend server)
+ * in two distinct runtime modes:
+ * 
+ * 1. DEVELOPMENT MODE (`setupVite`):
+ *    - Embeds Vite directly into Express as middleware.
+ *    - Enables Hot Module Replacement (HMR) so code edits appear instantly in the browser.
+ *    - Automatically transforms index.html and injects unique cache-busting IDs.
+ * 
+ * 2. PRODUCTION MODE (`serveStatic`):
+ *    - Serves the pre-compiled frontend bundle from `dist/public`.
+ *    - Sets a 1-year immutable cache header (`maxAge: 1y`) on content-hashed files (/assets/*)
+ *      so browsers cache them permanently for zero-latency loading.
+ *    - Forces HTML files (`index.html`) to revalidate (`no-cache, must-revalidate`) so users
+ *      immediately get updates whenever a new version is released.
+ */
 import express, { type Express } from "express";                                        // Express application framework and types
 import fs from "fs";                                                                        // Node file system module for reading built HTML files
 import { type Server } from "http";                                                         // Node HTTP Server type for attaching WebSocket HMR
@@ -6,7 +27,7 @@ import path from "path";                                                        
 import { createServer as createViteServer } from "vite";                                    // Vite programmatic development server constructor
 import viteConfig from "../../vite.config";                                                 // Base Vite configuration shared with frontend
 
-// Configures and mounts Vite's development middleware directly into Express
+// STEP 1: Configures and mounts Vite's development middleware directly into Express
 export async function setupVite(app: Express, server: Server) {
   const serverOptions = {
     middlewareMode: true,                                                                  // Embed Vite as middleware inside our existing Express server
