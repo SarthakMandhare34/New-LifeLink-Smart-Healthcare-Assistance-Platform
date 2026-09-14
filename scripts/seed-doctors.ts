@@ -1,3 +1,23 @@
+/**
+ * ============================================================================
+ * CLINICIAN SEEDING & WORKSTATION SETUP SCRIPT (scripts/seed-doctors.ts)
+ * ============================================================================
+ * 
+ * HOW TO RUN:
+ * Command: `npx tsx scripts/seed-doctors.ts`
+ * 
+ * WHAT THIS SCRIPT DOES:
+ * 1. Connects to the local MySQL database using Drizzle ORM.
+ * 2. Cleans out stale records to avoid duplicate or conflicting accounts.
+ * 3. Seeds exactly 24 verified doctor workstations across 12 specialties 
+ *    (Cardiology, Neurology, Orthopedics, Pediatrics, etc.) located along
+ *    Mumbai's railway corridors (Western, Central, Harbour).
+ * 4. Applies a memorable and consistent credential format for all clinicians:
+ *    - Email: <specialty>@lifelink.com (e.g. cardiology@lifelink.com)
+ *    - Password: <specialty-prefix>@lifelink (e.g. cardio@lifelink)
+ * 5. Zero Pre-Stored Patients: Maintains 0 patient records so live user
+ *    registration remains 100% dynamic and authentic.
+ */
 import "dotenv/config";
 import { getDb, createSyntheticDoctorCredential } from "../backend/db";
 import { mockDoctorDirectory } from "../backend/discovery/mockDoctorDirectory";
