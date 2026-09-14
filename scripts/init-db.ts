@@ -1,3 +1,18 @@
+/**
+ * ============================================================================
+ * DATABASE INITIALIZATION HELPER (scripts/init-db.ts)
+ * ============================================================================
+ * 
+ * HOW TO RUN:
+ * Command: `npx tsx scripts/init-db.ts`
+ * 
+ * WHAT THIS SCRIPT DOES:
+ * 1. Reads DATABASE_URL from .env and parses connection components (host, port, user, dbName).
+ * 2. Connects to the raw MySQL server instance.
+ * 3. Idempotently creates the target database (`lifelink`) with full UTF-8 Unicode support
+ *    (`CREATE DATABASE IF NOT EXISTS ... CHARACTER SET utf8mb4`).
+ * 4. Ensures Drizzle migrations can run smoothly without failing on a missing database.
+ */
 import "dotenv/config";                                          // Load environment variables from .env into process.env
 import mysql from "mysql2/promise";                               // Modern promise-based MySQL client for Node.js
 
