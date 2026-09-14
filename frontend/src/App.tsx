@@ -1,6 +1,27 @@
 /**
- * Liquid-glass design note: both patient and doctor flows use the same pearlescent
- * surface system, with page-specific content kept intact inside shared shells.
+ * ============================================================================
+ * LIFELINK APPLICATION ROUTER (frontend/src/App.tsx)
+ * ============================================================================
+ * 
+ * WHAT THIS FILE DOES:
+ * This is the central router for the LifeLink frontend application. It maps
+ * every browser URL (e.g. "/patient/dashboard" or "/doctor/consultation") to
+ * its corresponding React view component.
+ * 
+ * KEY ARCHITECTURAL FEATURES:
+ * 1. Code-Splitting with React.lazy():
+ *    Instead of loading the entire application at once (which would make the
+ *    initial download slow), each page is packed into a tiny separate bundle.
+ *    The browser only downloads a page when the user actually visits it!
+ * 2. Suspense & RouteLoader:
+ *    While a new page bundle is downloading in the background, React automatically
+ *    displays the <RouteLoader /> spinner, ensuring a smooth, flicker-free transition.
+ * 3. Two Distinct Application Portals:
+ *    - Public Entry Routes: Workspace selection, patient login/registration, and doctor login.
+ *    - Patient Portal (/patient/*): Wrapped in AppShell with patient navigation, alerts, and SOS.
+ *    - Doctor Portal (/doctor/*): Wrapped in DoctorAppShell with clinical triage, queue, and prescriptions.
+ * 4. Liquid-Glass Aesthetics:
+ *    Both portals share our pearlescent, translucent liquid-glass design system.
  */
 import React, { Suspense } from 'react';
 import { BrowserRouter, Navigate, Route, Routes } from 'react-router-dom';
@@ -9,7 +30,8 @@ import { DoctorAppShell } from './components/layout/DoctorAppShell';
 import { RouteLoader } from './components/ui/RouteLoader';
 import { WorkspaceSelector } from './features/entry/WorkspaceSelector';
 
-// --- Cluster: Code-Split Patient Portal Feature Modules ---
+// --- Cluster 1: Code-Split Patient Portal Feature Modules ---
+// Each module is dynamically imported on-demand to keep the initial bundle ultra-light (45 kB)
 const PatientDashboard = React.lazy(() => import('./features/patient/Dashboard').then(m => ({ default: m.PatientDashboard })));
 const HealthPassport = React.lazy(() => import('./features/patient/HealthPassport/HealthPassport').then(m => ({ default: m.HealthPassport })));
 const MedicineCabinet = React.lazy(() => import('./features/patient/Medicines/MedicineCabinet').then(m => ({ default: m.MedicineCabinet })));
@@ -23,7 +45,8 @@ const Emergency = React.lazy(() => import('./features/patient/Emergency/Emergenc
 const Profile = React.lazy(() => import('./features/patient/Profile/Profile').then(m => ({ default: m.Profile })));
 const Settings = React.lazy(() => import('./features/patient/Settings/Settings').then(m => ({ default: m.Settings })));
 
-// --- Cluster: Code-Split Doctor Portal Feature Modules ---
+// --- Cluster 2: Code-Split Doctor Portal Feature Modules ---
+// Specialized clinical workflows for doctor triage, consultations, and digital prescriptions
 const DoctorLogin = React.lazy(() => import('./features/doctor/Login').then(m => ({ default: m.DoctorLogin })));
 const DoctorResetPassword = React.lazy(() => import('./features/doctor/ResetPassword').then(m => ({ default: m.DoctorResetPassword })));
 const DoctorDashboard = React.lazy(() => import('./features/doctor/Dashboard').then(m => ({ default: m.DoctorDashboard })));
@@ -38,15 +61,7 @@ const PatientView = React.lazy(() => import('./features/doctor/Patients/PatientD
 
 /**
  * Main Application Router Component
- * 
- * This component defines the entire routing structure for the LifeLink platform.
- * It separates the application into three main areas:
- * 1. Entry / Public Routes (Login, Registration, Workspace Selection)
- * 2. Patient Portal (/patient/*) - Protected routes wrapped in AppShell
- * 3. Doctor Portal (/doctor/*) - Protected routes wrapped in DoctorAppShell
- * 
- * Feature routes are dynamically code-split using React.lazy to keep the initial
- * load bundle ultra-compact while providing smooth liquid-glass transitions.
+ * Renders the router and declares all route mappings.
  */
 function App() {
   return (
