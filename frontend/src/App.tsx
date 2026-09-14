@@ -2,34 +2,39 @@
  * Liquid-glass design note: both patient and doctor flows use the same pearlescent
  * surface system, with page-specific content kept intact inside shared shells.
  */
-import React from 'react';
+import React, { Suspense } from 'react';
 import { BrowserRouter, Navigate, Route, Routes } from 'react-router-dom';
 import { AppShell } from './components/layout/AppShell';
 import { DoctorAppShell } from './components/layout/DoctorAppShell';
-import { PatientDashboard } from './features/patient/Dashboard';
-import { HealthPassport } from './features/patient/HealthPassport/HealthPassport';
-import { MedicineCabinet } from './features/patient/Medicines/MedicineCabinet';
-import { PatientLogin } from './features/entry/Login';
-import { PatientRegistration } from './features/entry/Register';
-import { AIAssessment } from './features/patient/Assessment/AIAssessment';
-import { SpecialistFinder } from './features/patient/Specialists/SpecialistFinder';
-import { Appointments } from './features/patient/Appointments/Appointments';
-import { Prescriptions } from './features/patient/Prescriptions/Prescriptions';
-import { Emergency } from './features/patient/Emergency/Emergency';
-import { Profile } from './features/patient/Profile/Profile';
-import { Settings } from './features/patient/Settings/Settings';
-import { DoctorLogin } from './features/doctor/Login';
-import { DoctorResetPassword } from './features/doctor/ResetPassword';
-import { DoctorDashboard } from './features/doctor/Dashboard';
-import { Patients } from './features/doctor/Patients/Patients';
-import { DoctorAppointments } from './features/doctor/Appointments/Appointments';
-import { Consultation } from './features/doctor/Consultations/Consultation';
-import { DoctorPrescriptions } from './features/doctor/Prescriptions/Prescriptions';
-import { Assessments } from './features/doctor/Assessments/Assessments';
-import { DoctorProfile } from './features/doctor/Profile/Profile';
-import { DoctorSettings } from './features/doctor/Settings/Settings';
-import { PatientView } from './features/doctor/Patients/PatientDetails';
+import { RouteLoader } from './components/ui/RouteLoader';
 import { WorkspaceSelector } from './features/entry/WorkspaceSelector';
+
+// --- Cluster: Code-Split Patient Portal Feature Modules ---
+const PatientDashboard = React.lazy(() => import('./features/patient/Dashboard').then(m => ({ default: m.PatientDashboard })));
+const HealthPassport = React.lazy(() => import('./features/patient/HealthPassport/HealthPassport').then(m => ({ default: m.HealthPassport })));
+const MedicineCabinet = React.lazy(() => import('./features/patient/Medicines/MedicineCabinet').then(m => ({ default: m.MedicineCabinet })));
+const PatientLogin = React.lazy(() => import('./features/entry/Login').then(m => ({ default: m.PatientLogin })));
+const PatientRegistration = React.lazy(() => import('./features/entry/Register').then(m => ({ default: m.PatientRegistration })));
+const AIAssessment = React.lazy(() => import('./features/patient/Assessment/AIAssessment').then(m => ({ default: m.AIAssessment })));
+const SpecialistFinder = React.lazy(() => import('./features/patient/Specialists/SpecialistFinder').then(m => ({ default: m.SpecialistFinder })));
+const Appointments = React.lazy(() => import('./features/patient/Appointments/Appointments').then(m => ({ default: m.Appointments })));
+const Prescriptions = React.lazy(() => import('./features/patient/Prescriptions/Prescriptions').then(m => ({ default: m.Prescriptions })));
+const Emergency = React.lazy(() => import('./features/patient/Emergency/Emergency').then(m => ({ default: m.Emergency })));
+const Profile = React.lazy(() => import('./features/patient/Profile/Profile').then(m => ({ default: m.Profile })));
+const Settings = React.lazy(() => import('./features/patient/Settings/Settings').then(m => ({ default: m.Settings })));
+
+// --- Cluster: Code-Split Doctor Portal Feature Modules ---
+const DoctorLogin = React.lazy(() => import('./features/doctor/Login').then(m => ({ default: m.DoctorLogin })));
+const DoctorResetPassword = React.lazy(() => import('./features/doctor/ResetPassword').then(m => ({ default: m.DoctorResetPassword })));
+const DoctorDashboard = React.lazy(() => import('./features/doctor/Dashboard').then(m => ({ default: m.DoctorDashboard })));
+const Patients = React.lazy(() => import('./features/doctor/Patients/Patients').then(m => ({ default: m.Patients })));
+const DoctorAppointments = React.lazy(() => import('./features/doctor/Appointments/Appointments').then(m => ({ default: m.DoctorAppointments })));
+const Consultation = React.lazy(() => import('./features/doctor/Consultations/Consultation').then(m => ({ default: m.Consultation })));
+const DoctorPrescriptions = React.lazy(() => import('./features/doctor/Prescriptions/Prescriptions').then(m => ({ default: m.DoctorPrescriptions })));
+const Assessments = React.lazy(() => import('./features/doctor/Assessments/Assessments').then(m => ({ default: m.Assessments })));
+const DoctorProfile = React.lazy(() => import('./features/doctor/Profile/Profile').then(m => ({ default: m.DoctorProfile })));
+const DoctorSettings = React.lazy(() => import('./features/doctor/Settings/Settings').then(m => ({ default: m.DoctorSettings })));
+const PatientView = React.lazy(() => import('./features/doctor/Patients/PatientDetails').then(m => ({ default: m.PatientView })));
 
 /**
  * Main Application Router Component
@@ -40,9 +45,8 @@ import { WorkspaceSelector } from './features/entry/WorkspaceSelector';
  * 2. Patient Portal (/patient/*) - Protected routes wrapped in AppShell
  * 3. Doctor Portal (/doctor/*) - Protected routes wrapped in DoctorAppShell
  * 
- * Each portal uses a nested routing strategy where the "Shell" component handles
- * the shared UI (like sidebars and headers), and the child components render
- * specific features (like Dashboards, Appointments, etc.).
+ * Feature routes are dynamically code-split using React.lazy to keep the initial
+ * load bundle ultra-compact while providing smooth liquid-glass transitions.
  */
 function App() {
   return (
@@ -50,10 +54,10 @@ function App() {
       <Routes>                                                                             {/* Declarative client-side route matcher */}
         {/* Public Entry Routes */}
         <Route path="/" element={<WorkspaceSelector />} />                                  {/* Portal selector for patient vs clinician workspace */}
-        <Route path="/login" element={<PatientLogin />} />                                  {/* Patient sign-in form */}
-        <Route path="/register" element={<PatientRegistration />} />                        {/* Patient new account registration form */}
-        <Route path="/doctor/login" element={<DoctorLogin />} />                            {/* Clinician credential authentication screen */}
-        <Route path="/doctor/reset" element={<DoctorResetPassword />} />                    {/* Administrative clinician password reset */}
+        <Route path="/login" element={<Suspense fallback={<RouteLoader />}><PatientLogin /></Suspense>} />                                  {/* Patient sign-in form */}
+        <Route path="/register" element={<Suspense fallback={<RouteLoader />}><PatientRegistration /></Suspense>} />                        {/* Patient new account registration form */}
+        <Route path="/doctor/login" element={<Suspense fallback={<RouteLoader />}><DoctorLogin /></Suspense>} />                            {/* Clinician credential authentication screen */}
+        <Route path="/doctor/reset" element={<Suspense fallback={<RouteLoader />}><DoctorResetPassword /></Suspense>} />                    {/* Administrative clinician password reset */}
 
         {/* Patient Portal Routes - Uses AppShell for layout */}
         <Route path="/patient" element={<AppShell />}>                                      {/* Patient navigation shell with sidebar & header */}

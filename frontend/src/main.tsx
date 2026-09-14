@@ -23,12 +23,14 @@ import { ThemeProvider } from "./context/ThemeContext.tsx";                     
 import "./index.css";                                                                      // Global liquid-glass CSS styles and animations
 import { trpc } from "./lib/trpc";                                                         // Type-safe tRPC React hooks
 
-// STEP 1: Initialize TanStack Query Client with no-retry policy for fast UX failure feedback
+// STEP 1: Initialize TanStack Query Client with intelligent caching and fast-fail policy
 const queryClient = new QueryClient({
   defaultOptions: { 
     queries: { 
       retry: false,                                                                        // Fail fast without continuous retries on network error
-      refetchOnWindowFocus: false                                                          // Prevent unwanted refetches when switching browser tabs
+      refetchOnWindowFocus: false,                                                         // Prevent unwanted refetches when switching browser tabs
+      staleTime: 60 * 1000,                                                                // Retain data freshness for 1 minute for instant tab switching
+      gcTime: 5 * 60 * 1000,                                                               // Cache inactive query data for 5 minutes
     } 
   },
 });

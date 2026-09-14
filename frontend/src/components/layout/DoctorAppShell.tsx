@@ -11,6 +11,7 @@ import { useDoctorRealtime } from "../../hooks/useDoctorRealtime";              
 import { useTheme } from "../../context/ThemeContext";                                          // Application theme manager
 import { registerPatientInactivityTimer } from "../../hooks/patientInactivity";                  // Auto-logout security timer hook
 import { toast } from "sonner";                                                                 // User feedback toast notifications
+import { RouteLoader } from "../ui/RouteLoader";                                                   // Liquid-glass suspense fallback loader
 
 // Doctor portal navigation items
 const navItems = [
@@ -235,7 +236,9 @@ export const DoctorAppShell = () => {
 
         {/* Dynamic nested doctor view content */}
         <div className="app-content">
-          <Outlet />
+          <React.Suspense fallback={<RouteLoader />}>
+            <Outlet />
+          </React.Suspense>
         </div>
       </main>
     </div>

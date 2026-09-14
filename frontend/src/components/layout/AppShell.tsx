@@ -8,6 +8,7 @@ import { usePatientRealtime } from '../../hooks/usePatientRealtime';            
 import { trpc } from '../../lib/trpc';                                                          // Type-safe tRPC client bridge
 import { registerPatientInactivityTimer } from '../../hooks/patientInactivity';                  // Auto-logout security timer hook
 import { toast } from 'sonner';                                                                 // Toast notification library
+import { RouteLoader } from '../ui/RouteLoader';                                                   // Liquid-glass suspense fallback loader
 import {
   LayoutDashboard,
   FileHeart,
@@ -257,7 +258,9 @@ export const AppShell = () => {
 
         {/* Dynamic nested page content rendered via React Router */}
         <div className="app-content">
-          <Outlet />
+          <React.Suspense fallback={<RouteLoader />}>
+            <Outlet />
+          </React.Suspense>
         </div>
       </main>
     </div>
