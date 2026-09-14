@@ -30,12 +30,17 @@ export default defineConfig({
   build: {
     outDir: path.resolve(import.meta.dirname, "dist/public"),     // Compile production frontend bundle into dist/public folder
     emptyOutDir: true,                                           // Clean old files in dist/public before starting a new build
-    chunkSizeWarningLimit: 600,                                  // Set clean warning threshold for partitioned vendor modules
+    chunkSizeWarningLimit: 600,                                  // Set warning threshold to 600 kB for partitioned vendor modules
     rollupOptions: {
       output: {
+        // --- Cluster: Intelligent Vendor Chunk Partitioning ---
+        // Instead of downloading one massive bundle, third-party libraries (node_modules)
+        // are split into logical groups so browsers can download them in parallel and cache them:
         manualChunks(id) {
           if (id.includes("node_modules")) {
-            const normalized = id.replace(/\\/g, "/");
+            const normalized = id.replace(/\\/g, "/"); // Normalize Windows backslashes
+            
+            // 1. Core React runtime (React, ReactDOM, React Router)
             if (
               normalized.includes("/node_modules/react/") ||
               normalized.includes("/node_modules/react-dom/") ||
@@ -43,15 +48,21 @@ export default defineConfig({
             ) {
               return "vendor-react";
             }
+            
+            // 2. Charts & Analytics (Recharts)
             if (normalized.includes("/node_modules/recharts/")) {
               return "vendor-charts";
             }
+            
+            // 3. Interactive Mumbai Rail Maps (Leaflet & OpenStreetMap)
             if (
               normalized.includes("/node_modules/leaflet/") ||
               normalized.includes("/node_modules/react-leaflet/")
             ) {
               return "vendor-maps";
             }
+            
+            // 4. UI Primitives, Micro-Animations & Icons (Radix, Lucide, Framer Motion, Sonner)
             if (
               normalized.includes("/node_modules/@radix-ui/") ||
               normalized.includes("/node_modules/lucide-react/") ||
@@ -60,6 +71,8 @@ export default defineConfig({
             ) {
               return "vendor-ui";
             }
+            
+            // 5. Data Fetching & Type-Safe RPC (TanStack React Query & tRPC)
             if (
               normalized.includes("/node_modules/@tanstack/") ||
               normalized.includes("/node_modules/@trpc/")
