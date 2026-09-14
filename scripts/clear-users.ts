@@ -1,3 +1,17 @@
+/**
+ * ============================================================================
+ * DATABASE PURGE & RESET SCRIPT (scripts/clear-users.ts)
+ * ============================================================================
+ * 
+ * HOW TO RUN:
+ * Command: `npm run db:clear` or `npx tsx scripts/clear-users.ts`
+ * 
+ * WHAT THIS SCRIPT DOES:
+ * 1. Safely connects to the active MySQL database instance.
+ * 2. Temporarily disables foreign key checks (`SET FOREIGN_KEY_CHECKS = 0`) to prevent constraint locks.
+ * 3. Truncates all user tables (prescriptions, appointments, medicines, profiles, assessments, credentials).
+ * 4. Re-enables foreign key checks and leaves the database completely clean and fresh.
+ */
 import "dotenv/config";
 import { getDb } from "../backend/db";
 import { sql } from "drizzle-orm";
