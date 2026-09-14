@@ -202,6 +202,8 @@ The platform includes **24 verified doctor workstations** across Mumbai's railwa
 | 24 | **General Practice** (Panvel) | `generalpractice.panvel@lifelink.com` | `general.panvel@lifelink` | `general@lifelink.com` |
 
 > ℹ️ **Patient Accounts**: There are **zero pre-stored patient records**. Patients register dynamically in real time at `/register` or through Google OAuth.
+> 
+> 🔐 **Clinician Administrative Secret Key**: Doctors use the master access key `lifelink-controlled-clinician-secret-key-2026` at `/doctor/setup` or `/doctor/reset` to initialize workstations or reset credentials.
 
 ---
 
