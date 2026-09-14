@@ -39,6 +39,9 @@ We welcome contributions to the LifeLink platform. When submitting pull requests
 * Run `npm run verify` prior to submitting commits.
 * Ensure 0 TypeScript compilation errors (`npm run check`) and passing unit/integration test suites (`npm test`).
 
+### 5. Atomic Commit Conventions
+* Format commit messages according to Conventional Commits (`feat:`, `fix:`, `docs:`, `perf:`, `build:`, `refactor:`) to maintain a clean, readable git history.
+
 ---
 
 ## 📄 Related Project Policies
