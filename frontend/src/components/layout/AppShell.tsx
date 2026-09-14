@@ -258,6 +258,9 @@ export const AppShell = () => {
 
         {/* Dynamic nested page content rendered via React Router */}
         <div className="app-content">
+          {/* Nested Suspense Boundary: While child pages (e.g. Assessment, Medicines) are 
+              being loaded on-demand over the network, RouteLoader displays a liquid-glass 
+              spinner. The outer sidebar and header stay fully stationary and responsive. */}
           <React.Suspense fallback={<RouteLoader />}>
             <Outlet />
           </React.Suspense>
