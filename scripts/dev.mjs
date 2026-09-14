@@ -115,7 +115,7 @@ async function startProcesses() {
   };
 
   const backendCmd = "cross-env NODE_ENV=development tsx watch backend/_core/index.ts"; // Command to watch & run backend
-  const frontendCmd = `npx vite --port ${FRONTEND_PORT}`;        // Command to start Vite dev server on chosen port
+  const frontendCmd = `node node_modules/vite/bin/vite.js --port ${FRONTEND_PORT}`; // Direct local Vite execution bypassing npx latency
 
   // 1. Spawn Backend Process
   backendChild = spawn(backendCmd, {

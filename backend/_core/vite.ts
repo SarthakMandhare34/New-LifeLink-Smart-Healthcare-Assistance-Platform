@@ -59,10 +59,34 @@ export function serveStatic(app: Express) {
     );
   }
 
-  app.use(express.static(distPath));                                                       // Serve static CSS, JS, and image assets
+  // Immutable long-term caching for content-hashed assets (CSS, JS, chunks)
+  const assetsPath = path.resolve(distPath, "assets");
+  if (fs.existsSync(assetsPath)) {
+    app.use(
+      "/assets",
+      express.static(assetsPath, {
+        maxAge: "1y",
+        immutable: true,
+        index: false,
+      })
+    );
+  }
+
+  // General static file serving with HTML revalidation policy
+  app.use(
+    express.static(distPath, {
+      maxAge: "1h",
+      setHeaders: (res, filePath) => {
+        if (filePath.endsWith(".html")) {
+          res.setHeader("Cache-Control", "no-cache, must-revalidate");
+        }
+      },
+    })
+  );
 
   // Fallback route: serve index.html for any client-side routes (SPA router support)
   app.use("*", (_req, res) => {
+    res.setHeader("Cache-Control", "no-cache, must-revalidate");
     res.sendFile(path.resolve(distPath, "index.html"));                                    // Stream index.html for client-side routing
   });
 }

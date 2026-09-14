@@ -30,6 +30,46 @@ export default defineConfig({
   build: {
     outDir: path.resolve(import.meta.dirname, "dist/public"),     // Compile production frontend bundle into dist/public folder
     emptyOutDir: true,                                           // Clean old files in dist/public before starting a new build
+    chunkSizeWarningLimit: 600,                                  // Set clean warning threshold for partitioned vendor modules
+    rollupOptions: {
+      output: {
+        manualChunks(id) {
+          if (id.includes("node_modules")) {
+            const normalized = id.replace(/\\/g, "/");
+            if (
+              normalized.includes("/node_modules/react/") ||
+              normalized.includes("/node_modules/react-dom/") ||
+              normalized.includes("/node_modules/react-router-dom/")
+            ) {
+              return "vendor-react";
+            }
+            if (normalized.includes("/node_modules/recharts/")) {
+              return "vendor-charts";
+            }
+            if (
+              normalized.includes("/node_modules/leaflet/") ||
+              normalized.includes("/node_modules/react-leaflet/")
+            ) {
+              return "vendor-maps";
+            }
+            if (
+              normalized.includes("/node_modules/@radix-ui/") ||
+              normalized.includes("/node_modules/lucide-react/") ||
+              normalized.includes("/node_modules/framer-motion/") ||
+              normalized.includes("/node_modules/sonner/")
+            ) {
+              return "vendor-ui";
+            }
+            if (
+              normalized.includes("/node_modules/@tanstack/") ||
+              normalized.includes("/node_modules/@trpc/")
+            ) {
+              return "vendor-query";
+            }
+          }
+        },
+      },
+    },
   },
   server: {
     port: 5173,                                                  // Run Vite local dev server on standard port 5173
