@@ -33,7 +33,7 @@ import { mockDoctorDirectory } from "../discovery/mockDoctorDirectory";         
 
 // Zod schema validating doctor email and password input
 const credentialInput = z.object({
-  email: z.string().trim().email("Please enter a valid clinician work email (e.g. cardiology@lifelink.com)").max(320), // Validated email
+  email: z.string().trim().email("Please enter a valid work email (e.g. cardiology@lifelink.com)").max(320), // Validated email
   password: z.string().min(1).max(128),                                                   // Password string between 1 and 128 characters
 });
 
@@ -88,7 +88,7 @@ async function establishDoctorSession(
   openId: string,
 ) {
   const session = doctorSessionView(openId);                                               // Build client-safe session view
-  if (!session) throw new TRPCError({ code: "FORBIDDEN", message: "Synthetic doctor session is not valid." }); // Reject if doctor missing
+  if (!session) throw new TRPCError({ code: "FORBIDDEN", message: "Doctor session is not valid." }); // Reject if doctor missing
   const token = await authSession.createSessionToken(openId, { name: session.displayName, expiresInMs: ONE_YEAR_MS }); // Sign doctor JWT
   ctx.res.cookie(DOCTOR_COOKIE_NAME, token, { ...getSessionCookieOptions(ctx.req), maxAge: ONE_YEAR_MS }); // Write cookie to client response
   return session;                                                                          // Return session data
@@ -112,7 +112,7 @@ export const doctorAuthRouter = router({
       throw new TRPCError({ code: "UNAUTHORIZED", message: "The provisioning code is invalid." });
     }
     const doctor = getSyntheticDoctor(input.doctorId);                                     // Retrieve doctor profile
-    if (!doctor) throw new TRPCError({ code: "NOT_FOUND", message: "Selected controlled specialist was not found." });
+    if (!doctor) throw new TRPCError({ code: "NOT_FOUND", message: "Selected specialist was not found." });
     const passwordHash = await hashPatientPassword(input.password);                         // Hash entered password with scrypt
     const created = await createSyntheticDoctorCredential({                                // Persist doctor credential in MySQL
       doctor,
@@ -126,7 +126,7 @@ export const doctorAuthRouter = router({
         passwordHash,
       });
       if (refreshed === "email-conflict") {                                                // Email collision check
-        throw new TRPCError({ code: "CONFLICT", message: "This email is already assigned to another doctor account." });
+        throw new TRPCError({ code: "CONFLICT", message: "This email is already assigned." });
       }
     }
     return { doctorId: doctor.id, email: normalizedEmail(input.email), displayName: doctorDisplayName(doctor) }; // Success output
@@ -163,11 +163,11 @@ export const doctorAuthRouter = router({
         const passwordHash = await hashPatientPassword(password);                           // Hash with scrypt
         const rotation = await refreshSyntheticDoctorCredentialByDoctorId({ doctorId: doctor.id, email, passwordHash });
         if (rotation === "email-conflict") {
-          throw new TRPCError({ code: "CONFLICT", message: "A refreshed clinician email conflicts with another account." });
+          throw new TRPCError({ code: "CONFLICT", message: "A refreshed email conflicts with another account." });
         }
         if (rotation === "not-found") {                                                    // Auto-create if not previously existing
           const created = await createSyntheticDoctorCredential({ doctor, email, passwordHash });
-          if (!created) throw new TRPCError({ code: "CONFLICT", message: "A clinician account could not be refreshed safely." });
+          if (!created) throw new TRPCError({ code: "CONFLICT", message: "An account could not be refreshed safely." });
         }
         refreshed.push({ doctorId: doctor.id, displayName: doctorDisplayName(doctor), email, password });
       }
@@ -198,7 +198,7 @@ export const doctorAuthRouter = router({
       const email = normalizedEmail(input.email);                                          // Normalize email
       const password = `LL-${randomBytes(14).toString("base64url")}`;                     // Generate new random password
       const updated = await updateSyntheticDoctorPasswordByEmail(email, await hashPatientPassword(password)); // Save new hash
-      if (!updated) throw new TRPCError({ code: "NOT_FOUND", message: "No controlled clinician account uses that email." });
+      if (!updated) throw new TRPCError({ code: "NOT_FOUND", message: "No doctor account found with that email." });
       return { email, password };
     }),
 
@@ -267,7 +267,7 @@ export const doctorAuthRouter = router({
     }
     const doctorId = record ? doctorIdFromSyntheticOpenId(record.user.openId) : null;      // Extract synthetic doctor ID
     if (!record || !valid || record.user.role !== "doctor" || !doctorId || record.credential.doctorId !== doctorId) {
-      throw new TRPCError({ code: "UNAUTHORIZED", message: "Invalid clinician email or password." }); // Authentication failure
+      throw new TRPCError({ code: "UNAUTHORIZED", message: "Invalid email or Password" }); // Authentication failure
     }
     return establishDoctorSession(ctx, record.user.openId);                                // Set cookie and return doctor session
   }),
@@ -278,7 +278,7 @@ export const doctorAuthRouter = router({
       throw new TRPCError({ code: "UNAUTHORIZED", message: "The controlled reset code is invalid." });
     }
     const updated = await updateSyntheticDoctorPasswordByEmail(normalizedEmail(input.email), await hashPatientPassword(input.password));
-    if (!updated) throw new TRPCError({ code: "NOT_FOUND", message: "No controlled clinician account uses that email." });
+    if (!updated) throw new TRPCError({ code: "NOT_FOUND", message: "No doctor account found with that email." });
     return { success: true } as const;
   }),
 
@@ -286,9 +286,9 @@ export const doctorAuthRouter = router({
   changePassword: doctorProcedure.input(changePasswordInput).mutation(async ({ ctx, input }) => {
     const credential = await getSyntheticDoctorCredentialByUserId(ctx.user.id);             // Retrieve current doctor credential
     const valid = credential ? await verifyPatientPassword(input.currentPassword, credential.passwordHash) : false; // Check current password
-    if (!credential || !valid) throw new TRPCError({ code: "UNAUTHORIZED", message: "Current password was not accepted." });
+    if (!credential || !valid) throw new TRPCError({ code: "UNAUTHORIZED", message: "Current password is invalid." });
     const updated = await updateSyntheticDoctorPasswordByUserId(ctx.user.id, await hashPatientPassword(input.newPassword)); // Update with new hash
-    if (!updated) throw new TRPCError({ code: "NOT_FOUND", message: "Controlled clinician credentials are unavailable." });
+    if (!updated) throw new TRPCError({ code: "NOT_FOUND", message: "Doctor credentials are unavailable." });
     return { success: true } as const;
   }),
 
