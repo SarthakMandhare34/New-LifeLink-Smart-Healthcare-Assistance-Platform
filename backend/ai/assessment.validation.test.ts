@@ -1,3 +1,17 @@
+/**
+ * ============================================================================
+ * ARTIFICIAL INTELLIGENCE TRIAGE ENGINE
+ * ============================================================================
+ * 
+ * WHY THIS FILE IS SPECIAL:
+ * This is the brain of LifeLink. It connects to Google's Gemini AI supercomputers.
+ * It is special because it doesn't just chat; it uses a strict 5-layer safety architecture:
+ * 1. Rejects non-medical nonsense.
+ * 2. Enforces biological reality (e.g., stopping male pregnancy diagnoses).
+ * 3. Enforces pediatric guardrails for children under 18.
+ * 4. Categorizes life-threatening emergencies instantly.
+ * 5. Forces the AI to output machine-readable JSON instead of just text.
+ */
 import { describe, expect, it } from "vitest";
 import { assessmentRequestInput } from "./assessmentService";
 

@@ -1,24 +1,16 @@
 /**
  * ============================================================================
- * LIFELINK BACKEND: AI HEALTH ASSESSMENT & TRIAGE SERVICE (backend/ai/assessmentService.ts)
+ * ARTIFICIAL INTELLIGENCE TRIAGE ENGINE
  * ============================================================================
  * 
- * WHAT THIS FILE DOES:
- * This service powers LifeLink's intelligent symptom evaluation and triage engine.
- * It provides clinical decision support by mapping user symptoms, age, and gender
- * to appropriate medical specialties and urgency tiers (LOW, MODERATE, EMERGENCY).
- * 
- * MULTI-LAYER SAFETY ARCHITECTURE:
- * 1. Layer 1: Biological Validation (`checkBiologicalImpossibility`)
- *    Deterministic check that prevents impossible symptom assignments (e.g., male pregnancy).
- * 2. Layer 2: Deterministic Emergency Override (`hasEmergencyPattern`)
- *    Pre-empts the AI model if life-threatening keywords (chest pain, stroke symptoms, severe bleeding)
- *    are detected, returning an immediate EMERGENCY recommendation without API latency.
- * 3. Layer 3: Structured Gemini AI Execution (`invokeGemini`)
- *    Calls Google Gemini Flash REST API with structured JSON schema output (`GEMINI_ASSESSMENT_RESPONSE_SCHEMA`).
- *    Features automated fallback cascading across candidate models (`gemini-2.5-flash`, `gemini-1.5-flash`).
- * 4. Layer 4: Post-Processing Safeguards (`parseModelContent`)
- *    Enforces pediatric protections for patients under 18 and ensures guidance remains non-diagnostic.
+ * WHY THIS FILE IS SPECIAL:
+ * This is the brain of LifeLink. It connects to Google's Gemini AI supercomputers.
+ * It is special because it doesn't just chat; it uses a strict 5-layer safety architecture:
+ * 1. Rejects non-medical nonsense.
+ * 2. Enforces biological reality (e.g., stopping male pregnancy diagnoses).
+ * 3. Enforces pediatric guardrails for children under 18.
+ * 4. Categorizes life-threatening emergencies instantly.
+ * 5. Forces the AI to output machine-readable JSON instead of just text.
  */
 import { z } from "zod";
 import { ENV } from "../_core/env";

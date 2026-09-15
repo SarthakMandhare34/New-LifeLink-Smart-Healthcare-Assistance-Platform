@@ -1,23 +1,13 @@
 /**
  * ============================================================================
- * LIFELINK BACKEND: PATIENT tRPC ROUTER (backend/routers/patient.ts)
+ * tRPC DOMAIN ROUTERS & BUSINESS LOGIC
  * ============================================================================
  * 
- * WHAT THIS FILE DOES:
- * This module defines all patient-facing tRPC API procedures.
- * It provides secure, strongly-typed endpoints for:
- * 1. Authentication: Native email/password registration and login with cookie issuance.
- * 2. Profile Management: Emergency contacts, blood group, allergies, conditions.
- * 3. Dashboard Summary: Real-time aggregated stats (prescriptions, medicines, upcoming appointments).
- * 4. Medicine Cabinet: CRUD tracking of patient medications and dosage schedules.
- * 5. Appointments: Booking consultations with controlled Mumbai specialists.
- * 6. Prescriptions: Viewing digital prescriptions issued by authorized doctors.
- * 7. Mumbai Specialist Discovery: Filtering doctors across Central, Harbour, and Western railway lines.
- * 
- * SECURITY PATTERNS:
- * - `publicProcedure`: Unauthenticated routes for registration and login.
- * - `protectedProcedure`: Enforces valid user session (ctx.user), preventing IDOR attacks.
- * - `Zod`: Strict schema validation on all inputs before reaching DB query logic.
+ * WHY THIS FILE IS SPECIAL:
+ * This file contains the actual rules for what patients and doctors can do.
+ * It uses tRPC, which creates an unbreakable bridge between the front-end and back-end.
+ * More importantly, every single function here enforces IDOR (Insecure Direct Object Reference) protection.
+ * It strictly checks: "Does this prescription actually belong to the person requesting it?"
  */
 import { TRPCError } from "@trpc/server";
 import { z } from "zod";

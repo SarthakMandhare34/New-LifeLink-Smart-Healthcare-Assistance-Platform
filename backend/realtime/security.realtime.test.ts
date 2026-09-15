@@ -1,3 +1,15 @@
+/**
+ * ============================================================================
+ * REAL-TIME EVENT STREAMING (SSE)
+ * ============================================================================
+ * 
+ * WHY THIS FILE IS SPECIAL:
+ * Traditional websites force you to refresh the page to see new data.
+ * This file uses Server-Sent Events (SSE). Think of it like a walkie-talkie.
+ * The server keeps a persistent, lightweight connection open to the patient's phone.
+ * The absolute millisecond a doctor clicks 'Prescribe', the server pushes the 
+ * data directly to the patient's screen instantly. It saves battery and network data.
+ */
 import { describe, it, expect, vi, beforeEach, afterEach } from "vitest";
 import { EventEmitter } from "node:events";
 import { registerPatientRealtimeRoute, registerDoctorRealtimeRoute, parseLastEventId } from "./patientRealtime";
