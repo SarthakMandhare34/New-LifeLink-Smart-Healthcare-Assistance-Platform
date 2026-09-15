@@ -146,7 +146,7 @@ CRITICAL CLINICAL RULES FOR GENDER AND AGE:
   * urgency: "ERROR"
   * specialty: "Error"
   * reason: "The input is not related to health symptoms."
-  * guidance: "The Input is not related towards the symptoms please try again later"
+  * guidance: "The input is not related to health symptoms. Please try again."
 - Do NOT answer general knowledge questions, write code, or engage in non-medical chat.`;
 
 export function hasEmergencyPattern(symptoms: string): boolean {
@@ -174,7 +174,7 @@ export function nonMedicalOverride(): AssessmentResult {
     urgency: "ERROR",                                                                      // Error status
     specialty: "Error",                                                                    // Error category
     reason: "The input is not related to health symptoms.",                                // Plain reason
-    guidance: "The Input is not related towards the symptoms please try again later",      // Friendly user guidance
+    guidance: "The input is not related to health symptoms. Please try again.",            // Friendly user guidance
   };
 }
 
