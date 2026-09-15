@@ -166,7 +166,7 @@ async function syncDoctors() {
   console.log("=========================================================================\n");
   console.table(report);
 
-  console.log("\n✅ All 24 doctor accounts are 100% verified and active in the database.");
+  console.log("\n✅ All 12 doctor accounts are 100% verified and active in the database.");
   console.log("👉 Clinicians can log in at: http://localhost:5173/doctor/login\n");
   process.exit(0);
 }
