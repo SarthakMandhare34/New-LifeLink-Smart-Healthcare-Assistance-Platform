@@ -155,22 +155,6 @@ export const PatientRegistration = () => {
               <p style={{ fontSize: '0.92rem', color: 'var(--color-text-muted)', margin: 0, lineHeight: 1.5, maxWidth: '380px' }}>
                 Create your personal health profile to securely store your medical history, book appointments with trusted doctors, and get smart AI guidance.
               </p>
-
-              {/* Patient feature highlights */}
-              <div style={{ display: 'flex', flexDirection: 'column', gap: '8px', marginTop: '16px', textAlign: 'left', width: '100%', maxWidth: '340px' }}>
-                <div style={{ display: 'flex', alignItems: 'center', gap: '10px', fontSize: '0.84rem', color: 'var(--color-text)', fontWeight: 500 }}>
-                  <ShieldCheck size={18} color="var(--color-primary)" />
-                  <span>Private, Patient-Controlled Medical Records</span>
-                </div>
-                <div style={{ display: 'flex', alignItems: 'center', gap: '10px', fontSize: '0.84rem', color: 'var(--color-text)', fontWeight: 500 }}>
-                  <Activity size={18} color="var(--color-accent)" />
-                  <span>Instant AI Health Insights & Vital Tracking</span>
-                </div>
-                <div style={{ display: 'flex', alignItems: 'center', gap: '10px', fontSize: '0.84rem', color: 'var(--color-text)', fontWeight: 500 }}>
-                  <HeartPulse size={18} color="var(--color-primary)" />
-                  <span>Trusted Network of Certified Doctors</span>
-                </div>
-              </div>
             </div>
           </div>
         </div>
@@ -237,7 +221,7 @@ export const PatientRegistration = () => {
                   <Input
                     id="patient-name"
                     type="text"
-                    placeholder="e.g. Eleanor Vance"
+                    placeholder="Enter your full name for your health record"
                     value={name}
                     onChange={(event) => setName(event.target.value)}
                     required
@@ -265,7 +249,7 @@ export const PatientRegistration = () => {
                   <Input
                     id="patient-email"
                     type="email"
-                    placeholder="e.g. eleanor@example.com"
+                    placeholder="Enter your email address for account sign-in and updates"
                     value={email}
                     onChange={(event) => setEmail(event.target.value)}
                     autoComplete="username"
@@ -294,6 +278,7 @@ export const PatientRegistration = () => {
                   <Input
                     id="patient-password"
                     type="password"
+                    placeholder="Create a password (minimum 8 characters)"
                     value={password}
                     onChange={(event) => setPassword(event.target.value)}
                     autoComplete="new-password"
@@ -322,6 +307,7 @@ export const PatientRegistration = () => {
                   <Input
                     id="patient-confirm-password"
                     type="password"
+                    placeholder="Confirm your password"
                     value={confirmPassword}
                     onChange={(event) => setConfirmPassword(event.target.value)}
                     autoComplete="new-password"
@@ -408,22 +394,6 @@ export const PatientRegistration = () => {
                 Sign in
               </button>
             </div>
-
-            {/* Security Badges */}
-            <footer style={{ display: 'flex', justifyContent: 'space-around', marginTop: '22px', paddingTop: '14px', borderTop: '1px solid var(--color-border)' }}>
-              <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '4px', color: 'var(--color-text-muted)' }}>
-                <ShieldCheck size={18} color="var(--color-primary)" />
-                <span style={{ fontSize: '0.70rem', fontWeight: 600 }}>HIPAA Ready</span>
-              </div>
-              <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '4px', color: 'var(--color-text-muted)' }}>
-                <ShieldCheck size={18} color="var(--color-primary)" />
-                <span style={{ fontSize: '0.70rem', fontWeight: 600 }}>Encrypted Records</span>
-              </div>
-              <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '4px', color: 'var(--color-text-muted)' }}>
-                <Shield size={18} color="var(--color-accent)" />
-                <span style={{ fontSize: '0.70rem', fontWeight: 600 }}>Protected Privacy</span>
-              </div>
-            </footer>
           </Card>
         </div>
       </div>

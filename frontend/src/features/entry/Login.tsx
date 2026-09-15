@@ -150,22 +150,6 @@ export const PatientLogin = () => {
               <p style={{ fontSize: '0.92rem', color: 'var(--color-text-muted)', margin: 0, lineHeight: 1.5, maxWidth: '380px' }}>
                 Your personal healthcare companion for managing medical history, instant AI health checks, and direct consultations with certified specialists.
               </p>
-
-              {/* Patient feature highlights */}
-              <div style={{ display: 'flex', flexDirection: 'column', gap: '8px', marginTop: '16px', textAlign: 'left', width: '100%', maxWidth: '340px' }}>
-                <div style={{ display: 'flex', alignItems: 'center', gap: '10px', fontSize: '0.84rem', color: 'var(--color-text)', fontWeight: 500 }}>
-                  <ShieldCheck size={18} color="var(--color-primary)" />
-                  <span>Private, Secure Digital Health Records</span>
-                </div>
-                <div style={{ display: 'flex', alignItems: 'center', gap: '10px', fontSize: '0.84rem', color: 'var(--color-text)', fontWeight: 500 }}>
-                  <Activity size={18} color="var(--color-accent)" />
-                  <span>Instant AI Health Checks & Symptom Guidance</span>
-                </div>
-                <div style={{ display: 'flex', alignItems: 'center', gap: '10px', fontSize: '0.84rem', color: 'var(--color-text)', fontWeight: 500 }}>
-                  <HeartPulse size={18} color="var(--color-primary)" />
-                  <span>Direct Booking & Telehealth Consultations</span>
-                </div>
-              </div>
             </div>
           </div>
         </div>
@@ -232,7 +216,7 @@ export const PatientLogin = () => {
                   <Input
                     id="patient-email"
                     type="text"
-                    placeholder="e.g. patient@lifelink.com or patient"
+                    placeholder="Enter your registered email or username"
                     value={email}
                     onChange={(event) => setEmail(event.target.value)}
                     autoComplete="username"
@@ -261,6 +245,7 @@ export const PatientLogin = () => {
                   <Input
                     id="patient-password"
                     type={showPassword ? 'text' : 'password'}
+                    placeholder="Enter your account password"
                     value={password}
                     onChange={(event) => setPassword(event.target.value)}
                     autoComplete="current-password"
@@ -306,7 +291,7 @@ export const PatientLogin = () => {
                   opacity: isLoading ? 0.7 : 1
                 }}
               >
-                {isLoading ? 'Signing In…' : 'Sign In to LifeLink'}
+                {isLoading ? 'Signing In…' : 'Sign In'}
               </Button>
             </form>
 
@@ -354,17 +339,7 @@ export const PatientLogin = () => {
                   onClick={() => navigate('/register')}
                   style={{ background: 'none', border: 'none', color: 'var(--color-primary)', fontWeight: 700, cursor: 'pointer', padding: 0 }}
                 >
-                  Create one
-                </button>
-              </div>
-              <div>
-                <span style={{ color: 'var(--color-text-muted)' }}>Are you a clinician? </span>
-                <button
-                  type="button"
-                  onClick={() => navigate('/doctor/login')}
-                  style={{ background: 'none', border: 'none', color: 'var(--color-accent)', fontWeight: 700, cursor: 'pointer', padding: 0 }}
-                >
-                  Doctor sign in
+                  Sign up
                 </button>
               </div>
             </div>
