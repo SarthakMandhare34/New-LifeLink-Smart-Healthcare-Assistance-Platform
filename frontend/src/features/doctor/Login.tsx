@@ -213,7 +213,7 @@ export const DoctorLogin = () => {
                     }}
                   />
                 </div>
-                <small style={{ fontSize: '0.74rem', color: 'var(--color-text-muted)' }}>Must be your official @lifelink.com doctor work email.</small>
+                <small style={{ fontSize: '0.74rem', color: 'var(--color-text-muted)' }}>Use your @lifelink.com work email.</small>
               </div>
 
               {/* Password Field */}
