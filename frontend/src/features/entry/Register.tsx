@@ -221,7 +221,7 @@ export const PatientRegistration = () => {
                   <Input
                     id="patient-name"
                     type="text"
-                    placeholder="Enter your full name for your health record"
+                    placeholder="Enter full name"
                     value={name}
                     onChange={(event) => setName(event.target.value)}
                     required
@@ -249,7 +249,7 @@ export const PatientRegistration = () => {
                   <Input
                     id="patient-email"
                     type="email"
-                    placeholder="Enter your email address for account sign-in and updates"
+                    placeholder="Enter email"
                     value={email}
                     onChange={(event) => setEmail(event.target.value)}
                     autoComplete="username"
@@ -278,7 +278,7 @@ export const PatientRegistration = () => {
                   <Input
                     id="patient-password"
                     type="password"
-                    placeholder="Create a password (minimum 8 characters)"
+                    placeholder="Enter password"
                     value={password}
                     onChange={(event) => setPassword(event.target.value)}
                     autoComplete="new-password"
@@ -307,7 +307,7 @@ export const PatientRegistration = () => {
                   <Input
                     id="patient-confirm-password"
                     type="password"
-                    placeholder="Confirm your password"
+                    placeholder="Confirm password"
                     value={confirmPassword}
                     onChange={(event) => setConfirmPassword(event.target.value)}
                     autoComplete="new-password"

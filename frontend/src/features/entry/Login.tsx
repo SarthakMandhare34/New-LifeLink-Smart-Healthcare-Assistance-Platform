@@ -15,7 +15,7 @@ import { Input } from '../../components/ui/Input';
 import { LifeLinkLogo } from '../../components/brand/LifeLinkLogo';
 import { EntryThemeToggle } from '../../components/EntryThemeToggle';
 import { trpc } from '../../lib/trpc';
-import { Activity, Lock, User as UserIcon, Eye, EyeOff, HeartPulse, ShieldCheck, Shield } from 'lucide-react';
+import { Activity, Lock, Mail, Eye, EyeOff, HeartPulse, ShieldCheck, Shield } from 'lucide-react';
 import { PATIENT_DASHBOARD_PATH } from '../patient/patientAuthRoutes';
 
 const GoogleIcon = () => (
@@ -206,20 +206,20 @@ export const PatientLogin = () => {
 
             {/* Login form */}
             <form onSubmit={handleLogin} className="auth-form" style={{ display: 'grid', gap: '16px' }}>
-              {/* Username/Email Input Field */}
+              {/* Email Input Field */}
               <div style={{ display: 'flex', flexDirection: 'column', gap: '6px' }}>
                 <label htmlFor="patient-email" style={{ fontWeight: 600, fontSize: '0.86rem', color: 'var(--color-text)' }}>
-                  Email or Username
+                  Email
                 </label>
                 <div style={{ position: 'relative', display: 'flex', alignItems: 'center' }}>
-                  <UserIcon size={18} style={{ position: 'absolute', left: '14px', color: 'var(--color-text-muted)', pointerEvents: 'none' }} />
+                  <Mail size={18} style={{ position: 'absolute', left: '14px', color: 'var(--color-text-muted)', pointerEvents: 'none' }} />
                   <Input
                     id="patient-email"
-                    type="text"
-                    placeholder="Enter your registered email or username"
+                    type="email"
+                    placeholder="Enter email"
                     value={email}
                     onChange={(event) => setEmail(event.target.value)}
-                    autoComplete="username"
+                    autoComplete="email"
                     required
                     style={{ 
                       width: '100%', 
@@ -245,7 +245,7 @@ export const PatientLogin = () => {
                   <Input
                     id="patient-password"
                     type={showPassword ? 'text' : 'password'}
-                    placeholder="Enter your account password"
+                    placeholder="Enter password"
                     value={password}
                     onChange={(event) => setPassword(event.target.value)}
                     autoComplete="current-password"

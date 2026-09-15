@@ -226,7 +226,7 @@ export const DoctorLogin = () => {
                   <Input
                     id="doctor-password"
                     type={showPassword ? 'text' : 'password'}
-                    placeholder="Enter your doctor account password"
+                    placeholder="Enter password"
                     value={password}
                     onChange={(event) => setPassword(event.target.value)}
                     autoComplete="current-password"
