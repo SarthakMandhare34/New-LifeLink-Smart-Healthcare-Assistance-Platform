@@ -1,460 +1,492 @@
 # 🏥 LifeLink — Smart Healthcare Assistance Platform
 
-[![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
-[![React 19](https://img.shields.io/badge/React-19-61dafb.svg?logo=react)](https://react.dev/)
-[![TypeScript](https://img.shields.io/badge/TypeScript-5.9-3178c6.svg?logo=typescript)](https://www.typescriptlang.org/)
-[![Tailwind CSS v4](https://img.shields.io/badge/Tailwind-v4-38bdf8.svg?logo=tailwindcss)](https://tailwindcss.com/)
-[![Google Gemini AI](https://img.shields.io/badge/Google%20Gemini-AI-4285F4.svg?logo=google)](https://ai.google.dev/)
-[![MySQL](https://img.shields.io/badge/MySQL-8.0-4479A1.svg?logo=mysql)](https://www.mysql.com/)
-[![Bundle Optimized](https://img.shields.io/badge/Bundle-45%20kB%20Entry-success.svg)](#-performance--scalability-benchmarks)
+[![Live Deployment](https://img.shields.io/badge/Render-Live%20Deployment-00C4CC?style=for-the-badge&logo=render&logoColor=white)](https://lifelink-healthcare.onrender.com)
+[![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg?style=for-the-badge)](LICENSE)
+[![Node.js](https://img.shields.io/badge/Node.js-v22%2B-339933?style=for-the-badge&logo=node.js&logoColor=white)](https://nodejs.org/)
+[![React 19](https://img.shields.io/badge/React-19-61dafb?style=for-the-badge&logo=react&logoColor=black)](https://react.dev/)
+[![TypeScript](https://img.shields.io/badge/TypeScript-5.9-3178c6?style=for-the-badge&logo=typescript&logoColor=white)](https://www.typescriptlang.org/)
+[![Tailwind CSS](https://img.shields.io/badge/Tailwind-v4-38bdf8?style=for-the-badge&logo=tailwindcss&logoColor=white)](https://tailwindcss.com/)
+[![Google Gemini AI](https://img.shields.io/badge/Google%20Gemini-AI-4285F4?style=for-the-badge&logo=google&logoColor=white)](https://ai.google.dev/)
+[![TiDB Cloud / MySQL](https://img.shields.io/badge/TiDB%20Cloud-MySQL%208.0-E30C34?style=for-the-badge&logo=mysql&logoColor=white)](https://tidbcloud.com/)
+[![Tests Passing](https://img.shields.io/badge/Vitest-33%20Suites%20Passed-success?style=for-the-badge&logo=vitest&logoColor=white)](#-automated-testing--quality-verification)
 
-> **LifeLink** is an enterprise-grade clinical navigation and healthcare assistance platform connecting patients with verified medical clinicians across Mumbai's suburban transit corridors. Powered by a **5-layer Google Gemini AI symptom triage engine**, **tamper-evident SHA-256 digital prescriptions**, **real-time Server-Sent Events (SSE)**, and an **ultra-fast code-split React 19 architecture**.
+> **LifeLink** is a full-stack, enterprise-grade healthcare assistance and clinical navigation platform designed to bridge the gap between sudden illness and rapid medical intervention across Mumbai's suburban transit corridors.
+>
+> 🌐 **Live Production URL**: **[https://lifelink-healthcare.onrender.com](https://lifelink-healthcare.onrender.com)**
 
 ---
 
 ## 📑 Table of Contents
 
-- [🤔 What is LifeLink?](#-what-is-lifelink)
-- [✨ Key Platform Features](#-key-platform-features)
-  - [👤 Patient Portal](#-patient-portal)
-  - [🩺 Clinician Workspace](#-clinician-workspace)
-- [🎨 Design System & Visual Identity](#-design-system--visual-identity)
-- [🔒 Security, Privacy & Data Isolation](#-security-privacy--data-isolation)
-- [📁 Project Directory Tree & Guidelines](#-project-directory-tree--guidelines)
-  - [Complete Repository Tree](#complete-repository-tree)
-  - [Folder & File Architectural Guide](#folder--file-architectural-guide)
-- [🩺 Official Clinician Directory (24 Doctor Workstations)](#-official-clinician-directory-24-doctor-workstations)
-- [⚙️ Quickstart: Local Setup & Installation](#️-quickstart-local-setup--installation)
-- [📜 NPM Scripts Reference](#-npm-scripts-reference)
-- [🧭 Application Routes Matrix](#-application-routes-matrix)
-- [⚡ Performance & Scalability Benchmarks](#-performance--scalability-benchmarks)
-- [👥 Maintainers & Contributors](#-maintainers--contributors)
-- [📄 License](#-license)
+1. [Executive Summary & Core Problem Solved](#-executive-summary--core-problem-solved)
+2. [End-to-End System Architecture](#-end-to-end-system-architecture)
+3. [Core Clinical Modules & Working Mechanisms](#-core-clinical-modules--working-mechanisms)
+   - [1. 5-Layer AI Symptom Triage Engine](#1-5-layer-ai-symptom-triage-engine)
+   - [2. Transit-Corridor Clinic Discovery Map](#2-transit-corridor-clinic-discovery-map)
+   - [3. Digital Health Passport & Emergency Contacts](#3-digital-health-passport--emergency-contacts)
+   - [4. Medicine Cabinet & Adherence Tracker](#4-medicine-cabinet--adherence-tracker)
+   - [5. Tamper-Evident SHA-256 Digital Prescriptions](#5-tamper-evident-sha-256-digital-prescriptions)
+   - [6. Clinician Consultation Workstation](#6-clinician-consultation-workstation)
+   - [7. One-Tap National 112 SOS Dialer](#7-one-tap-national-112-sos-dialer)
+   - [8. Real-Time Server-Sent Events (SSE) Bus](#8-real-time-server-sent-events-sse-bus)
+4. [Official Clinician Directory (24 Mumbai Workstations)](#-official-clinician-directory-24-mumbai-workstations)
+5. [Security, Privacy & Data Isolation Guarantees](#-security-privacy--data-isolation-guarantees)
+6. [Cloud Deployment Guide (Render + TiDB Cloud Serverless)](#-cloud-deployment-guide-render--tidb-cloud-serverless)
+   - [Render Blueprint Setup](#1-render-blueprint-setup)
+   - [TiDB Cloud Database Configuration](#2-tidb-cloud-database-configuration)
+   - [Google OAuth 2.0 Cloud Setup](#3-google-oauth-20-cloud-setup)
+   - [Production Environment Variables Matrix](#4-production-environment-variables-matrix)
+7. [Local Development & Quickstart](#-local-development--quickstart)
+8. [NPM Scripts Command Reference](#-npm-scripts-command-reference)
+9. [Automated Testing & Quality Verification](#-automated-testing--quality-verification)
+10. [Application Routes Matrix](#-application-routes-matrix)
+11. [Repository Directory Structure](#-repository-directory-structure)
+12. [Maintainers & License](#-maintainers--license)
 
 ---
 
-## 🤔 What is LifeLink?
+## 🎯 Executive Summary & Core Problem Solved
 
-Navigating healthcare during sudden illness can be overwhelming and chaotic. Patients often struggle to gauge urgency, choose the right specialty, or locate accessible clinics along their daily transit routes.
+Navigating outpatient healthcare during acute illness or medical emergencies is fraught with friction:
+- **Misjudged Urgency**: Patients struggle to determine whether symptoms require home care, a scheduled clinic visit, or immediate emergency room admission.
+- **Specialty Misdirection**: Patients frequently consult the wrong specialist (e.g. visiting general orthopedics for neurological numbness), delaying treatment.
+- **Geographic Inaccessibility**: In major metropolitan transit hubs like Mumbai, patients need accessible medical care aligned with their daily transit routes (Central, Western, and Harbour suburban railway lines).
+- **Paper Record Loss & Tampering**: Paper prescriptions are easily lost, illegible, or vulnerable to unverified modification.
 
-**LifeLink bridges this gap by unifying:**
-1. **Intelligent Symptom Triage**: Plain-English symptom analysis categorized into clinical urgency levels (Low, Moderate, Emergency) powered by Google Gemini AI with pediatric safety nets.
-2. **Transit-Corridor Clinic Discovery**: Interactive Leaflet maps locating 24 verified specialist clinics across Mumbai's Central, Western, and Harbour suburban railway lines.
-3. **Emergency Health Passport**: Self-owned digital medical ID with verified blood group, allergies, chronic conditions, and emergency contacts.
-4. **Active Consultation Workspace**: Dedicated clinician portal for live diagnosis, notes documentation, and cryptographic prescription generation.
-5. **Medicine Cabinet & Adherence**: Real-time medication schedules with dosage tracking, pill counters, and auto-sync from doctor prescriptions.
-6. **One-Tap Emergency SOS**: Immediate access to the national `112` emergency response helpline with emergency contact SMS dispatch.
-
----
-
-## ✨ Key Platform Features
-
-### 👤 Patient Portal
-| Module | Capabilities |
-| :--- | :--- |
-| **Authentication** | Sign up with email/password or one-click Google OAuth with strict account collision safeguards. |
-| **AI Symptom Checker** | 5-layer clinical triage engine evaluates urgency (Low, Moderate, Emergency) with pediatric safety nets. |
-| **Health Passport** | Medical baseline storing blood group, verified allergies, chronic conditions, and avatar photos. |
-| **Medicine Cabinet** | Medication adherence tracker with dosage schedules, pill counters, and renewal reminders. |
-| **Specialist Finder** | Real-time geospatial map locating clinics near Mumbai suburban railway stations. |
-| **Appointment Manager** | Request, track, and manage consultations with assigned clinicians in real time. |
-| **Digital Prescriptions** | Access doctor-issued prescriptions verified with SHA-256 digital integrity references. |
-| **Emergency SOS** | Instant dialer for national emergency services (`112`) and emergency contact dispatch. |
-| **Preferences & Settings**| Balanced 2-column settings suite for notification alerts, privacy boundaries, and session control. |
-
-### 🩺 Clinician Workspace
-| Module | Capabilities |
-| :--- | :--- |
-| **Clinician Sign-In** | Dedicated credential authentication at `/doctor/login` with strict work emails (`<specialty>@lifelink.com`). |
-| **Clinical Dashboard** | Live consultation queue, patient roster, and pending appointment action items. |
-| **Patient History Review** | Review full patient medical baseline and triage notes prior to consultation. |
-| **Live Consultation Room** | Document clinical observations, diagnoses, and examination notes. |
-| **Digital Prescription Creator**| Prescribe medication line items and issue signed cryptographic prescriptions. |
-| **AI Triage Ingestion** | Review AI-generated symptom assessments submitted by patients for clinical context. |
-| **Workstation Settings** | 2-column security console for password updates with verification and access tier declarations. |
+**LifeLink eliminates these vulnerabilities through an integrated, zero-friction clinical software platform:**
+- Categorizes symptom urgency into **Low, Moderate, Emergency, or Non-Health Error** using Google Gemini AI with pediatric and biological guardrails.
+- Routes patients to **24 verified Mumbai specialist clinics** stationed at major suburban railway terminals.
+- Generates **cryptographically signed SHA-256 digital prescriptions** that auto-sync directly into the patient's digital Medicine Cabinet.
+- Maintains **100% strict identity isolation** between public patients and clinician workstations with independent dual-cookie authentication sessions.
 
 ---
 
-## 🎨 Design System & Visual Identity
-
-LifeLink employs two completely independent, carefully crafted design palettes ensuring clear cognitive separation between patient care and clinical operations:
-
-### 1. Patient Portal — Warm Amber + Deep Teal
-- **Primary Action**: Deep Warm Amber (`#B76B00` light / `#E09020` dark)
-- **Clinical Accent**: Calming Teal (`#0F766E` light / `#14B8A6` dark)
-- **Surfaces**: Warm Ivory (`#FDFBF7`) in light mode; Deep Roasted Espresso (`#1A120B`) in dark mode
-- **Typography**: Plus Jakarta Sans & Outfit with high-contrast espresso-ink (`#2C1C06` light / `#FAF3E8` dark)
-
-### 2. Doctor Workstation — Deep Ocean Teal + Rich Gold
-- **Primary Brand**: Deep Ocean Teal (`#0C5F66` light / `#4ECDC4` dark)
-- **Institutional Accent**: Rich Dark Gold (`#B8860B` light / `#E8C43A` dark)
-- **Surfaces**: Soft Mint Off-White (`#F0F8F8`) in light mode; Deep Ocean Abyss (`#0E2226`) in dark mode
-- **Dark Mode Contrast Overhaul**:
-  - Auth page (`.doctor-auth-page`) features a deep ocean teal radial background (`radial-gradient(circle at 30% 20%, #0E2E33 0%, #071416 60%, #030A0B 100%)`).
-  - Elevated ivory logo mounts (`#FAF5EC`) with gold rim accents.
-  - Luminous ice-teal (`#D4F0EE`) and clean ivory (`#F0FDFD`) typography, guaranteeing **zero low-contrast text**.
-  - No pure black (`#000000`) typography anywhere in the system.
-
-### 3. Responsive 2-Column Settings Layout
-Both Patient Preferences (`/patient/settings`) and Doctor Workspace Settings (`/doctor/settings`) feature a generous, balanced **2-column responsive layout** (`minmax(min(100%, 480px), 1fr)`) replacing narrow boxes with structured cards matching other dashboard pages.
-
----
-
-## 🔒 Security, Privacy & Data Isolation
-
-LifeLink implements strict enterprise healthcare security standards:
-
-- **Strict Identity Isolation (Option 1 Locked)**: Native email/password accounts and Google OAuth identities sharing the same email are blocked from silent merging (`ProviderAccountConflictError`), preventing account takeover.
-- **Zero Pre-Stored Patient Accounts**: The database maintains strictly 24 doctor accounts and 0 pre-seeded patients. Patient onboarding is 100% dynamic, realistic, and testable.
-- **Dual-Session Cookie Segregation**: Completely independent session cookies (`app_session_id` for patients, `doctor_session_id` for clinicians) allow a doctor and patient to operate simultaneously in the same browser without context leakage.
-- **Automated 5-Minute Inactivity Protection**: Workstations automatically log out after 300,000 ms (5 minutes) of inactivity, protecting sensitive patient records in public or clinical environments.
-- **Role Sandboxing**: Google OAuth is strictly restricted to patient accounts; doctor workstation credentials can never be escalated or bypassed via OAuth.
-- **Cryptographic Prescription Integrity**: Prescriptions are signed with automated SHA-256 integrity hashes verifying doctor ID, patient ID, medication items, dosage schedules, and timestamps.
-- **In-Memory Geolocation Privacy**: Patient GPS coordinates are processed exclusively in-memory on the client; coordinates are never persisted to disk or logged on the server.
-- **IDOR Protection**: All database queries enforce strict user ownership checks (`eq(patientProfiles.userId, ctx.user.id)`).
-
----
-
-## 📁 Project Directory Tree & Guidelines
-
-### Complete Repository Tree
+## 🏗️ End-to-End System Architecture
 
 ```text
-LifeLink-Smart-Healthcare-Assistance-Platform/
-│
-├── 📁 frontend/                                    # React 19 Single-Page Application (Vite 7)
-│   ├── index.html                                 # HTML5 entry point & viewport meta
-│   ├── public/                                    # Static assets, SVG logos, and brand icons
-│   │   ├── favicon.svg                            # Platform browser tab icon
-│   │   └── ...                                    # Brand mark assets
-│   └── src/                                       # Frontend TypeScript source code
-│       ├── main.tsx                               # Application bootstrap, TanStack Query & tRPC setup
-│       ├── App.tsx                                # Central route definitions with React.lazy code-splitting
-│       ├── index.css                              # Design tokens, themes (Amber/Teal & Ocean/Gold), WCAG rules
-│       │
-│       ├── 📁 _core/                              # Core client hooks & auth providers
-│       │   └── 📁 hooks/                          # Authentication status hooks (useAuth.ts)
-│       │
-│       ├── 📁 components/                         # Shared UI component primitives
-│       │   ├── EntryThemeToggle.tsx               # Light/dark mode toggle button for auth pages
-│       │   ├── ErrorBoundary.tsx                  # React error boundary fallback container
-│       │   ├── Map.tsx                            # Base Leaflet map wrapper component
-│       │   ├── MumbaiDoctorMap.tsx                # Mumbai rail station doctor locator map
-│       │   ├── 📁 brand/                          # Brand logos & symbolic marks
-│       │   │   └── LifeLinkLogo.tsx               # Branded SVG logo component (symbol & full mark)
-│       │   ├── 📁 layout/                         # Structural application shells
-│       │   │   ├── AppShell.tsx                   # Patient layout frame (sidebar, header, inactivity timer)
-│       │   │   ├── Bento.tsx                      # Bento-box layout grid primitive
-│       │   │   └── DoctorAppShell.tsx             # Clinician workstation frame (sidebar, queue, theme toggle)
-│       │   └── 📁 ui/                             # Base atomic UI elements
-│       │       ├── Button.tsx                     # Accessible button with variants
-│       │       ├── Card.tsx                       # Glassmorphic container card
-│       │       ├── Input.tsx                      # Accessible text and password input
-│       │       └── RouteLoader.tsx                # Suspense lazy-route loading animation
-│       │
-│       ├── 📁 context/                            # React Context providers
-│       │   └── ThemeContext.tsx                   # Theme provider persisting light/dark preference
-│       │
-│       ├── 📁 features/                           # Domain-driven feature modules
-│       │   ├── 📁 entry/                          # Public onboarding & gateway views
-│       │   │   ├── WorkspaceSelector.tsx          # Gateway selector: Patient Portal vs Doctor Workstation
-│       │   │   ├── Login.tsx                      # Patient login (Email/Password & Google OAuth)
-│       │   │   └── Register.tsx                   # Patient registration form with validation
-│       │   │
-│       │   ├── 📁 patient/                        # Patient workspace views
-│       │   │   ├── Dashboard.tsx                  # Patient home dashboard, quick stats & reminders
-│       │   │   ├── 📁 Appointments/               # Consultation booking and appointment queue
-│       │   │   ├── 📁 Assessment/                 # 5-stage Google Gemini AI symptom triage
-│       │   │   ├── 📁 Emergency/                  # National 112 emergency dialer & SOS trigger
-│       │   │   ├── 📁 HealthPassport/             # Medical baseline ID (blood group, allergies, conditions)
-│       │   │   ├── 📁 Medicines/                  # Medicine Cabinet adherence & inventory tracker
-│       │   │   ├── 📁 Prescriptions/              # Cryptographically signed digital prescriptions
-│       │   │   ├── 📁 Profile/                    # Patient demographic profile & avatar upload
-│       │   │   ├── 📁 Settings/                   # 2-column workspace preferences & notifications
-│       │   │   └── 📁 Specialists/                # Mumbai railway station specialist directory & map
-│       │   │
-│       │   └── 📁 doctor/                         # Clinician workspace views
-│       │       ├── Login.tsx                      # Clinician workstation login (/doctor/login)
-│       │       ├── ResetPassword.tsx              # Clinician credential recovery (/doctor/reset)
-│       │       ├── Dashboard.tsx                  # Clinician daily consultation queue & practice stats
-│       │       ├── 📁 Appointments/               # Clinician appointment management
-│       │       ├── 📁 Assessments/                # Ingested patient AI triage records
-│       │       ├── 📁 Consultations/              # Live examination & clinical documentation
-│       │       ├── 📁 Patients/                   # Patient medical records roster & details view
-│       │       ├── 📁 Prescriptions/              # Digital prescription generator with SHA-256 signing
-│       │       ├── 📁 Profile/                    # Clinician station assignment & details
-│       │       └── 📁 Settings/                   # 2-column workstation security & password update
-│       │
-│       ├── 📁 hooks/                              # Custom React application hooks
-│       │   ├── patientInactivity.ts               # 5-minute inactivity auto-logout monitor
-│       │   ├── usePatientRealtime.ts              # Patient Server-Sent Events (SSE) subscription
-│       │   └── useDoctorRealtime.ts               # Doctor Server-Sent Events (SSE) subscription
-│       │
-│       ├── 📁 lib/                                # Utility libraries & RPC client
-│       │   ├── trpc.ts                            # TanStack tRPC React client wrapper
-│       │   └── utils.ts                           # Class name mergers and common helpers
-│       │
-│       └── 📁 types/                              # Frontend-specific type definitions
-│           └── index.ts                           # Exported client interfaces and models
-│
-├── 📁 backend/                                    # Node.js Express Server & tRPC API
-│   ├── db.ts                                      # Primary Drizzle ORM data access layer & query helpers
-│   ├── profilePhoto.ts                            # Multipart avatar upload handler & image processing
-│   ├── routers.ts                                 # Master tRPC root router combining all sub-routers
-│   ├── storage.ts                                 # Local filesystem asset & media storage service
-│   ├── syntheticDoctor.ts                         # Synthetic clinician identity and OpenID resolution
-│   │
-│   ├── 📁 _core/                                  # Foundation server infrastructure
-│   │   ├── context.ts                             # tRPC request context extractor (user & doctor sessions)
-│   │   ├── cookies.ts                             # Secure cookie options builder (SameSite, HttpOnly)
-│   │   ├── env.ts                                 # Environment variable parsing and validation
-│   │   ├── index.ts                               # Express server bootstrap & middleware pipeline
-│   │   ├── systemRouter.ts                        # Healthcheck & telemetry endpoints (/api/trpc/system.health)
-│   │   ├── trpc.ts                                # Base tRPC router, middleware & procedure builders
-│   │   └── vite.ts                                # Vite development server middleware bridge
-│   │
-│   ├── 📁 ai/                                     # Google Gemini clinical triage engine
-│   │   ├── assessmentService.ts                   # 5-layer triage pipeline coordinator
-│   │   └── ...                                    # Prompt templates & validation schemas
-│   │
-│   ├── 📁 auth/                                   # Authentication & session services
-│   │   ├── authUtil.ts                            # Session token generation & JWT verification
-│   │   ├── doctorAuth.ts                          # Clinician login, session cookies & password reset
-│   │   ├── nativePatientAuth.ts                   # Patient password hashing (scrypt/PBKDF2) & login
-│   │   └── providerAuth.ts                        # Google OAuth 2.0 authorization & token exchange
-│   │
-│   ├── 📁 discovery/                              # Mumbai specialist directory services
-│   │   └── mockDoctorDirectory.ts                 # 24 verified doctor records across Mumbai rail lines
-│   │
-│   ├── 📁 realtime/                               # Real-time event streaming services
-│   │   ├── eventBus.ts                            # In-memory pub/sub event bus for SSE
-│   │   └── patientRealtime.ts                     # SSE HTTP streaming endpoint for real-time UI updates
-│   │
-│   └── 📁 routers/                                # Domain-specific tRPC sub-routers
-│       ├── doctor.ts                              # Clinician appointment & prescription endpoints
-│       └── patient.ts                             # Patient appointments, medicine, and passport routes
-│
-├── 📁 database/                                   # Relational Database Layer (MySQL 8.0)
-│   ├── drizzle.config.ts                          # Drizzle Kit configuration (schema path & dialect)
-│   ├── schema.ts                                  # Relational schema (13 tables: users, profiles, appointments...)
-│   └── 📁 migrations/                             # Versioned SQL migration files
-│
-├── 📁 shared/                                     # Isomorphic Code Shared Between Frontend & Backend
-│   ├── biologicalValidation.ts                    # Anatomical consistency rules for AI triage
-│   ├── const.ts                                   # Shared constants (cookie names, session timeouts)
-│   ├── mumbaiRailNetwork.ts                       # Mumbai railway transit directory (stations & corridors)
-│   ├── mumbaiStationCoordinates.ts                # Lat/Lng coordinates for Mumbai suburban stations
-│   └── types.ts                                   # Shared TypeScript contracts and schema interfaces
-│
-├── 📁 scripts/                                    # Operational CLI & Maintenance Scripts
-│   ├── clear-users.ts                             # Reset all database tables cleanly
-│   ├── dev.mjs                                    # High-speed parallel development runner (Vite + Express)
-│   ├── init-db.ts                                 # Idempotent database creation helper
-│   ├── seed-doctors.ts                            # Provisions strictly 24 doctor accounts (0 mock patients)
-│   └── sync-doctors.ts                            # Audits & synchronizes doctor records against directory
-│
-├── 📄 .env.example                                # Environment variables template
-├── 📄 CHANGELOG.md                                # Release notes and historical version changes
-├── 📄 CONTRIBUTORS.md                             # Maintainer credits and contributions
-├── 📄 LICENSE                                     # MIT License declaration
-├── 📄 package.json                                # NPM dependencies, scripts, and engine specifications
-├── 📄 README.md                                   # Comprehensive platform documentation (this file)
-├── 📄 SECURITY.md                                 # Security policy, IDOR safeguards, and vulnerability disclosures
-├── 📄 SYSTEM_DIAGRAMS.md                          # Mermaid ER diagrams, sequence flows, and architecture
-├── 📄 tsconfig.json                               # Master TypeScript compiler configuration
-├── 📄 vite.config.ts                              # Vite 7 build configuration with vendor chunk splitting
-└── 📄 vitest.config.ts                            # Vitest test runner configuration
+                                       ┌────────────────────────────────────────────────────────┐
+                                       │                   BROWSER CLIENT                      │
+                                       │          React 19 Single Page App (Vite 7)             │
+                                       └───────────────────────────┬────────────────────────────┘
+                                                                   │
+                                                tRPC Batch Requests & SSE Streams
+                                                                   │
+                                                                   ▼
+┌───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────┐
+│                                           LIFELINK NODE.JS / EXPRESS ENGINE                                            │
+│                                                                                                                       │
+│  ┌─────────────────────────┐   ┌──────────────────────────┐   ┌─────────────────────────┐   ┌──────────────────────┐  │
+│  │   Authentication Gate   │   │     tRPC Master Router   │   │  SSE Realtime EventBus  │   │ Static Production SPA│  │
+│  │  - Native Scrypt Hash   │   │  - Patient Sub-router    │   │  - /api/realtime/patient│   │  - Gzip / Brotli     │  │
+│  │  - Google OAuth 2.0     │   │  - Doctor Sub-router     │   │  - /api/realtime/doctor │   │  - 1-Year Cache Hits │  │
+│  │  - Master Clinician Key │   │  - System Health Router  │   │  - In-Memory Pub/Sub    │   │  - 45 kB Entry Chunk │  │
+│  └────────────┬────────────┘   └─────────────┬────────────┘   └────────────┬────────────┘   └──────────────────────┘  │
+└───────────────┼──────────────────────────────┼─────────────────────────────┼──────────────────────────────────────────┘
+                │                              │                             │
+                ▼                              ▼                             ▼
+┌───────────────────────────────┐ ┌───────────────────────────┐ ┌──────────────────────────────────────────────────────┐
+│       EXTERNAL SERVICES       │ │     DATA ACCESS LAYER     │ │              DATABASE REPOSITORY                     │
+│                               │ │                           │ │                                                      │
+│  🤖 Google Gemini 1.5/2.5     │ │  Drizzle ORM Engine       │ │  MySQL 8.0 Wire-Compatible Protocol                  │
+│     - Clinical AI Triage      │ │  - Type-Safe Querying     │ │                                                      │
+│     - Pediatric Guardrails    │ │  - Schema Validation      │ │  ☁️ Production: TiDB Cloud Serverless (AWS Singapore)│
+│                               │ │  - Auto Migration Engine  │ │  💻 Local Dev: Local MySQL Instance (Port 3306)       │
+│  🔑 Google OAuth 2.0          │ └────────────┬──────────────┘ │                                                      │
+│     - OpenID Connect (OIDC)   │              │                │  Tables: users, profiles, appointments, assessments, │
+│                               │              └───────────────►│  credentials, prescriptions, events, medicines (13)   │
+└───────────────────────────────┘                               └──────────────────────────────────────────────────────┘
 ```
 
 ---
 
-### Folder & File Architectural Guide
+## 🩺 Core Clinical Modules & Working Mechanisms
 
-| Directory / File | Architectural Role & Guidelines |
+### 1. 5-Layer AI Symptom Triage Engine
+* **Location**: [`backend/ai/assessmentService.ts`](file:///c:/Project%20FP/LifeLink-Smart-Healthcare-Assistance-Platform/backend/ai/assessmentService.ts) & [`frontend/src/features/patient/Assessment/`](file:///c:/Project%20FP/LifeLink-Smart-Healthcare-Assistance-Platform/frontend/src/features/patient/Assessment/)
+* **Engine**: Google Gemini AI (`gemini-2.5-flash` / `gemini-1.5-flash`)
+* **How It Works**:
+  1. **Layer 1: Input Hygiene & Non-Health Rejection**: Evaluates whether user input contains medical symptoms. Non-health gibberish or non-medical prompts are immediately flagged as `urgency: "ERROR"` without hallucinations.
+  2. **Layer 2: Biological & Anatomical Consistency**: Validates symptoms against declared patient biological sex (e.g. flagging male gynecological conditions as non-viable).
+  3. **Layer 3: Pediatric Safety Net**: Any assessment for patients aged `< 18` automatically injects pediatric evaluation criteria and directs the patient to Adolescent/Pediatric care.
+  4. **Layer 4: Urgency Classification**:
+     - `EMERGENCY`: Immediate life threats (chest pain radiating to arm, anaphylaxis, severe breathing difficulty). Prompts instant 112 SOS modal.
+     - `MODERATE`: Non-life-threatening conditions requiring clinical evaluation within 24–48 hours (persistent fever, localized sprains, rashes).
+     - `LOW`: Mild self-limiting symptoms appropriate for primary care observation or home care.
+  5. **Layer 5: Clinical Specialty Mapping**: Automatically aligns symptoms to one of 12 standard medical disciplines (Cardiology, Dermatology, Orthopedics, Neurology, General Practice, Pediatrics, Ophthalmology, Gastroenterology, Psychiatry, Endocrinology, Pulmonology, Gynecology).
+
+---
+
+### 2. Transit-Corridor Clinic Discovery Map
+* **Location**: [`frontend/src/features/patient/Specialists/`](file:///c:/Project%20FP/LifeLink-Smart-Healthcare-Assistance-Platform/frontend/src/features/patient/Specialists/) & [`shared/mumbaiRailNetwork.ts`](file:///c:/Project%20FP/LifeLink-Smart-Healthcare-Assistance-Platform/shared/mumbaiRailNetwork.ts)
+* **Technology**: Leaflet, OpenStreetMap, React-Leaflet
+* **How It Works**:
+  - Maps clinics to suburban transit nodes across **Central Line** (CSMT to Dombivli/Thakurli), **Western Line** (Churchgate to Borivali), and **Harbour Line** (Sewri to Panvel).
+  - Calculates real-time distance from the patient's device (using in-memory browser HTML5 Geolocation, zero server coordinates logging).
+  - Filters by specialty, railway corridor, consultation fees, and emergency walk-in capability.
+
+---
+
+### 3. Digital Health Passport & Emergency Contacts
+* **Location**: [`frontend/src/features/patient/HealthPassport/`](file:///c:/Project%20FP/LifeLink-Smart-Healthcare-Assistance-Platform/frontend/src/features/patient/HealthPassport/)
+* **Database Tables**: `patientProfiles`, `patientEmergencyContacts`
+* **How It Works**:
+  - Secure medical baseline recording blood group (A+, B+, O+, AB-, etc.), verified drug allergies (e.g. Penicillin, Sulfa drugs), and chronic conditions (Hypertension, Type 2 Diabetes).
+  - Clinicians can review this passport in 1 click during active consultations, preventing fatal drug-allergy interactions.
+
+---
+
+### 4. Medicine Cabinet & Adherence Tracker
+* **Location**: [`frontend/src/features/patient/Medicines/`](file:///c:/Project%20FP/LifeLink-Smart-Healthcare-Assistance-Platform/frontend/src/features/patient/Medicines/)
+* **Database Table**: `patientMedicines`
+* **How It Works**:
+  - Tracks active prescriptions, daily dosage schedules (Morning, Afternoon, Evening, Night), and inventory pill counters.
+  - Automatically populated whenever a clinician issues and signs an official prescription.
+
+---
+
+### 5. Tamper-Evident SHA-256 Digital Prescriptions
+* **Location**: [`backend/routers/doctor.ts`](file:///c:/Project%20FP/LifeLink-Smart-Healthcare-Assistance-Platform/backend/routers/doctor.ts) & [`frontend/src/features/patient/Prescriptions/`](file:///c:/Project%20FP/LifeLink-Smart-Healthcare-Assistance-Platform/frontend/src/features/patient/Prescriptions/)
+* **How It Works**:
+  - When a doctor finalizes a consultation, the server bundles: `doctorId` + `patientUserId` + `medicationsList` + `clinicalNotes` + `issuedTimestamp`.
+  - Computes a cryptographically salted **SHA-256 digest reference**.
+  - Any alteration of medication names, dosages, or quantities invalidates the integrity hash, protecting pharmacies and patients against prescription forgery.
+
+---
+
+### 6. Clinician Consultation Workstation
+* **Location**: [`frontend/src/features/doctor/`](file:///c:/Project%20FP/LifeLink-Smart-Healthcare-Assistance-Platform/frontend/src/features/doctor/)
+* **Authentication**: Dedicated clinician gateway at `/doctor/login` with official clinic emails (`<specialty>@lifelink.com`).
+* **Capabilities**:
+  - Real-time waiting room consultation queue.
+  - Full access to the patient's incoming AI symptom assessment report.
+  - Line-item prescription creator with instructions, dosage strength, and frequency.
+  - Master clinician key recovery portal (`/doctor/reset`).
+
+---
+
+### 7. One-Tap National 112 SOS Dialer
+* **Location**: [`frontend/src/features/patient/Emergency/`](file:///c:/Project%20FP/LifeLink-Smart-Healthcare-Assistance-Platform/frontend/src/features/patient/Emergency/)
+* **How It Works**:
+  - Triggered automatically when the AI Symptom Checker detects critical clinical red-flags, or manually via the SOS header button.
+  - Provides a direct telephone link to India's unified national emergency response service (`tel:112`).
+  - Prepares emergency SMS broadcasts with approximate station coordinates for registered family emergency contacts.
+
+---
+
+### 8. Real-Time Server-Sent Events (SSE) Bus
+* **Location**: [`backend/realtime/eventBus.ts`](file:///c:/Project%20FP/LifeLink-Smart-Healthcare-Assistance-Platform/backend/realtime/eventBus.ts) & [`backend/realtime/patientRealtime.ts`](file:///c:/Project%20FP/LifeLink-Smart-Healthcare-Assistance-Platform/backend/realtime/patientRealtime.ts)
+* **Endpoints**: `/api/realtime/patient` & `/api/realtime/doctor`
+* **How It Works**:
+  - Lightweight, persistent HTTP streaming connections push instant state updates without heavy WebSocket handshakes or battery-draining polling.
+  - When a patient books an appointment, the doctor's workstation updates instantly (`APPOINTMENT_UPDATED`).
+  - When a doctor signs a prescription, the patient's prescription suite and medicine cabinet refresh automatically.
+
+---
+
+## 🩺 Official Clinician Directory (24 Mumbai Workstations)
+
+The platform is pre-seeded with **24 verified doctor workstations** distributed across Mumbai's suburban rail corridors.
+
+### 🔴 Central Line Clinics
+| # | Specialty & Railway Station | Work Email | Workstation Password |
+| :-: | :--- | :--- | :--- |
+| 1 | **Cardiology** (CSMT) | `cardiology@lifelink.com` | `cardio@lifelink` |
+| 2 | **Dermatology** (Ghatkopar) | `dermatology@lifelink.com` | `derma@lifelink` |
+| 3 | **Orthopedics** (Bhandup) | `orthopedics@lifelink.com` | `ortho@lifelink` |
+| 4 | **Neurology** (Thane) | `neurology@lifelink.com` | `neuro@lifelink` |
+| 5 | **General Practice** (Mulund) | `generalpractice.mulund@lifelink.com` | `general.mulund@lifelink` |
+| 6 | **General Practice** (Thane) | `generalpractice.thane@lifelink.com` | `general.thane@lifelink` |
+| 7 | **General Practice** (Diva Junction) | `generalpractice.divajunction@lifelink.com` | `general.divajunction@lifelink` |
+| 8 | **General Practice** (Kopar) | `generalpractice.kopar@lifelink.com` | `general.kopar@lifelink` |
+| 9 | **General Practice** (Dombivli) | `generalpractice.dombivli@lifelink.com` | `general.dombivli@lifelink` |
+| 10 | **General Practice** (Thakurli) | `generalpractice.thakurli@lifelink.com` | `general.thakurli@lifelink` |
+
+### 🔵 Western Line Clinics
+| # | Specialty & Railway Station | Work Email | Workstation Password |
+| :-: | :--- | :--- | :--- |
+| 11 | **General Practice** (Churchgate) | `generalpractice.churchgate@lifelink.com` | `general.churchgate@lifelink` |
+| 12 | **General Practice** (Dadar) | `generalpractice.dadar@lifelink.com` | `general.dadar@lifelink` |
+| 13 | **Pediatrics** (Andheri) | `pediatrics@lifelink.com` | `pedia@lifelink` |
+| 14 | **Ophthalmology** (Goregaon) | `ophthalmology@lifelink.com` | `ophthal@lifelink` |
+| 15 | **Gastroenterology** (Borivali) | `gastroenterology@lifelink.com` | `gastro@lifelink` |
+| 16 | **General Practice** (Borivali) | `generalpractice.borivali@lifelink.com` | `general.borivali@lifelink` |
+
+### 🟢 Harbour Line Clinics
+| # | Specialty & Railway Station | Work Email | Workstation Password |
+| :-: | :--- | :--- | :--- |
+| 17 | **Psychiatry** (Sewri) | `psychiatry@lifelink.com` | `psych@lifelink` |
+| 18 | **Endocrinology** (Chembur) | `endocrinology@lifelink.com` | `endo@lifelink` |
+| 19 | **General Practice** (Chembur) | `generalpractice.chembur@lifelink.com` | `general.chembur@lifelink` |
+| 20 | **Pulmonology** (Vashi) | `pulmonology@lifelink.com` | `pulmo@lifelink` |
+| 21 | **General Practice** (Vashi) | `generalpractice.vashi@lifelink.com` | `general.vashi@lifelink` |
+| 22 | **General Practice** (Nerul) | `generalpractice.nerul@lifelink.com` | `general.nerul@lifelink` |
+| 23 | **Gynecology** (Panvel) | `gynecology@lifelink.com` | `gynae@lifelink` |
+| 24 | **General Practice** (Panvel) | `generalpractice.panvel@lifelink.com` | `general.panvel@lifelink` |
+
+> 🔑 **Master Clinician Administrative Key**: For credential recovery or password resets, doctors use the master recovery key: `lifelink-controlled-clinician-secret-key-2026` at [`/doctor/reset`](https://lifelink-healthcare.onrender.com/doctor/reset).
+
+---
+
+## 🔒 Security, Privacy & Data Isolation Guarantees
+
+- **Zero Pre-Stored Patient Records**: The platform intentionally maintains **0 dummy patients** in the database. All patient accounts are registered dynamically and realistically by end-users.
+- **Dual Independent Session Cookies**: Patients authenticate under `app_session_id`, while clinicians authenticate under `doctor_session_id`. A clinician and patient can be logged into the same computer simultaneously in different tabs without session crossover.
+- **Strict Account Collision Protection**: Google OAuth and Native Password accounts with the same email are blocked from automatic silent merging, preventing account takeover vulnerabilities.
+- **Automated Inactivity Protection**: Workstations automatically log out after **5 minutes (300,000 ms)** of idle time to safeguard patient privacy in busy clinic environments.
+- **Strict In-Memory Geolocation Privacy**: Patient latitude/longitude coordinates are computed strictly in-memory inside the browser and are **never saved to disk or database tables**.
+- **Full IDOR Protection**: Every tRPC procedure validates that `ctx.user.id` matches the target record ID before reading or updating data.
+
+---
+
+## ☁️ Cloud Deployment Guide (Render + TiDB Cloud Serverless)
+
+LifeLink is designed for automated zero-downtime deployment on **Render** paired with a free cloud-native **TiDB Serverless (MySQL 8.0)** cluster.
+
+### 1. Render Blueprint Setup
+The repository includes a production-ready [`render.yaml`](file:///c:/Project%20FP/LifeLink-Smart-Healthcare-Assistance-Platform/render.yaml) blueprint:
+1. Fork or push this repository to your GitHub account.
+2. Log into the **[Render Dashboard](https://dashboard.render.com/)**.
+3. Click **New +** → **Blueprint**.
+4. Connect your GitHub repository.
+5. Render reads `render.yaml` and provisions the Web Service with:
+   - Node 22 runtime.
+   - Build Command: `npm install --include=dev && npm run build`
+   - Start Command: `npm start`
+   - Health Check Path: `/health`
+
+---
+
+### 2. TiDB Cloud Database Configuration
+Since Render provides native PostgreSQL but LifeLink utilizes MySQL 8.0, we use **TiDB Cloud Serverless** (5 GB free tier, always online):
+1. Sign up at **[tidbcloud.com](https://tidbcloud.com)**.
+2. Create a free **Serverless Cluster** (e.g. `lifelink-db`) in the AWS Singapore region (`ap-southeast-1`).
+3. Click **Connect** → Generate Password.
+4. Copy the connection string:
+   ```text
+   mysql://<user>.root:<password>@gateway01.<region>.prod.aws.tidbcloud.com:4000/lifelink?ssl={"rejectUnauthorized":true}
+   ```
+5. In Render's **Environment** tab, set `DATABASE_URL` to this connection string.
+
+---
+
+### 3. Google OAuth 2.0 Cloud Setup
+To enable Google Sign-In for both Local development and Production Render:
+1. Open the **[Google Cloud Console Credentials](https://console.cloud.google.com/apis/credentials)**.
+2. Select your OAuth 2.0 Web Client ID.
+3. Configure the following entries:
+
+| Setting | Values to Add |
 | :--- | :--- |
-| **`frontend/src/features/entry/`** | Public onboarding gateway. Contains `WorkspaceSelector.tsx` (routing to Patient vs Doctor portal), `Login.tsx`, and `Register.tsx`. Must remain publicly accessible without auth guards. |
-| **`frontend/src/features/patient/`**| Patient portal views. All components under this directory require active patient authentication (`app_session_id`). Includes Dashboard, AI Assessment, Appointments, Health Passport, Medicine Cabinet, Prescriptions, Specialists, and Settings. |
-| **`frontend/src/features/doctor/`** | Clinician workspace views. All components require active clinician authentication (`doctor_session_id`). Includes Login, ResetPassword, Dashboard, Appointments, Consultations, Prescriptions, and Settings. |
-| **`frontend/src/components/layout/`**| Houses `AppShell.tsx` (patient layout frame with Amber/Teal branding) and `DoctorAppShell.tsx` (clinician layout frame with Ocean Teal/Gold branding). Both include auto-logout timers and real-time SSE listeners. |
-| **`frontend/src/components/ui/`** | Atomic design primitives (`Button`, `Card`, `Input`, `RouteLoader`). Must use semantic CSS variables (`var(--color-primary)`, `var(--color-surface)`) instead of hardcoded hex values. |
-| **`backend/db.ts`** | Central data access layer. All SQL queries and Drizzle mutations belong here. Never write ad-hoc SQL in routers; always add helper methods in `db.ts` with explicit user ID ownership checks. |
-| **`backend/routers.ts`** | Master tRPC router. Binds all domain routers (`patientAuth`, `doctorAuth`, `doctorWorkspace`, `patientProfile`, `assessment`) into the root `appRouter`. |
-| **`backend/storage.ts`** | File persistence engine. Sanitizes file keys with random UUID hash suffixes and saves uploaded avatars/media to `uploads/` for static serving. |
-| **`backend/ai/`** | Clinical AI triage engine. Houses `assessmentService.ts` which executes the 5-layer safety cascade with Google Gemini 1.5 Flash. |
-| **`backend/auth/`** | Dual-portal authentication services. Handles independent session cookies, native password hashing (`nativePatientAuth.ts`), Google OAuth (`providerAuth.ts`), and doctor credential verification (`doctorAuth.ts`). |
-| **`backend/discovery/`** | Mumbai suburban railway clinician catalog (`mockDoctorDirectory.ts`). Maps 24 verified doctors across Central, Western, and Harbour corridors. |
-| **`backend/realtime/`** | Real-time event bus (`eventBus.ts`) and Server-Sent Events HTTP streaming handler (`patientRealtime.ts`). Enables instant UI updates without polling. |
-| **`database/schema.ts`** | Relational database schema with 13 MySQL tables, relations, and enums. All schema changes must be versioned with `npm run db:push`. |
-| **`shared/`** | Isomorphic code imported by both client and server. Includes biological gender validation rules, session constants, transit network definitions, and shared TypeScript contracts. |
-| **`scripts/`** | Operational CLI tools. `dev.mjs` orchestrates Vite and Express in development; `seed-doctors.ts` provisions the 24 doctor accounts with zero pre-seeded patients. |
+| **Authorised JavaScript origins** | `http://localhost:5173`<br/>`https://lifelink-healthcare.onrender.com` |
+| **Authorised redirect URIs** | `http://localhost:5173/api/auth/google/callback`<br/>`https://lifelink-healthcare.onrender.com/api/auth/google/callback` |
+
+4. Click **Save**.
 
 ---
 
-## 🩺 Official Clinician Directory (24 Doctor Workstations)
+### 4. Production Environment Variables Matrix
 
-The platform includes **24 verified doctor workstations** across Mumbai's railway corridors. Multi-route clinic stops are standardized to **General Practice** for optimal patient coverage, with 1 dedicated Pediatrician at Andheri.
-
-### Central Line Clinics
-| # | Specialty & Station | Official Work Email | Password | Alias Login |
-| :-: | :--- | :--- | :--- | :--- |
-| 1 | **Cardiology** (CSMT) | `cardiology@lifelink.com` | `cardio@lifelink` | `cardio@lifelink.com` |
-| 2 | **Dermatology** (Ghatkopar) | `dermatology@lifelink.com` | `derma@lifelink` | `derma@lifelink.com` |
-| 3 | **Orthopedics** (Bhandup) | `orthopedics@lifelink.com` | `ortho@lifelink` | `ortho@lifelink.com` |
-| 4 | **Neurology** (Thane) | `neurology@lifelink.com` | `neuro@lifelink` | `neuro@lifelink.com` |
-| 5 | **General Practice** (Mulund) | `generalpractice.mulund@lifelink.com` | `general.mulund@lifelink` | `general@lifelink.com` |
-| 6 | **General Practice** (Thane) | `generalpractice.thane@lifelink.com` | `general.thane@lifelink` | `general@lifelink.com` |
-| 7 | **General Practice** (Diva Junction) | `generalpractice.divajunction@lifelink.com` | `general.divajunction@lifelink` | `general@lifelink.com` |
-| 8 | **General Practice** (Kopar) | `generalpractice.kopar@lifelink.com` | `general.kopar@lifelink` | `general@lifelink.com` |
-| 9 | **General Practice** (Dombivli) | `generalpractice.dombivli@lifelink.com` | `general.dombivli@lifelink` | `general@lifelink.com` |
-| 10 | **General Practice** (Thakurli) | `generalpractice.thakurli@lifelink.com` | `general.thakurli@lifelink` | `general@lifelink.com` |
-
-### Western Line Clinics
-| # | Specialty & Station | Official Work Email | Password | Alias Login |
-| :-: | :--- | :--- | :--- | :--- |
-| 11 | **General Practice** (Churchgate) | `generalpractice.churchgate@lifelink.com` | `general.churchgate@lifelink` | `general@lifelink.com` |
-| 12 | **General Practice** (Dadar) | `generalpractice.dadar@lifelink.com` | `general.dadar@lifelink` | `general@lifelink.com` |
-| 13 | **Pediatrics** (Andheri) | `pediatrics@lifelink.com` | `pedia@lifelink` | `pedia@lifelink.com` |
-| 14 | **Ophthalmology** (Goregaon) | `ophthalmology@lifelink.com` | `ophthal@lifelink` | `ophthal@lifelink.com` |
-| 15 | **Gastroenterology** (Borivali) | `gastroenterology@lifelink.com` | `gastro@lifelink` | `gastro@lifelink.com` |
-| 16 | **General Practice** (Borivali) | `generalpractice.borivali@lifelink.com` | `general.borivali@lifelink` | `general@lifelink.com` |
-
-### Harbour Line Clinics
-| # | Specialty & Station | Official Work Email | Password | Alias Login |
-| :-: | :--- | :--- | :--- | :--- |
-| 17 | **Psychiatry** (Sewri) | `psychiatry@lifelink.com` | `psych@lifelink` | `psych@lifelink.com` |
-| 18 | **Endocrinology** (Chembur) | `endocrinology@lifelink.com` | `endo@lifelink` | `endo@lifelink.com` |
-| 19 | **General Practice** (Chembur) | `generalpractice.chembur@lifelink.com` | `general.chembur@lifelink` | `general@lifelink.com` |
-| 20 | **Pulmonology** (Vashi) | `pulmonology@lifelink.com` | `pulmo@lifelink` | `pulmo@lifelink.com` |
-| 21 | **General Practice** (Vashi) | `generalpractice.vashi@lifelink.com` | `general.vashi@lifelink` | `general@lifelink.com` |
-| 22 | **General Practice** (Nerul) | `generalpractice.nerul@lifelink.com` | `general.nerul@lifelink` | `general@lifelink.com` |
-| 23 | **Gynecology** (Panvel) | `gynecology@lifelink.com` | `gynae@lifelink` | `gynae@lifelink.com` |
-| 24 | **General Practice** (Panvel) | `generalpractice.panvel@lifelink.com` | `general.panvel@lifelink` | `general@lifelink.com` |
-
-> ℹ️ **Patient Accounts**: There are **zero pre-stored patient records**. Patients register dynamically in real time at `/register` or via Google OAuth.
-> 
-> 🔐 **Clinician Administrative Secret Key**: Doctors use the master access key `lifelink-controlled-clinician-secret-key-2026` at `/doctor/reset` to recover credentials or reset passwords securely.
+| Variable Key | Description | Example / Required Value |
+| :--- | :--- | :--- |
+| `NODE_ENV` | Application environment mode | `production` |
+| `NODE_VERSION` | Node.js engine version | `22` |
+| `DATABASE_URL` | TiDB Cloud / MySQL connection URI | `mysql://user.root:pass@gateway01...tidbcloud.com:4000/lifelink?ssl={"rejectUnauthorized":true}` |
+| `JWT_SECRET` | 32+ character secret for signing session tokens | Auto-generated by Render Blueprint |
+| `GEMINI_API_KEY` | Google Gemini API key for AI triage | `AQ.Ab8...` |
+| `LIFELINK_DEMO_DOCTOR_ACCESS_CODE` | Master key for clinician password recovery | `lifelink-controlled-clinician-secret-key-2026` |
+| `AUTH_PUBLIC_BASE_URL` | Public production domain of the app | `https://lifelink-healthcare.onrender.com` |
+| `GOOGLE_OAUTH_CLIENT_ID` | Google OAuth Client ID | `420856394354-...apps.googleusercontent.com` |
+| `GOOGLE_OAUTH_CLIENT_SECRET` | Google OAuth Client Secret | `GOCSPX-...` |
 
 ---
 
-## ⚙️ Quickstart: Local Setup & Installation
+## 💻 Local Development & Quickstart
 
 ### Prerequisites
-- **Node.js** v22+ (tested up to v24.18)
-- **MySQL 8.0+** running locally on port 3306
-- **Google Gemini API Key** (for AI symptom triage)
+- **Node.js**: v22.0.0 or higher (`node -v`)
+- **MySQL**: Local MySQL 8.0 service running on port 3306 (or you can paste your TiDB Cloud URL into `.env`)
+- **Google Gemini API Key**: Free key from [Google AI Studio](https://aistudio.google.com/)
 
-### 1. Clone the Repository
-```powershell
+### 1. Clone & Install
+```bash
 git clone https://github.com/sarthakmandhare34/New-LifeLink-Smart-Healthcare-Assistance-Platform.git
 cd New-LifeLink-Smart-Healthcare-Assistance-Platform
 npm install
 ```
 
 ### 2. Configure Environment (`.env`)
-Create a `.env` file in the root directory:
+Create a [`.env`](file:///c:/Project%20FP/LifeLink-Smart-Healthcare-Assistance-Platform/.env) file in the project root:
 ```env
-DATABASE_URL="mysql://root:yourpassword@localhost:3306/lifelink"
-JWT_SECRET="generate-a-secure-random-32-character-secret-key"
+# Database Connection (Local MySQL or TiDB Cloud)
+DATABASE_URL="mysql://root:yourpassword@127.0.0.1:3306/lifelink"
+
+# Authentication
+JWT_SECRET="development-secret-key-change-in-production-min-32-chars"
+LIFELINK_DEMO_DOCTOR_ACCESS_CODE="lifelink-controlled-clinician-secret-key-2026"
+
+# Google Gemini AI Key
 GEMINI_API_KEY="your-google-gemini-api-key"
 
-# Optional: Google OAuth 2.0 Configuration
-GOOGLE_OAUTH_CLIENT_ID="your-google-oauth-client-id"
-GOOGLE_OAUTH_CLIENT_SECRET="your-google-oauth-client-secret"
+# Google OAuth (Optional for Local)
+GOOGLE_OAUTH_CLIENT_ID="your-client-id.apps.googleusercontent.com"
+GOOGLE_OAUTH_CLIENT_SECRET="your-client-secret"
 AUTH_PUBLIC_BASE_URL="http://localhost:5173"
 ```
 
-### 3. Initialize Database & Seed Doctors
-```powershell
-# Create MySQL schema tables
+### 3. Initialize Schema & Seed 24 Doctors
+```bash
+# Push schema tables into MySQL
 npm run db:push
 
-# Seed strictly 24 doctor accounts with zero pre-stored patients
-npx tsx scripts/seed-doctors.ts
+# Provision the 24 Mumbai doctor accounts with 0 mock patients
+npm run db:sync:doctors
 ```
 
 ### 4. Start Development Server
-```powershell
+```bash
 npm run dev
 ```
 Open **[http://localhost:5173](http://localhost:5173)** in your browser!
-- **Frontend Client**: `http://localhost:5173`
-- **Backend API Engine**: `http://localhost:4000`
+- **Frontend App**: `http://localhost:5173`
+- **Backend API Server**: `http://localhost:4000` (auto-proxied)
 
 ---
 
-## 📜 NPM Scripts Reference
+## 📜 NPM Scripts Command Reference
 
-| Command | Purpose |
+| Command | Action Performed |
 | :--- | :--- |
-| `npm run dev` | Boots the accelerated dev runner with direct binary execution (Vite + Express) |
-| `npm run check` | Runs full TypeScript validation (`tsc --noEmit`) with zero errors |
-| `npm test` | Executes all Vitest unit and integration suites |
-| `npm run build` | Compiles optimized frontend bundle (45 kB entry) and production Node server |
-| `npm run verify` | Runs TypeScript check + test suite + production build in sequence |
-| `npm run db:push` | Generates and runs Drizzle ORM migrations against MySQL |
-| `npm run db:studio` | Opens visual Drizzle Studio database browser |
-| `npm run db:clear` | Resets all database tables cleanly |
-| `npm run db:sync:doctors`| Audits and synchronizes doctor accounts against directory |
+| `npm run dev` | Starts Vite dev server (5173) and Express API server (4000) concurrently |
+| `npm run check` | Runs full TypeScript typechecking (`tsc --noEmit`) |
+| `npm test` | Executes all 33 Vitest unit & integration test suites |
+| `npm run build` | Compiles optimized Vite frontend bundle and esbuild Node production bundle into `dist/` |
+| `npm start` | Launches the production compiled server (`node dist/index.js`) |
+| `npm run verify` | Complete pre-deploy pipeline: Type check + Vitest tests + Production build |
+| `npm run db:push` | Generates Drizzle migrations and applies them to MySQL / TiDB |
+| `npm run db:studio` | Opens browser GUI to explore and inspect database tables |
+| `npm run db:clear` | Completely wipes all test patients, history, and dummy data |
+| `npm run db:sync:doctors` | Re-seeds and synchronizes strictly the 24 Mumbai doctor workstations |
+
+---
+
+## 🧪 Automated Testing & Quality Verification
+
+LifeLink maintains a **100% passing test suite** covering all critical security, triage, and data paths:
+
+```bash
+npm test
+```
+
+```text
+ ✓ backend/ai/assessmentService.test.ts (54 tests)
+ ✓ backend/realtime/security.realtime.test.ts (32 tests)
+ ✓ backend/auth/security.idor.test.ts (15 tests)
+ ✓ backend/healthPassport.test.ts (12 tests)
+ ✓ backend/prescriptionLifecycle.test.ts (12 tests)
+ ✓ frontend/src/features/patient/Emergency/Emergency.test.tsx (11 tests)
+ ✓ backend/appointmentLifecycle.test.ts (10 tests)
+ ✓ backend/routers/doctor.test.ts (10 tests)
+ ✓ backend/auth/doctorAuth.test.ts (8 tests)
+ ✓ backend/medicine.test.ts (7 tests)
+ ✓ frontend/src/responsiveLayout.test.ts (6 tests)
+ ✓ frontend/src/features/patient/Specialists/SpecialistFinder.test.ts (5 tests)
+ ✓ backend/auth/providerAuth.test.ts (4 tests)
+ ✓ backend/discovery/mockDoctorDirectory.test.ts (4 tests)
+ ...
+ Test Files  33 passed (33)
+      Tests  224 passed | 1 skipped (225)
+```
 
 ---
 
 ## 🧭 Application Routes Matrix
 
-| URL | Workspace / View | Access Tier | Description |
+| URL Path | Workspace | Access Control | Functionality |
 | :--- | :--- | :--- | :--- |
-| `/` | **Workspace Selector** | Public | Gateway choosing between Patient Portal & Clinician Workstation |
-| `/login` | Patient Login View | Public | Native email/password and Google OAuth sign-in |
-| `/register` | Patient Registration | Public | Live dynamic patient account creation |
-| `/patient/dashboard` | Patient Dashboard | Patient Auth | Health vitals summary, quick actions, active reminders |
-| `/patient/assessment` | AI Symptom Checker | Patient Auth | 5-layer Gemini symptom triage with pediatric guardrails |
-| `/patient/specialists` | Specialist Finder | Patient Auth | Mumbai railway line clinic directory & Leaflet map |
-| `/patient/appointments`| Appointments | Patient Auth | Request, track, and manage specialist consultations |
-| `/patient/health-passport` | Health Passport | Patient Auth | Blood group, allergies, chronic conditions, and emergency info |
-| `/patient/medicines` | Medicine Cabinet | Patient Auth | Medication adherence schedules, pill counters, reminders |
-| `/patient/prescriptions` | Prescriptions | Patient Auth | Doctor-issued prescriptions with SHA-256 digital signatures |
-| `/patient/emergency` | Emergency SOS | Patient Auth | Instant `112` national emergency dialer & SMS contact dispatch |
-| `/patient/profile` | Patient Profile | Patient Auth | Personal demographics and profile photo upload |
-| `/patient/settings` | Patient Preferences | Patient Auth | 2-column configuration for alerts, privacy, and sessions |
-| `/doctor/login` | Clinician Sign-In | Clinician Auth | Workstation authentication (`<specialty>@lifelink.com`) |
-| `/doctor/reset` | Password Recovery | Clinician Auth | Master key protected password reset (`/doctor/reset`) |
-| `/doctor/dashboard` | Doctor Dashboard | Clinician Auth | Live consultation queue, patient roster, daily action items |
-| `/doctor/appointments`| Doctor Appointments | Clinician Auth | Manage assigned consultations and appointment status |
-| `/doctor/patients` | Patient Records | Clinician Auth | Review assigned patient medical baselines and history |
-| `/doctor/consultation`| Consultation Room | Clinician Auth | Document clinical observations, diagnoses, and notes |
-| `/doctor/prescriptions`| Prescription Suite | Clinician Auth | Prescribe medication items with automated SHA-256 signing |
-| `/doctor/assessments` | AI Triage Review | Clinician Auth | Review AI symptom assessments submitted by patients |
-| `/doctor/profile` | Clinician Profile | Clinician Auth | Workstation details and station assignment |
-| `/doctor/settings` | Doctor Settings | Clinician Auth | 2-column security console for password updates |
+| `/` | **Gateway** | Public | Workspace Selector (Patient Portal vs Clinician Workstation) |
+| `/login` | Patient Auth | Public | Native Email/Password and Google OAuth login |
+| `/register` | Patient Auth | Public | Live patient registration form with input validation |
+| `/patient/dashboard` | Patient Portal | Patient Auth | Health vitals summary, quick actions, and active reminders |
+| `/patient/assessment` | Patient Portal | Patient Auth | 5-layer Gemini AI symptom triage with pediatric guardrails |
+| `/patient/specialists` | Patient Portal | Patient Auth | Mumbai rail station clinic directory & interactive map |
+| `/patient/appointments` | Patient Portal | Patient Auth | Request, track, and manage clinic consultations |
+| `/patient/health-passport` | Patient Portal | Patient Auth | Blood group, allergies, chronic conditions, and emergency contacts |
+| `/patient/medicines` | Patient Portal | Patient Auth | Medication adherence schedules, pill counters, and renewal reminders |
+| `/patient/prescriptions` | Patient Portal | Patient Auth | Doctor-issued prescriptions with SHA-256 digital verification |
+| `/patient/emergency` | Patient Portal | Patient Auth | National `112` SOS emergency dialer & SMS contact dispatch |
+| `/patient/profile` | Patient Portal | Patient Auth | Personal demographics and profile avatar upload |
+| `/patient/settings` | Patient Portal | Patient Auth | 2-column balanced preferences, notifications, and session controls |
+| `/doctor/login` | Clinician Auth | Public | Dedicated clinician workstation authentication (`<specialty>@lifelink.com`) |
+| `/doctor/reset` | Clinician Auth | Public | Master access key protected clinician password recovery |
+| `/doctor/dashboard` | Clinician Portal | Clinician Auth | Live consultation queue, patient roster, and daily stats |
+| `/doctor/appointments` | Clinician Portal | Clinician Auth | Manage assigned clinic consultations and appointment statuses |
+| `/doctor/patients` | Clinician Portal | Clinician Auth | Review assigned patient medical records and baseline history |
+| `/doctor/consultation` | Clinician Portal | Clinician Auth | Document clinical observations, diagnoses, and notes |
+| `/doctor/prescriptions` | Clinician Portal | Clinician Auth | Prescribe line items with automated SHA-256 digital signing |
+| `/doctor/assessments` | Clinician Portal | Clinician Auth | Ingest and inspect patient AI triage reports for clinical context |
+| `/doctor/profile` | Clinician Portal | Clinician Auth | Clinician station assignment and contact details |
+| `/doctor/settings` | Clinician Portal | Clinician Auth | 2-column security console for workstation password updates |
 
 ---
 
-## ⚡ Performance & Scalability Benchmarks
+## 📁 Repository Directory Structure
 
-LifeLink has been engineered for maximum responsiveness, low latency, and high concurrent throughput:
-
-| Performance Metric | Baseline | Optimized | Improvement |
-| :--- | :--- | :--- | :--- |
-| **Main JS Entry Bundle** | `759.29 kB` | **`45.29 kB`** | **94% reduction** ⚡ |
-| **Vite Bundle Warnings** | `(!) Chunks > 500 kB` | **Zero warnings** | **100% clean build** ✅ |
-| **Production Build Time** | `36.41s` | **`26.76s`** | **~27% faster build** 🚀 |
-| **Vitest Test Suite Run** | `86.34s` | **`45.32s`** | **~47% faster execution** ⚡ |
-| **Client Tab Navigation** | Server refetch on tab switch | **0ms instant cache** (`staleTime: 60s`) | **Instant UI response** ⚡ |
-| **Static Production Assets** | 304 re-validation roundtrips | **1-year immutable cache (`maxAge: 1y`)** | **0ms disk cache hits** ⚡ |
-
-### 🚀 Simultaneous User Capacity
-- **Local Machine / Development (e.g. Intel i7, 32GB RAM)**: Supports **8,000 – 15,000 active concurrent browsing users** and **15,000 – 25,000 live Server-Sent Events (SSE) connections**.
-- **Production Cloud Server (4–8 vCPUs, 16GB RAM + RDS)**: Supports **10,000 – 30,000 concurrent users** and **5,000+ requests/second**.
-- **Distributed Cluster (Cloudflare CDN + Auto-scaled Node + Redis)**: Supports **100,000+ concurrent users**.
+```text
+LifeLink-Smart-Healthcare-Assistance-Platform/
+│
+├── 📁 frontend/                         # React 19 Single-Page Application (Vite 7)
+│   ├── index.html                      # HTML5 entry document & meta tags
+│   ├── src/
+│   │   ├── main.tsx                    # React client entry point & providers
+│   │   ├── App.tsx                     # Route definitions & code-split lazy loaders
+│   │   ├── index.css                   # Dual design systems (Amber/Teal & Ocean/Gold)
+│   │   ├── 📁 components/              # Shared UI primitives (Bento, Map, Card, Button)
+│   │   ├── 📁 features/
+│   │   │   ├── 📁 entry/               # Gateway selector, Login, and Register
+│   │   │   ├── 📁 patient/             # Patient Portal views (Dashboard, Triage, Passport)
+│   │   │   └── 📁 doctor/              # Clinician Workspace views (Queue, Rx, Notes)
+│   │   └── 📁 hooks/                   # Custom hooks (Inactivity, SSE subscriptions)
+│
+├── 📁 backend/                          # Node.js Express Server & tRPC API
+│   ├── db.ts                           # Drizzle ORM queries & database helpers
+│   ├── routers.ts                      # Master tRPC root router
+│   ├── 📁 _core/                       # Server bootstrap, cookies, and system health
+│   ├── 📁 ai/                          # Google Gemini AI clinical triage coordinator
+│   ├── 📁 auth/                        # Dual auth (Scrypt, Google OAuth, Clinician sessions)
+│   ├── 📁 discovery/                   # Mumbai railway specialist doctor catalog
+│   ├── 📁 realtime/                    # Server-Sent Events (SSE) bus & route handlers
+│   └── 📁 routers/                     # Domain routers for patient & clinician procedures
+│
+├── 📁 database/                         # Relational Database Schema (MySQL 8.0)
+│   ├── schema.ts                       # 13 Drizzle ORM table definitions
+│   ├── drizzle.config.ts               # Drizzle Kit CLI configuration
+│   └── 📁 migrations/                  # Versioned SQL migration files
+│
+├── 📁 shared/                           # Code shared isomorphically across client & server
+│   ├── mumbaiRailNetwork.ts            # Mumbai railway transit directory (stations & corridors)
+│   ├── mumbaiStationCoordinates.ts     # Precise Lat/Lng coordinates for Mumbai rail stations
+│   └── types.ts                        # Shared TypeScript interfaces and contracts
+│
+├── 📁 scripts/                          # Operational & Maintenance CLI Tools
+│   ├── clear-users.ts                  # Purges all test patient records cleanly
+│   ├── dev.mjs                         # Parallel dev runner (Express + Vite)
+│   ├── init-db.ts                      # Idempotent database creation helper
+│   ├── seed-doctors.ts                 # Provisions 24 doctors with 0 test patients
+│   └── sync-doctors.ts                 # Audits and synchronizes doctor accounts
+│
+├── 📄 .env.example                     # Sample environment variable template
+├── 📄 render.yaml                      # Official Render Blueprint deployment specification
+├── 📄 package.json                     # NPM dependencies, scripts & engines
+├── 📄 tsconfig.json                    # TypeScript compiler configuration
+├── 📄 vite.config.ts                   # Vite 7 build configuration with vendor partitioning
+└── 📄 vitest.config.ts                 # Vitest testing configuration
+```
 
 ---
 
-## 👥 Maintainers & Contributors
+## 👥 Maintainers & License
 
-- **Sarthak Mandhare** ([@sarthakmandhare34](https://github.com/sarthakmandhare34)) — Lead Architect & Developer
+- **Sarthak Mandhare** ([@sarthakmandhare34](https://github.com/sarthakmandhare34)) — Lead System Architect & Full-Stack Engineer
 - **Google DeepMind / Gemini** — Clinical AI Engine Integration
 
----
-
-## 📄 License
-
-This project is open-source software licensed under the [MIT License](LICENSE).
+This project is open-source software licensed under the **[MIT License](LICENSE)**.
