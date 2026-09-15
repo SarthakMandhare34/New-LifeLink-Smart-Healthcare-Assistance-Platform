@@ -3,9 +3,6 @@
   "version": "1.0.0",
   "type": "module",
   "license": "MIT",
-  "engines": {
-    "node": ">=22.0.0"
-  },
   "scripts": {
     "dev": "node scripts/dev.mjs",
     "build": "vite build && esbuild backend/_core/index.ts --platform=node --packages=external --bundle --format=esm --outdir=dist",
@@ -18,6 +15,9 @@
     "db:clear": "tsx scripts/clear-users.ts",
     "db:sync:doctors": "tsx scripts/sync-doctors.ts",
     "verify": "npm run check && npm test && npm run build"
+  },
+  "engines": {
+    "node": ">=22.0.0"
   },
   "dependencies": {
     "@aws-sdk/client-s3": "^3.693.0",

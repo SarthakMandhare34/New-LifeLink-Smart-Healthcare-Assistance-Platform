@@ -75,7 +75,7 @@ async function startServer() {
   // In development mode, Vite runs alongside Express; in production, Express serves compiled HTML/JS
   if (process.env.NODE_ENV === "development" && process.env.EMBED_VITE === "true") {
     await setupVite(app, server);                                // Connects Vite development server middleware
-  } else if (process.env.NODE_ENV === "production") {
+  } else if (process.env.NODE_ENV === "production" || !process.env.NODE_ENV) {
     serveStatic(app);                                            // Serves optimized production build from dist/public
   } else {
     // Helpful landing page when visiting the backend port directly in a browser
