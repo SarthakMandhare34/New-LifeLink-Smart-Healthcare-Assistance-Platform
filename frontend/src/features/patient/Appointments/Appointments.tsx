@@ -91,7 +91,7 @@ export const Appointments = () => {
                   <div>
                     <div className="flex justify-between items-start mb-3">
                       <div className="flex items-center gap-3">
-                        <div style={{ width: 40, height: 40, borderRadius: '50%', background: 'var(--color-primary)', color: 'var(--color-secondary)', display: 'flex', alignItems: 'center', justifyContent: 'center', fontWeight: 'bold' }}>
+                        <div style={{ width: 40, height: 40, borderRadius: '50%', background: 'var(--color-primary)', color: 'var(--color-text-dark)', display: 'flex', alignItems: 'center', justifyContent: 'center', fontWeight: 'bold' }}>
                           {doctor?.name.charAt(0) || <User size={20} />}
                         </div>
                         <div>
@@ -104,7 +104,7 @@ export const Appointments = () => {
                       </Badge>
                     </div>
 
-                    <div style={{ padding: 'var(--spacing-3)', background: 'rgba(255,255,255,0.6)', borderRadius: 'var(--border-radius-md)', border: '1px solid var(--color-border)' }}>
+                    <div style={{ padding: 'var(--spacing-3)', background: 'var(--color-surface-interactive)', borderRadius: 'var(--border-radius-md)', border: '1px solid var(--color-border)' }}>
                       <div className="flex justify-between items-center">
                         <span className="caption">Date & Time</span>
                         <strong style={{ color: 'var(--color-primary)' }}>
@@ -163,7 +163,7 @@ export const Appointments = () => {
                     </p>
                   )}
                   {appointment.status === 'Completed' && (
-                    <p className="caption" style={{ margin: '4px 0 0', color: '#B45309', fontWeight: 600 }}>
+                    <p className="caption" style={{ margin: '4px 0 0', color: 'var(--color-semantic-success)', fontWeight: 600 }}>
                       ✓ Consultation completed with your specialist.
                     </p>
                   )}

@@ -3,15 +3,15 @@
   align-items: flex-start;
   gap: var(--spacing-2);
   padding: var(--spacing-3);
-  border: 1px solid rgba(0, 196, 204, 0.22);
+  border: 1px solid rgba(13, 148, 136, 0.22);
   border-radius: var(--border-radius-md);
-  background: rgba(0, 196, 204, 0.07);
-  color: #102B2D;
+  background: rgba(13, 148, 136, 0.07);
+  color: var(--color-text);
   font-family: 'Plus Jakarta Sans', sans-serif;
   font-size: var(--text-caption);
 }
 
-.mock-directory-notice svg { color: #00C4CC; flex: 0 0 auto; margin-top: 1px; }
+.mock-directory-notice svg { color: var(--color-accent); flex: 0 0 auto; margin-top: 1px; }
 
 .discovery-filter-grid {
   display: grid;
@@ -19,16 +19,16 @@
   gap: var(--spacing-3);
 }
 
-.discovery-location-control { display: flex; align-items: center; justify-content: space-between; gap: var(--spacing-3); padding: 10px 12px; border: 1px solid rgba(45, 157, 156, 0.22); border-radius: var(--border-radius-md); background: rgba(45, 157, 156, 0.08); }
+.discovery-location-control { display: flex; align-items: center; justify-content: space-between; gap: var(--spacing-3); padding: 10px 12px; border: 1px solid var(--color-border); border-radius: var(--border-radius-md); background: var(--color-surface-interactive); }
 .discovery-search-guidance { margin: 5px 0 0; }
-.discovery-location-title { margin: 0 0 3px; color: #2D9D9C; font-size: var(--text-caption); font-weight: 700; font-family: 'Outfit', sans-serif; }
-.discovery-location-copy { max-width: 720px; margin: 0; color: #102B2D; }
+.discovery-location-title { margin: 0 0 3px; color: var(--color-text-muted); font-size: var(--text-caption); font-weight: 700; font-family: 'Outfit', sans-serif; }
+.discovery-location-copy { max-width: 720px; margin: 0; color: var(--color-text); }
 .discovery-location-actions { display: flex; align-items: center; gap: var(--spacing-2); flex-shrink: 0; }
 
 .discovery-filter-label {
   display: block;
   margin-bottom: 6px;
-  color: #2D9D9C;
+  color: var(--color-text-muted);
   font-size: var(--text-caption);
   font-weight: 700;
   font-family: 'Outfit', sans-serif;
@@ -39,16 +39,16 @@
   width: 100%;
   min-height: 42px;
   padding: 10px var(--spacing-3);
-  color: #102B2D;
-  border: 1px solid #9FFBFF;
+  color: var(--color-text);
+  border: 1px solid var(--color-border);
   border-radius: var(--border-radius-input);
-  background: rgba(255, 255, 255, 0.8);
+  background: var(--color-surface-white);
   font-family: 'Plus Jakarta Sans', sans-serif;
   font-size: 0.92rem;
 }
 
 .discovery-city-lock { display: flex; align-items: center; justify-content: space-between; }
-.discovery-city-lock span { color: #2D9D9C; font-size: var(--text-caption); }
+.discovery-city-lock span { color: var(--color-text-muted); font-size: var(--text-caption); }
 
 .discovery-workspace {
   display: grid;
@@ -58,11 +58,11 @@
 }
 
 .discovery-results-heading { display: flex; align-items: flex-start; justify-content: space-between; gap: var(--spacing-3); margin: 0 0 var(--spacing-3); }
-.discovery-results-heading .caption { margin: 4px 0 0; color: #2D9D9C; }
-.directory-map-card { position: sticky; top: var(--spacing-4); overflow: hidden; border: 1px solid #9FFBFF !important; box-shadow: 0 8px 32px rgba(16, 43, 45, 0.04) !important; background: #E6F9FC !important; }
+.discovery-results-heading .caption { margin: 4px 0 0; color: var(--color-text-muted); }
+.directory-map-card { position: sticky; top: var(--spacing-4); overflow: hidden; border: 1px solid var(--color-border) !important; box-shadow: 0 8px 32px var(--color-card-shadow, rgba(0, 0, 0, 0.04)) !important; background: var(--color-surface-white) !important; }
 .mumbai-directory-map-wrap { position: relative; }
-.mumbai-directory-map { height: 420px !important; border: 1px solid #9FFBFF; border-radius: var(--border-radius-md); overflow: hidden; }
-.mumbai-map-error { position: absolute; inset: 0; display: flex; flex-direction: column; align-items: center; justify-content: center; margin: 0; padding: var(--spacing-5); border: 1px solid #9FFBFF; border-radius: var(--border-radius-md); background: rgba(230, 249, 252, 0.94); color: #2D9D9C; font-size: var(--text-caption); text-align: center; }
+.mumbai-directory-map { height: 420px !important; border: 1px solid var(--color-border); border-radius: var(--border-radius-md); overflow: hidden; }
+.mumbai-map-error { position: absolute; inset: 0; display: flex; flex-direction: column; align-items: center; justify-content: center; margin: 0; padding: var(--spacing-5); border: 1px solid var(--color-border); border-radius: var(--border-radius-md); background: var(--color-surface-white); color: var(--color-text-muted); font-size: var(--text-caption); text-align: center; }
 .mumbai-map-error p { margin: 0; }
 
 @media (max-width: 1024px) {
@@ -101,10 +101,10 @@
   justify-content: center;
   gap: 10px;
   min-height: 240px;
-  color: #2D9D9C;
+  color: var(--color-text-muted);
 }
 .discovery-state p { margin: 0; }
-.discovery-state-icon { color: #00C4CC; }
+.discovery-state-icon { color: var(--color-accent); }
 
 @media (prefers-reduced-motion: no-preference) {
   .discovery-state-icon { animation: discovery-spin 1.1s linear infinite; }
@@ -120,8 +120,8 @@
   padding: clamp(var(--spacing-4), 4vw, var(--spacing-6));
 }
 
-.discovery-load-error h1 { margin: 0; font-size: var(--text-h2); font-family: 'Outfit', sans-serif; color: #102B2D; }
-.discovery-load-error .caption { max-width: 520px; margin: 8px 0 0; color: #102B2D; }
+.discovery-load-error h1 { margin: 0; font-size: var(--text-h2); font-family: 'Outfit', sans-serif; color: var(--color-text); }
+.discovery-load-error .caption { max-width: 520px; margin: 8px 0 0; color: var(--color-text-muted); }
 .discovery-load-error button { margin-top: var(--spacing-4); }
 .discovery-load-error-icon {
   display: grid;
@@ -139,9 +139,9 @@
   justify-items: center;
   gap: var(--spacing-2);
   border-style: dashed !important;
-  border-color: #9FFBFF !important;
-  background: #E6F9FC !important;
-  color: #2D9D9C !important;
+  border-color: var(--color-border) !important;
+  background: var(--color-surface-white) !important;
+  color: var(--color-text-muted) !important;
 }
 
 /* Refinement panel */
@@ -149,9 +149,9 @@
   position: relative;
   overflow: hidden;
   padding: clamp(18px, 2.7vw, 30px) !important;
-  border-color: #9FFBFF !important;
-  background: #E6F9FC !important;
-  box-shadow: 0 8px 32px rgba(16, 43, 45, 0.04) !important;
+  border-color: var(--color-border) !important;
+  background: var(--color-surface-white) !important;
+  box-shadow: 0 8px 32px var(--color-card-shadow, rgba(0, 0, 0, 0.04)) !important;
 }
 
 .discovery-refinement-content {
@@ -172,47 +172,47 @@
 .discovery-request-field {
   min-width: 0;
   padding: 14px;
-  border: 1px solid #9FFBFF;
+  border: 1px solid var(--color-border);
   border-radius: var(--border-radius-md);
-  background: rgba(255, 255, 255, 0.6);
+  background: var(--color-surface-interactive);
 }
 
 .discovery-request-field .discovery-filter-label { margin-bottom: 9px; }
-.discovery-request-field .liquid-input { min-height: 50px; border-color: #9FFBFF; }
+.discovery-request-field .liquid-input { min-height: 50px; border-color: var(--color-border); }
 .discovery-request-field textarea {
   display: block;
   width: 100%;
   min-height: 126px;
   padding: 12px 14px;
   resize: vertical;
-  color: #102B2D;
-  border: 1px solid #9FFBFF;
+  color: var(--color-text);
+  border: 1px solid var(--color-border);
   border-radius: var(--border-radius-input);
-  background: rgba(255, 255, 255, 0.8);
+  background: var(--color-surface-white);
   font-family: 'Plus Jakarta Sans', sans-serif;
   line-height: 1.5;
   outline: none;
 }
-.discovery-request-field .caption { margin: 8px 0 0; line-height: 1.45; color: #2D9D9C; }
+.discovery-request-field .caption { margin: 8px 0 0; line-height: 1.45; color: var(--color-text-muted); }
 
 .discovery-search-field {
   display: flex;
   align-items: center;
   gap: var(--spacing-3);
   padding: 12px 14px;
-  border: 1px solid #9FFBFF;
+  border: 1px solid var(--color-border);
   border-radius: calc(var(--border-radius-md) + 2px);
-  background: rgba(255, 255, 255, 0.6);
+  background: var(--color-surface-interactive);
 }
 
-.discovery-search-field > svg { flex: 0 0 auto; color: #00C4CC; }
-.discovery-search-field input { background: transparent; border: none; outline: none; width: 100%; color: #102B2D; font-family: 'Plus Jakarta Sans', sans-serif; }
-.discovery-search-field .discovery-search-guidance { margin: 6px 0 0; color: #2D9D9C; }
+.discovery-search-field > svg { flex: 0 0 auto; color: var(--color-accent); }
+.discovery-search-field input { background: transparent; border: none; outline: none; width: 100%; color: var(--color-text); font-family: 'Plus Jakarta Sans', sans-serif; }
+.discovery-search-field .discovery-search-guidance { margin: 6px 0 0; color: var(--color-text-muted); }
 
 .discovery-refinement-card .discovery-location-control {
   padding: 13px 14px;
-  border-color: rgba(45, 157, 156, 0.25);
-  background: rgba(45, 157, 156, 0.08);
+  border-color: var(--color-border);
+  background: var(--color-surface-interactive);
 }
 
 .discovery-refinement-card .discovery-filter-grid {
@@ -222,9 +222,9 @@
 
 .discovery-filter-grid > div {
   padding: 12px;
-  border: 1px solid #9FFBFF;
+  border: 1px solid var(--color-border);
   border-radius: var(--border-radius-md);
-  background: rgba(255, 255, 255, 0.6);
+  background: var(--color-surface-interactive);
 }
 
 .discovery-filter-grid .discovery-filter-label { margin-bottom: 8px; }
@@ -265,10 +265,10 @@
 
   .discovery-refinement-card .discovery-filter-select:focus,
   .discovery-refinement-card .discovery-filter-select:focus-visible {
-    outline: 3px solid rgba(0, 196, 204, 0.3);
+    outline: 3px solid rgba(217, 119, 6, 0.3);
     outline-offset: 2px;
-    border-color: #00C4CC;
-    box-shadow: 0 0 0 4px rgba(0, 196, 204, 0.1);
+    border-color: var(--color-primary);
+    box-shadow: 0 0 0 4px rgba(217, 119, 6, 0.1);
   }
 
   .discovery-request-field { padding: 13px; }
@@ -282,13 +282,13 @@
 }
 
 :root[data-theme="dark"] .discovery-refinement-card {
-  border-color: rgba(159, 251, 255, 0.3) !important;
-  background: #0A1919 !important;
+  border-color: var(--color-border) !important;
+  background: var(--color-surface-white) !important;
 }
 
 :root[data-theme="dark"] .discovery-request-field textarea {
-  border-color: rgba(159, 251, 255, 0.26);
-  background: rgba(10, 25, 25, 0.94);
-  color: #E6F9FC;
+  border-color: var(--color-border);
+  background: var(--color-surface-interactive);
+  color: var(--color-text);
 }
 

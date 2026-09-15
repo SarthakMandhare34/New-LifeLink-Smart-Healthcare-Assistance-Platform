@@ -185,12 +185,12 @@ export const SpecialistFinder = () => {
     <div className="container" style={{ padding: 0, fontFamily: "'Plus Jakarta Sans', sans-serif" }}>
       {/* Page header */}
       <header className="mb-4 flex items-center gap-3">
-        <div style={{ width: 44, height: 44, borderRadius: '14px', background: 'rgba(0, 196, 204, 0.15)', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-          <UserCheck size={24} color="#00C4CC" />                                               {/* Specialist finder icon */}
+        <div style={{ width: 44, height: 44, borderRadius: '14px', background: 'var(--color-primary-muted)', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+          <UserCheck size={24} color="var(--color-primary)" />                                               {/* Specialist finder icon */}
         </div>
         <div>
-          <h1 style={{ margin: 0, fontFamily: "'Outfit', sans-serif", color: '#102B2D', fontSize: '2rem' }}>Specialist Finder</h1>
-          <p className="caption" style={{ color: '#2D9D9C' }}>Browse controlled Mumbai specialist entries by specialty and the Mumbai area closest to where you live, then send a patient-owned appointment request.</p>
+          <h1 style={{ margin: 0, fontFamily: "'Outfit', sans-serif", color: 'var(--color-text)', fontSize: '2rem' }}>Specialist Finder</h1>
+          <p className="caption" style={{ color: 'var(--color-text-muted)' }}>Browse controlled Mumbai specialist entries by specialty and the Mumbai area closest to where you live, then send a patient-owned appointment request.</p>
         </div>
       </header>
 
@@ -207,7 +207,6 @@ export const SpecialistFinder = () => {
             <Search size={20} color="var(--color-primary)" style={{ flexShrink: 0 }} />
             <div style={{ flex: 1 }}>
               <Input aria-label="Search specialists by specialty" placeholder="Search by specialty…" value={searchTerm} onChange={(event) => setSearchTerm(event.target.value)} />
-              <p className="caption discovery-search-guidance">{SPECIALTY_SEARCH_GUIDANCE}</p>
             </div>
           </div>
 
@@ -258,8 +257,8 @@ export const SpecialistFinder = () => {
         <section>
           <div className="discovery-results-heading">
             <div>
-              <h2 style={{ fontSize: '1.4rem', margin: 0, fontFamily: "'Outfit', sans-serif", color: '#102B2D' }}>Mumbai Specialist Directory</h2>
-              <p className="caption" style={{ color: '#2D9D9C' }}>{displayedDoctors.length} controlled {displayedDoctors.length === 1 ? 'entry' : 'entries'} match the current filters.{browserLocation ? ' They are ordered approximately from your browser location.' : ''}</p>
+              <h2 style={{ fontSize: '1.4rem', margin: 0, fontFamily: "'Outfit', sans-serif", color: 'var(--color-text)' }}>Mumbai Specialist Directory</h2>
+              <p className="caption" style={{ color: 'var(--color-text-muted)' }}>{displayedDoctors.length} controlled {displayedDoctors.length === 1 ? 'entry' : 'entries'} match the current filters.{browserLocation ? ' They are ordered approximately from your browser location.' : ''}</p>
             </div>
             <Badge status="neutral">Mumbai only</Badge>
           </div>
@@ -273,18 +272,18 @@ export const SpecialistFinder = () => {
                     <div>
                       <div className="flex justify-between items-start mb-2">
                         <div>
-                          <h3 style={{ margin: 0, color: '#102B2D', fontFamily: "'Outfit', sans-serif", fontSize: '1.1rem' }}>{doctor.name}</h3>
-                          <p style={{ color: '#00C4CC', fontWeight: 700, margin: '2px 0 0 0', fontSize: '0.9rem' }}>{doctor.specialty}</p>
+                          <h3 style={{ margin: 0, color: 'var(--color-text)', fontFamily: "'Outfit', sans-serif", fontSize: '1.1rem' }}>{doctor.name}</h3>
+                          <p style={{ color: 'var(--color-primary)', fontWeight: 700, margin: '2px 0 0 0', fontSize: '0.9rem' }}>{doctor.specialty}</p>
                         </div>
                         <Badge status="neutral">Controlled directory</Badge>
                       </div>
                       <div className="flex-col gap-1 mt-2">
-                        <div className="caption flex items-center gap-1" style={{ color: '#2D9D9C' }}><Building size={14} /> {doctor.hospital}</div>
-                        <div className="caption flex items-center gap-1" style={{ color: '#2D9D9C' }}><MapPin size={14} /> {doctor.locality}, {doctor.city} • {doctor.station} station</div>
-                        <div className="caption flex items-center gap-1" style={{ color: '#2D9D9C' }}><TrainFront size={14} /> {doctor.railLines.join(" + ")} connectivity</div>
+                        <div className="caption flex items-center gap-1" style={{ color: 'var(--color-text-muted)' }}><Building size={14} /> {doctor.hospital}</div>
+                        <div className="caption flex items-center gap-1" style={{ color: 'var(--color-text-muted)' }}><MapPin size={14} /> {doctor.locality}, {doctor.city} • {doctor.station} station</div>
+                        <div className="caption flex items-center gap-1" style={{ color: 'var(--color-text-muted)' }}><TrainFront size={14} /> {doctor.railLines.join(" + ")} connectivity</div>
                       </div>
                     </div>
-                    <div style={{ marginTop: 'var(--spacing-4)', paddingTop: 'var(--spacing-3)', borderTop: '1px solid #9FFBFF' }}>
+                    <div style={{ marginTop: 'var(--spacing-4)', paddingTop: 'var(--spacing-3)', borderTop: '1px solid var(--color-border)' }}>
                       {requestedDocId === doctor.id ? (
                         <Button variant="secondary" className="w-full" disabled>Requested!</Button>
                       ) : (
@@ -314,8 +313,8 @@ export const SpecialistFinder = () => {
         <aside className="discovery-map-pane">
           <Card variant="glass" className="directory-map-card">
             <div className="flex items-center gap-2 mb-3">
-              <Route size={20} color="#00C4CC" />
-              <div><h2 style={{ margin: 0, fontSize: '1.2rem', fontFamily: "'Outfit', sans-serif", color: '#102B2D' }}>Interactive OpenStreetMap</h2><p className="caption" style={{ color: '#2D9D9C' }}>OpenStreetMap base map and controlled directory markers stay in sync.</p></div>
+              <Route size={20} color="var(--color-accent)" />
+              <div><h2 style={{ margin: 0, fontSize: '1.2rem', fontFamily: "'Outfit', sans-serif", color: 'var(--color-text)' }}>Interactive OpenStreetMap</h2><p className="caption" style={{ color: 'var(--color-text-muted)' }}>OpenStreetMap base map and controlled directory markers stay in sync.</p></div>
             </div>
             <MumbaiDoctorMap doctors={displayedDoctors} selectedDoctorId={selectedDocId} onSelectDoctor={selectDoctor} browserLocation={browserLocation} />
           </Card>
@@ -325,12 +324,12 @@ export const SpecialistFinder = () => {
       {/* Booking confirmation popup dialog */}
       <Popup isOpen={showSuccessPopup} onClose={() => navigate('/patient/appointments')} title="Appointment Requested" maxWidth="400px">
         <div style={{ textAlign: 'center', padding: '16px 0', fontFamily: "'Plus Jakarta Sans', sans-serif" }}>
-          <CheckCircle size={48} color="#00C4CC" style={{ margin: '0 auto 16px' }} />
-          <h3 style={{ margin: '0 0 8px', color: '#102B2D', fontFamily: "'Outfit', sans-serif", fontSize: '1.2rem' }}>Request Sent</h3>
-          <p style={{ color: '#2D9D9C', fontSize: '0.9rem', marginBottom: '24px' }}>
+          <CheckCircle size={48} color="var(--color-primary)" style={{ margin: '0 auto 16px' }} />
+          <h3 style={{ margin: '0 0 8px', color: 'var(--color-text)', fontFamily: "'Outfit', sans-serif", fontSize: '1.2rem' }}>Request Sent</h3>
+          <p style={{ color: 'var(--color-text-muted)', fontSize: '0.9rem', marginBottom: '24px' }}>
             Your appointment request has been submitted to the assigned specialist workspace successfully.
           </p>
-          <Button variant="primary" className="w-full" onClick={() => navigate('/patient/appointments')} style={{ background: '#00C4CC', borderColor: '#00C4CC', color: 'white', fontWeight: 700 }}>
+          <Button variant="primary" className="w-full" onClick={() => navigate('/patient/appointments')}>
             View My Appointments
           </Button>
         </div>

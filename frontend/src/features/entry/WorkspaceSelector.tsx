@@ -46,7 +46,7 @@ export const WorkspaceSelector = () => {
       <header className="workspace-portal-header" aria-label="LifeLink portal header">
         <div className="workspace-portal-brand">
           <span className="workspace-portal-mark" aria-hidden="true">
-            <HeartPulse size={22} />
+            <LifeLinkLogo variant="symbol" style={{ width: '30px', height: '30px', objectFit: 'contain' }} />
           </span>
           <span>
             <strong>LifeLink</strong>
@@ -63,7 +63,23 @@ export const WorkspaceSelector = () => {
       <section className="workspace-entry-shell">
         <header className="workspace-entry-header">
           <div className="workspace-entry-logo-wrap">
-            <LifeLinkLogo className="lifelink-logo-auth workspace-entry-logo" />
+            <div 
+              className="auth-branding-logo-mount"
+              style={{ 
+                background: '#FAF5EC', 
+                border: '1px solid #D4B07B', 
+                borderRadius: '8px', 
+                padding: '16px 28px', 
+                boxShadow: '0 4px 18px rgba(183, 107, 0, 0.12)',
+                display: 'inline-flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                maxWidth: 'min(480px, 92vw)',
+                width: '100%'
+              }}
+            >
+              <LifeLinkLogo className="lifelink-logo-auth workspace-entry-logo" style={{ width: '100%', maxWidth: '420px', height: 'auto', margin: 0, padding: 0, border: 'none', background: 'transparent', boxShadow: 'none' }} />
+            </div>
           </div>
           <span className="workspace-entry-kicker">LifeLink connected care</span>
           <h1 id="workspace-entry-heading">Choose your care workspace</h1>
@@ -71,12 +87,12 @@ export const WorkspaceSelector = () => {
         </header>
 
         <div className="workspace-entry-grid">
-          <Card variant="glass" className="workspace-choice-card">
+          <Card variant="glass" className="workspace-choice-card patient-choice-card">
             <div className="workspace-choice-topline">
               <span className="workspace-choice-icon patient">
                 <HeartPulse size={22} />
               </span>
-              <span className="workspace-choice-label">Patient Portal</span>
+              <span className="workspace-choice-label patient">Patient Portal</span>
             </div>
             <h2>Personal health workspace</h2>
             <p>Manage your health information and care requests.</p>
@@ -91,7 +107,7 @@ export const WorkspaceSelector = () => {
             <Button
               type="button"
               variant="primary"
-              className="workspace-choice-action"
+              className="workspace-choice-action btn-primary"
               onClick={() => openWorkspace("patient", "/login")}
               disabled={Boolean(switchingTo)}
             >
@@ -115,12 +131,12 @@ export const WorkspaceSelector = () => {
             </button>
           </Card>
 
-          <Card variant="glass" className="workspace-choice-card">
+          <Card variant="glass" className="workspace-choice-card doctor-choice-card">
             <div className="workspace-choice-topline">
               <span className="workspace-choice-icon doctor">
                 <Stethoscope size={22} />
               </span>
-              <span className="workspace-choice-label">Doctor Workstation</span>
+              <span className="workspace-choice-label doctor">Doctor Workstation</span>
             </div>
             <h2>Clinician workspace</h2>
             <p>Review assigned appointments and patient context.</p>
@@ -135,7 +151,7 @@ export const WorkspaceSelector = () => {
             <Button
               type="button"
               variant="primary"
-              className="workspace-choice-action"
+              className="workspace-choice-action doctor-btn-primary"
               onClick={() => openWorkspace("clinician", "/doctor/login")}
               disabled={Boolean(switchingTo)}
             >
