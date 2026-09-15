@@ -61,6 +61,11 @@ async function startServer() {
   
   // Serve uploaded profile pictures and files statically from the local /uploads directory
   app.use("/uploads", express.static(path.resolve(process.cwd(), 'uploads')));
+
+  // Direct health check endpoint for cloud load balancers and Render health checks
+  app.get("/health", (_req, res) => {
+    res.status(200).json({ status: "ok", timestamp: Date.now() });
+  });
   
   // --- Cluster: tRPC Middleware Mounting ---
   // Connects our type-safe tRPC API router to the /api/trpc endpoint
