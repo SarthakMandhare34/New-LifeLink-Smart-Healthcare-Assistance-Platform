@@ -1,16 +1,12 @@
 /**
  * ============================================================================
- * BIOLOGICAL VALIDATION & CLINICAL SAFETY INVARIANTS (shared/biologicalValidation.ts)
+ * SHARED ISOMORPHIC LOGIC
  * ============================================================================
  * 
- * WHAT THIS FILE DOES:
- * Layer 1 of the LifeLink AI Safety Cascade. Validates patient symptoms against
- * biological gender rules before sending requests to the AI engine.
- * 
- * For example:
- * - Detects female-exclusive symptoms (pregnancy, menstrual cramps, ovarian pain)
- *   reported for a male profile.
- * - Prevents hallucinations, prompt injections, and dangerous medical mismatches.
+ * WHY THIS FILE IS SPECIAL:
+ * The code in this folder is executed by BOTH the front-end browser and the back-end server.
+ * This ensures that when we calculate things (like the distance between clinics),
+ * both the server and the phone agree on the exact same mathematical rules.
  */
 // --- Cluster: Female-Exclusive Biological Terms ---
 // Keywords and conditions that exclusively pertain to biological female anatomy.

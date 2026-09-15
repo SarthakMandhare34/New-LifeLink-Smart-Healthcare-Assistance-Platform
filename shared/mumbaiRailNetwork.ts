@@ -1,18 +1,13 @@
 /**
  * ============================================================================
- * MUMBAI SUBURBAN RAILWAY TRANSIT DIRECTORY (shared/mumbaiRailNetwork.ts)
+ * SHARED ISOMORPHIC LOGIC
  * ============================================================================
  * 
- * WHAT THIS FILE DOES:
- * Contains the geographic transit mapping of Mumbai's three major suburban rail
- * corridors: Central Line, Western Line, and Harbour Line.
- * 
- * Used by both frontend and backend to:
- * 1. Locate nearby specialist clinics for patients based on railway stations.
- * 2. Calculate station distance and transit accessibility on Leaflet maps.
- * 3. Assign synthetic clinician workstations to specific railway stations.
+ * WHY THIS FILE IS SPECIAL:
+ * The code in this folder is executed by BOTH the front-end browser and the back-end server.
+ * This ensures that when we calculate things (like the distance between clinics),
+ * both the server and the phone agree on the exact same mathematical rules.
  */
-
 export const MUMBAI_RAIL_LINES = ["Central", "Harbour", "Western"] as const;                     // The three major Mumbai suburban railway networks
 export type MumbaiRailLine = typeof MUMBAI_RAIL_LINES[number];                                   // Rail line union type
 

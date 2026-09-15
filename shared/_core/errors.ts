@@ -1,3 +1,13 @@
+/**
+ * ============================================================================
+ * SHARED ISOMORPHIC LOGIC
+ * ============================================================================
+ * 
+ * WHY THIS FILE IS SPECIAL:
+ * The code in this folder is executed by BOTH the front-end browser and the back-end server.
+ * This ensures that when we calculate things (like the distance between clinics),
+ * both the server and the phone agree on the exact same mathematical rules.
+ */
 // =========================================================================================
 // SHARED HTTP ERROR DEFINITIONS
 // Canonical HTTP error abstraction thrown by tRPC route handlers and API endpoints.
