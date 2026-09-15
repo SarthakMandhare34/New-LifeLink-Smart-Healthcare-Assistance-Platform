@@ -1,3 +1,21 @@
+/**
+ * ============================================================================
+ * LIFELINK BACKEND: SYNTHETIC CLINICIAN IDENTITY SERVICE (backend/syntheticDoctor.ts)
+ * ============================================================================
+ * 
+ * WHAT THIS MODULE DOES:
+ * Bridges the in-memory Mumbai Rail Specialist Directory (`mockDoctorDirectory`) with
+ * the database user identity system (`users` & `syntheticDoctorCredentials` tables).
+ * 
+ * CORE RESPONSIBILITIES:
+ * 1. OpenID Formatting: Generates consistent identity strings (`synthetic-doctor:<doctor-id>`)
+ *    distinguishing clinician accounts from patient accounts.
+ * 2. Directory Resolution: Maps database OpenIDs back to active clinician directory records.
+ * 3. Standardized Display Titles: Formats institutional titles for UI display (e.g.,
+ *    "Controlled Cardiology Specialist — CSMT").
+ * 4. Station Mapping: Anchors clinicians to specific suburban railway stations across
+ *    Mumbai's Western, Central, and Harbour corridors.
+ */
 import { getMockDoctorById, type MockDoctorDirectoryEntry } from "./discovery/mockDoctorDirectory"; // Directory lookups and type definitions
 
 const SYNTHETIC_DOCTOR_OPEN_ID_PREFIX = "synthetic-doctor:";                              // Prefix distinguishing doctor OpenIDs from patient OpenIDs

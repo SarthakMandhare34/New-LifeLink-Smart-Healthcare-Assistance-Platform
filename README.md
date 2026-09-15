@@ -20,7 +20,6 @@
   - [🩺 Clinician Workspace](#-clinician-workspace)
 - [🎨 Design System & Visual Identity](#-design-system--visual-identity)
 - [🔒 Security, Privacy & Data Isolation](#-security-privacy--data-isolation)
-- [🧠 5-Layer AI Clinical Triage Safety Architecture](#-5-layer-ai-clinical-triage-safety-architecture)
 - [📁 Project Directory Tree & Guidelines](#-project-directory-tree--guidelines)
   - [Complete Repository Tree](#complete-repository-tree)
   - [Folder & File Architectural Guide](#folder--file-architectural-guide)
@@ -113,30 +112,6 @@ LifeLink implements strict enterprise healthcare security standards:
 - **Cryptographic Prescription Integrity**: Prescriptions are signed with automated SHA-256 integrity hashes verifying doctor ID, patient ID, medication items, dosage schedules, and timestamps.
 - **In-Memory Geolocation Privacy**: Patient GPS coordinates are processed exclusively in-memory on the client; coordinates are never persisted to disk or logged on the server.
 - **IDOR Protection**: All database queries enforce strict user ownership checks (`eq(patientProfiles.userId, ctx.user.id)`).
-
----
-
-## 🧠 5-Layer AI Clinical Triage Safety Architecture
-
-LifeLink's symptom checker does not pass raw user text directly to an LLM. It routes queries through a **5-layer clinical safety cascade**:
-
-```mermaid
-flowchart TD
-    A[Patient Inputs Symptoms] --> B[Layer 1: Biological Consistency & Gender Invariant]
-    B -- Inconsistency Detected --> B1[Immediate Guardrail Error Response]
-    B -- Valid --> C[Layer 2: Pediatric Age Filter & Dosage Safeguard]
-    C -- Red Flag / Infant Emergency --> C1[High Urgency Pediatric Warning]
-    C -- Valid --> D[Layer 3: Medical Hallucination & Prompt Injection Sanitizer]
-    D --> E[Layer 4: Google Gemini 1.5 Flash Structured Inference]
-    E --> F[Layer 5: Output Schema Validation & Urgency Triage]
-    F --> G[Route to Mumbai Rail Specialist & Care Recommendations]
-```
-
-1. **Layer 1: Biological Consistency**: Detects anatomical impossibilities (e.g., pregnancy or ovarian symptoms reported for a biological male) before executing AI prompts (`shared/biologicalValidation.ts`).
-2. **Layer 2: Pediatric Safeguard**: Automatically identifies pediatric patients (<18 years) and enforces strict safety restrictions (e.g., routing to pediatricians, warning against adult NSAIDs).
-3. **Layer 3: Injection & Hallucination Defense**: Filters non-clinical system instructions, malicious jailbreaks, and out-of-scope queries.
-4. **Layer 4: Gemini Flash Triage Engine**: Analyzes symptom clusters, sets clinical urgency (`LOW`, `MODERATE`, `EMERGENCY`), and determines the optimal medical specialty.
-5. **Layer 5: Output Schema Validation**: Enforces strict Zod typing on Gemini responses (`urgency`, `specialty`, `homeCareNotes`, `warningSigns`, `recommendedSpecialistId`).
 
 ---
 

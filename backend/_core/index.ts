@@ -27,7 +27,7 @@ import { registerPatientProfilePhotoRoute } from "../profilePhoto"; // Multer fi
 function isPortAvailable(port: number): Promise<boolean> {
   return new Promise(resolve => {
     const server = net.createServer();                           // Create a test socket server
-    server.listen(port, () => {
+    server.listen(port, "0.0.0.0", () => {
       server.close(() => resolve(true));                         // Port is free and available!
     });
     server.on("error", () => resolve(false));                    // Port is busy / occupied
@@ -95,15 +95,26 @@ async function startServer() {
   }
 
   const preferredPort = parseInt(process.env.PORT || "4000", 10); // Check configured port from .env or default to 4000
-  const port = await findAvailablePort(preferredPort);           // Automatically select an open port
+  let currentPort = preferredPort;
 
-  if (port !== preferredPort) {
-    console.log(`Port ${preferredPort} is busy, using port ${port} instead`);
-  }
+  // Gracefully handle any unexpected socket error during listen
+  server.on("error", (err: any) => {
+    if (err.code === "EADDRINUSE") {
+      console.warn(`[Backend] Port ${currentPort} is busy (EADDRINUSE), retrying on port ${currentPort + 1}...`);
+      currentPort++;
+      if (currentPort <= preferredPort + 5) {
+        server.listen(currentPort, "0.0.0.0");
+      } else {
+        console.error(`[Backend Fatal] Exhausted port range ${preferredPort}–${preferredPort + 5}.`);
+      }
+    } else {
+      console.error("[Backend Server Error]", err);
+    }
+  });
 
   // Begin listening for incoming HTTP connections
-  server.listen(port, () => {
-    console.log(`Server running on http://localhost:${port}/`);  // Confirmation log when server is ready
+  server.listen(preferredPort, "0.0.0.0", () => {
+    console.log(`Server running on http://localhost:${currentPort}/`);  // Confirmation log when server is ready
   });
 }
 

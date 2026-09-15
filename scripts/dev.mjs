@@ -50,7 +50,7 @@ function isPortAvailable(port) {
     server.once("error", () => {
       resolve(false);                                            // Port is occupied by another process
     });
-    server.listen(port, () => {
+    server.listen(port, "0.0.0.0", () => {
       server.close(() => {
         resolve(true);                                           // Port is completely free and available for use
       });
@@ -91,11 +91,34 @@ async function resolveFrontendPort() {
   return await findAvailablePort(FRONTEND_PORT_START, FRONTEND_PORT_END, "Frontend");
 }
 
+// Actively checks if backend port is accepting TCP connections before launching Vite
+function waitForBackendPort(port, timeoutMs = 12000) {
+  const start = Date.now();
+  return new Promise((resolve) => {
+    const tryConnect = () => {
+      const socket = net.createConnection({ port, host: "127.0.0.1" });
+      socket.once("connect", () => {
+        socket.destroy();
+        resolve(true);
+      });
+      socket.once("error", () => {
+        socket.destroy();
+        if (Date.now() - start >= timeoutMs) {
+          resolve(false);
+        } else {
+          setTimeout(tryConnect, 150);
+        }
+      });
+    };
+    tryConnect();
+  });
+}
+
 let backendChild = null;                                         // Reference to the running Express child process
 let frontendChild = null;                                        // Reference to the running Vite child process
 
 // --- Cluster: Dual Process Launcher ---
-// Spawns the Express backend and Vite frontend as independent, parallel child processes
+// Spawns the Express backend first, awaits socket readiness, then launches Vite dev server
 async function startProcesses() {
   const API_PORT = await resolveBackendPort();                   // 1. Resolve free port for backend
   const FRONTEND_PORT = await resolveFrontendPort();             // 2. Resolve free port for frontend
@@ -124,6 +147,10 @@ async function startProcesses() {
     shell: true,                                                 // Execute command within system shell
     stdio: ["ignore", "inherit", "inherit"],                     // Pipe stdout & stderr directly to terminal
   });
+
+  // Wait for the backend API to initialize before launching Vite dev server
+  // This guarantees the Express HTTP server is active and avoids proxy ECONNREFUSED errors
+  await waitForBackendPort(API_PORT, 12000);
 
   // 2. Spawn Frontend Process
   frontendChild = spawn(frontendCmd, {

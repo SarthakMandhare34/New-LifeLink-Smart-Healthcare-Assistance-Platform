@@ -13,7 +13,7 @@ const plugins = [
 // In development, scripts/dev.mjs finds an open port and injects VITE_API_PORT.
 // If not found, it defaults to the standard Express port (4000).
 const API_PORT = process.env.VITE_API_PORT || process.env.PORT || "4000"; // Read backend port from environment or fallback to 4000
-const target = `http://localhost:${API_PORT}`;                            // Destination URL for forwarding API calls to backend Express
+const target = `http://127.0.0.1:${API_PORT}`;                           // Direct IPv4 loopback URL for reliable proxy forwarding without IPv6 resolution delays
 
 export default defineConfig({
   plugins,                                                       // Registers our React and Tailwind plugins with Vite
@@ -99,10 +99,27 @@ export default defineConfig({
         target: target,                                          // Forward all /api/trpc calls directly to the Express backend
         changeOrigin: true,                                      // Changes the Host header to match backend target
         ws: true,                                                // Enable WebSocket / SSE forwarding for live event streaming
+        configure: (proxy) => {
+          proxy.on("error", (err, _req, res) => {
+            // Gracefully handle connection attempts during initial Express boot milliseconds
+            if (res && "writeHead" in res && !res.headersSent) {
+              res.writeHead(503, { "Content-Type": "application/json" });
+              res.end(JSON.stringify({ error: "Backend server starting up, please refresh in a moment" }));
+            }
+          });
+        },
       },
       "/uploads": {
         target: target,                                          // Forward avatar and document requests to Express static folder
         changeOrigin: true,                                      // Rewrite origin header for static asset access
+        configure: (proxy) => {
+          proxy.on("error", (err, _req, res) => {
+            if (res && "writeHead" in res && !res.headersSent) {
+              res.writeHead(503, { "Content-Type": "application/json" });
+              res.end(JSON.stringify({ error: "Backend server starting up" }));
+            }
+          });
+        },
       },
     },
   },

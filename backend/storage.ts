@@ -1,3 +1,21 @@
+/**
+ * ============================================================================
+ * LIFELINK BACKEND: LOCAL ASSET & MEDIA STORAGE SERVICE (backend/storage.ts)
+ * ============================================================================
+ * 
+ * WHAT THIS MODULE DOES:
+ * Provides an abstracted binary asset storage pipeline for patient profile avatars,
+ * medical attachments, and clinical documentation uploads.
+ * 
+ * CORE RESPONSIBILITIES:
+ * 1. Storage Directory Management: Ensures the local `uploads/` directory exists on disk recursively.
+ * 2. Key Sanitization & Collision Avoidance: Normalizes incoming file keys (strips leading slashes,
+ *    flattens directory separators) and appends an 8-character random UUID hash to prevent file overwrites.
+ * 3. File Persistence: Writes incoming binary buffers or streams to disk asynchronously.
+ * 4. Public Asset Resolution: Generates static serve URLs (`/uploads/{key}`) consumed by Express static middleware.
+ * 5. Cloud Compatibility: Provides an isomorphic interface (`storagePut`, `storageGet`, `storageGetSignedUrl`)
+ *    that can be swapped with AWS S3, Google Cloud Storage, or Cloudflare R2 without breaking caller contracts.
+ */
 import fs from 'node:fs/promises';                                                        // Node asynchronous file system API
 import path from 'node:path';                                                              // Path normalization and join utilities
 import crypto from 'node:crypto';                                                          // Cryptographic UUID generation
