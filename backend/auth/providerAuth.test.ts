@@ -1,3 +1,15 @@
+/**
+ * ============================================================================
+ * SECURITY AND AUTHENTICATION CORE
+ * ============================================================================
+ * 
+ * WHY THIS FILE IS SPECIAL:
+ * This file manages how users securely log into the application.
+ * Healthcare apps are prime targets for hackers. Instead of basic security,
+ * we use strict token management, password hashing (scrypt), and Google OAuth.
+ * This prevents account takeovers, brute force attacks, and identity theft.
+ * Never modify these security rules without a senior security audit.
+ */
 import type { Express } from "express";
 import { describe, expect, it, vi } from "vitest";
 import { googleAuthorizationStartUrlFromConfig, googleAvailabilityFromConfig, registerProviderAuthRoutes } from "./providerAuth";

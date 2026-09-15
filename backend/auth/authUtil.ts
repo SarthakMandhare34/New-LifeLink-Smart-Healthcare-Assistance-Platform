@@ -1,3 +1,15 @@
+/**
+ * ============================================================================
+ * SECURITY AND AUTHENTICATION CORE
+ * ============================================================================
+ * 
+ * WHY THIS FILE IS SPECIAL:
+ * This file manages how users securely log into the application.
+ * Healthcare apps are prime targets for hackers. Instead of basic security,
+ * we use strict token management, password hashing (scrypt), and Google OAuth.
+ * This prevents account takeovers, brute force attacks, and identity theft.
+ * Never modify these security rules without a senior security audit.
+ */
 import { COOKIE_NAME, ONE_YEAR_MS } from "@shared/const";                                // Default patient cookie key and 365-day millisecond constant
 import { ForbiddenError } from "@shared/_core/errors";                                      // Helper for throwing 403 Forbidden HTTP exceptions
 import { parse as parseCookieHeader } from "cookie";                                       // Cookie parser library for parsing raw cookie headers

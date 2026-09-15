@@ -1,3 +1,15 @@
+/**
+ * ============================================================================
+ * SECURITY AND AUTHENTICATION CORE
+ * ============================================================================
+ * 
+ * WHY THIS FILE IS SPECIAL:
+ * This file manages how users securely log into the application.
+ * Healthcare apps are prime targets for hackers. Instead of basic security,
+ * we use strict token management, password hashing (scrypt), and Google OAuth.
+ * This prevents account takeovers, brute force attacks, and identity theft.
+ * Never modify these security rules without a senior security audit.
+ */
 import { randomBytes, timingSafeEqual } from "node:crypto";                             // Cryptographic tools for generating CSRF state tokens and timing-safe checks
 import { parse as parseCookieHeader } from "cookie";                                       // Cookie parser for reading OAuth state cookies
 import type { Express, Request, Response } from "express";                                  // Express types for route handlers
