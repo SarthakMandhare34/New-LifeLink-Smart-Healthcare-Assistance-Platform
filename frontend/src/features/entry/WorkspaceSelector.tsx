@@ -1,3 +1,12 @@
+/**
+ * ============================================================================
+ * FRONTEND REACT CORE
+ * ============================================================================
+ * 
+ * WHY THIS FILE IS SPECIAL:
+ * This is the root configuration of the React application.
+ * It sets up the Routing (which URL goes to which page) and global Theme Contexts.
+ */
 import { useState } from "react";                                                         // React state hook for tracking UI transitions
 import { ArrowRight, HeartPulse, LoaderCircle, ShieldCheck, Stethoscope } from "lucide-react"; // Healthcare and action icons
 import { useNavigate } from "react-router-dom";                                            // Programmatic client router navigation hook

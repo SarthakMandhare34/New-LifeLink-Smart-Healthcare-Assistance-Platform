@@ -1,3 +1,13 @@
+/**
+ * ============================================================================
+ * CLINICIAN WORKSTATION PORTAL
+ * ============================================================================
+ * 
+ * WHY THIS FILE IS SPECIAL:
+ * This is the heavily restricted portal used by professional doctors.
+ * It contains components for reviewing AI Triage reports, managing live consultation queues,
+ * and writing clinical notes. It is isolated completely from the patient portal.
+ */
 import { Card } from "../../../components/ui/Card";                                             // Visual glass card container
 import { ShieldCheck, Stethoscope, MapPin, Building, Mail, User } from "lucide-react";           // Medical specialist profile iconography
 import { trpc } from "../../../lib/trpc";                                                       // Type-safe tRPC client bridge

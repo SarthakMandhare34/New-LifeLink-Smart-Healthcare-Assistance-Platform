@@ -1,3 +1,12 @@
+/**
+ * ============================================================================
+ * PATIENT PORTAL UI
+ * ============================================================================
+ * 
+ * WHY THIS FILE IS SPECIAL:
+ * This manages the everyday user interfaces for patients (Dashboard, Health Passport, Medicines).
+ * It uses modern React hooks to keep data perfectly synchronized and responsive.
+ */
 import React from 'react';                                                                // Core React UI framework
 import { useNavigate } from 'react-router-dom';                                                 // Single-page application route navigator
 import { 

@@ -1,3 +1,14 @@
+/**
+ * ============================================================================
+ * 112 NATIONAL SOS DIALER
+ * ============================================================================
+ * 
+ * WHY THIS FILE IS SPECIAL:
+ * This is the critical emergency override screen.
+ * It uses native HTML5 deep-linking (`tel:112`) to bypass the browser and instantly
+ * force the mobile phone's dialer open to call national emergency services.
+ * Seconds matter here, so it is built to load instantly.
+ */
 // @vitest-environment jsdom
 import { describe, expect, it, vi, beforeEach, afterEach } from 'vitest';
 import { render, screen, fireEvent } from '@testing-library/react';

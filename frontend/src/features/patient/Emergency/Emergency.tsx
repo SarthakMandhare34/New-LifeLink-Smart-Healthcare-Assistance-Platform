@@ -1,3 +1,14 @@
+/**
+ * ============================================================================
+ * 112 NATIONAL SOS DIALER
+ * ============================================================================
+ * 
+ * WHY THIS FILE IS SPECIAL:
+ * This is the critical emergency override screen.
+ * It uses native HTML5 deep-linking (`tel:112`) to bypass the browser and instantly
+ * force the mobile phone's dialer open to call national emergency services.
+ * Seconds matter here, so it is built to load instantly.
+ */
 import React, { useState } from 'react';                                                  // Core React hooks for interactive state management
 import { ShieldAlert, Phone, MessageCircle, Siren, UsersRound } from 'lucide-react';           // Emergency and communication icon set
 import { Card } from '../../../components/ui/Card';                                            // Reusable visual card component

@@ -1,3 +1,13 @@
+/**
+ * ============================================================================
+ * CLINICIAN WORKSTATION PORTAL
+ * ============================================================================
+ * 
+ * WHY THIS FILE IS SPECIAL:
+ * This is the heavily restricted portal used by professional doctors.
+ * It contains components for reviewing AI Triage reports, managing live consultation queues,
+ * and writing clinical notes. It is isolated completely from the patient portal.
+ */
 import { useState } from "react";                                                             // React state hook for form input tracking
 import { useNavigate } from "react-router-dom";                                                 // Navigation hook to redirect between views
 import { Card } from "../../components/ui/Card";                                                // UI glass container component

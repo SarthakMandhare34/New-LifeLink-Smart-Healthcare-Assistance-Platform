@@ -1,3 +1,13 @@
+/**
+ * ============================================================================
+ * SHA-256 DIGITAL PRESCRIPTIONS UI
+ * ============================================================================
+ * 
+ * WHY THIS FILE IS SPECIAL:
+ * This handles the rendering of official medical prescriptions.
+ * To stop prescription fraud (hackers changing 1 pill to 10 pills), it displays 
+ * a cryptographic SHA-256 hash. If even one letter of the medicine changes, the hash breaks.
+ */
 import React, { useState } from 'react';                                                  // Core React engine & component state tracking
 import { Card } from '../../../components/ui/Card';                                            // Reusable glassmorphic UI container
 import { Button } from '../../../components/ui/Button';                                        // Styled user interaction action button

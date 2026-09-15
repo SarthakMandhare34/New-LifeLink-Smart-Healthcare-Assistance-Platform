@@ -1,3 +1,14 @@
+/**
+ * ============================================================================
+ * TRANSIT CLINIC INTERACTIVE MAP
+ * ============================================================================
+ * 
+ * WHY THIS FILE IS SPECIAL:
+ * This file renders the live geographic map using Leaflet.
+ * It is highly special because it accesses the patient's GPS coordinates securely.
+ * It computes the physical distance to 24 Mumbai railway clinics purely inside the browser memory.
+ * Your GPS location is NEVER sent or saved to our servers, ensuring total geographic privacy.
+ */
 import { describe, expect, it } from 'vitest';
 import { sortByBrowserLocation } from './discoveryLocation';
 

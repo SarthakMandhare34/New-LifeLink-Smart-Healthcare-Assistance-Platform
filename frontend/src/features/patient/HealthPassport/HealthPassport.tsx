@@ -1,3 +1,12 @@
+/**
+ * ============================================================================
+ * PATIENT PORTAL UI
+ * ============================================================================
+ * 
+ * WHY THIS FILE IS SPECIAL:
+ * This manages the everyday user interfaces for patients (Dashboard, Health Passport, Medicines).
+ * It uses modern React hooks to keep data perfectly synchronized and responsive.
+ */
 import React, { useEffect, useState } from 'react';                                        // Core React hooks for component state & side effects
 import { Card } from '../../../components/ui/Card';                                            // Reusable glassmorphic UI card container
 import { Badge } from '../../../components/ui/Badge';                                          // Small indicator badge component

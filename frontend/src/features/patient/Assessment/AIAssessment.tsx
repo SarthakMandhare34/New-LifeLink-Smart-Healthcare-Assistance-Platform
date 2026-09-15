@@ -1,17 +1,12 @@
 /**
  * ============================================================================
- * LIFELINK FRONTEND: AI HEALTH ASSESSMENT COMPONENT (features/patient/Assessment/AIAssessment.tsx)
+ * AI SYMPTOM CHECKER UI
  * ============================================================================
  * 
- * WHAT THIS COMPONENT DOES:
- * Provides an interactive clinical decision-support interface for patients:
- * 1. Symptom Collection: Gathers reported symptoms, age, biological gender, duration, and conditions.
- * 2. Real-Time AI Analysis: Submits data to `trpc.assessment.analyze` mutation for triage assessment.
- * 3. Triage Urgency Display: Renders color-coded urgency badges (LOW, MODERATE, EMERGENCY, ERROR).
- * 4. Emergency Action Workflow: If urgency is EMERGENCY, triggers prominent warning banner with 
- *    direct button to the SOS Emergency portal (`/patient/emergency`).
- * 5. Specialist Routing: Allows one-click handoff to find specialists in Mumbai matching the recommended field.
- * 6. Historical Triage Cards: Lists past persisted assessments fetched via `trpc.assessment.list`.
+ * WHY THIS FILE IS SPECIAL:
+ * This React component provides the interface for patients to type their symptoms.
+ * It manages complex loading states while waiting for Google's supercomputers to reply,
+ * ensuring the user feels calm and informed during a potentially stressful medical moment.
  */
 import React, { useState } from 'react';
 import { AlertCircle, ArrowRight, ShieldAlert, Stethoscope, Clock, Activity, FileText } from 'lucide-react';
