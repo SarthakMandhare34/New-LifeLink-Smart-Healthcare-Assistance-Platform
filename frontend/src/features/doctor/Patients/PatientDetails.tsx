@@ -135,7 +135,7 @@ export const PatientView = () => {
                   Accept Appointment
                 </Button>
               ) : appointment.status === "Confirmed" ? (
-                <Button size="sm" variant="primary" style={{ background: "#27272A", borderColor: "#18181B", color: "#F4F4F5" }} disabled={updateStatus.isPending} aria-label={`Mark appointment on ${new Date(appointment.scheduledAt).toLocaleDateString()} completed`} onClick={() => updateStatus.mutate({ id: appointment.id, status: "Completed" })}>
+                <Button size="sm" variant="primary" style={{ background: "var(--color-surface-interactive)", borderColor: "var(--color-border)", color: "var(--color-text)" }} disabled={updateStatus.isPending} aria-label={`Mark appointment on ${new Date(appointment.scheduledAt).toLocaleDateString()} completed`} onClick={() => updateStatus.mutate({ id: appointment.id, status: "Completed" })}>
                   ✓ Mark Completed
                 </Button>
               ) : null}

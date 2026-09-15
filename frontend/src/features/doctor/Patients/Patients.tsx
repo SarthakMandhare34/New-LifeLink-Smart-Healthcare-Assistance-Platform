@@ -38,7 +38,7 @@ export const Patients = () => {
           <p className="caption" style={{ margin: '4px 0 0' }}>Patients authorized via assigned appointments</p>
         </div>
         <div style={{ marginLeft: 'auto' }}>
-          <Badge style={{ background: '#E6F0FF', color: 'var(--color-primary)', border: 'none', padding: '8px 16px', fontSize: '14px', fontWeight: 700 }}>
+          <Badge style={{ background: 'var(--color-surface-interactive)', color: 'var(--color-primary)', border: 'none', padding: '8px 16px', fontSize: '14px', fontWeight: 700 }}>
             {patients.data?.length ?? 0} Patients                                               {/* Patient counter badge */}
           </Badge>
         </div>
@@ -72,7 +72,7 @@ export const Patients = () => {
                   </div>
                 </div>
                 {/* Direct action button */}
-                <Button variant="outline" size="sm" style={{ background: '#FFF', flexShrink: 0 }}
+                <Button variant="outline" size="sm" style={{ background: 'var(--color-surface-white)', flexShrink: 0 }}
                   onClick={(e) => { e.stopPropagation(); navigate(`/doctor/patients/${patient.id}`); }}>
                   View record <ArrowRight size={14} />                                          {/* Direct view link */}
                 </Button>

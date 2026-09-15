@@ -44,10 +44,10 @@ export const DoctorAppointments = () => {
   // Dynamic left border indicator color matching appointment lifecycle - No Blue/Green/Purple
   const getBorderColor = (status: string) => {
     switch (status) {
-      case "Completed": return "4px solid #B45309";                                             // Honey Amber for completed visit
-      case "Confirmed": return "4px solid #27272A";                                             // Technical Graphite Slate for active confirmed booking
-      case "Cancelled": return "4px solid #991B1B";                                             // Crimson for cancelled session
-      default: return "4px solid #B45309";                                                      // Amber for pending requested visit
+      case "Completed": return "4px solid var(--color-doctor-accent)";
+      case "Confirmed": return "4px solid var(--color-doctor-primary)";
+      case "Cancelled": return "4px solid #991B1B";
+      default: return "4px solid var(--color-doctor-accent)";
     }
   };
 
@@ -55,13 +55,13 @@ export const DoctorAppointments = () => {
   const getStatusBadge = (status: string) => {
     switch (status) {
       case "Completed":
-        return <span style={{ display: "inline-flex", alignItems: "center", gap: 4, background: "#F4F4F5", color: "#27272A", border: "1px solid #D4D4D8", padding: "3px 10px", borderRadius: 12, fontSize: 13, fontWeight: 600 }}><CheckCheck size={14} /> Completed</span>;
+        return <span style={{ display: "inline-flex", alignItems: "center", gap: 4, background: "var(--color-surface-interactive)", color: "var(--color-text)", border: "1px solid var(--color-border)", padding: "3px 10px", borderRadius: 12, fontSize: 13, fontWeight: 600 }}><CheckCheck size={14} /> Completed</span>;
       case "Confirmed":
-        return <span style={{ display: "inline-flex", alignItems: "center", gap: 4, background: "rgba(180, 83, 9, 0.12)", color: "#B45309", border: "1px solid rgba(180, 83, 9, 0.25)", padding: "3px 10px", borderRadius: 12, fontSize: 13, fontWeight: 600 }}><CheckCircle2 size={14} /> Confirmed (Active)</span>;
+        return <span style={{ display: "inline-flex", alignItems: "center", gap: 4, background: "rgba(14, 114, 121, 0.12)", color: "var(--color-doctor-primary)", border: "1px solid rgba(14, 114, 121, 0.25)", padding: "3px 10px", borderRadius: 12, fontSize: 13, fontWeight: 600 }}><CheckCircle2 size={14} /> Confirmed (Active)</span>;
       case "Cancelled":
         return <span style={{ display: "inline-flex", alignItems: "center", gap: 4, background: "rgba(153, 27, 27, 0.12)", color: "#991B1B", border: "1px solid rgba(153, 27, 27, 0.25)", padding: "3px 10px", borderRadius: 12, fontSize: 13, fontWeight: 600 }}><XCircle size={14} /> Cancelled</span>;
       default:
-        return <span style={{ display: "inline-flex", alignItems: "center", gap: 4, background: "#F4F4F5", color: "#B45309", border: "1px solid #D4D4D8", padding: "3px 10px", borderRadius: 12, fontSize: 13, fontWeight: 600 }}><Clock size={14} /> {status}</span>;
+        return <span style={{ display: "inline-flex", alignItems: "center", gap: 4, background: "var(--color-surface-interactive)", color: "var(--color-doctor-accent)", border: "1px solid var(--color-border)", padding: "3px 10px", borderRadius: 12, fontSize: 13, fontWeight: 600 }}><Clock size={14} /> {status}</span>;
     }
   };
 
@@ -77,9 +77,9 @@ export const DoctorAppointments = () => {
 
       {/* Dismissible feedback notification message */}
       {feedbackMessage && (
-        <div style={{ background: "#F4F4F5", border: "1px solid #B45309", color: "#27272A", padding: "var(--spacing-3)", borderRadius: "var(--border-radius-md)", display: "flex", justifyContent: "space-between", alignItems: "center" }}>
+        <div style={{ background: "var(--color-surface-interactive)", border: "1px solid var(--color-doctor-accent)", color: "var(--color-text)", padding: "var(--spacing-3)", borderRadius: "var(--border-radius-md)", display: "flex", justifyContent: "space-between", alignItems: "center" }}>
           <span><strong>Status updated:</strong> {feedbackMessage}</span>
-          <button type="button" aria-label="Dismiss status notification" onClick={() => setFeedbackMessage(null)} style={{ background: "none", border: "none", cursor: "pointer", color: "#27272A", fontWeight: "bold", fontSize: "1.2rem", padding: "4px 8px" }}>×</button>
+          <button type="button" aria-label="Dismiss status notification" onClick={() => setFeedbackMessage(null)} style={{ background: "none", border: "none", cursor: "pointer", color: "var(--color-text)", fontWeight: "bold", fontSize: "1.2rem", padding: "4px 8px" }}>×</button>
         </div>
       )}
 

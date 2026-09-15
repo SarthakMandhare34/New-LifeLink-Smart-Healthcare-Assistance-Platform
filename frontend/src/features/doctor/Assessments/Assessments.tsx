@@ -68,10 +68,10 @@ export const Assessments = () => {
                     </div>
                   </div>
                 </div>
-                <Badge style={{ background: '#E6F0FF', color: 'var(--color-primary)', border: 'none' }}>Active</Badge>
+                <Badge style={{ background: 'var(--color-surface-interactive)', color: 'var(--color-primary)', border: 'none' }}>Active</Badge>
               </div>
               {/* Action button to open full patient assessment context */}
-              <Button variant="outline" className="w-full" style={{ background: '#FFF', marginTop: '8px' }}
+              <Button variant="outline" className="w-full" style={{ background: 'var(--color-surface-white)', marginTop: '8px' }}
                 onClick={() => navigate(`/doctor/patients/${patient.id}`)}>
                 Review Assessment Context <ArrowRight size={14} />                              {/* Navigate to clinical inspection */}
               </Button>

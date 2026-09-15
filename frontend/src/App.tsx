@@ -16,12 +16,14 @@
  * 2. Suspense & RouteLoader:
  *    While a new page bundle is downloading in the background, React automatically
  *    displays the <RouteLoader /> spinner, ensuring a smooth, flicker-free transition.
- * 3. Two Distinct Application Portals:
+ * 3. Two Distinct Application Portals with Dedicated Visual Identity:
  *    - Public Entry Routes: Workspace selection, patient login/registration, and doctor login.
- *    - Patient Portal (/patient/*): Wrapped in AppShell with patient navigation, alerts, and SOS.
- *    - Doctor Portal (/doctor/*): Wrapped in DoctorAppShell with clinical triage, queue, and prescriptions.
- * 4. Liquid-Glass Aesthetics:
- *    Both portals share our pearlescent, translucent liquid-glass design system.
+ *    - Patient Portal (/patient/*): Warm Amber + Teal palette with Warm Ivory/Espresso surfaces,
+ *      wrapped in AppShell with patient navigation, alerts, medication tracker, and SOS.
+ *    - Doctor Portal (/doctor/*): Deep Ocean Teal + Rich Gold palette with Slate Mint/Abyss surfaces,
+ *      wrapped in DoctorAppShell with clinical triage, queue, and digital prescriptions.
+ * 4. Liquid-Glass Aesthetics & High-Contrast Readability:
+ *    - Crisp contrast standards across both light and dark modes with zero pure black typography.
  */
 import React, { Suspense } from 'react';
 import { BrowserRouter, Navigate, Route, Routes } from 'react-router-dom';

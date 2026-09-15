@@ -62,8 +62,9 @@ export const Consultation = () => {
                   <h3 style={{ margin: 0 }}>{appointment.patient.name}</h3>                     {/* Patient name */}
                   <span
                     style={{
-                      background: appointment.status === "Confirmed" ? "#eff6ff" : "#fffbeb",
-                      color: appointment.status === "Confirmed" ? "#1e40af" : "#92400e",
+                      background: appointment.status === "Confirmed" ? "rgba(14, 114, 121, 0.12)" : "rgba(184, 134, 11, 0.12)",
+                      color: appointment.status === "Confirmed" ? "var(--color-doctor-primary)" : "var(--color-doctor-accent)",
+                      border: appointment.status === "Confirmed" ? "1px solid rgba(14, 114, 121, 0.25)" : "1px solid rgba(184, 134, 11, 0.25)",
                       padding: "2px 8px",
                       borderRadius: 12,
                       fontSize: 12,
