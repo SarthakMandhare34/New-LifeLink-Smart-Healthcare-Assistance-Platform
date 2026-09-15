@@ -151,10 +151,10 @@ export const DoctorAppShell = () => {
             <LifeLinkLogo className="lifelink-logo-sidebar lifelink-logo-sidebar-patient" />
           </NavLink>
 
-          {/* Institutional clinician subtitle */}
+          {/* Clinician subtitle */}
           <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
             <span style={{ fontSize: '0.68rem', fontWeight: 700, letterSpacing: '0.08em', textTransform: 'uppercase', color: '#B45309' }}>
-              Clinician Terminal • EHR
+              Doctor Workspace
             </span>
             <span style={{ display: 'inline-block', width: '6px', height: '6px', borderRadius: '50%', background: '#D97706' }} title="Provider Session Active" />
           </div>
@@ -186,9 +186,9 @@ export const DoctorAppShell = () => {
                 borderRadius: '4px',
                 fontSize: '0.88rem',
                 fontWeight: isActive ? 600 : 500,
-                color: isActive ? '#18181B' : '#52525B',
-                background: isActive ? '#EBECEF' : 'transparent',
-                borderLeft: isActive ? '3px solid #B45309' : '3px solid transparent',
+                color: isActive ? 'var(--color-text)' : 'var(--color-text-muted)',
+                background: isActive ? 'var(--color-surface-interactive)' : 'transparent',
+                borderLeft: isActive ? '3px solid var(--color-doctor-accent)' : '3px solid transparent',
                 textDecoration: 'none',
                 transition: 'background 0.15s, color 0.15s, border-color 0.15s'
               })}
@@ -250,28 +250,6 @@ export const DoctorAppShell = () => {
               <LifeLinkLogo variant="symbol" className="app-mobile-brand-symbol" />
               <span>LifeLink</span>
             </NavLink>
-
-            {/* Institutional Clinician Terminal Badge (Desktop/Tablet): Automatically responsive via .app-header-system-tag */}
-            <div className="app-header-system-tag" style={{ display: 'flex', alignItems: 'center', gap: '8px', marginLeft: '12px' }}>
-              <span 
-                className="badge" 
-                style={{ 
-                  background: '#27272A', 
-                  color: '#FAFAFA', 
-                  border: '1px solid #B45309',
-                  fontSize: '0.70rem', 
-                  fontWeight: 700, 
-                  padding: '3px 8px', 
-                  letterSpacing: '0.04em',
-                  borderRadius: '4px'
-                }}
-              >
-                CLINICAL WORKSTATION
-              </span>
-              <span style={{ fontSize: '0.82rem', fontWeight: 600, color: 'var(--color-text-muted)' }}>
-                Provider Terminal
-              </span>
-            </div>
           </div>
 
           {/* Header controls: Theme toggle, notifications, and structured clinician badge */}
@@ -327,9 +305,9 @@ export const DoctorAppShell = () => {
                   width: '32px', 
                   height: '32px', 
                   borderRadius: '3px', 
-                  background: '#27272A', 
-                  border: '1px solid #B45309',
-                  color: '#FAFAFA', 
+                  background: 'var(--color-surface-interactive)', 
+                  border: '1px solid var(--color-doctor-accent)',
+                  color: 'var(--color-text)', 
                   fontWeight: 700, 
                   fontSize: '0.80rem', 
                   display: 'grid', 
@@ -340,7 +318,7 @@ export const DoctorAppShell = () => {
               </div>
               <div className="app-header-user-meta" style={{ display: 'flex', flexDirection: 'column', alignItems: 'flex-start', lineHeight: 1.2 }}>
                 <span style={{ fontSize: '0.82rem', fontWeight: 600, color: 'var(--color-text)' }}>{session.data?.displayName || 'Doctor'}</span>
-                <span style={{ fontSize: '0.68rem', color: '#B45309', fontWeight: 600 }}>Active Clinician</span>
+                <span style={{ fontSize: '0.68rem', color: 'var(--color-doctor-accent)', fontWeight: 600 }}>Active Clinician</span>
               </div>
               <ChevronDown size={14} color="var(--color-text-muted)" />
             </button>

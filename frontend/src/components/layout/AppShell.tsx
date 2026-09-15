@@ -96,7 +96,7 @@ export const AppShell = () => {
   if (loading) {
     return (
       <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', minHeight: '100vh', width: '100%' }}>
-        <p className="caption" style={{ color: '#2D9D9C', fontFamily: 'Plus Jakarta Sans, sans-serif', fontSize: '1rem', fontWeight: 600 }}>
+        <p className="caption" style={{ color: 'var(--color-primary)', fontFamily: 'Plus Jakarta Sans, sans-serif', fontSize: '1rem', fontWeight: 600 }}>
           Loading your LifeLink workspace…
         </p>
       </div>
@@ -194,9 +194,9 @@ export const AppShell = () => {
                 borderRadius: '4px',
                 fontSize: '0.88rem',
                 fontWeight: isActive ? 600 : 500,
-                color: isActive ? '#581825' : 'var(--color-text-muted)',
-                background: isActive ? '#F5ECEE' : 'transparent',
-                borderLeft: isActive ? '3px solid #581825' : '3px solid transparent',
+                color: isActive ? 'var(--color-primary)' : 'var(--color-text-muted)',
+                background: isActive ? 'var(--color-primary-muted)' : 'transparent',
+                borderLeft: isActive ? '3px solid var(--color-primary)' : '3px solid transparent',
                 textDecoration: 'none',
                 transition: 'background 0.15s, color 0.15s, border-color 0.15s'
               })}
@@ -256,27 +256,6 @@ export const AppShell = () => {
               <LifeLinkLogo variant="symbol" className="app-mobile-brand-symbol" />
               <span>LifeLink</span>
             </NavLink>
-
-            {/* Institutional System Status Indicator: Automatically responsive via .app-header-system-tag */}
-            <div className="app-header-system-tag" style={{ display: 'flex', alignItems: 'center', gap: '8px', marginLeft: '12px' }}>
-              <span 
-                className="badge" 
-                style={{ 
-                  background: '#581825', 
-                  color: '#FAF7F2', 
-                  fontSize: '0.70rem', 
-                  fontWeight: 700, 
-                  padding: '3px 8px', 
-                  letterSpacing: '0.04em',
-                  borderRadius: '4px'
-                }}
-              >
-                LIFELINK EHR
-              </span>
-              <span style={{ fontSize: '0.82rem', fontWeight: 600, color: 'var(--color-text-muted)' }}>
-                Patient Ambulatory Portal
-              </span>
-            </div>
           </div>
 
           {/* Header controls: Theme toggle, notifications, and structured patient profile badge */}
@@ -332,8 +311,8 @@ export const AppShell = () => {
                   width: '32px', 
                   height: '32px', 
                   borderRadius: '3px', 
-                  background: '#581825', 
-                  color: '#FAF7F2', 
+                  background: 'var(--color-primary)', 
+                  color: '#FFFFFF', 
                   fontWeight: 700, 
                   fontSize: '0.80rem', 
                   display: 'grid', 

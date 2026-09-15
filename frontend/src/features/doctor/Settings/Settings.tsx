@@ -1,134 +1,246 @@
-import { useState } from "react";                                                             // React hook for input form tracking
-import { Card } from "../../../components/ui/Card";                                             // Visual card component
-import { Button } from "../../../components/ui/Button";                                         // Styled interaction button
-import { Input } from "../../../components/ui/Input";                                           // Styled input field
-import { Settings, Lock, CheckCircle2, AlertCircle } from "lucide-react";                       // Workspace and security icons
-import { trpc } from "../../../lib/trpc";                                                       // Type-safe client tRPC bridge
+import React, { useState } from "react";
+import { Card } from "../../../components/ui/Card";
+import { Button } from "../../../components/ui/Button";
+import { Input } from "../../../components/ui/Input";
+import { Settings, Lock, CheckCircle2, AlertCircle, ShieldCheck, UserCheck } from "lucide-react";
+import { trpc } from "../../../lib/trpc";
 
 // =========================================================================================
-// DOCTOR WORKSPACE SETTINGS
-// Provides security controls for clinicians:
-// - Password modification requiring verification of current password
-// - Account authorization levels and clinical boundary declarations
+// DOCTOR WORKSPACE SETTINGS & CLINICIAN SECURITY PREFERENCES (DoctorSettings)
+// =========================================================================================
+//
+// WHAT THIS COMPONENT DOES:
+// 1. Provides a structured 2-column configuration suite for medical clinicians.
+// 2. Password Modification Card: Allows clinicians to update workstation passwords
+//    with cryptographic verification of their current password via tRPC mutation.
+// 3. Workstation Authorization & Boundary Declarations Card: Displays institutional
+//    access tier, active station assignment, and session privacy compliance rules.
+// 4. Layout & Design System: Implements generous 2-column responsive layout (`minmax(480px, 1fr)`)
+//    with deep ocean teal accents, matching the visual rhythm of other clinical dashboard views.
 // =========================================================================================
 export const DoctorSettings = () => {
-  const [currentPassword, setCurrentPassword] = useState("");                                   // Current password input state
-  const [newPassword, setNewPassword] = useState("");                                           // New password input state
-  const [message, setMessage] = useState("");                                                   // Feedback message string
-  const [isSuccess, setIsSuccess] = useState(false);                                            // Success/failure indicator flag
+  const [currentPassword, setCurrentPassword] = useState("");
+  const [newPassword, setNewPassword] = useState("");
+  const [message, setMessage] = useState("");
+  const [isSuccess, setIsSuccess] = useState(false);
 
   // tRPC mutation to change password
   const changePassword = trpc.doctorAuth.changePassword.useMutation({
     onSuccess: () => {
-      setMessage("Password changed successfully.");                                             // Success banner
+      setMessage("Password changed successfully.");
       setIsSuccess(true);
-      setCurrentPassword("");                                                                   // Clear inputs
+      setCurrentPassword("");
       setNewPassword("");
     },
     onError: (error) => {
-      setMessage(error.message);                                                                // Error message
+      setMessage(error.message);
       setIsSuccess(false);
     },
   });
 
   // Submit handler
   const submit = (event: React.FormEvent) => {
-    event.preventDefault();                                                                     // Prevent page reload
+    event.preventDefault();
     setMessage("");
-    changePassword.mutate({ currentPassword, newPassword });                                    // Trigger mutation
+    changePassword.mutate({ currentPassword, newPassword });
   };
 
   return (
-    <div className="dashboard-workspace">
-      {/* Settings Header */}
-      <header className="flex items-center gap-3" style={{ marginBottom: 'var(--spacing-5)' }}>
-        <div style={{ width: 52, height: 52, borderRadius: '14px', background: 'var(--color-primary)', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-          <Settings size={26} color="#FFF" />                                                   {/* Settings cog icon */}
+    <div style={{ display: 'flex', flexDirection: 'column', gap: '24px', width: '100%', maxWidth: '1400px', margin: '0 auto' }}>
+      
+      {/* Settings Header Banner */}
+      <section
+        style={{
+          display: 'flex',
+          alignItems: 'center',
+          gap: '20px',
+          padding: '24px 28px',
+          background: 'var(--color-surface-white)',
+          border: '1px solid var(--color-border)',
+          borderLeft: '4px solid var(--color-primary)',
+          borderRadius: '12px',
+          boxShadow: 'var(--shadow-sm)',
+        }}
+      >
+        <div
+          style={{
+            width: '52px',
+            height: '52px',
+            borderRadius: '12px',
+            background: 'var(--color-primary-muted)',
+            border: '1px solid var(--color-border)',
+            display: 'grid',
+            placeItems: 'center',
+            color: 'var(--color-primary)',
+            flexShrink: 0,
+          }}
+        >
+          <Settings size={26} />
         </div>
         <div>
-          <h1 style={{ margin: 0 }}>Workspace Settings</h1>                                     {/* Header title */}
-          <p className="caption" style={{ margin: '4px 0 0' }}>Security controls for your clinician account</p>
-        </div>
-      </header>
-
-      {/* Bento grid layout */}
-      <section className="bento-grid">
-        {/* Change Password Card */}
-        <Card variant="glass" className="bento-col-6" style={{ padding: '28px' }}>
-          <div className="flex items-center gap-2" style={{ marginBottom: '20px', paddingBottom: '16px', borderBottom: '1px solid var(--color-border)' }}>
-            <Lock size={18} color="var(--color-primary)" />
-            <h2 style={{ margin: 0, fontSize: 'var(--text-h2)' }}>Change Password</h2>
-          </div>
-          <p className="caption" style={{ marginBottom: '20px' }}>
-            Update this clinician account's password. The owner-controlled reset path is available from Doctor sign in if your current password is unavailable.
+          <h1 style={{ margin: 0, fontSize: '1.65rem', fontWeight: 700, color: 'var(--color-text)', letterSpacing: '-0.02em', fontFamily: 'Outfit, sans-serif' }}>
+            Workspace Settings
+          </h1>
+          <p style={{ margin: '4px 0 0', color: 'var(--color-text-muted)', fontSize: '0.92rem' }}>
+            Security controls, credential status, and privacy boundary declarations for your clinician account.
           </p>
+        </div>
+      </section>
 
-          {/* Feedback banner */}
-          {message && (
-            <div style={{
-              display: 'flex', alignItems: 'center', gap: '10px', padding: '12px 16px',
-              borderRadius: '10px', marginBottom: '20px',
-              background: isSuccess ? '#E6FCF5' : '#FFF0F0',
-              color: isSuccess ? '#00856F' : '#B01E1E',
-              border: `1px solid ${isSuccess ? 'rgba(0,133,111,0.2)' : 'rgba(176,30,30,0.2)'}`
-            }}>
-              {isSuccess ? <CheckCircle2 size={16} /> : <AlertCircle size={16} />}
-              <span style={{ fontSize: '14px', fontWeight: 500 }}>{message}</span>
+      {/* Main Grid: Generous 2-column layout */}
+      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(min(100%, 480px), 1fr))', gap: '24px' }}>
+        
+        {/* Change Password Card */}
+        <Card
+          variant="glass"
+          style={{
+            padding: '28px',
+            background: 'var(--color-surface-white)',
+            border: '1px solid var(--color-border)',
+            borderRadius: '12px',
+            boxShadow: 'var(--shadow-sm)',
+            display: 'flex',
+            flexDirection: 'column',
+            justifyContent: 'space-between',
+            gap: '24px',
+          }}
+        >
+          <div>
+            <div style={{ display: 'flex', alignItems: 'center', gap: '12px', marginBottom: '24px', paddingBottom: '16px', borderBottom: '1px solid var(--color-border)' }}>
+              <div style={{ width: '38px', height: '38px', borderRadius: '10px', background: 'var(--color-primary-muted)', display: 'grid', placeItems: 'center', color: 'var(--color-primary)' }}>
+                <Lock size={18} />
+              </div>
+              <h2 style={{ margin: 0, fontSize: '1.25rem', fontWeight: 700, color: 'var(--color-text)', fontFamily: 'Outfit, sans-serif' }}>
+                Change Password
+              </h2>
             </div>
-          )}
 
-          {/* Password update form */}
-          <form onSubmit={submit} style={{ display: 'flex', flexDirection: 'column', gap: 'var(--spacing-3)' }}>
-            <label className="auth-field" style={{ display: 'flex', flexDirection: 'column', gap: '6px' }}>
-              <span style={{ fontWeight: 600, fontSize: '14px' }}>Current password</span>
-              <Input
-                type="password"
-                value={currentPassword}
-                onChange={(event) => setCurrentPassword(event.target.value)}
-                autoComplete="current-password"
-                minLength={10}
-                required
-                placeholder="Enter your current password"
-              />
-            </label>
-            <label className="auth-field" style={{ display: 'flex', flexDirection: 'column', gap: '6px' }}>
-              <span style={{ fontWeight: 600, fontSize: '14px' }}>New password</span>
-              <Input
-                type="password"
-                value={newPassword}
-                onChange={(event) => setNewPassword(event.target.value)}
-                autoComplete="new-password"
-                minLength={10}
-                required
-                placeholder="At least 10 characters"
-              />
-            </label>
-            <Button type="submit" variant="primary" disabled={changePassword.isPending} style={{ marginTop: '8px' }}>
-              {changePassword.isPending ? "Changing…" : "Change password"}
-            </Button>
-          </form>
+            <p className="caption" style={{ marginBottom: '20px', color: 'var(--color-text-muted)', lineHeight: 1.5 }}>
+              Update this clinician account's password. The owner-controlled reset path is available from Doctor sign in if your current password is unavailable.
+            </p>
+
+            {/* Feedback banner */}
+            {message && (
+              <div
+                style={{
+                  display: 'flex',
+                  alignItems: 'center',
+                  gap: '10px',
+                  padding: '14px 16px',
+                  borderRadius: '10px',
+                  marginBottom: '20px',
+                  background: isSuccess ? 'rgba(13, 148, 136, 0.12)' : 'rgba(220, 38, 38, 0.12)',
+                  color: isSuccess ? 'var(--color-semantic-success)' : 'var(--color-semantic-emergency)',
+                  border: `1px solid ${isSuccess ? 'rgba(13, 148, 136, 0.25)' : 'rgba(220, 38, 38, 0.25)'}`,
+                }}
+              >
+                {isSuccess ? <CheckCircle2 size={18} /> : <AlertCircle size={18} />}
+                <span style={{ fontSize: '0.90rem', fontWeight: 600 }}>{message}</span>
+              </div>
+            )}
+
+            {/* Password update form */}
+            <form onSubmit={submit} style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
+              <label style={{ display: 'flex', flexDirection: 'column', gap: '6px' }}>
+                <span style={{ fontWeight: 600, fontSize: '0.88rem', color: 'var(--color-text)' }}>Current password</span>
+                <Input
+                  type="password"
+                  value={currentPassword}
+                  onChange={(event) => setCurrentPassword(event.target.value)}
+                  autoComplete="current-password"
+                  minLength={10}
+                  required
+                  placeholder="Enter your current password"
+                  style={{
+                    borderRadius: '8px',
+                    minHeight: '44px',
+                    border: '1px solid var(--color-border)',
+                    background: 'var(--color-surface-interactive)',
+                    color: 'var(--color-text)',
+                  }}
+                />
+              </label>
+
+              <label style={{ display: 'flex', flexDirection: 'column', gap: '6px' }}>
+                <span style={{ fontWeight: 600, fontSize: '0.88rem', color: 'var(--color-text)' }}>New password</span>
+                <Input
+                  type="password"
+                  value={newPassword}
+                  onChange={(event) => setNewPassword(event.target.value)}
+                  autoComplete="new-password"
+                  minLength={10}
+                  required
+                  placeholder="At least 10 characters"
+                  style={{
+                    borderRadius: '8px',
+                    minHeight: '44px',
+                    border: '1px solid var(--color-border)',
+                    background: 'var(--color-surface-interactive)',
+                    color: 'var(--color-text)',
+                  }}
+                />
+              </label>
+
+              <Button
+                type="submit"
+                variant="primary"
+                className="doctor-btn-primary"
+                disabled={changePassword.isPending}
+                style={{ marginTop: '8px', minHeight: '44px', fontWeight: 700, borderRadius: '8px' }}
+              >
+                {changePassword.isPending ? "Changing…" : "Change password"}
+              </Button>
+            </form>
+          </div>
         </Card>
 
         {/* Account Information Card */}
-        <Card variant="glass" className="bento-col-6" style={{ padding: '28px' }}>
-          <h2 style={{ margin: '0 0 20px', fontSize: 'var(--text-h2)' }}>Account Information</h2>
-          <div style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
-            <div style={{ padding: '16px', background: 'rgba(0,0,0,0.03)', borderRadius: '10px', border: '1px solid var(--color-border)' }}>
-              <p className="caption" style={{ margin: '0 0 4px', textTransform: 'uppercase', letterSpacing: '0.08em' }}>Account Type</p>
-              <strong>Controlled Directory Clinician</strong>
+        <Card
+          variant="glass"
+          style={{
+            padding: '28px',
+            background: 'var(--color-surface-white)',
+            border: '1px solid var(--color-border)',
+            borderRadius: '12px',
+            boxShadow: 'var(--shadow-sm)',
+            display: 'flex',
+            flexDirection: 'column',
+            justifyContent: 'space-between',
+            gap: '24px',
+          }}
+        >
+          <div>
+            <div style={{ display: 'flex', alignItems: 'center', gap: '12px', marginBottom: '24px', paddingBottom: '16px', borderBottom: '1px solid var(--color-border)' }}>
+              <div style={{ width: '38px', height: '38px', borderRadius: '10px', background: 'var(--color-primary-muted)', display: 'grid', placeItems: 'center', color: 'var(--color-primary)' }}>
+                <ShieldCheck size={20} />
+              </div>
+              <h2 style={{ margin: 0, fontSize: '1.25rem', fontWeight: 700, color: 'var(--color-text)', fontFamily: 'Outfit, sans-serif' }}>
+                Account Information & Privacy Boundary
+              </h2>
             </div>
-            <div style={{ padding: '16px', background: 'rgba(0,0,0,0.03)', borderRadius: '10px', border: '1px solid var(--color-border)' }}>
-              <p className="caption" style={{ margin: '0 0 4px', textTransform: 'uppercase', letterSpacing: '0.08em' }}>Access Level</p>
-              <strong>Appointment-restricted patient context</strong>
-            </div>
-            <div style={{ padding: '16px', background: 'rgba(0,102,255,0.06)', borderRadius: '10px', border: '1px solid rgba(0,102,255,0.15)' }}>
-              <p style={{ margin: 0, fontSize: '13px', color: 'var(--color-primary)', lineHeight: 1.6 }}>
-                <strong>Note:</strong> This is a controlled LifeLink directory account. Records here are not verified clinician identities, credentials, or medical registrations.
-              </p>
+
+            <div style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
+              <div style={{ padding: '18px 20px', background: 'var(--color-surface-interactive)', borderRadius: '10px', border: '1px solid var(--color-border)' }}>
+                <p className="caption" style={{ margin: '0 0 4px', textTransform: 'uppercase', letterSpacing: '0.08em', color: 'var(--color-text-muted)', fontWeight: 700 }}>Account Type</p>
+                <strong style={{ fontSize: '1rem', color: 'var(--color-text)' }}>Controlled Directory Clinician</strong>
+              </div>
+
+              <div style={{ padding: '18px 20px', background: 'var(--color-surface-interactive)', borderRadius: '10px', border: '1px solid var(--color-border)' }}>
+                <p className="caption" style={{ margin: '0 0 4px', textTransform: 'uppercase', letterSpacing: '0.08em', color: 'var(--color-text-muted)', fontWeight: 700 }}>Access Level</p>
+                <strong style={{ fontSize: '1rem', color: 'var(--color-text)' }}>Appointment-restricted patient context</strong>
+              </div>
+
+              <div style={{ padding: '18px 20px', background: 'var(--color-primary-muted)', borderRadius: '10px', border: '1px solid var(--color-border)', display: 'flex', alignItems: 'flex-start', gap: '12px' }}>
+                <UserCheck size={20} color="var(--color-primary)" style={{ flexShrink: 0, marginTop: '2px' }} />
+                <p style={{ margin: 0, fontSize: '0.88rem', color: 'var(--color-text)', lineHeight: 1.6 }}>
+                  <strong>Note:</strong> This is a controlled LifeLink directory account. Records here are not verified clinician identities, credentials, or medical registrations.
+                </p>
+              </div>
             </div>
           </div>
         </Card>
-      </section>
+
+      </div>
     </div>
   );
 };
