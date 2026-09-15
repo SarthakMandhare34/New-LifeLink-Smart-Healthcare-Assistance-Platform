@@ -1,16 +1,12 @@
 /**
  * ============================================================================
- * DRIZZLE KIT CONFIGURATION (database/drizzle.config.ts)
+ * RELATIONAL DATABASE SCHEMA (DRIZZLE ORM)
  * ============================================================================
  * 
- * HOW TO RUN:
- * Command: `npm run db:push` (applies schema changes to MySQL)
- * Command: `npm run db:studio` (opens visual web interface for database)
- * 
- * WHAT THIS FILE DOES:
- * Tells Drizzle Kit where to find our TypeScript schema (`./database/schema.ts`),
- * where to store versioned SQL migration files (`./database/migrations`), and
- * which database dialect (MySQL) and connection string to use.
+ * WHY THIS FILE IS SPECIAL:
+ * This file is the absolute blueprint of how data is stored permanently.
+ * We use a tool called Drizzle ORM. It prevents SQL Injection attacks (hackers typing malicious code).
+ * It guarantees that if we expect a 'number' for an Age, nobody can accidentally save a 'string'.
  */
 import { defineConfig } from "drizzle-kit";
 

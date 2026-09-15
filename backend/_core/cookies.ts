@@ -1,3 +1,13 @@
+/**
+ * ============================================================================
+ * SYSTEM CORE & INFRASTRUCTURE
+ * ============================================================================
+ * 
+ * WHY THIS FILE IS SPECIAL:
+ * These are the foundational building blocks of the backend server.
+ * It sets up the Express framework, cookie parsing, and environment variables.
+ * Without this core infrastructure, the application cannot boot or talk to the internet securely.
+ */
 import type { CookieOptions, Request } from "express";                                  // Express types for cookie settings and incoming requests
 
 // Set of loopback / local IP strings where TLS/HTTPS is not required during local development

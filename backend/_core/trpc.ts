@@ -1,14 +1,12 @@
 /**
  * ============================================================================
- * TRPC CORE FOUNDATION & PROCEDURE GUARDS (backend/_core/trpc.ts)
+ * SYSTEM CORE & INFRASTRUCTURE
  * ============================================================================
  * 
- * WHAT THIS FILE DOES:
- * Configures the base tRPC instance with SuperJSON transformation and provides
- * procedure builders:
- * 1. publicProcedure: Open routes (no authentication required).
- * 2. protectedProcedure: Guards patient routes and binds `ctx.user.id`.
- * 3. doctorProcedure: Guards clinician routes and validates `ctx.user.openId`.
+ * WHY THIS FILE IS SPECIAL:
+ * These are the foundational building blocks of the backend server.
+ * It sets up the Express framework, cookie parsing, and environment variables.
+ * Without this core infrastructure, the application cannot boot or talk to the internet securely.
  */
 import { NOT_ADMIN_ERR_MSG, UNAUTHED_ERR_MSG } from '@shared/const';                    // Standard error messages for forbidden and unauthorized responses
 import { initTRPC, TRPCError } from "@trpc/server";                                        // Core tRPC initialization and typed error constructors

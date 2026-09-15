@@ -1,3 +1,13 @@
+/**
+ * ============================================================================
+ * SYSTEM CORE & INFRASTRUCTURE
+ * ============================================================================
+ * 
+ * WHY THIS FILE IS SPECIAL:
+ * These are the foundational building blocks of the backend server.
+ * It sets up the Express framework, cookie parsing, and environment variables.
+ * Without this core infrastructure, the application cannot boot or talk to the internet securely.
+ */
 import "dotenv/config";                                                                  // Loads local .env file variables into process.env at boot
 
 // Centralized access dictionary for all system environment variables

@@ -1,12 +1,13 @@
 /**
  * ============================================================================
- * MASTER TRPC APPLICATION ROUTER (backend/routers.ts)
+ * tRPC DOMAIN ROUTERS & BUSINESS LOGIC
  * ============================================================================
  * 
- * WHAT THIS FILE DOES:
- * This is the central tRPC root router for the LifeLink API. It binds all
- * domain-specific sub-routers (patient, doctor, auth, system, and AI triage)
- * into a single type-safe API schema shared between backend and frontend.
+ * WHY THIS FILE IS SPECIAL:
+ * This file contains the actual rules for what patients and doctors can do.
+ * It uses tRPC, which creates an unbreakable bridge between the front-end and back-end.
+ * More importantly, every single function here enforces IDOR (Insecure Direct Object Reference) protection.
+ * It strictly checks: "Does this prescription actually belong to the person requesting it?"
  */
 import { COOKIE_NAME } from "@shared/const";                                             // Patient session cookie constant name
 import { z } from "zod";                                                                   // Input validation schema builder

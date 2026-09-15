@@ -1,12 +1,12 @@
 /**
  * ============================================================================
- * LIFELINK BACKEND: HTTP & TRPC SERVER BOOTSTRAP (backend/_core/index.ts)
+ * SYSTEM CORE & INFRASTRUCTURE
  * ============================================================================
  * 
- * WHAT THIS FILE DOES:
- * This is the main server process entry point. It initializes Express, attaches
- * tRPC API middleware at /api/trpc, registers SSE real-time streaming routes,
- * mounts OAuth endpoints, and binds to the dynamically assigned backend port.
+ * WHY THIS FILE IS SPECIAL:
+ * These are the foundational building blocks of the backend server.
+ * It sets up the Express framework, cookie parsing, and environment variables.
+ * Without this core infrastructure, the application cannot boot or talk to the internet securely.
  */
 import "dotenv/config";                                          // Load secret environment variables from .env into process.env
 import express from "express";                                   // Express web framework for routing and middleware

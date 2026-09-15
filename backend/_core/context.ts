@@ -1,21 +1,12 @@
 /**
  * ============================================================================
- * LIFELINK BACKEND: tRPC REQUEST CONTEXT (backend/_core/context.ts)
+ * SYSTEM CORE & INFRASTRUCTURE
  * ============================================================================
  * 
- * WHAT THIS FILE DOES:
- * This module generates the execution context for every incoming tRPC API request.
- * The context acts as the bridge between Express HTTP requests and tRPC procedures,
- * attaching the authenticated User object (if logged in) and standard HTTP objects (req, res).
- * 
- * HOW IT WORKS IN THE PIPELINE:
- * 1. Express receives an HTTP request at `/api/trpc/...`
- * 2. Express middleware invokes `createContext(opts)` before calling the procedure.
- * 3. `authSession.authenticateRequest` inspects cookies / Authorization Bearer tokens.
- * 4. If valid, the authenticated `User` record from the database is attached.
- * 5. Supports simultaneous dual sessions: patient session (`app_session_id`) and clinician session (`doctor_session_id`).
- * 5. If invalid or unauthenticated, `user` is set to `null` (allowing public routes).
- * 6. tRPC middleware/procedures can now safely check `ctx.user` for role-based access.
+ * WHY THIS FILE IS SPECIAL:
+ * These are the foundational building blocks of the backend server.
+ * It sets up the Express framework, cookie parsing, and environment variables.
+ * Without this core infrastructure, the application cannot boot or talk to the internet securely.
  */
 import type { CreateExpressContextOptions } from "@trpc/server/adapters/express";
 import type { User } from "../../database/schema";
