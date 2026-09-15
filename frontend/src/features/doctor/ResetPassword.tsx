@@ -197,7 +197,7 @@ export const DoctorResetPassword = () => {
                   <Input
                     id="reset-email"
                     type="email"
-                    placeholder="Enter your official @lifelink.com doctor email"
+                    placeholder="Enter email"
                     value={email}
                     onChange={(event) => setEmail(event.target.value)}
                     autoComplete="username"
@@ -218,7 +218,7 @@ export const DoctorResetPassword = () => {
                     id="reset-password"
                     type="password"
                     minLength={10}
-                    placeholder="Enter your new password (minimum 10 characters)"
+                    placeholder="Enter new password"
                     value={password}
                     onChange={(event) => setPassword(event.target.value)}
                     autoComplete="new-password"
@@ -238,7 +238,7 @@ export const DoctorResetPassword = () => {
                   <Input
                     id="reset-provisioning-code"
                     type="password"
-                    placeholder="Enter your owner provisioning access code"
+                    placeholder="Enter owner code"
                     value={provisioningCode}
                     onChange={(event) => setProvisioningCode(event.target.value)}
                     autoComplete="off"

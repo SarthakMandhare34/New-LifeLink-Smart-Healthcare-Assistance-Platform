@@ -196,7 +196,7 @@ export const DoctorLogin = () => {
                   <Input
                     id="doctor-email"
                     type="email"
-                    placeholder="Enter your official @lifelink.com doctor email"
+                    placeholder="Enter email"
                     value={email}
                     onChange={(event) => setEmail(event.target.value)}
                     autoComplete="email"
