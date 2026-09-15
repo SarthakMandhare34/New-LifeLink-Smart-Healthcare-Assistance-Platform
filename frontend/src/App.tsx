@@ -1,29 +1,11 @@
 /**
  * ============================================================================
- * LIFELINK APPLICATION ROUTER (frontend/src/App.tsx)
+ * FRONTEND REACT CORE
  * ============================================================================
  * 
- * WHAT THIS FILE DOES:
- * This is the central router for the LifeLink frontend application. It maps
- * every browser URL (e.g. "/patient/dashboard" or "/doctor/consultation") to
- * its corresponding React view component.
- * 
- * KEY ARCHITECTURAL FEATURES:
- * 1. Code-Splitting with React.lazy():
- *    Instead of loading the entire application at once (which would make the
- *    initial download slow), each page is packed into a tiny separate bundle.
- *    The browser only downloads a page when the user actually visits it!
- * 2. Suspense & RouteLoader:
- *    While a new page bundle is downloading in the background, React automatically
- *    displays the <RouteLoader /> spinner, ensuring a smooth, flicker-free transition.
- * 3. Two Distinct Application Portals with Dedicated Visual Identity:
- *    - Public Entry Routes: Workspace selection, patient login/registration, and doctor login.
- *    - Patient Portal (/patient/*): Warm Amber + Teal palette with Warm Ivory/Espresso surfaces,
- *      wrapped in AppShell with patient navigation, alerts, medication tracker, and SOS.
- *    - Doctor Portal (/doctor/*): Deep Ocean Teal + Rich Gold palette with Slate Mint/Abyss surfaces,
- *      wrapped in DoctorAppShell with clinical triage, queue, and digital prescriptions.
- * 4. Liquid-Glass Aesthetics & High-Contrast Readability:
- *    - Crisp contrast standards across both light and dark modes with zero pure black typography.
+ * WHY THIS FILE IS SPECIAL:
+ * This is the root configuration of the React application.
+ * It sets up the Routing (which URL goes to which page) and global Theme Contexts.
  */
 import React, { Suspense } from 'react';
 import { BrowserRouter, Navigate, Route, Routes } from 'react-router-dom';

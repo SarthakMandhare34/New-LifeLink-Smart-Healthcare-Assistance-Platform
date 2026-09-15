@@ -1,17 +1,11 @@
 /**
  * ============================================================================
- * LIFELINK FRONTEND: CLIENT ENTRY POINT (frontend/src/main.tsx)
+ * FRONTEND REACT CORE
  * ============================================================================
  * 
- * WHAT THIS FILE DOES:
- * This is the root bootstrap file of the LifeLink React 19 application.
- * It configures and mounts the core application providers:
- * 1. React Query (`QueryClient`): Manages async state caching, retries, and data synchronization.
- * 2. tRPC Client (`trpc.createClient`): End-to-end type-safe RPC client communicating with `/api/trpc`.
- *    - Uses `superjson` for seamless serialization of complex objects (Dates, BigInt, Sets).
- *    - Configures `credentials: "include"` so HTTP cookies are sent on every request for session auth.
- * 3. Theme Provider: Supplies persistent dark/light liquid-glass aesthetic variables.
- * 4. App Component: Mounts the application routing layer.
+ * WHY THIS FILE IS SPECIAL:
+ * This is the root configuration of the React application.
+ * It sets up the Routing (which URL goes to which page) and global Theme Contexts.
  */
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";               // TanStack React Query cache and provider
 import { httpBatchLink } from "@trpc/client";                                              // tRPC HTTP batch network link

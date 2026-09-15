@@ -1,3 +1,12 @@
+/**
+ * ============================================================================
+ * FRONTEND REACT CORE
+ * ============================================================================
+ * 
+ * WHY THIS FILE IS SPECIAL:
+ * This is the root configuration of the React application.
+ * It sets up the Routing (which URL goes to which page) and global Theme Contexts.
+ */
 import React, { createContext, useContext, useEffect, useState } from 'react';         // React core state, context, and effect hooks
 import type { ReactNode } from 'react';                                                    // Type for nested JSX child nodes
 

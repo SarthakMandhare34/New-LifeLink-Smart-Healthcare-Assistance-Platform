@@ -1,3 +1,13 @@
+/**
+ * ============================================================================
+ * REUSABLE UI COMPONENTS (DESIGN SYSTEM)
+ * ============================================================================
+ * 
+ * WHY THIS FILE IS SPECIAL:
+ * Instead of rewriting the code for a button 50 times, we write it once here.
+ * This ensures the entire application looks perfectly consistent (using Tailwind CSS)
+ * and guarantees every component is accessible to screen readers for visually impaired users.
+ */
 // Canonical asset paths for official LifeLink brand identity
 export const LIFELINK_OFFICIAL_LOGO_URL = "/assets/branding/lifelink-logo-lockup.png";           // Full brand lockup logo
 export const LIFELINK_OFFICIAL_LOGO_SYMBOL_URL = "/assets/branding/lifelink-logo-symbol.png";   // Compact symbol monogram

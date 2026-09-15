@@ -1,26 +1,15 @@
-import React from 'react';
-
 /**
  * ============================================================================
- * ROUTE LOADER COMPONENT (frontend/src/components/ui/RouteLoader.tsx)
+ * REUSABLE UI COMPONENTS (DESIGN SYSTEM)
  * ============================================================================
  * 
- * WHAT THIS COMPONENT DOES:
- * When users navigate between different sections of the LifeLink app (e.g. from
- * Dashboard to Medicine Cabinet), the page code is downloaded on-demand in the
- * background via React.lazy(). 
- * 
- * While the browser is fetching that code, this RouteLoader component is rendered
- * inside <React.Suspense fallback={<RouteLoader />} /> as a smooth placeholder.
- * 
- * WHY THIS IS IMPORTANT:
- * 1. Prevents Layout Shifts: Has a minimum height (min-h-[320px]) so the page layout
- *    stays stable and doesn't jerk up and down.
- * 2. Accessibility (a11y): Includes role="status" and aria-label so screen readers
- *    inform visually impaired users that content is currently loading.
- * 3. Liquid-Glass Aesthetics: Uses backdrop blur, subtle pulsing borders, and a
- *    gentle primary-color spinner that seamlessly matches our clinical glass theme.
+ * WHY THIS FILE IS SPECIAL:
+ * Instead of rewriting the code for a button 50 times, we write it once here.
+ * This ensures the entire application looks perfectly consistent (using Tailwind CSS)
+ * and guarantees every component is accessible to screen readers for visually impaired users.
  */
+import React from 'react';
+
 export const RouteLoader: React.FC = () => {
   return (
     // Outer centered layout container with smooth 300ms fade transition

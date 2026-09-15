@@ -1,3 +1,13 @@
+/**
+ * ============================================================================
+ * REUSABLE UI COMPONENTS (DESIGN SYSTEM)
+ * ============================================================================
+ * 
+ * WHY THIS FILE IS SPECIAL:
+ * Instead of rewriting the code for a button 50 times, we write it once here.
+ * This ensures the entire application looks perfectly consistent (using Tailwind CSS)
+ * and guarantees every component is accessible to screen readers for visually impaired users.
+ */
 import { describe, expect, it } from 'vitest';
 import { LIFELINK_FULL_LOGO_PRESENTATION_CLASS, LIFELINK_OFFICIAL_LOGO_SYMBOL_URL, LIFELINK_OFFICIAL_LOGO_URL } from '../brand/LifeLinkLogo';
 import { PATIENT_SIDEBAR_BRAND_LABEL } from './AppShell';

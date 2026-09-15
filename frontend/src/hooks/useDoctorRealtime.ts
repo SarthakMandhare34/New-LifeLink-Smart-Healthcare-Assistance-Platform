@@ -1,3 +1,13 @@
+/**
+ * ============================================================================
+ * CUSTOM REACT HOOKS
+ * ============================================================================
+ * 
+ * WHY THIS FILE IS SPECIAL:
+ * These files contain isolated, reusable behavior. 
+ * For example, the auto-logout hook lives here. It constantly monitors mouse movement,
+ * and if a doctor leaves their computer for 5 minutes, it logs them out to protect patient data.
+ */
 import { useEffect } from "react";                                                            // React effect hook for SSE lifecycle
 import { trpc } from "../lib/trpc";                                                             // Type-safe tRPC client bridge
 

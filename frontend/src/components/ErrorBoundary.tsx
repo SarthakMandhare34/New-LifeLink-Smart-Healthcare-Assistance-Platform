@@ -1,3 +1,13 @@
+/**
+ * ============================================================================
+ * REUSABLE UI COMPONENTS (DESIGN SYSTEM)
+ * ============================================================================
+ * 
+ * WHY THIS FILE IS SPECIAL:
+ * Instead of rewriting the code for a button 50 times, we write it once here.
+ * This ensures the entire application looks perfectly consistent (using Tailwind CSS)
+ * and guarantees every component is accessible to screen readers for visually impaired users.
+ */
 import { cn } from "@/lib/utils";                                                              // Classname merger
 import { AlertTriangle, RotateCcw } from "lucide-react";                                        // Warning and reload icons
 import { Component, ReactNode } from "react";                                                   // React class component types

@@ -1,3 +1,12 @@
+/**
+ * ============================================================================
+ * FRONTEND REACT CORE
+ * ============================================================================
+ * 
+ * WHY THIS FILE IS SPECIAL:
+ * This is the root configuration of the React application.
+ * It sets up the Routing (which URL goes to which page) and global Theme Contexts.
+ */
 import { OAUTH_STATE_COOKIE, encodeOAuthState } from "@shared/const";                          // Shared constants and state encoder
 
 export { COOKIE_NAME, ONE_YEAR_MS } from "@shared/const";                                      // Re-export session cookie parameters
