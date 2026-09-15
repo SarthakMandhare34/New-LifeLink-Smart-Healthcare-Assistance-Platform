@@ -158,7 +158,7 @@ export const DoctorResetPassword = () => {
               </div>
 
               <h1 id="doctor-reset-heading" className="font-display" style={{ fontSize: '1.65rem', fontWeight: 700, marginBottom: '6px', color: 'var(--color-doctor-text)', letterSpacing: '-0.02em' }}>
-                Reset Clinician Password
+                Reset Doctor Password
               </h1>
               <p style={{ color: 'var(--color-text-muted)', fontSize: '0.90rem', margin: 0 }}>
                 Use your owner provisioning code to set a new password
@@ -190,13 +190,14 @@ export const DoctorResetPassword = () => {
               {/* Doctor email */}
               <div style={{ display: 'flex', flexDirection: 'column', gap: '6px' }}>
                 <label htmlFor="reset-email" style={{ fontWeight: 600, fontSize: '0.86rem', color: 'var(--color-text)' }}>
-                  Clinician Email
+                  Doctor Email
                 </label>
                 <div style={{ position: 'relative', display: 'flex', alignItems: 'center' }}>
                   <Mail size={18} style={{ position: 'absolute', left: '14px', color: 'var(--color-text-muted)', pointerEvents: 'none' }} />
                   <Input
                     id="reset-email"
                     type="email"
+                    placeholder="Enter your official @lifelink.com doctor email"
                     value={email}
                     onChange={(event) => setEmail(event.target.value)}
                     autoComplete="username"
@@ -217,6 +218,7 @@ export const DoctorResetPassword = () => {
                     id="reset-password"
                     type="password"
                     minLength={10}
+                    placeholder="Enter your new password (minimum 10 characters)"
                     value={password}
                     onChange={(event) => setPassword(event.target.value)}
                     autoComplete="new-password"
@@ -236,6 +238,7 @@ export const DoctorResetPassword = () => {
                   <Input
                     id="reset-provisioning-code"
                     type="password"
+                    placeholder="Enter your owner provisioning access code"
                     value={provisioningCode}
                     onChange={(event) => setProvisioningCode(event.target.value)}
                     autoComplete="off"
@@ -280,22 +283,6 @@ export const DoctorResetPassword = () => {
                 Doctor sign in
               </button>
             </div>
-
-            {/* Trust and security badges */}
-            <footer style={{ display: 'flex', justifyContent: 'space-around', marginTop: '24px', paddingTop: '16px', borderTop: '1px solid var(--color-border)' }}>
-              <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '4px', color: 'var(--color-text-muted)' }}>
-                <ShieldCheck size={18} color="var(--color-doctor-primary)" />
-                <span style={{ fontSize: '0.70rem', fontWeight: 600 }}>Owner Auth</span>
-              </div>
-              <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '4px', color: 'var(--color-text-muted)' }}>
-                <ShieldCheck size={18} color="var(--color-doctor-primary)" />
-                <span style={{ fontSize: '0.70rem', fontWeight: 600 }}>Zero Stored Logs</span>
-              </div>
-              <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '4px', color: 'var(--color-text-muted)' }}>
-                <Shield size={18} color="var(--color-doctor-primary)" />
-                <span style={{ fontSize: '0.70rem', fontWeight: 600 }}>Protected Workspace</span>
-              </div>
-            </footer>
           </Card>
         </div>
       </div>

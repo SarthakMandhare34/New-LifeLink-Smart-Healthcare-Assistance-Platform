@@ -47,7 +47,7 @@ export const DoctorLogin = () => {
       await utils.auth.me.invalidate();                                                    // Invalidate stale user context
       navigate("/doctor/dashboard", { replace: true });                                    // Navigate to clinician dashboard
     },
-    onError: () => setError("The clinician email or password was not accepted."),          // Display error message
+    onError: () => setError("Invalid email or Password"),                                  // Display error message
   });
 
   // Form submission handler
@@ -71,7 +71,7 @@ export const DoctorLogin = () => {
         </div>
         <div className="workspace-portal-assurance">
           <ShieldCheck size={16} aria-hidden="true" />
-          <span>Protected clinician workspace</span>
+          <span>Protected doctor workspace</span>
         </div>
         <EntryThemeToggle />
       </header>
@@ -129,22 +129,6 @@ export const DoctorLogin = () => {
               <p style={{ fontSize: '0.92rem', color: 'var(--color-text-muted)', margin: 0, lineHeight: 1.5, maxWidth: '380px' }}>
                 Streamlined clinical platform for patient appointments, intelligent triage insights, and digital prescriptions.
               </p>
-
-              {/* Provider feature highlights — warm, human, not institutional */}
-              <div style={{ display: 'flex', flexDirection: 'column', gap: '10px', marginTop: '16px', textAlign: 'left', width: '100%', maxWidth: '340px' }}>
-                <div style={{ display: 'flex', alignItems: 'center', gap: '10px', fontSize: '0.86rem', color: 'var(--color-doctor-text)', fontWeight: 500 }}>
-                  <ShieldCheck size={18} color="var(--color-doctor-primary)" style={{ flexShrink: 0 }} />
-                  <span>Your patients, your dashboard</span>
-                </div>
-                <div style={{ display: 'flex', alignItems: 'center', gap: '10px', fontSize: '0.86rem', color: 'var(--color-doctor-text)', fontWeight: 500 }}>
-                  <Activity size={18} color="var(--color-doctor-primary)" style={{ flexShrink: 0 }} />
-                  <span>Smart triage queue built for busy practitioners</span>
-                </div>
-                <div style={{ display: 'flex', alignItems: 'center', gap: '10px', fontSize: '0.86rem', color: 'var(--color-doctor-text)', fontWeight: 500 }}>
-                  <Stethoscope size={18} color="var(--color-doctor-primary)" style={{ flexShrink: 0 }} />
-                  <span>Digital prescriptions sent in under a minute</span>
-                </div>
-              </div>
             </div>
           </div>
         </div>
@@ -200,19 +184,19 @@ export const DoctorLogin = () => {
               </div>
             )}
 
-            {/* Clinician Login form */}
+            {/* Doctor Login form */}
             <form onSubmit={handleLogin} className="auth-form" style={{ display: 'grid', gap: '16px' }}>
-              {/* Clinician Work Email Field */}
+              {/* Doctor Work Email Field */}
               <div style={{ display: 'flex', flexDirection: 'column', gap: '6px' }}>
                 <label htmlFor="doctor-email" style={{ fontWeight: 600, fontSize: '0.86rem', color: 'var(--color-doctor-text)' }}>
-                  Clinician Work Email
+                  Doctor Work Email
                 </label>
                 <div style={{ position: 'relative', display: 'flex', alignItems: 'center' }}>
                   <Mail size={18} style={{ position: 'absolute', left: '14px', color: 'var(--color-doctor-primary)', pointerEvents: 'none' }} />
                   <Input
                     id="doctor-email"
                     type="email"
-                    placeholder="e.g. cardiology@lifelink.com or orthopedics@lifelink.com"
+                    placeholder="Enter your official @lifelink.com doctor email"
                     value={email}
                     onChange={(event) => setEmail(event.target.value)}
                     autoComplete="email"
@@ -229,7 +213,7 @@ export const DoctorLogin = () => {
                     }}
                   />
                 </div>
-                <small style={{ fontSize: '0.74rem', color: 'var(--color-text-muted)' }}>Must be your official @lifelink.com clinical work email.</small>
+                <small style={{ fontSize: '0.74rem', color: 'var(--color-text-muted)' }}>Must be your official @lifelink.com doctor work email.</small>
               </div>
 
               {/* Password Field */}
@@ -242,6 +226,7 @@ export const DoctorLogin = () => {
                   <Input
                     id="doctor-password"
                     type={showPassword ? 'text' : 'password'}
+                    placeholder="Enter your doctor account password"
                     value={password}
                     onChange={(event) => setPassword(event.target.value)}
                     autoComplete="current-password"
@@ -286,7 +271,7 @@ export const DoctorLogin = () => {
                   boxShadow: '0 4px 12px rgba(12, 95, 102, 0.3)'
                 }}
               >
-                {login.isPending ? 'Authenticating Clinician…' : 'Access Provider Terminal'}
+                {login.isPending ? 'Signing In…' : 'Sign In'}
               </Button>
             </form>
 

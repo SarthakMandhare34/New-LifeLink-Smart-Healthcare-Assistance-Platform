@@ -23,9 +23,9 @@ export const DoctorProfile = () => {
   const profile = trpc.doctorWorkspace.profile.useQuery();                                      // Retrieves clinician profile from backend
   
   // Loading skeleton state
-  if (profile.isLoading) return <div className="dashboard-loading"><p className="caption">Loading clinician profile…</p></div>;
+  if (profile.isLoading) return <div className="dashboard-loading"><p className="caption">Loading doctor profile…</p></div>;
   // Error boundary state
-  if (profile.isError || !profile.data) return <p role="alert">Unable to load the clinician profile. Please try again.</p>;
+  if (profile.isError || !profile.data) return <p role="alert">Unable to load the doctor profile. Please try again.</p>;
 
   const data = profile.data;                                                                    // Loaded clinician profile data
 
@@ -37,7 +37,7 @@ export const DoctorProfile = () => {
           <Stethoscope size={26} color="#FFF" />                                                {/* Clinician stethoscope icon */}
         </div>
         <div>
-          <h1 style={{ margin: 0 }}>Clinician Profile</h1>                                      {/* Header title */}
+          <h1 style={{ margin: 0 }}>Doctor Profile</h1>                                         {/* Header title */}
           <p className="caption" style={{ margin: '4px 0 0' }}>Your controlled LifeLink directory account</p>
         </div>
       </header>

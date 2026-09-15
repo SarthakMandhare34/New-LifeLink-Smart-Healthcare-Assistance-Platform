@@ -92,7 +92,7 @@ export const DoctorSettings = () => {
             Workspace Settings
           </h1>
           <p style={{ margin: '4px 0 0', color: 'var(--color-text-muted)', fontSize: '0.92rem' }}>
-            Security controls, credential status, and privacy boundary declarations for your clinician account.
+            Security controls, credential status, and privacy boundary declarations for your doctor account.
           </p>
         </div>
       </section>
@@ -126,7 +126,7 @@ export const DoctorSettings = () => {
             </div>
 
             <p className="caption" style={{ marginBottom: '20px', color: 'var(--color-text-muted)', lineHeight: 1.5 }}>
-              Update this clinician account's password. The owner-controlled reset path is available from Doctor sign in if your current password is unavailable.
+              Update this doctor account's password. The owner-controlled reset path is available from Doctor sign in if your current password is unavailable.
             </p>
 
             {/* Feedback banner */}
@@ -232,7 +232,7 @@ export const DoctorSettings = () => {
             <div style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
               <div style={{ padding: '18px 20px', background: 'var(--color-surface-interactive)', borderRadius: '10px', border: '1px solid var(--color-border)' }}>
                 <p className="caption" style={{ margin: '0 0 4px', textTransform: 'uppercase', letterSpacing: '0.08em', color: 'var(--color-text-muted)', fontWeight: 700 }}>Account Type</p>
-                <strong style={{ fontSize: '1rem', color: 'var(--color-text)' }}>Controlled Directory Clinician</strong>
+                <strong style={{ fontSize: '1rem', color: 'var(--color-text)' }}>Controlled Directory Doctor</strong>
               </div>
 
               <div style={{ padding: '18px 20px', background: 'var(--color-surface-interactive)', borderRadius: '10px', border: '1px solid var(--color-border)' }}>
@@ -243,7 +243,7 @@ export const DoctorSettings = () => {
               <div style={{ padding: '18px 20px', background: 'var(--color-primary-muted)', borderRadius: '10px', border: '1px solid var(--color-border)', display: 'flex', alignItems: 'flex-start', gap: '12px' }}>
                 <UserCheck size={20} color="var(--color-primary)" style={{ flexShrink: 0, marginTop: '2px' }} />
                 <p style={{ margin: 0, fontSize: '0.88rem', color: 'var(--color-text)', lineHeight: 1.6 }}>
-                  <strong>Note:</strong> This is a controlled LifeLink directory account. Records here are not verified clinician identities, credentials, or medical registrations.
+                  <strong>Note:</strong> This is a controlled LifeLink directory account. Records here are not verified doctor identities, credentials, or medical registrations.
                 </p>
               </div>
             </div>
