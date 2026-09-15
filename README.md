@@ -563,12 +563,12 @@ LifeLink-Smart-Healthcare-Assistance-Platform/
 
 ## 13. License & Creators
 
-- **Sarthak Mandhare** ([@sarthakmandhare34](https://github.com/sarthakmandhare34)) — Lead System Architect & Full-Stack Engineer
+- **Sarthak Mandhare** ([@sarthakmandhare34](https://github.com/sarthakmandhare34)) — TY BSc CS Student & Aspiring Full-Stack Developer 🚀
 - **Google DeepMind / Gemini** — Clinical AI Engine Integration
 
 This project is open-source software and is free to use, modify, and distribute under the **[MIT License](LICENSE)**. 
 
-*Thank you for reviewing LifeLink. We believe technology can make healthcare significantly safer, faster, and more accessible for everyone.*
+*Thank you for reviewing LifeLink! This project was built driven by a passion for learning and a dream to use code to solve real-world problems. I'm just at the start of my full-stack journey, but I truly believe technology can make healthcare significantly safer, faster, and more accessible for everyone.*
 
 ---
 
