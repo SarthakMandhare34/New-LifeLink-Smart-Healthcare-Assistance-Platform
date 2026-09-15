@@ -6,9 +6,22 @@ import { Input } from "../../components/ui/Input";
 import { LifeLinkLogo } from "../../components/brand/LifeLinkLogo";
 import { EntryThemeToggle } from "../../components/EntryThemeToggle";
 import { trpc } from "../../lib/trpc";
-import { Activity, Lock, Mail, Eye, EyeOff, Stethoscope, ShieldCheck, Shield } from 'lucide-react';
+import { Activity, Lock, Mail, Eye, EyeOff, Stethoscope, ShieldCheck } from 'lucide-react';
 
-// Doctor authentication page component allowing specialists to access their clinical dashboard
+// =========================================================================================
+// CLINICIAN WORKSTATION AUTHENTICATION MODULE (DoctorLogin)
+// =========================================================================================
+//
+// WHAT THIS COMPONENT DOES:
+// 1. Provides a dedicated sign-in portal for medical clinicians at `/doctor/login`.
+// 2. Enforces institutional work-email logins (`<specialty>@lifelink.com`) with auto-provisioning
+//    for all 24 seeded Mumbai specialty stations.
+// 3. Establishes isolated `doctor_session_id` HTTP-only cookies completely decoupled from patient sessions.
+// 4. Implements the Deep Ocean Teal + Gold visual identity system with high-contrast dark mode support:
+//    - Luminous ice-teal & ivory typography (`#D4F0EE` / `#F0FDFD`) on dark surfaces (`#0E2226`).
+//    - Elevated ivory logo mount (`#FAF5EC`) for crisp brand presentation.
+//    - Deep ocean teal radial ambient background (`radial-gradient` at 30% 20%).
+// =========================================================================================
 export const DoctorLogin = () => {
   const navigate = useNavigate();                                                          // Programmatic page navigation hook
   const utils = trpc.useUtils();                                                           // tRPC cache utilities
@@ -35,11 +48,11 @@ export const DoctorLogin = () => {
   };
 
   return (
-    <main className="auth-page" aria-labelledby="doctor-login-heading" style={{ fontFamily: 'Plus Jakarta Sans, sans-serif' }}>
-      <header className="workspace-portal-header" aria-label="LifeLink portal header">
+    <main className="auth-page doctor-auth-page" aria-labelledby="doctor-login-heading" style={{ fontFamily: 'Plus Jakarta Sans, sans-serif' }}>
+      <header className="workspace-portal-header doctor-portal-header" aria-label="LifeLink portal header">
         <div className="workspace-portal-brand">
           <span className="workspace-portal-mark" aria-hidden="true">
-            <LifeLinkLogo variant="symbol" style={{ width: '22px', height: '22px', objectFit: 'contain' }} />
+            <LifeLinkLogo variant="symbol" style={{ width: '32px', height: '32px', objectFit: 'contain' }} />
           </span>
           <span>
             <strong>LifeLink</strong>
@@ -55,7 +68,7 @@ export const DoctorLogin = () => {
 
       <div className="doctor-setup-layout auth-split-layout" style={{ flex: 1, display: 'flex', width: '100%', position: 'relative', zIndex: 1 }}>
         {/* Ambient background clinical grid watermark */}
-        <div className="ambient-ecg-decoration" style={{ position: 'absolute', bottom: '2%', left: '4%', opacity: 0.08, color: '#27272A', pointerEvents: 'none' }}>
+        <div className="ambient-ecg-decoration" style={{ position: 'absolute', bottom: '2%', left: '4%', opacity: 0.08, color: 'var(--color-doctor-primary)', pointerEvents: 'none' }}>
           <Activity size={340} strokeWidth={1} />
         </div>
 
@@ -63,61 +76,63 @@ export const DoctorLogin = () => {
         <div className="auth-branding-panel" style={{ flex: 1, display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems: 'center', padding: 'var(--spacing-6)', zIndex: 1 }}>
           <div style={{ textAlign: 'center', maxWidth: '440px', display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
             
-            {/* Structured Institutional Logo Mount: Crisp, elevated zinc ash plate guaranteeing high contrast and sharp brand visibility */}
+            {/* Structured Logo Mount: Crisp elevated plate guaranteeing high contrast and sharp brand visibility */}
             <div 
               style={{ 
-                background: '#EBECEF', 
-                border: '2px solid #D4D4D8', 
-                borderRadius: '6px', 
-                padding: '16px 28px', 
-                boxShadow: '0 4px 12px rgba(24, 24, 27, 0.08)',
+                background: '#FAF5EC', 
+                border: '2px solid #D4B07B', 
+                borderRadius: '8px', 
+                padding: '24px 36px', 
+                boxShadow: '0 8px 24px rgba(0, 0, 0, 0.25)',
                 marginBottom: '28px',
                 display: 'inline-flex',
                 alignItems: 'center',
-                justifyContent: 'center'
+                justifyContent: 'center',
+                maxWidth: 'min(460px, 94vw)',
+                width: '100%'
               }}
             >
-              <LifeLinkLogo className="lifelink-logo-auth" style={{ width: '280px', height: 'auto', margin: 0, padding: 0, border: 'none', background: 'transparent', boxShadow: 'none' }} />
+              <LifeLinkLogo className="lifelink-logo-auth" style={{ width: '100%', maxWidth: '420px', height: 'auto', margin: 0, padding: 0, border: 'none', background: 'transparent', boxShadow: 'none' }} />
             </div>
             
             {/* Institutional Clinician Subtitle & Motto */}
             <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '14px' }}>
               <span 
                 style={{ 
-                  background: '#27272A', 
-                  color: '#F4F4F5', 
+                  background: 'var(--color-doctor-primary)', 
+                  color: '#FFFFFF', 
                   fontSize: '0.74rem', 
                   fontWeight: 700, 
                   letterSpacing: '0.08em', 
                   textTransform: 'uppercase', 
-                  padding: '4px 12px', 
+                  padding: '5px 14px', 
                   borderRadius: '4px',
-                  border: '1px solid #3F3F46'
+                  border: '1px solid var(--color-doctor-border)'
                 }}
               >
-                Clinician Workstation • Provider Terminal
+                Healthcare Provider Suite
               </span>
 
-              <h2 className="font-display" style={{ fontSize: '1.5rem', fontWeight: 700, margin: '6px 0 0', color: '#18181B', letterSpacing: '-0.01em', fontFamily: 'Outfit, sans-serif' }}>
+              <h2 className="font-display" style={{ fontSize: '1.6rem', fontWeight: 700, margin: '6px 0 0', color: 'var(--color-doctor-text)', letterSpacing: '-0.01em' }}>
                 Care. Connect. Cure.
               </h2>
-              <p style={{ fontSize: '0.92rem', color: '#52525B', margin: 0, lineHeight: 1.5, maxWidth: '380px' }}>
-                Authorized provider terminal for patient roster management, clinical assessments review, and e-prescription issuance.
+              <p style={{ fontSize: '0.92rem', color: 'var(--color-text-muted)', margin: 0, lineHeight: 1.5, maxWidth: '380px' }}>
+                Streamlined clinical platform for patient appointments, intelligent triage insights, and digital prescriptions.
               </p>
 
-              {/* Institutional feature highlights in classic American enterprise list */}
-              <div style={{ display: 'flex', flexDirection: 'column', gap: '8px', marginTop: '16px', textAlign: 'left', width: '100%', maxWidth: '340px' }}>
-                <div style={{ display: 'flex', alignItems: 'center', gap: '10px', fontSize: '0.84rem', color: '#27272A', fontWeight: 500 }}>
-                  <ShieldCheck size={18} color="#B45309" />
-                  <span>Authorized Physician Credential Guard</span>
+              {/* Provider feature highlights — warm, human, not institutional */}
+              <div style={{ display: 'flex', flexDirection: 'column', gap: '10px', marginTop: '16px', textAlign: 'left', width: '100%', maxWidth: '340px' }}>
+                <div style={{ display: 'flex', alignItems: 'center', gap: '10px', fontSize: '0.86rem', color: 'var(--color-doctor-text)', fontWeight: 500 }}>
+                  <ShieldCheck size={18} color="var(--color-doctor-primary)" style={{ flexShrink: 0 }} />
+                  <span>Your patients, your dashboard</span>
                 </div>
-                <div style={{ display: 'flex', alignItems: 'center', gap: '10px', fontSize: '0.84rem', color: '#27272A', fontWeight: 500 }}>
-                  <Activity size={18} color="#B45309" />
-                  <span>Patient Triage Review & Consultation Queue</span>
+                <div style={{ display: 'flex', alignItems: 'center', gap: '10px', fontSize: '0.86rem', color: 'var(--color-doctor-text)', fontWeight: 500 }}>
+                  <Activity size={18} color="var(--color-doctor-primary)" style={{ flexShrink: 0 }} />
+                  <span>Smart triage queue built for busy practitioners</span>
                 </div>
-                <div style={{ display: 'flex', alignItems: 'center', gap: '10px', fontSize: '0.84rem', color: '#27272A', fontWeight: 500 }}>
-                  <Stethoscope size={18} color="#B45309" />
-                  <span>Digital Prescription & Diagnosis Workflow</span>
+                <div style={{ display: 'flex', alignItems: 'center', gap: '10px', fontSize: '0.86rem', color: 'var(--color-doctor-text)', fontWeight: 500 }}>
+                  <Stethoscope size={18} color="var(--color-doctor-primary)" style={{ flexShrink: 0 }} />
+                  <span>Digital prescriptions sent in under a minute</span>
                 </div>
               </div>
             </div>
@@ -134,10 +149,10 @@ export const DoctorLogin = () => {
               maxHeight: '90vh', 
               overflowY: 'auto', 
               padding: 'clamp(24px, 4vw, 36px)',
-              background: '#EBECEF',
-              border: '1px solid #D4D4D8',
-              borderRadius: '4px',
-              boxShadow: '0 4px 16px rgba(24, 24, 27, 0.06)'
+              background: 'var(--color-doctor-surface)',
+              border: '1px solid var(--color-doctor-border)',
+              borderRadius: '6px',
+              boxShadow: 'var(--shadow-lg)'
             }}
           >
             {/* Form Card Header */}
@@ -147,10 +162,10 @@ export const DoctorLogin = () => {
                 <LifeLinkLogo className="lifelink-logo-auth auth-card-mobile-logo" />
               </div>
 
-              <h1 id="doctor-login-heading" className="font-display" style={{ fontSize: '1.65rem', fontWeight: 700, marginBottom: '6px', color: '#18181B', letterSpacing: '-0.02em', fontFamily: 'Outfit, sans-serif' }}>
+              <h1 id="doctor-login-heading" className="font-display" style={{ fontSize: '1.65rem', fontWeight: 700, marginBottom: '6px', color: 'var(--color-doctor-text)', letterSpacing: '-0.02em' }}>
                 Doctor Sign In
               </h1>
-              <p style={{ color: '#52525B', fontSize: '0.90rem', margin: 0 }}>
+              <p style={{ color: 'var(--color-text-muted)', fontSize: '0.90rem', margin: 0 }}>
                 Review assigned appointments and clinical patient context
               </p>
             </header>
@@ -164,8 +179,8 @@ export const DoctorLogin = () => {
                   marginBottom: '20px', 
                   color: 'var(--color-semantic-emergency)', 
                   textAlign: 'center',
-                  background: '#FEF2F2',
-                  border: '1px solid #FECACA',
+                  background: 'rgba(239, 68, 68, 0.12)',
+                  border: '1px solid rgba(239, 68, 68, 0.25)',
                   borderRadius: '4px',
                   padding: '10px 14px',
                   fontSize: '0.88rem'
@@ -179,11 +194,11 @@ export const DoctorLogin = () => {
             <form onSubmit={handleLogin} className="auth-form" style={{ display: 'grid', gap: '16px' }}>
               {/* Clinician Work Email Field */}
               <div style={{ display: 'flex', flexDirection: 'column', gap: '6px' }}>
-                <label htmlFor="doctor-email" style={{ fontWeight: 600, fontSize: '0.86rem', color: '#18181B' }}>
+                <label htmlFor="doctor-email" style={{ fontWeight: 600, fontSize: '0.86rem', color: 'var(--color-doctor-text)' }}>
                   Clinician Work Email
                 </label>
                 <div style={{ position: 'relative', display: 'flex', alignItems: 'center' }}>
-                  <Mail size={18} style={{ position: 'absolute', left: '14px', color: '#71717A', pointerEvents: 'none' }} />
+                  <Mail size={18} style={{ position: 'absolute', left: '14px', color: 'var(--color-doctor-primary)', pointerEvents: 'none' }} />
                   <Input
                     id="doctor-email"
                     type="email"
@@ -198,22 +213,22 @@ export const DoctorLogin = () => {
                       borderRadius: '4px', 
                       minHeight: '44px', 
                       fontSize: '0.90rem',
-                      border: '1px solid #D4D4D8',
-                      background: '#F4F4F5',
-                      color: '#18181B'
+                      border: '1px solid var(--color-doctor-border)',
+                      background: 'var(--color-surface-interactive)',
+                      color: 'var(--color-doctor-text)'
                     }}
                   />
                 </div>
-                <small style={{ fontSize: '0.74rem', color: '#71717A' }}>Must be your official @lifelink.com clinical work email.</small>
+                <small style={{ fontSize: '0.74rem', color: 'var(--color-text-muted)' }}>Must be your official @lifelink.com clinical work email.</small>
               </div>
 
               {/* Password Field */}
               <div style={{ display: 'flex', flexDirection: 'column', gap: '6px' }}>
-                <label htmlFor="doctor-password" style={{ fontWeight: 600, fontSize: '0.86rem', color: '#18181B' }}>
+                <label htmlFor="doctor-password" style={{ fontWeight: 600, fontSize: '0.86rem', color: 'var(--color-doctor-text)' }}>
                   Password
                 </label>
                 <div style={{ position: 'relative', display: 'flex', alignItems: 'center' }}>
-                  <Lock size={18} style={{ position: 'absolute', left: '14px', color: '#71717A', pointerEvents: 'none' }} />
+                  <Lock size={18} style={{ position: 'absolute', left: '14px', color: 'var(--color-doctor-primary)', pointerEvents: 'none' }} />
                   <Input
                     id="doctor-password"
                     type={showPassword ? 'text' : 'password'}
@@ -228,15 +243,15 @@ export const DoctorLogin = () => {
                       borderRadius: '4px', 
                       minHeight: '44px', 
                       fontSize: '0.90rem',
-                      border: '1px solid #D4D4D8',
-                      background: '#F4F4F5',
-                      color: '#18181B'
+                      border: '1px solid var(--color-doctor-border)',
+                      background: 'var(--color-surface-interactive)',
+                      color: 'var(--color-doctor-text)'
                     }}
                   />
                   <button
                     type="button"
                     onClick={() => setShowPassword(!showPassword)}
-                    style={{ position: 'absolute', right: '14px', background: 'none', border: 'none', color: '#71717A', cursor: 'pointer', padding: 0 }}
+                    style={{ position: 'absolute', right: '14px', background: 'none', border: 'none', color: 'var(--color-doctor-primary)', cursor: 'pointer', padding: 0 }}
                     aria-label={showPassword ? 'Hide password' : 'Show password'}
                   >
                     {showPassword ? <EyeOff size={18} /> : <Eye size={18} />}
@@ -247,21 +262,18 @@ export const DoctorLogin = () => {
               {/* Sign In Primary Button */}
               <Button
                 type="submit"
-                variant="primary"
                 disabled={login.isPending}
-                style={{ 
-                  width: '100%', 
-                  minHeight: '44px', 
-                  padding: '11px', 
-                  fontSize: '0.96rem', 
-                  fontWeight: 600, 
-                  borderRadius: '4px', 
-                  marginTop: '4px', 
-                  cursor: 'pointer', 
-                  opacity: login.isPending ? 0.7 : 1,
-                  background: 'linear-gradient(180deg, #3F3F46 0%, #27272A 100%)',
-                  border: '1px solid #18181B',
-                  color: '#F4F4F5'
+                style={{
+                  width: '100%',
+                  minHeight: '46px',
+                  background: 'linear-gradient(180deg, #0E7279 0%, #0C5F66 100%)',
+                  border: '1px solid var(--color-doctor-accent)',
+                  color: '#FFFFFF',
+                  fontWeight: 700,
+                  borderRadius: '4px',
+                  cursor: 'pointer',
+                  marginTop: '4px',
+                  boxShadow: '0 4px 12px rgba(12, 95, 102, 0.3)'
                 }}
               >
                 {login.isPending ? 'Authenticating Clinician…' : 'Access Provider Terminal'}
@@ -274,38 +286,23 @@ export const DoctorLogin = () => {
                 <button
                   type="button"
                   onClick={() => navigate('/doctor/reset')}
-                  style={{ background: 'none', border: 'none', color: '#B45309', fontWeight: 700, cursor: 'pointer', padding: 0 }}
+                  style={{ background: 'none', border: 'none', color: 'var(--color-doctor-accent)', fontWeight: 700, cursor: 'pointer', padding: 0 }}
                 >
                   Reset password
                 </button>
               </div>
               <div style={{ marginTop: '4px' }}>
-                <span style={{ color: '#71717A' }}>Are you a patient? </span>
+                <span style={{ color: 'var(--color-text-muted)' }}>Are you a patient? </span>
                 <button
                   type="button"
                   onClick={() => navigate('/login')}
-                  style={{ background: 'none', border: 'none', color: '#27272A', fontWeight: 700, cursor: 'pointer', padding: 0 }}
+                  style={{ background: 'none', border: 'none', color: 'var(--color-doctor-primary)', fontWeight: 700, cursor: 'pointer', padding: 0 }}
                 >
                   Patient sign in
                 </button>
               </div>
             </div>
 
-            {/* Institutional Security Badges */}
-            <footer style={{ display: 'flex', justifyContent: 'space-around', marginTop: '24px', paddingTop: '16px', borderTop: '1px solid #D4D4D8' }}>
-              <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '4px', color: '#52525B' }}>
-                <ShieldCheck size={18} color="#27272A" />
-                <span style={{ fontSize: '0.70rem', fontWeight: 600 }}>Physician Guard</span>
-              </div>
-              <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '4px', color: '#52525B' }}>
-                <ShieldCheck size={18} color="#27272A" />
-                <span style={{ fontSize: '0.70rem', fontWeight: 600 }}>Verified Doctors</span>
-              </div>
-              <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '4px', color: '#52525B' }}>
-                <Shield size={18} color="#27272A" />
-                <span style={{ fontSize: '0.70rem', fontWeight: 600 }}>Protected Access</span>
-              </div>
-            </footer>
           </Card>
         </div>
       </div>

@@ -38,82 +38,98 @@
   --color-semantic-success: #0D9488; /* TEAL */
 }
 
-/* Light Theme (Default - Option D: American Registry Patient Portal) */
+/* ═══════════════════════════════════════════════════════════════════════
+   PATIENT PORTAL — Amber + Teal Palette (Light)
+   ═══════════════════════════════════════════════════════════════════════ */
 :root[data-theme="light"], :root {
-  /* Brand Primary - Deep Cordovan Wine (Strictly no blue, green, or purple) */
-  --color-primary: #581825;
-  --color-primary-hover: #6E1E2E;
-  --color-primary-active: #45121C;
-  --color-primary-muted: rgba(88, 24, 37, 0.09);
-  --color-secondary: #F5F1EB; /* Warm Bone Alabaster */
+  /* Patient Brand — Warm Amber Primary */
+  --color-primary: #B76B00;          /* Deep warm amber */
+  --color-primary-hover: #CA7800;
+  --color-primary-active: #994F00;
+  --color-primary-muted: rgba(183, 107, 0, 0.10);
+  --color-secondary: #FBF5EC;        /* Warm cream */
 
-  /* Doctor Portal Specific Brand Palette */
-  --color-doctor-primary: #27272A; /* Technical Graphite Slate */
-  --color-doctor-primary-hover: #3F3F46;
-  --color-doctor-accent: #B45309; /* Spiced Honey Amber */
-  --color-doctor-accent-hover: #D97706;
-  --color-doctor-bg: #F4F4F5; /* Technical Light Zinc Off-White */
-  --color-doctor-surface: #EBECEF;
-  --color-doctor-border: #D4D4D8;
-  --color-doctor-text: #18181B;
+  /* Patient Teal Accent */
+  --color-accent: #0F766E;
+  --color-accent-hover: #0D9488;
+  --color-accent-muted: rgba(15, 118, 110, 0.10);
 
-  /* Backgrounds & Surfaces - Warm Alabaster & Soft Bone (Not stark pure white) */
-  --color-background: #FBF9F7;
-  --color-surface-white: #F5F1EB;
-  --color-surface-glass: #FAF7F2;
-  --color-surface-interactive: #EFE9DF;
-  
-  /* Typography Ink - Deep Cordovan Ink */
-  --color-text: #2B1519;
-  --color-text-muted: #6E585B;
-  
-  /* Borders - Warm Limestone */
-  --color-border: #E0D8CE;
-  --color-glass-border: #E9E3D9;
+  /* ── Doctor Portal — Deep Teal + Gold ── */
+  --color-doctor-primary: #0C5F66;   /* Deep ocean teal */
+  --color-doctor-primary-hover: #0E7279;
+  --color-doctor-accent: #B8860B;    /* Rich dark gold */
+  --color-doctor-accent-hover: #D4A00E;
+  --color-doctor-bg: #F0F8F8;        /* Soft teal-tinted off-white */
+  --color-doctor-surface: #E2F0F0;
+  --color-doctor-border: #B0D4D4;
+  --color-doctor-text: #0A2E30;
 
-  /* Shadows - Grounded Enterprise Box Shadows */
-  --shadow-sm: 0 1px 3px rgba(43, 21, 25, 0.06), 0 1px 2px rgba(43, 21, 25, 0.04);
-  --shadow-md: 0 4px 6px -1px rgba(43, 21, 25, 0.07), 0 2px 4px -1px rgba(43, 21, 25, 0.04);
-  --shadow-lg: 0 10px 15px -3px rgba(43, 21, 25, 0.08), 0 4px 6px -2px rgba(43, 21, 25, 0.03);
-}
+  /* Backgrounds & Surfaces — Warm Ivory */
+  --color-background: #FDFAF5;
+  --color-surface-white: #FBF5EC;
+  --color-surface-glass: #FAF4E8;
+  --color-surface-interactive: #F2E8D4;
 
-/* Dark Theme - Nighttime Cordovan & Technical Carbon Registry */
-:root[data-theme="dark"] {
-  /* Brand Primary - Warm Rosewood Cordovan */
-  --color-primary: #9F2B3E;
-  --color-primary-hover: #B83A4F;
-  --color-primary-active: #D45267;
-  --color-primary-muted: rgba(159, 43, 62, 0.18);
-  --color-secondary: #271115; /* Dark Cordovan Secondary */
+  /* Typography — Deep Warm Espresso Ink (Never pure black #000000) */
+  --color-text: #2C1C06;
+  --color-text-muted: #745228;
+  --color-text-dark: #2C1C06;
 
-  /* Doctor Portal Specific Dark Palette */
-  --color-doctor-primary: #D4D4D8;
-  --color-doctor-primary-hover: #F4F4F5;
-  --color-doctor-accent: #D97706; /* Luminous Honey Amber */
-  --color-doctor-accent-hover: #F59E0B;
-  --color-doctor-bg: #121214;
-  --color-doctor-surface: #1C1C1F;
-  --color-doctor-border: #2E2E33;
-  --color-doctor-text: #F4F4F5;
-
-  /* Backgrounds & Surfaces - Deep Cordovan Night */
-  --color-background: #1A0A0D;
-  --color-surface-white: #271115;
-  --color-surface-glass: #271115;
-  --color-surface-interactive: #33161C;
-  
-  /* Text */
-  --color-text: #F9ECEE;
-  --color-text-muted: #B89EA3;
-  
-  /* Borders */
-  --color-border: #482028;
-  --color-glass-border: #5A2933;
+  /* Borders — Warm Honey */
+  --color-border: #E2D0B0;
+  --color-glass-border: #EDD9BA;
 
   /* Shadows */
-  --shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.35);
-  --shadow-md: 0 4px 8px rgba(0, 0, 0, 0.45);
-  --shadow-lg: 0 12px 24px rgba(0, 0, 0, 0.55);
+  --shadow-sm: 0 1px 3px rgba(44, 28, 0, 0.07), 0 1px 2px rgba(44, 28, 0, 0.04);
+  --shadow-md: 0 4px 6px -1px rgba(44, 28, 0, 0.08), 0 2px 4px -1px rgba(44, 28, 0, 0.04);
+  --shadow-lg: 0 10px 15px -3px rgba(44, 28, 0, 0.09), 0 4px 6px -2px rgba(44, 28, 0, 0.04);
+}
+
+/* ═══════════════════════════════════════════════════════════════════════
+   PATIENT PORTAL — Amber + Teal Palette (Dark)
+   ═══════════════════════════════════════════════════════════════════════ */
+:root[data-theme="dark"] {
+  /* Patient Brand — Luminous Amber */
+  --color-primary: #E09020;          /* Bright amber for dark bg */
+  --color-primary-hover: #F5A030;
+  --color-primary-active: #FFB840;
+  --color-primary-muted: rgba(224, 144, 32, 0.16);
+  --color-secondary: #20170E;        /* Warm espresso card surface */
+
+  /* Patient Teal Accent - Dark */
+  --color-accent: #14B8A6;
+  --color-accent-hover: #2DD4BF;
+  --color-accent-muted: rgba(20, 184, 166, 0.16);
+
+  /* ── Doctor Portal — Deep Teal + Gold (Dark) ── */
+  --color-doctor-primary: #4ECDC4;   /* Bright teal for dark bg */
+  --color-doctor-primary-hover: #6ED9D2;
+  --color-doctor-accent: #E8C43A;    /* Bright gold */
+  --color-doctor-accent-hover: #FFD84D;
+  --color-doctor-bg: #071416;        /* Very dark teal-black */
+  --color-doctor-surface: #0E2226;
+  --color-doctor-border: #1C4048;
+  --color-doctor-text: #D4F0EE;
+
+  /* Backgrounds & Surfaces — Deep Espresso Night (Warm, not harsh black) */
+  --color-background: #151008;
+  --color-surface-white: #20170E;
+  --color-surface-glass: rgba(32, 23, 14, 0.85);
+  --color-surface-interactive: #2A1F13;
+
+  /* Typography — Luminous Warm Ivory (Crystal-clear readability in dark mode) */
+  --color-text: #FAF3E8;
+  --color-text-muted: #D4BD96;
+  --color-text-dark: #2C1C06;        /* Deep espresso for text on light pills/buttons */
+
+  /* Borders — Warm amber-brown */
+  --color-border: #4A351C;
+  --color-glass-border: #5A4022;
+
+  /* Shadows */
+  --shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.40);
+  --shadow-md: 0 4px 8px rgba(0, 0, 0, 0.50);
+  --shadow-lg: 0 12px 24px rgba(0, 0, 0, 0.60);
 }
 
 * {
@@ -250,62 +266,62 @@ a:hover {
 }
 
 .btn-primary {
-  background: linear-gradient(180deg, #781D2D 0%, #6E1E2E 50%, #581825 100%) !important;
-  border: 1px solid #45121C !important;
-  color: #FAF7F2 !important;
-  box-shadow: 0 1px 3px rgba(43, 21, 25, 0.16), inset 0 1px 0 rgba(255, 255, 255, 0.22) !important;
-  text-shadow: 0 1px 1px rgba(0, 0, 0, 0.3);
+  background: linear-gradient(180deg, #CA7800 0%, #B76B00 50%, #994F00 100%) !important;
+  border: 1px solid #7A4800 !important;
+  color: #FFF8E8 !important;
+  box-shadow: 0 1px 3px rgba(100, 60, 0, 0.20), inset 0 1px 0 rgba(255, 255, 255, 0.24) !important;
+  text-shadow: 0 1px 1px rgba(0, 0, 0, 0.20);
 }
 
 .btn-primary:hover:not(:disabled) {
-  background: linear-gradient(180deg, #882234 0%, #781D2D 50%, #6E1E2E 100%) !important;
-  box-shadow: 0 2px 5px rgba(88, 24, 37, 0.28), inset 0 1px 0 rgba(255, 255, 255, 0.28) !important;
+  background: linear-gradient(180deg, #D98400 0%, #CA7800 50%, #B76B00 100%) !important;
+  box-shadow: 0 2px 5px rgba(183, 107, 0, 0.30), inset 0 1px 0 rgba(255, 255, 255, 0.30) !important;
   transform: translateY(-1px);
 }
 
-/* Doctor Workstation Specific Primary Button */
+/* Doctor Workstation Specific Primary Button — Deep Teal */
 .doctor-content .btn-primary,
 #doctor-sidebar .btn-primary,
 .doctor-setup-layout .btn-primary {
-  background: linear-gradient(180deg, #3F3F46 0%, #27272A 50%, #18181B 100%) !important;
-  border: 1px solid #B45309 !important;
-  color: #FAFAFA !important;
-  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.24), inset 0 1px 0 rgba(255, 255, 255, 0.15) !important;
+  background: linear-gradient(180deg, #0E7279 0%, #0C5F66 50%, #094E55 100%) !important;
+  border: 1px solid #073C42 !important;
+  color: #E2F0F0 !important;
+  box-shadow: 0 1px 3px rgba(7, 60, 66, 0.28), inset 0 1px 0 rgba(255, 255, 255, 0.18) !important;
 }
 
 .doctor-content .btn-primary:hover:not(:disabled),
 #doctor-sidebar .btn-primary:hover:not(:disabled),
 .doctor-setup-layout .btn-primary:hover:not(:disabled) {
-  background: linear-gradient(180deg, #52525B 0%, #3F3F46 50%, #27272A 100%) !important;
-  border-color: #D97706 !important;
+  background: linear-gradient(180deg, #10838A 0%, #0E7279 50%, #0C5F66 100%) !important;
+  border-color: #B8860B !important;
   transform: translateY(-1px);
 }
 
 .btn-secondary {
-  background: linear-gradient(180deg, #FAF7F2 0%, #EFE9DF 100%) !important;
-  border: 1px solid #D8CFC2 !important;
-  color: #2B1519 !important;
-  box-shadow: 0 1px 2px rgba(43, 21, 25, 0.05), inset 0 1px 0 rgba(255, 255, 255, 0.8) !important;
+  background: linear-gradient(180deg, #FBF5EC 0%, #F2E8D4 100%) !important;
+  border: 1px solid #E2D0B0 !important;
+  color: #2C1C00 !important;
+  box-shadow: 0 1px 2px rgba(44, 28, 0, 0.05), inset 0 1px 0 rgba(255, 255, 255, 0.8) !important;
 }
 
 .btn-secondary:hover:not(:disabled) {
-  background: linear-gradient(180deg, #F5F0E6 0%, #E5DDD0 100%) !important;
-  border-color: #BFB4A3 !important;
-  color: #2B1519 !important;
+  background: linear-gradient(180deg, #F5EDDA 0%, #E8D9BE 100%) !important;
+  border-color: #C8B08A !important;
+  color: #2C1C00 !important;
   transform: translateY(-1px);
 }
 
 .btn-outline {
-  background: #FAF7F2 !important;
-  border: 1px solid #D8CFC2 !important;
-  color: #581825 !important;
+  background: #FBF5EC !important;
+  border: 1px solid #E2D0B0 !important;
+  color: #B76B00 !important;
   box-shadow: 0 1px 2px rgba(0, 0, 0, 0.04) !important;
 }
 
 .btn-outline:hover:not(:disabled) {
-  background: #EFE9DF !important;
-  border-color: #581825 !important;
-  color: #581825 !important;
+  background: #F2E8D4 !important;
+  border-color: #B76B00 !important;
+  color: #994F00 !important;
   transform: translateY(-1px);
 }
 
@@ -762,44 +778,42 @@ dialog.popup.closing::backdrop {
 .h-full { height: 100%; }
 
 /*
- * Liquid-glass design system: source-inspired 117° border shimmer, translucent
- * pearl layers, and soft indigo depth unify every patient and clinician surface.
+ * Liquid-glass design system: warm amber-teal pearl layers for patient surfaces,
+ * deep teal-gold shimmer for clinician surfaces.
  */
 :root {
-  --liquid-blue: #5866d8;
-  --liquid-aqua: #77c9e6;
-  --liquid-violet: #8991e7;
+  /* Amber-Warm glass tokens (patient) */
   --liquid-edge: rgba(255, 255, 255, 0.88);
-  --liquid-edge-muted: rgba(139, 163, 222, 0.34);
-  --liquid-panel: rgba(255, 255, 255, 0.48);
-  --liquid-panel-strong: rgba(255, 255, 255, 0.66);
-  --liquid-panel-end: rgba(255, 255, 255, 0.34);
-  --liquid-edge-strong: rgba(255, 255, 255, 0.78);
-  --liquid-highlight: rgba(255, 255, 255, 0.52);
-  --liquid-sheen: rgba(255, 255, 255, 0.28);
-  --liquid-shadow: 0 20px 48px rgba(31, 38, 135, 0.13), 0 6px 16px rgba(66, 91, 170, 0.06);
-  --liquid-inset: inset 0 1px 0 rgba(255, 255, 255, 0.86), inset 0 -16px 28px rgba(126, 151, 229, 0.07);
+  --liquid-edge-muted: rgba(220, 165, 80, 0.32);
+  --liquid-panel: rgba(255, 248, 235, 0.52);
+  --liquid-panel-strong: rgba(255, 252, 242, 0.70);
+  --liquid-panel-end: rgba(255, 242, 210, 0.38);
+  --liquid-edge-strong: rgba(255, 255, 255, 0.80);
+  --liquid-highlight: rgba(255, 255, 255, 0.54);
+  --liquid-sheen: rgba(255, 200, 80, 0.18);
+  --liquid-shadow: 0 20px 48px rgba(140, 80, 0, 0.10), 0 6px 16px rgba(180, 110, 0, 0.06);
+  --liquid-inset: inset 0 1px 0 rgba(255, 255, 255, 0.88), inset 0 -16px 28px rgba(200, 140, 20, 0.05);
 }
 
 :root[data-theme="dark"] {
-  --liquid-edge: rgba(220, 230, 255, 0.24);
-  --liquid-edge-muted: rgba(142, 159, 255, 0.18);
-  --liquid-panel: rgba(20, 28, 63, 0.56);
-  --liquid-panel-strong: rgba(25, 35, 77, 0.76);
-  --liquid-panel-end: rgba(13, 20, 50, 0.78);
-  --liquid-edge-strong: rgba(156, 177, 255, 0.34);
-  --liquid-highlight: rgba(177, 197, 255, 0.09);
-  --liquid-sheen: rgba(112, 155, 255, 0.07);
-  --liquid-shadow: 0 24px 60px rgba(0, 0, 0, 0.32), 0 5px 18px rgba(45, 67, 152, 0.18);
-  --liquid-inset: inset 0 1px 0 rgba(255, 255, 255, 0.11), inset 0 -16px 28px rgba(65, 84, 175, 0.14);
+  --liquid-edge: rgba(255, 210, 130, 0.22);
+  --liquid-edge-muted: rgba(200, 150, 50, 0.18);
+  --liquid-panel: rgba(30, 20, 0, 0.60);
+  --liquid-panel-strong: rgba(40, 28, 0, 0.80);
+  --liquid-panel-end: rgba(20, 14, 0, 0.82);
+  --liquid-edge-strong: rgba(230, 180, 80, 0.30);
+  --liquid-highlight: rgba(255, 200, 80, 0.07);
+  --liquid-sheen: rgba(200, 140, 30, 0.06);
+  --liquid-shadow: 0 24px 60px rgba(0, 0, 0, 0.40), 0 5px 18px rgba(100, 60, 0, 0.18);
+  --liquid-inset: inset 0 1px 0 rgba(255, 220, 120, 0.10), inset 0 -16px 28px rgba(150, 90, 10, 0.10);
 }
 
 body {
   background:
-    radial-gradient(circle at 11% 8%, rgba(123, 207, 242, 0.38), transparent 27rem),
-    radial-gradient(circle at 91% 18%, rgba(161, 158, 246, 0.34), transparent 30rem),
-    radial-gradient(circle at 59% 100%, rgba(150, 225, 228, 0.31), transparent 27rem),
-    linear-gradient(135deg, #edf6ff 0%, #edf0ff 47%, #e8f9f5 100%);
+    radial-gradient(circle at 11% 8%, rgba(224, 160, 60, 0.22), transparent 28rem),
+    radial-gradient(circle at 88% 18%, rgba(15, 118, 110, 0.14), transparent 28rem),
+    radial-gradient(circle at 55% 95%, rgba(200, 130, 30, 0.16), transparent 26rem),
+    linear-gradient(135deg, #FBF5E6 0%, #FDF6EE 50%, #F2F9F8 100%);
   background-attachment: fixed;
   isolation: isolate;
   overflow-x: hidden;
@@ -807,9 +821,10 @@ body {
 
 :root[data-theme="dark"] body {
   background:
-    radial-gradient(circle at 11% 8%, rgba(49, 112, 181, 0.26), transparent 27rem),
-    radial-gradient(circle at 91% 18%, rgba(108, 82, 189, 0.28), transparent 30rem),
-    linear-gradient(135deg, #090d21 0%, #121837 50%, #0a2028 100%);
+    radial-gradient(circle at 11% 8%, rgba(183, 107, 0, 0.20), transparent 28rem),
+    radial-gradient(circle at 88% 18%, rgba(15, 118, 110, 0.16), transparent 28rem),
+    radial-gradient(circle at 55% 95%, rgba(183, 107, 0, 0.12), transparent 26rem),
+    linear-gradient(135deg, #151008 0%, #1A130B 50%, #101717 100%);
 }
 
 body::before,
@@ -828,13 +843,13 @@ body::after {
 body::before {
   top: 19%;
   left: -10rem;
-  background: radial-gradient(circle, rgba(147, 188, 255, 0.27) 0%, rgba(147, 188, 255, 0) 72%);
+  background: radial-gradient(circle, rgba(224, 144, 32, 0.20) 0%, rgba(224, 144, 32, 0) 72%);
 }
 
 body::after {
   right: -10rem;
   bottom: 7%;
-  background: radial-gradient(circle, rgba(127, 229, 214, 0.23) 0%, rgba(127, 229, 214, 0) 72%);
+  background: radial-gradient(circle, rgba(15, 118, 110, 0.18) 0%, rgba(15, 118, 110, 0) 72%);
 }
 
 .glass-surface,
@@ -912,45 +927,45 @@ dialog.popup {
 }
 
 .btn-primary {
-  background: linear-gradient(180deg, #6E1E2E 0%, #581825 50%, #45121C 100%) !important;
-  border: 1px solid #380E17 !important;
-  box-shadow: 0 1px 3px rgba(43, 21, 25, 0.25), inset 0 1px 0 rgba(255, 255, 255, 0.22) !important;
-  color: #FAF7F2 !important;
-  text-shadow: 0 1px 1px rgba(0, 0, 0, 0.3);
+  background: linear-gradient(180deg, #CA7800 0%, #B76B00 50%, #994F00 100%) !important;
+  border: 1px solid #7A4800 !important;
+  box-shadow: 0 1px 3px rgba(100, 60, 0, 0.22), inset 0 1px 0 rgba(255, 255, 255, 0.22) !important;
+  color: #FFF8E8 !important;
+  text-shadow: 0 1px 1px rgba(0, 0, 0, 0.18);
 }
 
 .btn-primary:hover:not(:disabled) {
-  background: linear-gradient(180deg, #832437 0%, #6E1E2E 50%, #581825 100%) !important;
-  border-color: #581825 !important;
-  box-shadow: 0 2px 5px rgba(43, 21, 25, 0.32), inset 0 1px 0 rgba(255, 255, 255, 0.3) !important;
+  background: linear-gradient(180deg, #D98400 0%, #CA7800 50%, #B76B00 100%) !important;
+  border-color: #994F00 !important;
+  box-shadow: 0 2px 5px rgba(183, 107, 0, 0.32), inset 0 1px 0 rgba(255, 255, 255, 0.30) !important;
   transform: translateY(-1px);
 }
 
 .btn-secondary {
-  background: linear-gradient(180deg, #FAF7F2 0%, #F5F1EB 100%) !important;
-  border: 1px solid #E0D8CE !important;
-  color: #2B1519 !important;
-  box-shadow: 0 1px 2px rgba(43, 21, 25, 0.05), inset 0 1px 0 #FAF7F2 !important;
+  background: linear-gradient(180deg, #FBF5EC 0%, #F2E8D4 100%) !important;
+  border: 1px solid #E2D0B0 !important;
+  color: #2C1C00 !important;
+  box-shadow: 0 1px 2px rgba(44, 28, 0, 0.05), inset 0 1px 0 #FBF5EC !important;
 }
 
 .btn-secondary:hover:not(:disabled) {
-  background: linear-gradient(180deg, #F5F1EB 0%, #EAE4DA 100%) !important;
-  border-color: #D8CFC2 !important;
-  color: #2B1519 !important;
+  background: linear-gradient(180deg, #F5EDDA 0%, #E8D9BE 100%) !important;
+  border-color: #C8B08A !important;
+  color: #2C1C00 !important;
   transform: translateY(-1px);
 }
 
 .btn-outline {
-  background: #FAF7F2 !important;
-  border: 1px solid #E0D8CE !important;
-  color: #581825 !important;
-  box-shadow: 0 1px 2px rgba(43, 21, 25, 0.04) !important;
+  background: #FBF5EC !important;
+  border: 1px solid #E2D0B0 !important;
+  color: #B76B00 !important;
+  box-shadow: 0 1px 2px rgba(44, 28, 0, 0.04) !important;
 }
 
 .btn-outline:hover:not(:disabled) {
-  background: #F5ECEE !important;
-  border-color: #581825 !important;
-  color: #45121C !important;
+  background: #F2E8D4 !important;
+  border-color: #B76B00 !important;
+  color: #994F00 !important;
   transform: translateY(-1px);
 }
 
@@ -1003,8 +1018,8 @@ select:hover:not(:focus) {
 input:not([type="checkbox"]):not([type="radio"]):not([type="range"]):focus,
 textarea:focus,
 select:focus {
-  border-color: #1E3A8A !important;
-  box-shadow: 0 0 0 3px rgba(30, 58, 138, 0.18), inset 0 1px 1px rgba(0, 0, 0, 0.03) !important;
+  border-color: var(--color-primary) !important;
+  box-shadow: 0 0 0 3px var(--color-primary-muted), inset 0 1px 1px rgba(0, 0, 0, 0.03) !important;
   outline: none;
 }
 
@@ -1117,19 +1132,19 @@ dialog.popup::backdrop {
 }
 
 .lifelink-logo-symbol .lifelink-logo {
-  height: 28px;
+  height: 42px;
 }
 
 .lifelink-logo-auth {
   width: auto;
-  max-width: min(360px, 90vw);
+  max-width: min(500px, 94vw);
   margin: 0 auto var(--spacing-4);
-  padding: 10px 22px;
+  padding: 14px 28px;
 }
 
 .lifelink-logo-auth .lifelink-logo {
-  height: 48px;
-  max-height: 52px;
+  height: 74px;
+  max-height: 86px;
 }
 
 /* Mobile Auth Card Logo Showcase: Mounted plate ensuring full brand visibility on mobile screens */
@@ -1148,10 +1163,15 @@ dialog.popup::backdrop {
   background: #FAF7F2;
   border: 1px solid #E0D8CE;
   border-radius: var(--border-radius-md);
-  padding: 8px 18px;
+  padding: 12px 24px;
   box-shadow: var(--shadow-sm);
-  max-width: min(280px, 85vw);
+  max-width: min(350px, 92vw);
   margin: 0 auto;
+}
+
+.auth-card-mobile-logo .lifelink-logo {
+  height: 60px;
+  max-height: 70px;
 }
 
 .doctor-theme .auth-card-mobile-logo,
@@ -1162,12 +1182,12 @@ dialog.popup::backdrop {
 
 .lifelink-logo-sidebar {
   width: auto;
-  max-width: 210px;
+  max-width: 260px;
 }
 
 .lifelink-logo-sidebar .lifelink-logo {
-  height: 38px;
-  max-height: 42px;
+  height: 52px;
+  max-height: 58px;
 }
 
 .lifelink-logo-sidebar-symbol {
@@ -1215,59 +1235,69 @@ dialog.popup::backdrop {
   box-shadow: var(--shadow-sm);
 }
 
-/* Dark-mode surfaces - Classic American Enterprise */
+/* Dark-mode surfaces — Amber-Teal & Teal-Gold palettes */
 :root[data-theme="dark"] .btn-primary {
-  background: linear-gradient(180deg, #3F3F46 0%, #27272A 50%, #18181B 100%) !important;
-  border: 1px solid #18181B !important;
-  color: #F4F4F5 !important;
-  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.3), inset 0 1px 0 rgba(255, 255, 255, 0.1) !important;
+  background: linear-gradient(180deg, #CA7800 0%, #B76B00 50%, #994F00 100%) !important;
+  border: 1px solid #7A3E00 !important;
+  color: #FFF8E8 !important;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.3), inset 0 1px 0 rgba(255, 255, 255, 0.12) !important;
 }
 
 :root[data-theme="dark"] .btn-primary:hover:not(:disabled) {
-  background: linear-gradient(180deg, #52525B 0%, #3F3F46 50%, #27272A 100%) !important;
-  border-color: #B45309 !important;
-  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.4), inset 0 1px 0 rgba(255, 255, 255, 0.2) !important;
+  background: linear-gradient(180deg, #E09020 0%, #CA7800 50%, #B76B00 100%) !important;
+  border-color: #994F00 !important;
+  box-shadow: 0 2px 6px rgba(183, 107, 0, 0.4), inset 0 1px 0 rgba(255, 255, 255, 0.18) !important;
   transform: translateY(-1px);
 }
 
 :root[data-theme="dark"] .btn-secondary,
 :root[data-theme="dark"] .btn-outline {
-  background: linear-gradient(180deg, #27272A 0%, #18181B 100%) !important;
-  border: 1px solid #3F3F46 !important;
-  color: #F4F4F5 !important;
+  background: linear-gradient(180deg, #2A1E06 0%, #1E1400 100%) !important;
+  border: 1px solid #4A3410 !important;
+  color: #FBF0DC !important;
 }
 
 :root[data-theme="dark"] .btn-secondary:hover:not(:disabled),
 :root[data-theme="dark"] .btn-outline:hover:not(:disabled) {
-  background: #3F3F46 !important;
-  border-color: #52525B !important;
-  color: #FAF7F2 !important;
+  background: #2A1E06 !important;
+  border-color: #6A5020 !important;
+  color: #FFF8E8 !important;
   transform: translateY(-1px);
 }
 
-:root[data-theme="dark"] .app-sidebar,
-:root[data-theme="dark"] .doctor-sidebar {
-  background: #0B1120;
-  border-right: 1px solid #334155;
+:root[data-theme="dark"] .app-sidebar {
+  background: #180E00;
+  border-right: 1px solid #4A3410;
   box-shadow: var(--shadow-sm);
 }
 
-:root[data-theme="dark"] .app-header,
+:root[data-theme="dark"] .doctor-sidebar {
+  background: #071416;
+  border-right: 1px solid #1C4048;
+  box-shadow: var(--shadow-sm);
+}
+
+:root[data-theme="dark"] .app-header {
+  background: rgba(24, 14, 0, 0.92);
+  border-bottom: 1px solid #4A3410;
+  box-shadow: var(--shadow-sm);
+}
+
 :root[data-theme="dark"] .doctor-header {
-  background: #0B1120;
-  border-bottom: 1px solid #334155;
+  background: rgba(7, 20, 22, 0.92);
+  border-bottom: 1px solid #1C4048;
   box-shadow: var(--shadow-sm);
 }
 
 :root[data-theme="dark"] .interactive-surface:hover {
-  border-color: rgba(164, 184, 255, 0.46);
-  background: linear-gradient(145deg, rgba(42, 54, 112, 0.82), rgba(19, 28, 66, 0.76)) padding-box,
-    linear-gradient(117deg, rgba(178, 193, 255, 0.48), rgba(104, 143, 250, 0.46), rgba(125, 211, 252, 0.3)) border-box;
-  box-shadow: 0 24px 52px rgba(0, 0, 0, 0.3), var(--liquid-inset);
+  border-color: rgba(224, 160, 60, 0.40);
+  background: linear-gradient(145deg, rgba(42, 28, 0, 0.82), rgba(26, 16, 0, 0.76)) padding-box,
+    linear-gradient(117deg, rgba(224, 160, 60, 0.40), rgba(180, 107, 0, 0.30), rgba(20, 184, 166, 0.20)) border-box;
+  box-shadow: 0 24px 52px rgba(0, 0, 0, 0.32), var(--liquid-inset);
 }
 
-:root[data-theme="dark"] .icon-btn:hover,
-:root[data-theme="dark"] .doctor-nav-item:hover { background: rgba(85, 105, 189, 0.24); }
+:root[data-theme="dark"] .icon-btn:hover { background: rgba(183, 107, 0, 0.20); }
+:root[data-theme="dark"] .doctor-nav-item:hover { background: rgba(14, 114, 121, 0.28); }
 
 :root[data-theme="dark"] .emergency-panel {
   background: linear-gradient(rgba(89, 25, 45, 0.76), rgba(61, 20, 40, 0.66)) padding-box,
@@ -1301,25 +1331,33 @@ dialog.popup::backdrop {
 :root[data-theme="dark"] .lifelink-logo {
   mix-blend-mode: normal;
   opacity: 1;
-  filter: saturate(1.1) contrast(1.08) brightness(1.05) drop-shadow(0 7px 14px rgba(38, 101, 145, 0.2));
+  filter: saturate(1.08) contrast(1.05) brightness(1.02);
 }
 
 :root[data-theme="dark"] .lifelink-logo-crop {
   padding: 6px 14px;
-  border: 1px solid #3F3F46;
+  border: 1px solid #C4A870;
   border-radius: var(--border-radius-sm);
-  background: #F4F4F5;
-  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.45);
+  background: #FAF5EC;
+  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.35);
   -webkit-mask-image: none;
   mask-image: none;
 }
 
+:root[data-theme="dark"] .auth-branding-logo-mount .lifelink-logo-crop,
+:root[data-theme="dark"] .workspace-entry-logo .lifelink-logo-crop {
+  background: transparent !important;
+  border: none !important;
+  box-shadow: none !important;
+  padding: 0 !important;
+}
+
 :root[data-theme="dark"] .lifelink-logo-symbol { padding: 0; border: 0; box-shadow: none; }
 
-:root[data-theme="dark"] .assessment-save-notice { background: rgba(30, 39, 84, 0.72); }
+:root[data-theme="dark"] .assessment-save-notice { background: rgba(42, 28, 6, 0.80); }
 :root[data-theme="dark"] .saved-assessments-panel {
-  background: linear-gradient(145deg, rgba(28, 38, 84, 0.86), rgba(15, 23, 55, 0.77)) padding-box,
-    linear-gradient(117deg, rgba(174, 192, 255, 0.31), rgba(103, 135, 225, 0.35), rgba(125, 211, 252, 0.18)) border-box;
+  background: linear-gradient(145deg, rgba(42, 28, 0, 0.86), rgba(26, 16, 0, 0.80)) padding-box,
+    linear-gradient(117deg, rgba(224, 160, 60, 0.28), rgba(180, 107, 0, 0.25), rgba(20, 184, 166, 0.16)) border-box;
 }
 
 /* Occasional page entry motion: no fabricated loading animation, only a short slide/fade on mounted content. */
@@ -1375,7 +1413,7 @@ dialog.popup::backdrop {
 .app-mobile-menu-button { display: none; align-items: center; justify-content: center; width: 38px; height: 38px; padding: 0; border-radius: 10px; }
 .app-mobile-brand { display: none; align-items: center; gap: 7px; min-width: 0; color: var(--color-text); font-family: 'Oxanium', -apple-system, BlinkMacSystemFont, sans-serif; font-size: 14px; font-weight: 800; letter-spacing: -.035em; text-decoration: none; }
 .app-mobile-brand:hover { color: var(--color-primary); text-decoration: none; }
-.app-mobile-brand-symbol { width: 28px; height: 28px; flex: 0 0 auto; }
+.app-mobile-brand-symbol { width: 38px; height: 38px; flex: 0 0 auto; }
 .app-sidebar-backdrop { display: none; }
 
 .dashboard-workspace { display: grid; gap: var(--spacing-5); }
@@ -1491,11 +1529,49 @@ dialog.popup::backdrop {
   display: flex;
   align-items: center;
   gap: 1rem;
-  border: 1px solid #3D101A;
+  border: 1px solid #7A4800;
   border-radius: var(--border-radius-md);
-  background: linear-gradient(180deg, #581825 0%, #3D101A 100%);
-  box-shadow: 0 2px 4px rgba(43, 21, 25, 0.25), inset 0 1px 0 rgba(255, 255, 255, 0.12);
-  color: #FAF7F2;
+  background: linear-gradient(180deg, #B76B00 0%, #8C4E00 100%);
+  box-shadow: 0 2px 4px rgba(100, 60, 0, 0.28), inset 0 1px 0 rgba(255, 255, 255, 0.14);
+  color: #FFF8E8;
+}
+
+:root[data-theme="dark"] .workspace-portal-header {
+  background: linear-gradient(180deg, #2A1B0A 0%, #1C1206 100%);
+  border-color: #5A3A14;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.4), inset 0 1px 0 rgba(224, 160, 60, 0.18);
+  color: #FAF3E8;
+}
+
+.workspace-portal-header.doctor-portal-header {
+  background: linear-gradient(180deg, #0E7279 0%, #0C5F66 100%);
+  border-color: #073C42;
+  box-shadow: 0 2px 4px rgba(7, 60, 66, 0.28), inset 0 1px 0 rgba(255, 255, 255, 0.14);
+}
+
+:root[data-theme="dark"] .workspace-portal-header.doctor-portal-header {
+  background: linear-gradient(180deg, #0D282C 0%, #071719 100%);
+  border-color: #1C4850;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.4), inset 0 1px 0 rgba(78, 205, 196, 0.18);
+  color: #D4F0EE;
+}
+
+/* Doctor Auth Page background & dark mode container styling */
+.doctor-auth-page {
+  background-color: var(--color-doctor-bg);
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+:root[data-theme="dark"] .doctor-auth-page {
+  background: radial-gradient(circle at 30% 20%, #0E2E33 0%, #071416 60%, #030A0B 100%) !important;
+}
+
+:root[data-theme="dark"] .doctor-auth-page .clinical-glass-card {
+  background: #0E2226 !important;
+  border: 1px solid #1C4850 !important;
+  box-shadow: 0 12px 36px rgba(0, 0, 0, 0.5) !important;
 }
 
 .workspace-portal-brand {
@@ -1513,9 +1589,9 @@ dialog.popup::backdrop {
   flex: 0 0 auto;
   overflow: hidden;
   border-radius: var(--border-radius-sm);
-  background: #6E1E2E;
-  border: 1px solid rgba(255, 255, 255, 0.2);
-  color: #FAF7F2;
+  background: #8C4E00;
+  border: 1px solid rgba(255, 255, 255, 0.22);
+  color: #FFF8E8;
   box-shadow: 0 1px 3px rgba(0, 0, 0, 0.2);
 }
 .workspace-portal-brand > span { display: grid; gap: 0.08rem; min-width: 0; }
@@ -1582,7 +1658,7 @@ dialog.popup::backdrop {
 
 .workspace-entry-logo {
   width: auto;
-  max-width: min(100%, 320px);
+  max-width: min(100%, 540px);
   margin: 0 auto;
   display: inline-flex;
   justify-content: center;
@@ -1595,9 +1671,10 @@ dialog.popup::backdrop {
 
 .workspace-entry-logo .lifelink-logo {
   width: 100%;
-  max-width: 290px;
+  max-width: 480px;
+  min-height: 105px;
   height: auto;
-  aspect-ratio: 992 / 318;
+  aspect-ratio: 968 / 294;
   object-fit: contain;
 }
 
@@ -1605,10 +1682,10 @@ dialog.popup::backdrop {
 .workspace-choice-label {
   display: inline-flex;
   align-items: center;
-  border: 1px solid #E0D8CE;
+  border: 1px solid #E2D0B0;
   border-radius: var(--border-radius-sm);
-  background: #F5ECEE;
-  color: #581825;
+  background: #FEF0D0;
+  color: #8C5800;
   font-size: 0.72rem;
   font-weight: 700;
   letter-spacing: 0.05em;
@@ -1620,7 +1697,7 @@ dialog.popup::backdrop {
   margin: 0.8rem 0 0.45rem;
   font-size: clamp(1.85rem, 3.5vw, 2.6rem);
   font-weight: 700;
-  color: #2B1519;
+  color: #2C1C00;
   letter-spacing: -0.02em;
 }
 
@@ -1642,17 +1719,28 @@ dialog.popup::backdrop {
   min-height: 380px;
   flex-direction: column;
   padding: clamp(1.25rem, 2.5vw, 1.85rem);
-  background: #FAF7F2;
-  border: 1px solid #E0D8CE;
+  background: #FBF5EC;
+  border: 1px solid #E2D0B0;
   border-radius: var(--border-radius-md);
-  box-shadow: 0 1px 3px rgba(43, 21, 25, 0.05);
+  box-shadow: 0 1px 3px rgba(44, 28, 0, 0.06);
   transition: transform 180ms var(--ease-out), box-shadow 180ms var(--ease-out), border-color 180ms ease;
 }
 
-.workspace-choice-card:hover {
+.workspace-choice-card.doctor-choice-card {
+  background: #F0F8F8;
+  border-color: #B0D4D4;
+}
+
+.workspace-choice-card.patient-choice-card:hover {
   transform: translateY(-2px);
-  border-color: #581825;
-  box-shadow: 0 6px 16px rgba(43, 21, 25, 0.08);
+  border-color: #B76B00;
+  box-shadow: 0 6px 16px rgba(44, 28, 0, 0.10);
+}
+
+.workspace-choice-card.doctor-choice-card:hover {
+  transform: translateY(-2px);
+  border-color: #0C5F66;
+  box-shadow: 0 6px 16px rgba(12, 95, 102, 0.12);
 }
 
 .workspace-choice-topline {
@@ -1669,22 +1757,32 @@ dialog.popup::backdrop {
   width: 2.5rem;
   height: 2.5rem;
   border-radius: var(--border-radius-sm);
-  background: #F5ECEE;
-  border: 1px solid #E0D8CE;
-  color: #581825;
+  background: rgba(183, 107, 0, 0.10);
+  border: 1px solid #E2D0B0;
+  color: #B76B00;
 }
 
 .workspace-choice-icon.doctor {
-  background: #EBECEF;
-  border-color: #D4D4D8;
-  color: #27272A;
+  background: rgba(12, 95, 102, 0.10);
+  border-color: #B0D4D4;
+  color: #0C5F66;
+}
+
+.workspace-choice-label.doctor {
+  border-color: #B0D4D4;
+  background: #E2F0F0;
+  color: #0C5F66;
 }
 
 .workspace-choice-card h2 {
   margin: 1.15rem 0 0.35rem;
   font-size: 1.35rem;
   font-weight: 700;
-  color: #2B1519;
+  color: #2C1C00;
+}
+
+.doctor-choice-card h2 {
+  color: #0A2E30;
 }
 
 .workspace-choice-card > p {
@@ -1702,19 +1800,31 @@ dialog.popup::backdrop {
   list-style: none;
 }
 
+.doctor-choice-card .workspace-choice-list {
+  border-top-color: #B0D4D4;
+}
+
 .workspace-choice-list li {
   display: flex;
   align-items: flex-start;
   gap: 0.6rem;
   font-size: 0.9rem;
   line-height: 1.45;
-  color: #4B3539;
+  color: #4A3000;
+}
+
+.doctor-choice-card .workspace-choice-list li {
+  color: #0A2E30;
 }
 
 .workspace-choice-list svg {
   flex: 0 0 auto;
   margin-top: 0.15rem;
-  color: #581825;
+  color: #B76B00;
+}
+
+.doctor-choice-card .workspace-choice-list svg {
+  color: #0C5F66;
 }
 
 .workspace-choice-action {
@@ -1722,6 +1832,19 @@ dialog.popup::backdrop {
   margin-top: auto;
   justify-content: center;
   gap: 0.45rem;
+}
+
+.doctor-btn-primary {
+  background: linear-gradient(180deg, #0E7279 0%, #0C5F66 50%, #094E55 100%) !important;
+  border: 1px solid #073C42 !important;
+  color: #E2F0F0 !important;
+  box-shadow: 0 1px 3px rgba(7, 60, 66, 0.28), inset 0 1px 0 rgba(255, 255, 255, 0.18) !important;
+}
+
+.doctor-btn-primary:hover:not(:disabled) {
+  background: linear-gradient(180deg, #10838A 0%, #0E7279 50%, #0C5F66 100%) !important;
+  border-color: #B8860B !important;
+  transform: translateY(-1px);
 }
 
 .workspace-secondary-link {
@@ -1743,18 +1866,18 @@ dialog.popup::backdrop {
   gap: 0.75rem;
   margin: 1.5rem 0 0;
   padding: 0.9rem 1.15rem;
-  border: 1px solid #E0D8CE;
-  border-left: 4px solid #581825;
+  border: 1px solid #E2D0B0;
+  border-left: 4px solid #B76B00;
   border-radius: var(--border-radius-sm);
-  background: #FAF7F2;
-  color: #4B3539;
+  background: #FBF5EC;
+  color: #4A3000;
   box-shadow: var(--shadow-sm);
 }
 
 .workspace-entry-note svg {
   flex: 0 0 auto;
   margin-top: 0.1rem;
-  color: #581825;
+  color: #B76B00;
 }
 
 .workspace-entry-note p {
@@ -1777,11 +1900,11 @@ dialog.popup::backdrop {
   gap: 0.55rem;
   max-width: calc(100vw - 2rem);
   padding: 0.75rem 1rem;
-  border: 1px solid rgba(88, 24, 37, 0.3);
+  border: 1px solid rgba(183, 107, 0, 0.30);
   border-radius: 999px;
-  background: #FAF7F2;
-  box-shadow: 0 18px 38px rgba(43, 21, 25, 0.18);
-  color: #581825;
+  background: #FBF5EC;
+  box-shadow: 0 18px 38px rgba(44, 28, 0, 0.18);
+  color: #B76B00;
   font-size: 0.9rem;
   font-weight: 700;
   transform: translateX(-50%);
@@ -1811,53 +1934,83 @@ dialog.popup::backdrop {
 }
 
 :root[data-theme="dark"] .workspace-entry {
-  color: #F4F4F5;
-  background: #141416;
+  color: #FAF3E8;
+  background: #151008;
 }
 
-:root[data-theme="dark"] .workspace-entry-header h1 { color: #FAF7F2; text-shadow: 0 4px 18px rgba(0, 0, 0, 0.28); }
-:root[data-theme="dark"] .workspace-entry-header > p { color: #A1A1AA; }
+:root[data-theme="dark"] .workspace-entry-header h1 { color: #FAF3E8; text-shadow: 0 4px 18px rgba(0, 0, 0, 0.32); }
+:root[data-theme="dark"] .workspace-entry-header > p { color: #D4BD96; }
 :root[data-theme="dark"] .workspace-entry-kicker,
-:root[data-theme="dark"] .workspace-choice-label { border-color: rgba(224, 216, 206, 0.3); background: rgba(88, 24, 37, 0.35); color: #F5ECEE; }
+:root[data-theme="dark"] .workspace-choice-label.patient { border-color: rgba(224, 160, 60, 0.30); background: rgba(183, 107, 0, 0.28); color: #FFF0C8; }
+:root[data-theme="dark"] .workspace-choice-label.doctor { border-color: rgba(78, 205, 196, 0.35); background: rgba(15, 118, 110, 0.25); color: #4ECDC4; }
 
-:root[data-theme="dark"] .workspace-choice-card {
-  border-color: #3F3F46;
-  background: #1F1F23;
-  box-shadow: 0 20px 44px rgba(0, 0, 0, 0.35), inset 0 1px 0 rgba(255, 255, 255, 0.05);
+:root[data-theme="dark"] .workspace-choice-card.patient-choice-card {
+  border-color: #4A351C;
+  background: #20170E;
+  box-shadow: 0 20px 44px rgba(0, 0, 0, 0.40), inset 0 1px 0 rgba(255, 200, 80, 0.06);
 }
 
-:root[data-theme="dark"] .workspace-choice-card h2 { color: #FAF7F2; }
-:root[data-theme="dark"] .workspace-choice-card > p { color: #A1A1AA; }
-:root[data-theme="dark"] .workspace-choice-list { border-color: #27272A; }
-:root[data-theme="dark"] .workspace-choice-list li { color: #E4E4E7; }
-:root[data-theme="dark"] .workspace-choice-list svg { color: #D97706; }
-:root[data-theme="dark"] .workspace-choice-icon { background: rgba(88, 24, 37, 0.4); color: #F5ECEE; }
-:root[data-theme="dark"] .workspace-choice-icon.doctor { background: rgba(39, 39, 42, 0.6); color: #F4F4F5; }
-:root[data-theme="dark"] .workspace-secondary-link { color: #D4D4D8; }
+:root[data-theme="dark"] .workspace-choice-card.doctor-choice-card {
+  border-color: #1C4048;
+  background: #0E2226;
+  box-shadow: 0 20px 44px rgba(0, 0, 0, 0.40), inset 0 1px 0 rgba(78, 205, 196, 0.06);
+}
+
+:root[data-theme="dark"] .workspace-choice-card h2 { color: #FAF3E8; }
+:root[data-theme="dark"] .patient-choice-card > p { color: #D4BD96; }
+:root[data-theme="dark"] .doctor-choice-card > p { color: #A0C4C8; }
+
+:root[data-theme="dark"] .patient-choice-card .workspace-choice-list { border-color: #3D2B16; }
+:root[data-theme="dark"] .doctor-choice-card .workspace-choice-list { border-color: #1C4048; }
+
+:root[data-theme="dark"] .patient-choice-card .workspace-choice-list li { color: #FAF3E8; }
+:root[data-theme="dark"] .doctor-choice-card .workspace-choice-list li { color: #E2F0F0; }
+
+:root[data-theme="dark"] .patient-choice-card .workspace-choice-list svg { color: #E09020; }
+:root[data-theme="dark"] .doctor-choice-card .workspace-choice-list svg { color: #4ECDC4; }
+
+:root[data-theme="dark"] .workspace-choice-icon { background: rgba(183, 107, 0, 0.25); color: #FFD080; border-color: rgba(183, 107, 0, 0.35); }
+:root[data-theme="dark"] .workspace-choice-icon.doctor { background: rgba(15, 118, 110, 0.25); color: #4ECDC4; border-color: rgba(15, 118, 110, 0.35); }
+:root[data-theme="dark"] .workspace-secondary-link { color: #D4BD96; }
+
+:root[data-theme="dark"] .doctor-btn-primary {
+  background: linear-gradient(180deg, #10838A 0%, #0E7279 50%, #0C5F66 100%) !important;
+  border: 1px solid #1C4048 !important;
+  color: #E2F0F0 !important;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.3), inset 0 1px 0 rgba(255, 255, 255, 0.12) !important;
+}
+
+:root[data-theme="dark"] .doctor-btn-primary:hover:not(:disabled) {
+  background: linear-gradient(180deg, #149AA2 0%, #10838A 50%, #0E7279 100%) !important;
+  border-color: #E8C43A !important;
+  box-shadow: 0 2px 6px rgba(14, 114, 121, 0.4), inset 0 1px 0 rgba(255, 255, 255, 0.18) !important;
+  transform: translateY(-1px);
+}
 
 :root[data-theme="dark"] .workspace-entry-note {
-  border-color: #3F3F46;
-  background: #18181B;
-  color: #D4D4D8;
+  border-color: #4A351C;
+  border-left-color: #E09020;
+  background: #20170E;
+  color: #D4BD96;
 }
 
-:root[data-theme="dark"] .workspace-entry-note strong { color: #fbfcff; }
-:root[data-theme="dark"] .workspace-entry-note svg { color: #b6c4ff; }
-:root[data-theme="dark"] .workspace-switch-status { border-color: rgba(178, 194, 255, 0.28); background: rgba(18, 30, 73, 0.96); color: #eef2ff; }
+:root[data-theme="dark"] .workspace-entry-note strong { color: #FAF3E8; }
+:root[data-theme="dark"] .workspace-entry-note svg { color: #E09020; }
+:root[data-theme="dark"] .workspace-switch-status { border-color: rgba(224, 160, 60, 0.28); background: rgba(26, 16, 0, 0.96); color: #FFF0C8; }
 
 .auth-page {
-  --entry-canvas-start: #edf5ff;
-  --entry-canvas-mid: #f4f1ff;
-  --entry-canvas-end: #e7fbf6;
-  --entry-orb-primary: rgba(92, 112, 230, .2);
-  --entry-orb-secondary: rgba(88, 198, 213, .18);
-  --entry-card-start: rgba(255, 255, 255, .86);
-  --entry-card-end: rgba(242, 247, 255, .68);
-  --entry-card-border: rgba(255, 255, 255, .9);
-  --entry-control-start: rgba(255, 255, 255, .74);
-  --entry-control-end: rgba(245, 248, 255, .58);
-  --entry-control-border: rgba(98, 117, 205, .22);
-  --entry-label: #4656bd;
+  --entry-canvas-start: #FBF5E6;
+  --entry-canvas-mid: #FDF6EE;
+  --entry-canvas-end: #F2F9F8;
+  --entry-orb-primary: rgba(183, 107, 0, .18);
+  --entry-orb-secondary: rgba(15, 118, 110, .14);
+  --entry-card-start: rgba(255, 252, 242, .90);
+  --entry-card-end: rgba(255, 248, 232, .72);
+  --entry-card-border: rgba(255, 255, 255, .92);
+  --entry-control-start: rgba(255, 250, 235, .80);
+  --entry-control-end: rgba(255, 245, 220, .65);
+  --entry-control-border: rgba(183, 107, 0, .24);
+  --entry-label: #8C5800;
   position: relative;
   isolation: isolate;
   min-height: 100vh;
@@ -1944,26 +2097,26 @@ dialog.popup::backdrop {
 .auth-theme-toggle:active { transform: scale(.97); }
 
 :root[data-theme="dark"] .auth-page {
-  --entry-canvas-start: #070b1c;
-  --entry-canvas-mid: #11183c;
-  --entry-canvas-end: #071f29;
-  --entry-orb-primary: rgba(100, 112, 255, .26);
-  --entry-orb-secondary: rgba(64, 199, 208, .16);
-  --entry-card-start: rgba(20, 30, 73, .91);
-  --entry-card-end: rgba(12, 20, 54, .86);
-  --entry-card-border: rgba(165, 185, 255, .3);
-  --entry-control-start: rgba(37, 50, 105, .9);
-  --entry-control-end: rgba(20, 31, 75, .86);
-  --entry-control-border: rgba(118, 159, 255, .42);
-  --entry-label: #b8c7ff;
+  --entry-canvas-start: #151008;
+  --entry-canvas-mid: #1A130B;
+  --entry-canvas-end: #101717;
+  --entry-orb-primary: rgba(224, 144, 32, .22);
+  --entry-orb-secondary: rgba(20, 184, 166, .18);
+  --entry-card-start: rgba(34, 24, 14, .94);
+  --entry-card-end: rgba(24, 17, 10, .90);
+  --entry-card-border: rgba(224, 160, 60, .32);
+  --entry-control-start: rgba(46, 32, 18, .90);
+  --entry-control-end: rgba(32, 22, 14, .88);
+  --entry-control-border: rgba(224, 160, 60, .38);
+  --entry-label: #FFB84D;
 }
 :root[data-theme="dark"] .auth-card {
-  box-shadow: 0 30px 80px rgba(0, 0, 0, .42), inset 0 1px 0 rgba(218, 228, 255, .1) !important;
+  box-shadow: 0 30px 80px rgba(0, 0, 0, .48), inset 0 1px 0 rgba(224, 160, 60, .08) !important;
 }
 :root[data-theme="dark"] .auth-card-footer,
 :root[data-theme="dark"] .social-auth-divider::before,
-:root[data-theme="dark"] .social-auth-divider::after { border-color: rgba(165, 185, 255, .2); background-color: rgba(165, 185, 255, .2); }
-:root[data-theme="dark"] .auth-theme-toggle { box-shadow: 0 10px 26px rgba(0, 0, 0, .3), inset 0 1px 0 rgba(218, 228, 255, .1); }
+:root[data-theme="dark"] .social-auth-divider::after { border-color: rgba(224, 160, 60, .18); background-color: rgba(224, 160, 60, .18); }
+:root[data-theme="dark"] .auth-theme-toggle { box-shadow: 0 10px 26px rgba(0, 0, 0, .35), inset 0 1px 0 rgba(224, 160, 60, .08); }
 
 /* Assessment is a focused form workflow; results remain in the existing accessible popup. */
 .assessment-workflow { max-width: 980px; margin: 0 auto; display: grid; gap: var(--spacing-4); }
@@ -2880,4 +3033,148 @@ div[tabindex="0"]:focus-visible {
   letter-spacing: -0.02em;
 }
 
+/* ═══════════════════════════════════════════════════════════════════════
+   DOCTOR PORTAL THEME OVERRIDES — Deep Teal + Gold
+   ═══════════════════════════════════════════════════════════════════════ */
+.doctor-layout,
+.doctor-content {
+  --color-primary: var(--color-doctor-primary);
+  --color-primary-hover: var(--color-doctor-primary-hover);
+  --color-primary-muted: rgba(12, 95, 102, 0.10);
+}
 
+.doctor-nav-item.active {
+  color: var(--color-doctor-primary);
+  background: rgba(12, 95, 102, 0.12);
+  box-shadow: inset 3px 0 0 var(--color-doctor-primary);
+  font-weight: 600;
+}
+
+.doctor-sidebar-brand h2,
+.doctor-sidebar-brand .caption { color: var(--color-doctor-primary); }
+
+:root[data-theme="dark"] .doctor-layout,
+:root[data-theme="dark"] .doctor-content {
+  --color-primary: var(--color-doctor-primary);
+  --color-primary-hover: var(--color-doctor-primary-hover);
+  --color-primary-muted: rgba(78, 205, 196, 0.14);
+}
+
+:root[data-theme="dark"] .doctor-nav-item.active {
+  color: var(--color-doctor-primary);
+  background: rgba(78, 205, 196, 0.14);
+  box-shadow: inset 3px 0 0 var(--color-doctor-primary);
+}
+
+/* ═══════════════════════════════════════════════════════════════════════
+   DARK MODE GLOBAL TEXT & SURFACE CONTRAST ENHANCEMENTS
+   ═══════════════════════════════════════════════════════════════════════ */
+:root[data-theme="dark"] h1,
+:root[data-theme="dark"] h2,
+:root[data-theme="dark"] h3,
+:root[data-theme="dark"] h4,
+:root[data-theme="dark"] h5,
+:root[data-theme="dark"] h6 { color: #FAF3E8; }
+
+:root[data-theme="dark"] .card,
+:root[data-theme="dark"] .glass-surface,
+:root[data-theme="dark"] .solid-clinical-surface { 
+  background-color: #20170E;
+  border-color: #4A351C;
+  color: var(--color-text); 
+}
+
+:root[data-theme="dark"] .clinical-glass-card {
+  background: #20170E !important;
+  border-color: #4A351C !important;
+  color: #FAF3E8 !important;
+}
+
+:root[data-theme="dark"] .app-sidebar {
+  background: #191209 !important;
+  border-color: #3D2B16 !important;
+}
+
+:root[data-theme="dark"] .app-sidebar-header {
+  background: #20170E !important;
+  border-color: #3D2B16 !important;
+}
+
+:root[data-theme="dark"] .app-header {
+  background: rgba(25, 18, 9, 0.94) !important;
+  border-color: #3D2B16 !important;
+}
+
+:root[data-theme="dark"] input,
+:root[data-theme="dark"] select,
+:root[data-theme="dark"] textarea {
+  background-color: #191209;
+  border-color: #4A351C;
+  color: #FAF3E8;
+}
+
+:root[data-theme="dark"] input::placeholder,
+:root[data-theme="dark"] textarea::placeholder {
+  color: #B09875;
+}
+
+:root[data-theme="dark"] .dashboard-stat-card,
+:root[data-theme="dark"] .dashboard-stat-card span { color: var(--color-text); }
+
+:root[data-theme="dark"] .clinical-table td { border-color: #4A351C; color: #FAF3E8; }
+:root[data-theme="dark"] .clinical-table tr:nth-child(even) td { background: rgba(42, 30, 16, 0.50); }
+:root[data-theme="dark"] .clinical-table tr:hover td { background: rgba(54, 38, 20, 0.70); }
+
+/* Patient theme badges */
+.badge-amber {
+  background: rgba(183, 107, 0, 0.12) !important;
+  color: #8C4E00 !important;
+  border: 1px solid rgba(183, 107, 0, 0.30) !important;
+}
+:root[data-theme="dark"] .badge-amber {
+  background: rgba(224, 144, 32, 0.20) !important;
+  color: #FFB84D !important;
+  border: 1px solid rgba(224, 144, 32, 0.40) !important;
+}
+
+.badge-teal {
+  background: rgba(15, 118, 110, 0.12) !important;
+  color: #0F766E !important;
+  border: 1px solid rgba(15, 118, 110, 0.30) !important;
+}
+:root[data-theme="dark"] .badge-teal {
+  background: rgba(20, 184, 166, 0.20) !important;
+  color: #5EEAD4 !important;
+  border: 1px solid rgba(20, 184, 166, 0.40) !important;
+}
+
+/* Patient authentication layout */
+.patient-auth-layout {
+  width: 100%;
+  max-width: 1200px;
+  margin: 0 auto;
+  display: flex;
+  flex-direction: row;
+  align-items: stretch;
+  justify-content: center;
+  gap: var(--spacing-6);
+}
+@media (max-width: 860px) {
+  .patient-auth-layout {
+    flex-direction: column;
+    align-items: center;
+  }
+  .patient-auth-layout .auth-branding-panel {
+    display: none !important;
+  }
+}
+
+/* Doctor dark mode text */
+:root[data-theme="dark"] .doctor-layout h1,
+:root[data-theme="dark"] .doctor-layout h2,
+:root[data-theme="dark"] .doctor-layout h3,
+:root[data-theme="dark"] .doctor-layout h4 { color: #D4F0EE; }
+
+:root[data-theme="dark"] .doctor-layout .clinical-table td { border-color: #1C4048; color: #D4F0EE; }
+:root[data-theme="dark"] .doctor-layout .clinical-table tr:nth-child(even) td { background: rgba(14, 34, 38, 0.60); }
+:root[data-theme="dark"] .doctor-layout .clinical-table tr:hover td { background: rgba(20, 50, 56, 0.80); }
