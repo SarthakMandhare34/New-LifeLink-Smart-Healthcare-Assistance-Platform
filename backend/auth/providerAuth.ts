@@ -16,10 +16,20 @@ type ProviderIntent = "sign-in" | "register";                                   
 type StoredState = { state: string; nonce: string; expiresAt: number; intent: ProviderIntent }; // Data structure preserved across OAuth redirects
 type ProviderConfig = Pick<typeof ENV, "authPublicBaseUrl" | "googleOAuthClientId" | "googleOAuthClientSecret">; // Config subset needed for OAuth
 
+// Sanitizes base URL by ensuring hostnames without protocol are treated as https
+function normalizeBaseUrl(raw: string): string {
+  if (!raw) return "";
+  const trimmed = raw.trim();
+  if (!trimmed.startsWith("http://") && !trimmed.startsWith("https://")) {
+    return `https://${trimmed}`;
+  }
+  return trimmed;
+}
+
 // Helper to determine the sanitized, protocol-correct public URL for OAuth redirect callbacks
 function getPublicBaseUrl() {
   try {
-    const parsed = new URL(ENV.authPublicBaseUrl);                                         // Parse configured public origin
+    const parsed = new URL(normalizeBaseUrl(ENV.authPublicBaseUrl));                       // Parse configured public origin
     const isLocalhost = parsed.hostname === "localhost" || parsed.hostname === "127.0.0.1"; // Identify local development environments
     return (parsed.protocol === "https:" || isLocalhost) ? parsed.origin.replace(/\/$/, "") : ""; // Require HTTPS unless local
   } catch {
@@ -31,7 +41,7 @@ function getPublicBaseUrl() {
 export function googleAvailabilityFromConfig(config: { authPublicBaseUrl: string; googleOAuthClientId: string; googleOAuthClientSecret: string }) {
   let hasValidBase = false;
   try {
-    const url = new URL(config.authPublicBaseUrl);                                         // Check base URL validity
+    const url = new URL(normalizeBaseUrl(config.authPublicBaseUrl));                       // Check base URL validity
     const isLocalDev = (url.hostname === "localhost" || url.hostname === "127.0.0.1") && url.port !== "3000";
     hasValidBase = url.protocol === "https:" || isLocalDev;                                // Verify HTTPS or local dev port
   } catch { /* An empty or invalid public origin must keep Google unavailable. */ }
@@ -41,7 +51,7 @@ export function googleAvailabilityFromConfig(config: { authPublicBaseUrl: string
 // Generates the initial authorization URL to initiate the Google OAuth flow
 export function googleAuthorizationStartUrlFromConfig(config: ProviderConfig, intent: ProviderIntent = "sign-in") {
   if (!googleAvailabilityFromConfig(config)) return null;                                  // Abort if credentials or base URL missing
-  const startUrl = new URL("/api/auth/google", new URL(config.authPublicBaseUrl).origin);  // Mount on API route
+  const startUrl = new URL("/api/auth/google", new URL(normalizeBaseUrl(config.authPublicBaseUrl)).origin);  // Mount on API route
   if (intent === "register") startUrl.searchParams.set("intent", "register");              // Append registration intent parameter
   return startUrl.toString();                                                              // Return full URL string
 }
