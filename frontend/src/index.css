@@ -88,52 +88,52 @@
 }
 
 /* ═══════════════════════════════════════════════════════════════════════
-   PATIENT PORTAL — Amber + Teal Palette (Dark)
+   PATIENT PORTAL — Clinical Slate + Amber Palette (Dark)
    ═══════════════════════════════════════════════════════════════════════ */
 :root[data-theme="dark"] {
-  /* Patient Brand — Luminous Amber */
-  --color-primary: #E09020;          /* Bright amber for dark bg */
-  --color-primary-hover: #F5A030;
-  --color-primary-active: #FFB840;
-  --color-primary-muted: rgba(224, 144, 32, 0.16);
-  --color-secondary: #20170E;        /* Warm espresso card surface */
+  /* Patient Brand — Luminous Amber (High contrast on slate) */
+  --color-primary: #F5A030;          /* Bright amber for dark bg */
+  --color-primary-hover: #FFB840;
+  --color-primary-active: #E09020;
+  --color-primary-muted: rgba(245, 160, 48, 0.15);
+  --color-secondary: #1E293B;        /* Clinical slate-800 card surface */
 
   /* Patient Teal Accent - Dark */
-  --color-accent: #14B8A6;
-  --color-accent-hover: #2DD4BF;
-  --color-accent-muted: rgba(20, 184, 166, 0.16);
+  --color-accent: #2DD4BF;
+  --color-accent-hover: #5EEAD4;
+  --color-accent-muted: rgba(45, 212, 191, 0.15);
 
-  /* ── Doctor Portal — Deep Teal + Gold (Dark) ── */
-  --color-doctor-primary: #4ECDC4;   /* Bright teal for dark bg */
-  --color-doctor-primary-hover: #6ED9D2;
-  --color-doctor-accent: #E8C43A;    /* Bright gold */
-  --color-doctor-accent-hover: #FFD84D;
-  --color-doctor-bg: #071416;        /* Very dark teal-black */
-  --color-doctor-surface: #0E2226;
-  --color-doctor-border: #2E6D7A;
-  --color-doctor-input-border: #3F8A99;
-  --color-doctor-text: #D4F0EE;
+  /* ── Doctor Portal — Obsidian + Teal (Dark) ── */
+  --color-doctor-primary: #2DD4BF;   /* Bright teal for dark bg */
+  --color-doctor-primary-hover: #5EEAD4;
+  --color-doctor-accent: #FBBF24;    /* Clinical gold */
+  --color-doctor-accent-hover: #FCD34D;
+  --color-doctor-bg: #020817;        /* Obsidian clinical black */
+  --color-doctor-surface: #0F172A;   /* Slate-900 surface */
+  --color-doctor-border: #1E293B;    /* Slate-800 highly defined border */
+  --color-doctor-input-border: #334155; /* Slate-700 inputs */
+  --color-doctor-text: #F8FAFC;      /* Pure icy white text */
 
-  /* Backgrounds & Surfaces — Deep Espresso Night (Warm, not harsh black) */
-  --color-background: #151008;
-  --color-surface-white: #20170E;
-  --color-surface-glass: rgba(32, 23, 14, 0.85);
-  --color-surface-interactive: #2A1F13;
+  /* Backgrounds & Surfaces — Deep Clinical Slate (Cool, professional) */
+  --color-background: #090E17;       /* Very deep cool slate */
+  --color-surface-white: #0F172A;    /* Slate 900 base */
+  --color-surface-glass: rgba(15, 23, 42, 0.85); /* Frosty glass */
+  --color-surface-interactive: #1E293B; /* Slate 800 */
 
-  /* Typography — Luminous Warm Ivory (Crystal-clear readability in dark mode) */
-  --color-text: #FAF3E8;
-  --color-text-muted: #D4BD96;
-  --color-text-dark: #2C1C06;        /* Deep espresso for text on light pills/buttons */
+  /* Typography — Icy Whites & Crisp Silvers (Crystal-clear contrast) */
+  --color-text: #F8FAFC;             /* Pure icy white */
+  --color-text-muted: #94A3B8;       /* Silver slate-400 */
+  --color-text-dark: #0F172A;        /* Deep slate for text on light pills/buttons */
 
-  /* Borders — Warm amber-brown & Visible Contrast (WCAG AA Compliant) */
-  --color-border: #7E5C32;
-  --color-input-border: #9A7545;
-  --color-glass-border: #8A6436;
+  /* Borders — Crisp Slate Outlines (Sharp definition & WCAG AA) */
+  --color-border: #334155;           /* Slate 700 borders */
+  --color-input-border: #475569;     /* Slate 600 input borders */
+  --color-glass-border: rgba(255, 255, 255, 0.12); /* Silver glass reflection */
 
   /* Shadows */
-  --shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.40);
-  --shadow-md: 0 4px 8px rgba(0, 0, 0, 0.50);
-  --shadow-lg: 0 12px 24px rgba(0, 0, 0, 0.60);
+  --shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.50);
+  --shadow-md: 0 4px 8px rgba(0, 0, 0, 0.60);
+  --shadow-lg: 0 12px 24px rgba(0, 0, 0, 0.70);
 }
 
 * {
@@ -800,16 +800,17 @@ dialog.popup.closing::backdrop {
 }
 
 :root[data-theme="dark"] {
-  --liquid-edge: rgba(255, 210, 130, 0.22);
-  --liquid-edge-muted: rgba(200, 150, 50, 0.18);
-  --liquid-panel: rgba(30, 20, 0, 0.60);
-  --liquid-panel-strong: rgba(40, 28, 0, 0.80);
-  --liquid-panel-end: rgba(20, 14, 0, 0.82);
-  --liquid-edge-strong: rgba(230, 180, 80, 0.30);
-  --liquid-highlight: rgba(255, 200, 80, 0.07);
-  --liquid-sheen: rgba(200, 140, 30, 0.06);
-  --liquid-shadow: 0 24px 60px rgba(0, 0, 0, 0.40), 0 5px 18px rgba(100, 60, 0, 0.18);
-  --liquid-inset: inset 0 1px 0 rgba(255, 220, 120, 0.10), inset 0 -16px 28px rgba(150, 90, 10, 0.10);
+  /* Slate-Cool glass tokens (Crisp clinical dark mode) */
+  --liquid-edge: rgba(255, 255, 255, 0.18);
+  --liquid-edge-muted: rgba(148, 163, 184, 0.12);
+  --liquid-panel: rgba(15, 23, 42, 0.60);
+  --liquid-panel-strong: rgba(30, 41, 59, 0.75);
+  --liquid-panel-end: rgba(9, 14, 23, 0.85);
+  --liquid-edge-strong: rgba(255, 255, 255, 0.25);
+  --liquid-highlight: rgba(255, 255, 255, 0.06);
+  --liquid-sheen: rgba(148, 163, 184, 0.05);
+  --liquid-shadow: 0 24px 60px rgba(0, 0, 0, 0.50), 0 5px 18px rgba(0, 0, 0, 0.30);
+  --liquid-inset: inset 0 1px 0 rgba(255, 255, 255, 0.12), inset 0 -16px 28px rgba(0, 0, 0, 0.20);
 }
 
 body {
@@ -825,10 +826,10 @@ body {
 
 :root[data-theme="dark"] body {
   background:
-    radial-gradient(circle at 11% 8%, rgba(183, 107, 0, 0.20), transparent 28rem),
-    radial-gradient(circle at 88% 18%, rgba(15, 118, 110, 0.16), transparent 28rem),
-    radial-gradient(circle at 55% 95%, rgba(183, 107, 0, 0.12), transparent 26rem),
-    linear-gradient(135deg, #151008 0%, #1A130B 50%, #101717 100%);
+    radial-gradient(circle at 11% 8%, rgba(20, 184, 166, 0.08), transparent 28rem),
+    radial-gradient(circle at 88% 18%, rgba(14, 116, 144, 0.10), transparent 28rem),
+    radial-gradient(circle at 55% 95%, rgba(245, 160, 48, 0.06), transparent 26rem),
+    linear-gradient(135deg, #090E17 0%, #060910 50%, #0F172A 100%);
 }
 
 body::before,
@@ -3228,3 +3229,11 @@ div[tabindex="0"]:focus-visible {
 :root[data-theme="dark"] .doctor-layout .clinical-table td { border-color: #1C4048; color: #D4F0EE; }
 :root[data-theme="dark"] .doctor-layout .clinical-table tr:nth-child(even) td { background: rgba(14, 34, 38, 0.60); }
 :root[data-theme="dark"] .doctor-layout .clinical-table tr:hover td { background: rgba(20, 50, 56, 0.80); }
+
+/* Dark Mode Orbs */
+:root[data-theme="dark"] body::before {
+  background: radial-gradient(circle, rgba(20, 184, 166, 0.12) 0%, rgba(20, 184, 166, 0) 72%);
+}
+:root[data-theme="dark"] body::after {
+  background: radial-gradient(circle, rgba(14, 116, 144, 0.15) 0%, rgba(14, 116, 144, 0) 72%);
+}
