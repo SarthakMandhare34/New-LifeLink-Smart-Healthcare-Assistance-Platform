@@ -10,6 +10,8 @@
 [![TiDB Cloud / MySQL](https://img.shields.io/badge/TiDB%20Cloud-MySQL%208.0-E30C34?style=for-the-badge&logo=mysql&logoColor=white)](https://tidbcloud.com/)
 [![Tests Passing](https://img.shields.io/badge/Vitest-33%20Suites%20Passed-success?style=for-the-badge&logo=vitest&logoColor=white)](#-automated-testing--quality-verification)
 
+<div align="justify">
+
 > **LifeLink** is a comprehensive, full-stack healthcare assistance platform. It is designed to act as an intelligent medical assistant that helps patients figure out what is wrong with them, connect them to the right doctor in Mumbai, and provide secure, digital medical records. 
 > 
 > By combining Artificial Intelligence, real-time data syncing, and high-level security, LifeLink ensures that patients never get lost in the complex healthcare system again.
@@ -672,3 +674,6 @@ Insecure Direct Object Reference (IDOR) is the most common vulnerability in mode
 - **Dual Cookies:** We use `app_session_id` for patients and `doctor_session_id` for clinicians. They cannot be swapped or exchanged.
 
 By layering these defenses (Encryption, Strict Validation, Safe ORMs, and AI Guardrails), LifeLink achieves enterprise-grade security suitable for a real-world clinical environment.
+
+
+</div>
