@@ -207,8 +207,8 @@ export const DoctorLogin = () => {
                       borderRadius: '4px', 
                       minHeight: '44px', 
                       fontSize: '0.90rem',
-                      border: '1px solid var(--color-doctor-border)',
-                      background: 'var(--color-surface-interactive)',
+                      border: '1px solid var(--color-doctor-input-border, var(--color-doctor-border))',
+                      background: 'var(--color-surface-white)',
                       color: 'var(--color-doctor-text)'
                     }}
                   />
@@ -238,8 +238,8 @@ export const DoctorLogin = () => {
                       borderRadius: '4px', 
                       minHeight: '44px', 
                       fontSize: '0.90rem',
-                      border: '1px solid var(--color-doctor-border)',
-                      background: 'var(--color-surface-interactive)',
+                      border: '1px solid var(--color-doctor-input-border, var(--color-doctor-border))',
+                      background: 'var(--color-surface-white)',
                       color: 'var(--color-doctor-text)'
                     }}
                   />

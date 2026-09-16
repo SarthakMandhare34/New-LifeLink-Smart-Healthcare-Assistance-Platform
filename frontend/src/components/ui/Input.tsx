@@ -18,8 +18,7 @@ import React from 'react';                                                      
 export const Input = React.forwardRef<HTMLInputElement, React.InputHTMLAttributes<HTMLInputElement>>(
   ({ style, className = '', ...props }, ref) => {
     const baseStyle: React.CSSProperties = {
-      background: 'transparent',                                                                // Transparent backdrop
-      border: '1px solid transparent',
+      background: 'transparent',
       borderRadius: 'var(--border-radius-input)',
       padding: '10px var(--spacing-3)',
       fontSize: 'var(--text-body)',

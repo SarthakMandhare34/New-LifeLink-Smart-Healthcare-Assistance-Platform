@@ -180,7 +180,7 @@ export const PatientLogin = () => {
                 Patient Sign In
               </h1>
               <p style={{ color: 'var(--color-text-muted)', fontSize: '0.90rem', margin: 0 }}>
-                Enter your credentials to access your secure health portal
+                Access your health portal
               </p>
             </header>
 
@@ -227,8 +227,8 @@ export const PatientLogin = () => {
                       borderRadius: '4px', 
                       minHeight: '44px', 
                       fontSize: '0.90rem',
-                      border: '1px solid var(--color-border)',
-                      background: 'var(--color-background)',
+                      border: '1px solid var(--color-input-border, var(--color-border))',
+                      background: 'var(--color-surface-white)',
                       color: 'var(--color-text)'
                     }}
                   />
@@ -257,8 +257,8 @@ export const PatientLogin = () => {
                       borderRadius: '4px', 
                       minHeight: '44px', 
                       fontSize: '0.90rem',
-                      border: '1px solid var(--color-border)',
-                      background: 'var(--color-background)',
+                      border: '1px solid var(--color-input-border, var(--color-border))',
+                      background: 'var(--color-surface-white)',
                       color: 'var(--color-text)'
                     }}
                   />

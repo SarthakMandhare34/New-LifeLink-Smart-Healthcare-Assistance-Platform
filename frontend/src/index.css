@@ -61,7 +61,8 @@
   --color-doctor-accent-hover: #D4A00E;
   --color-doctor-bg: #F0F8F8;        /* Soft teal-tinted off-white */
   --color-doctor-surface: #E2F0F0;
-  --color-doctor-border: #B0D4D4;
+  --color-doctor-border: #669EA0;
+  --color-doctor-input-border: #487F82;
   --color-doctor-text: #0A2E30;
 
   /* Backgrounds & Surfaces — Warm Ivory */
@@ -75,9 +76,10 @@
   --color-text-muted: #745228;
   --color-text-dark: #2C1C06;
 
-  /* Borders — Warm Honey */
-  --color-border: #E2D0B0;
-  --color-glass-border: #EDD9BA;
+  /* Borders — Warm Honey & Clear Contrast (WCAG AA Compliant) */
+  --color-border: #C8B28E;
+  --color-input-border: #9E7B47;
+  --color-glass-border: #D8C3A3;
 
   /* Shadows */
   --shadow-sm: 0 1px 3px rgba(44, 28, 0, 0.07), 0 1px 2px rgba(44, 28, 0, 0.04);
@@ -108,7 +110,8 @@
   --color-doctor-accent-hover: #FFD84D;
   --color-doctor-bg: #071416;        /* Very dark teal-black */
   --color-doctor-surface: #0E2226;
-  --color-doctor-border: #1C4048;
+  --color-doctor-border: #2E6D7A;
+  --color-doctor-input-border: #3F8A99;
   --color-doctor-text: #D4F0EE;
 
   /* Backgrounds & Surfaces — Deep Espresso Night (Warm, not harsh black) */
@@ -122,9 +125,10 @@
   --color-text-muted: #D4BD96;
   --color-text-dark: #2C1C06;        /* Deep espresso for text on light pills/buttons */
 
-  /* Borders — Warm amber-brown */
-  --color-border: #4A351C;
-  --color-glass-border: #5A4022;
+  /* Borders — Warm amber-brown & Visible Contrast (WCAG AA Compliant) */
+  --color-border: #7E5C32;
+  --color-input-border: #9A7545;
+  --color-glass-border: #8A6436;
 
   /* Shadows */
   --shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.40);
@@ -998,7 +1002,7 @@ dialog.popup {
 input:not([type="checkbox"]):not([type="radio"]):not([type="range"]),
 textarea,
 select {
-  border: 1px solid var(--color-border) !important;
+  border: 1px solid var(--color-input-border, var(--color-border)) !important;
   border-radius: var(--border-radius-input);
   background: var(--color-surface-white) !important;
   color: var(--color-text);
@@ -1010,7 +1014,7 @@ select {
 input:not([type="checkbox"]):not([type="radio"]):not([type="range"]):hover:not(:focus),
 textarea:hover:not(:focus),
 select:hover:not(:focus) {
-  border-color: #94A3B8 !important;
+  border-color: var(--color-primary) !important;
   box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.06);
 }
 
@@ -1021,6 +1025,52 @@ select:focus {
   border-color: var(--color-primary) !important;
   box-shadow: 0 0 0 3px var(--color-primary-muted), inset 0 1px 1px rgba(0, 0, 0, 0.03) !important;
   outline: none;
+}
+
+/* Doctor portal input outlines */
+.doctor-auth-page .liquid-input,
+.doctor-auth-page input:not([type="checkbox"]):not([type="radio"]):not([type="range"]),
+.doctor-auth-page textarea,
+.doctor-auth-page select,
+.doctor-portal .liquid-input,
+.doctor-portal input:not([type="checkbox"]):not([type="radio"]):not([type="range"]),
+.doctor-portal textarea,
+.doctor-portal select {
+  border-color: var(--color-doctor-input-border, var(--color-doctor-border)) !important;
+  background: var(--color-surface-white) !important;
+  color: var(--color-doctor-text) !important;
+}
+
+.doctor-auth-page .liquid-input:hover:not(:focus),
+.doctor-auth-page input:not([type="checkbox"]):not([type="radio"]):not([type="range"]):hover:not(:focus),
+.doctor-portal .liquid-input:hover:not(:focus),
+.doctor-portal input:not([type="checkbox"]):not([type="radio"]):not([type="range"]):hover:not(:focus) {
+  border-color: var(--color-doctor-primary) !important;
+}
+
+.doctor-auth-page .liquid-input:focus,
+.doctor-auth-page input:not([type="checkbox"]):not([type="radio"]):not([type="range"]):focus,
+.doctor-portal .liquid-input:focus,
+.doctor-portal input:not([type="checkbox"]):not([type="radio"]):not([type="range"]):focus {
+  border-color: var(--color-doctor-primary) !important;
+  box-shadow: 0 0 0 3px rgba(12, 95, 102, 0.22), inset 0 1px 1px rgba(0, 0, 0, 0.03) !important;
+}
+
+:root[data-theme="dark"] .doctor-auth-page .liquid-input,
+:root[data-theme="dark"] .doctor-auth-page input:not([type="checkbox"]):not([type="radio"]):not([type="range"]),
+:root[data-theme="dark"] .doctor-portal .liquid-input,
+:root[data-theme="dark"] .doctor-portal input:not([type="checkbox"]):not([type="radio"]):not([type="range"]) {
+  border-color: var(--color-doctor-input-border, var(--color-doctor-border)) !important;
+  background: #0E2226 !important;
+  color: var(--color-doctor-text) !important;
+}
+
+:root[data-theme="dark"] .doctor-auth-page .liquid-input:focus,
+:root[data-theme="dark"] .doctor-auth-page input:not([type="checkbox"]):not([type="radio"]):not([type="range"]):focus,
+:root[data-theme="dark"] .doctor-portal .liquid-input:focus,
+:root[data-theme="dark"] .doctor-portal input:not([type="checkbox"]):not([type="radio"]):not([type="range"]):focus {
+  border-color: var(--color-doctor-primary) !important;
+  box-shadow: 0 0 0 3px rgba(78, 205, 196, 0.28), inset 0 1px 1px rgba(0, 0, 0, 0.03) !important;
 }
 
 .app-sidebar,
@@ -1570,7 +1620,7 @@ dialog.popup::backdrop {
 
 :root[data-theme="dark"] .doctor-auth-page .clinical-glass-card {
   background: #0E2226 !important;
-  border: 1px solid #1C4850 !important;
+  border: 1px solid var(--color-doctor-border) !important;
   box-shadow: 0 12px 36px rgba(0, 0, 0, 0.5) !important;
 }
 
@@ -1682,7 +1732,7 @@ dialog.popup::backdrop {
 .workspace-choice-label {
   display: inline-flex;
   align-items: center;
-  border: 1px solid #E2D0B0;
+  border: 1px solid var(--color-border);
   border-radius: var(--border-radius-sm);
   background: #FEF0D0;
   color: #8C5800;
@@ -1720,7 +1770,7 @@ dialog.popup::backdrop {
   flex-direction: column;
   padding: clamp(1.25rem, 2.5vw, 1.85rem);
   background: #FBF5EC;
-  border: 1px solid #E2D0B0;
+  border: 1px solid var(--color-border);
   border-radius: var(--border-radius-md);
   box-shadow: 0 1px 3px rgba(44, 28, 0, 0.06);
   transition: transform 180ms var(--ease-out), box-shadow 180ms var(--ease-out), border-color 180ms ease;
@@ -1728,7 +1778,7 @@ dialog.popup::backdrop {
 
 .workspace-choice-card.doctor-choice-card {
   background: #F0F8F8;
-  border-color: #B0D4D4;
+  border-color: var(--color-doctor-border);
 }
 
 .workspace-choice-card.patient-choice-card:hover {
@@ -1758,18 +1808,18 @@ dialog.popup::backdrop {
   height: 2.5rem;
   border-radius: var(--border-radius-sm);
   background: rgba(183, 107, 0, 0.10);
-  border: 1px solid #E2D0B0;
+  border: 1px solid var(--color-border);
   color: #B76B00;
 }
 
 .workspace-choice-icon.doctor {
   background: rgba(12, 95, 102, 0.10);
-  border-color: #B0D4D4;
+  border-color: var(--color-doctor-border);
   color: #0C5F66;
 }
 
 .workspace-choice-label.doctor {
-  border-color: #B0D4D4;
+  border-color: var(--color-doctor-border);
   background: #E2F0F0;
   color: #0C5F66;
 }
@@ -1866,7 +1916,7 @@ dialog.popup::backdrop {
   gap: 0.75rem;
   margin: 1.5rem 0 0;
   padding: 0.9rem 1.15rem;
-  border: 1px solid #E2D0B0;
+  border: 1px solid var(--color-border);
   border-left: 4px solid #B76B00;
   border-radius: var(--border-radius-sm);
   background: #FBF5EC;
@@ -1945,13 +1995,13 @@ dialog.popup::backdrop {
 :root[data-theme="dark"] .workspace-choice-label.doctor { border-color: rgba(78, 205, 196, 0.35); background: rgba(15, 118, 110, 0.25); color: #4ECDC4; }
 
 :root[data-theme="dark"] .workspace-choice-card.patient-choice-card {
-  border-color: #4A351C;
+  border-color: var(--color-border);
   background: #20170E;
   box-shadow: 0 20px 44px rgba(0, 0, 0, 0.40), inset 0 1px 0 rgba(255, 200, 80, 0.06);
 }
 
 :root[data-theme="dark"] .workspace-choice-card.doctor-choice-card {
-  border-color: #1C4048;
+  border-color: var(--color-doctor-border);
   background: #0E2226;
   box-shadow: 0 20px 44px rgba(0, 0, 0, 0.40), inset 0 1px 0 rgba(78, 205, 196, 0.06);
 }
@@ -2778,7 +2828,7 @@ input[type="tel"],
 select,
 textarea {
   background: var(--color-surface-white);
-  border: 1px solid var(--color-border);
+  border: 1px solid var(--color-input-border, var(--color-border));
   border-radius: var(--border-radius-input);
   padding: 11px 16px;
   font-size: var(--text-body);
@@ -2795,7 +2845,7 @@ input[type="email"]:hover,
 input[type="password"]:hover,
 select:hover,
 textarea:hover {
-  border-color: #94A3B8;
+  border-color: var(--color-primary);
   box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.06);
 }
 
@@ -2816,8 +2866,8 @@ textarea:focus {
 :root[data-theme="dark"] input[type="password"],
 :root[data-theme="dark"] select,
 :root[data-theme="dark"] textarea {
-  background: #18181B;
-  border-color: #3F3F46;
+  background: #18120A;
+  border-color: var(--color-input-border, var(--color-border));
   color: var(--color-text);
   box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.3);
 }
@@ -3086,7 +3136,7 @@ div[tabindex="0"]:focus-visible {
 
 :root[data-theme="dark"] .clinical-glass-card {
   background: #20170E !important;
-  border-color: #4A351C !important;
+  border-color: var(--color-border) !important;
   color: #FAF3E8 !important;
 }
 
@@ -3109,7 +3159,7 @@ div[tabindex="0"]:focus-visible {
 :root[data-theme="dark"] select,
 :root[data-theme="dark"] textarea {
   background-color: #191209;
-  border-color: #4A351C;
+  border-color: var(--color-input-border, var(--color-border)) !important;
   color: #FAF3E8;
 }
 

@@ -202,7 +202,7 @@ export const DoctorResetPassword = () => {
                     onChange={(event) => setEmail(event.target.value)}
                     autoComplete="username"
                     required
-                    style={{ width: '100%', paddingLeft: '42px', borderRadius: '4px', minHeight: '44px', border: '1px solid var(--color-border)', fontSize: '0.90rem', background: 'var(--color-surface-interactive)', color: 'var(--color-text)' }}
+                    style={{ width: '100%', paddingLeft: '42px', borderRadius: '4px', minHeight: '44px', border: '1px solid var(--color-doctor-input-border, var(--color-doctor-border))', fontSize: '0.90rem', background: 'var(--color-surface-white)', color: 'var(--color-doctor-text)' }}
                   />
                 </div>
               </div>
@@ -223,7 +223,7 @@ export const DoctorResetPassword = () => {
                     onChange={(event) => setPassword(event.target.value)}
                     autoComplete="new-password"
                     required
-                    style={{ width: '100%', paddingLeft: '42px', borderRadius: '4px', minHeight: '44px', border: '1px solid var(--color-border)', fontSize: '0.90rem', background: 'var(--color-surface-interactive)', color: 'var(--color-text)' }}
+                    style={{ width: '100%', paddingLeft: '42px', borderRadius: '4px', minHeight: '44px', border: '1px solid var(--color-doctor-input-border, var(--color-doctor-border))', fontSize: '0.90rem', background: 'var(--color-surface-white)', color: 'var(--color-doctor-text)' }}
                   />
                 </div>
               </div>
@@ -243,7 +243,7 @@ export const DoctorResetPassword = () => {
                     onChange={(event) => setProvisioningCode(event.target.value)}
                     autoComplete="off"
                     required
-                    style={{ width: '100%', paddingLeft: '42px', borderRadius: '4px', minHeight: '44px', border: '1px solid var(--color-border)', fontSize: '0.90rem', background: 'var(--color-surface-interactive)', color: 'var(--color-text)' }}
+                    style={{ width: '100%', paddingLeft: '42px', borderRadius: '4px', minHeight: '44px', border: '1px solid var(--color-doctor-input-border, var(--color-doctor-border))', fontSize: '0.90rem', background: 'var(--color-surface-white)', color: 'var(--color-doctor-text)' }}
                   />
                 </div>
               </div>
