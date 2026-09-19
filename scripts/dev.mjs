@@ -132,12 +132,13 @@ async function startProcesses() {
 
   const childEnv = { 
     ...devEnv, 
+    NODE_ENV: "development",
     PORT: String(API_PORT),                                      // Pass selected port to Express backend
     VITE_API_PORT: String(API_PORT),                             // Pass backend port to Vite proxy config
     BROWSER: process.env.BROWSER || "chrome",                    // Set default browser for auto-open
   };
 
-  const backendCmd = "cross-env NODE_ENV=development tsx watch backend/_core/index.ts"; // Command to watch & run backend
+  const backendCmd = "node node_modules/tsx/dist/cli.mjs watch backend/_core/index.ts"; // Direct local TSX execution bypassing cross-env
   const frontendCmd = `node node_modules/vite/bin/vite.js --port ${FRONTEND_PORT}`; // Direct local Vite execution bypassing npx latency
 
   // 1. Spawn Backend Process
