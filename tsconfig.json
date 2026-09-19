@@ -1,6 +1,6 @@
 {
   "include": ["frontend/src/**/*", "backend/**/*", "database/**/*", "shared/**/*", "scripts/**/*"],
-  "exclude": ["node_modules", "build", "dist", "**/*.test.ts"],
+  "exclude": ["node_modules", "build", "dist", "**/*.test.ts", "**/*.test.tsx"],
   "compilerOptions": {
     "incremental": true,
     "tsBuildInfoFile": "./node_modules/typescript/tsbuildinfo",
