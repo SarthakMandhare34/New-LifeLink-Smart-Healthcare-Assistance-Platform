@@ -1,18 +1,15 @@
 # 🏥 LifeLink — Smart Healthcare Assistance Platform
 
-[![Live Deployment](https://img.shields.io/badge/Render-Live%20Deployment-00C4CC?style=for-the-badge&logo=render&logoColor=white)](https://lifelink-healthcare.onrender.com)
 [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg?style=for-the-badge)](LICENSE)
 [![Node.js](https://img.shields.io/badge/Node.js-v22%2B-339933?style=for-the-badge&logo=node.js&logoColor=white)](https://nodejs.org/)
 [![React 19](https://img.shields.io/badge/React-19-61dafb?style=for-the-badge&logo=react&logoColor=black)](https://react.dev/)
 [![TypeScript](https://img.shields.io/badge/TypeScript-5.9-3178c6?style=for-the-badge&logo=typescript&logoColor=white)](https://www.typescriptlang.org/)
 [![Tailwind CSS](https://img.shields.io/badge/Tailwind-v4-38bdf8?style=for-the-badge&logo=tailwindcss&logoColor=white)](https://tailwindcss.com/)
 [![Google Gemini AI](https://img.shields.io/badge/Google%20Gemini-AI-4285F4?style=for-the-badge&logo=google&logoColor=white)](https://ai.google.dev/)
-[![TiDB Cloud](https://img.shields.io/badge/TiDB%20Cloud-MySQL%208.0-E30C34?style=for-the-badge&logo=mysql&logoColor=white)](https://tidbcloud.com/)
+[![MySQL](https://img.shields.io/badge/MySQL-8.0-4479A1?style=for-the-badge&logo=mysql&logoColor=white)](https://www.mysql.com/)
 [![Tests Passing](https://img.shields.io/badge/Vitest-50%20Tests%20Passed-success?style=for-the-badge&logo=vitest&logoColor=white)](#-automated-testing)
 
-**LifeLink** is a full-stack, production-ready healthcare assistance platform built for Mumbai, India. It connects patients with **52 verified doctors** through an **AI-powered symptom triage engine** (Google Gemini), an **interactive Mumbai railway clinic map** (Leaflet + OpenStreetMap), and a **cryptographically secured digital prescription system** (SHA-256).
-
-🌐 **Live Application:** [https://lifelink-healthcare.onrender.com](https://lifelink-healthcare.onrender.com)
+**LifeLink** is a full-stack healthcare assistance platform built for **Mumbai, India**. It connects patients with **52 verified doctors** through an **AI-powered symptom triage engine** (Google Gemini), an **interactive Mumbai railway clinic map** (Leaflet + OpenStreetMap), and a **cryptographically secured digital prescription system** (SHA-256).
 
 ---
 
@@ -25,18 +22,17 @@
 5. [🩺 Mumbai Doctor Directory (52 Doctors)](#-mumbai-doctor-directory-52-doctors)
 6. [🔐 Environment Configuration](#-environment-configuration)
 7. [🚀 Local Development Setup (Step-by-Step)](#-local-development-setup-step-by-step)
-8. [☁️ Cloud Deployment Guide (Render + TiDB)](#️-cloud-deployment-guide-render--tidb)
-9. [📦 NPM Script Reference](#-npm-script-reference)
-10. [🗺️ Application Routes](#️-application-routes)
-11. [📁 Project Structure](#-project-structure)
-12. [🗄️ Database Schema (13 Tables)](#️-database-schema-13-tables)
-13. [🧪 Automated Testing](#-automated-testing)
-14. [🔧 Troubleshooting](#-troubleshooting)
-15. [📖 Real-World Usage Scenarios](#-real-world-usage-scenarios)
-16. [💡 Technology Rationale](#-technology-rationale)
-17. [🗓️ Future Roadmap](#️-future-roadmap)
-18. [👥 Contributors](#-contributors)
-19. [📄 License](#-license)
+8. [📦 NPM Script Reference](#-npm-script-reference)
+9. [🗺️ Application Routes](#️-application-routes)
+10. [📁 Project Structure](#-project-structure)
+11. [🗄️ Database Schema (13 Tables)](#️-database-schema-13-tables)
+12. [🧪 Automated Testing](#-automated-testing)
+13. [🔧 Troubleshooting](#-troubleshooting)
+14. [📖 Real-World Usage Scenarios](#-real-world-usage-scenarios)
+15. [💡 Technology Rationale](#-technology-rationale)
+16. [🗓️ Future Roadmap](#️-future-roadmap)
+17. [👥 Contributors](#-contributors)
+18. [📄 License](#-license)
 
 ---
 
@@ -72,14 +68,14 @@ Paper prescriptions can be lost, damaged, or physically altered. Illegible handw
 | 📝 Language | **TypeScript 5.9** | End-to-end type safety across the full stack |
 | 🖧 Backend Runtime | **Node.js v22 + Express.js** | HTTP server and API request handling |
 | 🔗 API Layer | **tRPC v11** | Type-safe remote procedure calls (zero API contracts to maintain) |
-| 🗄️ Database | **MySQL 8.0 on TiDB Cloud Serverless** | Scalable, distributed relational data storage |
+| 🗄️ Database | **MySQL 8.0 (Local)** | Relational data storage with full ACID compliance |
 | 📊 ORM | **Drizzle ORM** | Type-safe SQL query building and schema management |
 | 🤖 AI Engine | **Google Gemini (Flash models)** | Clinical symptom analysis and urgency classification |
 | 🔐 Authentication | **JWT + HTTP-Only Cookies** | Secure dual-session management (patient + doctor) |
 | 🗺️ Maps | **Leaflet + OpenStreetMap** | Interactive clinic map locked to Mumbai Metropolitan Region |
 | ⚡ Real-Time | **Server-Sent Events (SSE)** | Live appointment and prescription push notifications |
 | 🧪 Testing | **Vitest** | 50 tests across 6 suites covering core business logic |
-| 🚀 Deployment | **Render (Web Service)** | Cloud hosting with auto-deploy on GitHub push |
+| 🚀 Runtime | **Local Development** | Runs on `localhost` via Vite (frontend) + Express (backend) |
 
 ---
 
@@ -331,7 +327,7 @@ cp .env.example .env
 | `GEMINI_API_KEY` | Google AI Studio API key (starts with `AIzaSy`) | Get from [aistudio.google.com](https://aistudio.google.com/) |
 | `GOOGLE_OAUTH_CLIENT_ID` | Google OAuth client ID | From [Google Cloud Console](https://console.cloud.google.com/) → APIs & Services → Credentials |
 | `GOOGLE_OAUTH_CLIENT_SECRET` | Google OAuth client secret | Same as above |
-| `AUTH_PUBLIC_BASE_URL` | Base URL of the running application | `http://localhost:5173` (local) or your Render URL (production) |
+| `AUTH_PUBLIC_BASE_URL` | Base URL of the running application | `http://localhost:5173` |
 
 ### 📝 Example `.env` File
 
@@ -360,7 +356,7 @@ Before you begin, ensure you have:
 | ✅ **Node.js v22+** | Run `node -v` in terminal | [nodejs.org](https://nodejs.org/) |
 | ✅ **npm** (comes with Node) | Run `npm -v` in terminal | Included with Node.js |
 | ✅ **Git** | Run `git --version` in terminal | [git-scm.com](https://git-scm.com/) |
-| ✅ **A MySQL Database** | — | Free option: [tidbcloud.com](https://tidbcloud.com/) (no local install needed) |
+| ✅ **MySQL 8.0+** | Run `mysql --version` in terminal | [mysql.com](https://dev.mysql.com/downloads/mysql/) or via XAMPP / WAMP / MAMP |
 
 ### Step 1️⃣ — Clone the Repository
 
@@ -454,51 +450,6 @@ Press `Ctrl + C` in the terminal where `npm run dev` is running.
 
 ---
 
-## ☁️ Cloud Deployment Guide (Render + TiDB)
-
-This project is pre-configured for deployment to **Render** (application hosting) and **TiDB Cloud** (database hosting). The `render.yaml` file at the project root is an Infrastructure-as-Code blueprint.
-
-### Step 1️⃣ — Push Code to GitHub
-
-Ensure your complete codebase is in a GitHub repository. Render connects directly to GitHub to pull the source code.
-
-### Step 2️⃣ — Create a TiDB Cloud Database
-
-1. Sign up at [tidbcloud.com](https://tidbcloud.com)
-2. Create a **Serverless Cluster** in your preferred region (e.g., AWS Singapore)
-3. Click **Connect** → select **Node.js** → click **Generate Password**
-4. Copy the full connection string
-
-### Step 3️⃣ — Deploy on Render
-
-1. Log into [dashboard.render.com](https://dashboard.render.com)
-2. Click **New +** → select **Blueprint**
-3. Connect your GitHub account and select the LifeLink repository
-4. Render reads `render.yaml` and configures everything automatically
-
-### Step 4️⃣ — Add Environment Variables on Render
-
-Enter the following in the Render dashboard:
-
-| Variable | Value |
-|:---|:---|
-| `DATABASE_URL` | Your TiDB connection string |
-| `GEMINI_API_KEY` | Your Google AI Studio key |
-| `GOOGLE_OAUTH_CLIENT_ID` | From Google Cloud Console |
-| `GOOGLE_OAUTH_CLIENT_SECRET` | From Google Cloud Console |
-| `AUTH_PUBLIC_BASE_URL` | Your Render URL (e.g., `https://lifelink-healthcare.onrender.com`) |
-
-> ⚠️ **Important:** `AUTH_PUBLIC_BASE_URL` must be your Render URL, NOT `localhost`.
-
-### Step 5️⃣ — Authorize Production URL in Google Cloud
-
-1. Go to [Google Cloud Console](https://console.cloud.google.com/) → edit your OAuth client
-2. Under **Authorized JavaScript origins** → add your Render URL
-3. Under **Authorized redirect URIs** → add: `https://your-render-url.onrender.com/api/auth/google/callback`
-4. Save (changes propagate in ~5 minutes)
-
----
-
 ## 📦 NPM Script Reference
 
 All available commands defined in `package.json`:
@@ -507,7 +458,7 @@ All available commands defined in `package.json`:
 |:---|:---|
 | `npm run dev` | 🚀 Starts Vite frontend (port 5173) + Express backend (port 4000) concurrently |
 | `npm run build` | 📦 Compiles React frontend to `dist/public/` and backend to `dist/index.js` |
-| `npm start` | ▶️ Starts the compiled production server (what Render runs) |
+| `npm start` | ▶️ Starts the compiled production server locally |
 | `npm test` | 🧪 Runs all 50 Vitest tests across 6 suites |
 | `npm run check` | ✅ TypeScript type-check (`tsc --noEmit`) — reports errors without building |
 | `npm run format` | 🎨 Formats all source files using Prettier |
@@ -633,7 +584,6 @@ LifeLink-Smart-Healthcare-Assistance-Platform/
 │   └── init-db.ts                       # Safe database initialization helper
 │
 ├── .env.example                         # 📝 Template for required environment variables
-├── render.yaml                          # ☁️ Render cloud deployment blueprint
 ├── package.json                         # 📦 NPM scripts and dependency list
 ├── tsconfig.json                        # TypeScript compiler configuration
 ├── vite.config.ts                       # Vite build and proxy configuration
@@ -704,8 +654,8 @@ Your `.env` file is missing `GOOGLE_OAUTH_CLIENT_ID` or `GOOGLE_OAUTH_CLIENT_SEC
 
 Google rejected the login because the redirect URL is not approved. In the Google Cloud Console, add the correct URI to **Authorized redirect URIs**:
 
-- 🖥️ **Local:** `http://localhost:5173/api/auth/google/callback`
-- ☁️ **Production:** `https://your-render-url.onrender.com/api/auth/google/callback`
+- 🖥️ **Authorized Redirect URI:** `http://localhost:5173/api/auth/google/callback`
+- 🌐 **Authorized JavaScript Origins:** `http://localhost:5173`
 
 ---
 
@@ -719,9 +669,9 @@ Your `GEMINI_API_KEY` is missing or invalid. Keys from Google AI Studio begin wi
 
 The backend cannot reach the database. Verify:
 
-1. `DATABASE_URL` in your `.env` is correct
-2. If using TiDB Cloud, confirm the cluster is **Active** (not Paused) from the dashboard
-3. If using local MySQL, ensure the MySQL service is running
+1. `DATABASE_URL` in your `.env` is correct (e.g., `mysql://root:password@localhost:3306/lifelink_db`)
+2. Ensure your local MySQL service is running (via MySQL Command Line, MySQL Workbench, XAMPP, or Windows Services)
+3. Ensure the database `lifelink_db` has been created (`CREATE DATABASE IF NOT EXISTS lifelink_db;`)
 
 ---
 
@@ -779,9 +729,9 @@ LifeLink is a multi-screen application with dozens of interactive components sha
 
 Vite uses native ES Modules during development, meaning it processes only the currently-edited file instead of re-bundling the entire codebase. For a project of this size, this reduces rebuild time from **tens of seconds to milliseconds**.
 
-### Why TiDB Serverless instead of standard hosted MySQL?
+### Why MySQL 8.0?
 
-A standard MySQL instance requires pre-provisioning a fixed server. TiDB Serverless scales horizontally on demand and **scales to zero cost** when idle — ideal for a project with high traffic during demos and minimal traffic otherwise.
+MySQL is the world's most widely used open-source relational database. It provides **full ACID compliance**, **strong foreign key support**, and seamless integration with Drizzle ORM. Running locally gives you full control over your data with zero external dependencies or cloud costs.
 
 ### Why Google Gemini instead of other AI providers?
 
