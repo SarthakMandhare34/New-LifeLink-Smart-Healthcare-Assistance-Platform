@@ -1,6 +1,6 @@
 /**
  * ============================================================================
- * CUSTOM REACT HOOKS
+ * CUSTOM REACT HOOKS (usePatientRealtime)
  * ============================================================================
  * 
  * WHY THIS FILE IS SPECIAL:
@@ -8,7 +8,7 @@
  * For example, the auto-logout hook lives here. It constantly monitors mouse movement,
  * and if a doctor leaves their computer for 5 minutes, it logs them out to protect patient data.
  */
-import { useEffect } from "react";                                                            // React effect hook for SSE lifecycle
+import { useEffect, useState } from "react";                                                    // React hooks
 import { trpc } from "../lib/trpc";                                                             // Type-safe client tRPC bridge
 
 // Real-time notification payload received by patient SSE listener
@@ -19,31 +19,51 @@ type PatientRealtimePayload = {
   createdAt: string;                                                                            // Event timestamp
 };
 
+export type RealtimeConnectionStatus = "connecting" | "connected" | "disconnected";
+
 // =========================================================================================
 // REAL-TIME SERVER-SENT EVENTS (SSE) HOOK FOR PATIENT PORTAL
 // Establishes a persistent SSE stream to `/api/patient-events`.
-// Whenever a doctor confirms an appointment, issues a new prescription, or updates medical records,
-// this hook receives the event and intelligently invalidates exact cached queries so the patient
-// sees the update in real-time without needing to manually refresh their browser.
+// Eliminates connection dropouts: listens for reconnects and instantly re-syncs
+// doctor availability, appointment slots, and map discovery in true real-time.
 // =========================================================================================
 export function usePatientRealtime(enabled: boolean) {
   const utils = trpc.useUtils();                                                                // tRPC cache manager
+  const [status, setStatus] = useState<RealtimeConnectionStatus>("connecting");
 
   useEffect(() => {
     // Guard against SSR or disabled state
     if (!enabled || typeof window === "undefined" || !("EventSource" in window)) return;
 
+    setStatus("connecting");
     const source = new EventSource("/api/patient-events");                                      // Open same-origin SSE connection
+
+    // Reconnection and connection established handler: eliminates stale data after network dropouts
+    source.onopen = () => {
+      setStatus("connected");
+      void utils.patientDashboard.summary.invalidate();
+      void utils.patientNotification.list.invalidate();
+      void utils.patientAppointment.list.invalidate();
+      void utils.patientAppointment.getDoctorAvailability.invalidate();
+      void utils.patientDiscovery.list.invalidate();
+    };
+
+    source.onerror = () => {
+      setStatus("disconnected");
+    };
 
     // Granular cache invalidation dispatcher matching received event domain
     const refreshForEvent = (type: PatientRealtimePayload["type"]) => {
       void utils.patientDashboard.summary.invalidate();                                         // Refresh aggregate dashboard
+      void utils.patientNotification.list.invalidate();                                        // Refresh notification bell
       switch (type) {
         case "PROFILE_UPDATED":
           void utils.patientProfile.get.invalidate();                                           // Refresh profile
           break;
         case "APPOINTMENT_UPDATED":
           void utils.patientAppointment.list.invalidate();                                      // Refresh appointments
+          void utils.patientAppointment.getDoctorAvailability.invalidate();                     // Refresh live slot availability
+          void utils.patientDiscovery.list.invalidate();                                        // Refresh doctor map and directory
           break;
         case "PRESCRIPTION_CREATED":
           void utils.patientPrescription.list.invalidate();                                     // Refresh prescriptions
@@ -75,4 +95,6 @@ export function usePatientRealtime(enabled: boolean) {
       source.close();                                                                           // Close stream
     };
   }, [enabled, utils]);
+
+  return { status };
 }

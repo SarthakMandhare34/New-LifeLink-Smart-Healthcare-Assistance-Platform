@@ -8,8 +8,7 @@
  * This ensures the entire application looks perfectly consistent (using Tailwind CSS)
  * and guarantees every component is accessible to screen readers for visually impaired users.
  */
-import React, { useState } from 'react';                                                  // Core React and state hook
-import { useEffect } from 'react';                                                              // React side-effect hook
+import React, { useState, useEffect, useRef } from 'react';                                                  // Core React hooks
 import { Outlet, NavLink, Navigate, useLocation, useNavigate } from 'react-router-dom';          // Router layout primitives and hooks
 import { useTheme } from '../../context/ThemeContext';                                          // Application theme manager
 import { useAuth } from '../../_core/hooks/useAuth';                                            // Client authentication state
@@ -70,6 +69,50 @@ export const AppShell = () => {
   const [isMobileNavigationOpen, setIsMobileNavigationOpen] = useState(false);                  // Mobile drawer open state
   const profileQuery = trpc.patientProfile.get.useQuery(undefined, { enabled: Boolean(user) }); // Fetch patient name and avatar
   usePatientRealtime(Boolean(user));                                                            // Subscribe to real-time SSE updates
+
+  // Centralized notifications state (designated panel for all notifications)
+  const [isNotificationOpen, setIsNotificationOpen] = useState(false);
+  const notificationRef = useRef<HTMLDivElement>(null);
+  const notificationsQuery = trpc.patientNotification.list.useQuery(undefined, { enabled: Boolean(user) });
+  const notifications = notificationsQuery.data ?? [];
+
+  const [readIds, setReadIds] = useState<string[]>(() => {
+    try {
+      return JSON.parse(localStorage.getItem('lifelink_read_notifications') || '[]');
+    } catch {
+      return [];
+    }
+  });
+
+  const unreadCount = notifications.filter((n) => !readIds.includes(n.id)).length;
+
+  const markAllRead = () => {
+    const allIds = notifications.map((n) => n.id);
+    setReadIds(allIds);
+    localStorage.setItem('lifelink_read_notifications', JSON.stringify(allIds));
+  };
+
+  const handleNotificationClick = (link: string, id: string) => {
+    if (!readIds.includes(id)) {
+      const next = [...readIds, id];
+      setReadIds(next);
+      localStorage.setItem('lifelink_read_notifications', JSON.stringify(next));
+    }
+    setIsNotificationOpen(false);
+    navigate(link);
+  };
+
+  useEffect(() => {
+    const handleClickOutside = (e: MouseEvent) => {
+      if (notificationRef.current && !notificationRef.current.contains(e.target as Node)) {
+        setIsNotificationOpen(false);
+      }
+    };
+    if (isNotificationOpen) {
+      document.addEventListener('mousedown', handleClickOutside);
+    }
+    return () => document.removeEventListener('mousedown', handleClickOutside);
+  }, [isNotificationOpen]);
 
   const closeMobileNavigation = () => setIsMobileNavigationOpen(false);                         // Close drawer helper
 
@@ -281,24 +324,180 @@ export const AppShell = () => {
               {theme === 'light' ? <Moon size={18} /> : <Sun size={18} />}
             </button>
 
-            {/* Notification alert center */}
-            <button 
-              className="icon-btn" 
-              aria-label="Notifications" 
-              style={{ 
-                position: 'relative', 
-                background: 'var(--color-background)', 
-                width: '36px', 
-                height: '36px', 
-                borderRadius: '4px', 
-                display: 'grid', 
-                placeItems: 'center', 
-                border: '1px solid var(--color-border)', 
-                cursor: 'pointer' 
-              }}
-            >
-              <Bell size={18} color="var(--color-text-muted)" />
-            </button>
+            {/* Notification alert center (designated panel for all notifications) */}
+            <div ref={notificationRef} style={{ position: 'relative' }}>
+              <button 
+                className="icon-btn" 
+                aria-label="Notifications" 
+                onClick={() => setIsNotificationOpen(!isNotificationOpen)}
+                title="Notifications"
+                style={{ 
+                  position: 'relative', 
+                  background: isNotificationOpen ? 'var(--color-surface-interactive)' : 'var(--color-background)', 
+                  width: '36px', 
+                  height: '36px', 
+                  borderRadius: '4px', 
+                  display: 'grid', 
+                  placeItems: 'center', 
+                  border: '1px solid var(--color-border)', 
+                  cursor: 'pointer' 
+                }}
+              >
+                <Bell size={18} color={unreadCount > 0 ? 'var(--color-primary)' : 'var(--color-text-muted)'} />
+                {unreadCount > 0 && (
+                  <span style={{
+                    position: 'absolute',
+                    top: '-4px',
+                    right: '-4px',
+                    background: 'var(--color-semantic-emergency, #dc2626)',
+                    color: '#FFFFFF',
+                    fontSize: '0.65rem',
+                    fontWeight: 700,
+                    borderRadius: '10px',
+                    padding: '1px 5px',
+                    minWidth: '16px',
+                    height: '16px',
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    border: '1.5px solid var(--color-surface-white)',
+                    lineHeight: 1,
+                  }}>
+                    {unreadCount > 9 ? '9+' : unreadCount}
+                  </span>
+                )}
+              </button>
+
+              {/* Centralized Notification Dropdown Panel */}
+              {isNotificationOpen && (
+                <div
+                  role="region"
+                  aria-label="Notifications Panel"
+                  style={{
+                    position: 'absolute',
+                    top: 'calc(100% + 8px)',
+                    right: 0,
+                    width: 'min(90vw, 360px)',
+                    background: 'var(--color-surface-white)',
+                    border: '1px solid var(--color-border)',
+                    borderRadius: '12px',
+                    boxShadow: 'var(--shadow-lg, 0 10px 25px -5px rgba(0,0,0,0.1))',
+                    zIndex: 1000,
+                    overflow: 'hidden',
+                    display: 'flex',
+                    flexDirection: 'column',
+                    fontFamily: "'Plus Jakarta Sans', sans-serif",
+                  }}
+                >
+                  <div style={{
+                    padding: '12px 16px',
+                    borderBottom: '1px solid var(--color-border)',
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'space-between',
+                    background: 'var(--color-surface-interactive)',
+                  }}>
+                    <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+                      <Bell size={16} color="var(--color-primary)" />
+                      <strong style={{ fontSize: '0.92rem', color: 'var(--color-text)' }}>Notifications</strong>
+                      {unreadCount > 0 && (
+                        <span style={{
+                          background: 'var(--color-primary)',
+                          color: '#FFF',
+                          fontSize: '0.72rem',
+                          fontWeight: 700,
+                          borderRadius: '8px',
+                          padding: '1px 6px',
+                        }}>
+                          {unreadCount} new
+                        </span>
+                      )}
+                    </div>
+                    {unreadCount > 0 && (
+                      <button
+                        type="button"
+                        onClick={markAllRead}
+                        style={{
+                          background: 'transparent',
+                          border: 'none',
+                          color: 'var(--color-primary)',
+                          fontSize: '0.78rem',
+                          fontWeight: 600,
+                          cursor: 'pointer',
+                          padding: 0,
+                        }}
+                      >
+                        Mark all as read
+                      </button>
+                    )}
+                  </div>
+
+                  <div style={{ maxHeight: '360px', overflowY: 'auto' }}>
+                    {notifications.length === 0 ? (
+                      <div style={{ padding: '24px 16px', textAlign: 'center', color: 'var(--color-text-muted)' }}>
+                        <Bell size={24} style={{ opacity: 0.3, margin: '0 auto 8px', display: 'block' }} />
+                        <p style={{ margin: 0, fontSize: '0.85rem' }}>No notifications yet.</p>
+                        <span className="caption" style={{ display: 'block', marginTop: '4px', fontSize: '0.78rem' }}>
+                          Appointment booking updates and prescription updates will appear here.
+                        </span>
+                      </div>
+                    ) : (
+                      notifications.map((item) => {
+                        const isUnread = !readIds.includes(item.id);
+                        return (
+                          <div
+                            key={item.id}
+                            onClick={() => handleNotificationClick(item.link, item.id)}
+                            style={{
+                              padding: '12px 16px',
+                              borderBottom: '1px solid var(--color-border)',
+                              background: isUnread ? 'rgba(15, 118, 110, 0.04)' : 'transparent',
+                              cursor: 'pointer',
+                              display: 'flex',
+                              gap: '10px',
+                              alignItems: 'flex-start',
+                              transition: 'background 0.15s ease',
+                            }}
+                            onMouseEnter={(e) => e.currentTarget.style.background = 'var(--color-surface-interactive)'}
+                            onMouseLeave={(e) => e.currentTarget.style.background = isUnread ? 'rgba(15, 118, 110, 0.04)' : 'transparent'}
+                          >
+                            <div style={{
+                              width: '32px',
+                              height: '32px',
+                              borderRadius: '8px',
+                              background: item.category === 'PRESCRIPTION' ? 'rgba(15, 118, 110, 0.12)' : 'rgba(0, 27, 48, 0.08)',
+                              color: item.category === 'PRESCRIPTION' ? 'var(--color-primary)' : 'var(--color-text)',
+                              display: 'grid',
+                              placeItems: 'center',
+                              flexShrink: 0,
+                              marginTop: '2px',
+                            }}>
+                              {item.category === 'PRESCRIPTION' ? <FileText size={16} /> : <Calendar size={16} />}
+                            </div>
+                            <div style={{ flex: 1, minWidth: 0 }}>
+                              <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: '6px' }}>
+                                <strong style={{ fontSize: '0.84rem', color: 'var(--color-text)', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>
+                                  {item.title}
+                                </strong>
+                                {isUnread && (
+                                  <span style={{ width: '6px', height: '6px', borderRadius: '50%', background: 'var(--color-primary)', flexShrink: 0 }} />
+                                )}
+                              </div>
+                              <p style={{ margin: '2px 0 0', fontSize: '0.78rem', color: 'var(--color-text-muted)', lineHeight: 1.35 }}>
+                                {item.description}
+                              </p>
+                              <span style={{ display: 'block', marginTop: '4px', fontSize: '0.72rem', color: 'var(--color-text-muted)', opacity: 0.8 }}>
+                                {new Date(item.timestamp).toLocaleDateString(undefined, { month: 'short', day: 'numeric', hour: '2-digit', minute: '2-digit' })}
+                              </span>
+                            </div>
+                          </div>
+                        );
+                      })
+                    )}
+                  </div>
+                </div>
+              )}
+            </div>
 
             {/* User Profile Monogram Badge: Responsive chip with collapsible text metadata on small phones */}
             <button 

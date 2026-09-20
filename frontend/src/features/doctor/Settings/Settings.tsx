@@ -8,12 +8,12 @@
  * It contains components for reviewing AI Triage reports, managing live consultation queues,
  * and writing clinical notes. It is isolated completely from the patient portal.
  */
-import React, { useState } from "react";
-import { Card } from "../../../components/ui/Card";
-import { Button } from "../../../components/ui/Button";
-import { Input } from "../../../components/ui/Input";
-import { Settings, Lock, CheckCircle2, AlertCircle, ShieldCheck, UserCheck } from "lucide-react";
-import { trpc } from "../../../lib/trpc";
+import React, { useState } from "react";                                      // React core runtime and component state hooks
+import { Card } from "../../../components/ui/Card";                                // Reusable glass/solid container UI component
+import { Button } from "../../../components/ui/Button";                            // Button component with loading and disabled states
+import { Input } from "../../../components/ui/Input";                              // Input component for styled form fields
+import { Settings, Lock, CheckCircle2, AlertCircle, ShieldCheck, UserCheck } from "lucide-react"; // Icons for settings, security, and notices
+import { trpc } from "../../../lib/trpc";                                          // Type-safe tRPC client bridge for React
 
 // =========================================================================================
 // DOCTOR WORKSPACE SETTINGS & CLINICIAN SECURITY PREFERENCES (DoctorSettings)
@@ -29,30 +29,30 @@ import { trpc } from "../../../lib/trpc";
 //    with deep ocean teal accents, matching the visual rhythm of other clinical dashboard views.
 // =========================================================================================
 export const DoctorSettings = () => {
-  const [currentPassword, setCurrentPassword] = useState("");
-  const [newPassword, setNewPassword] = useState("");
-  const [message, setMessage] = useState("");
-  const [isSuccess, setIsSuccess] = useState(false);
+  const [currentPassword, setCurrentPassword] = useState("");                      // Clinician's current password for verification
+  const [newPassword, setNewPassword] = useState("");                              // Clinician's proposed new password (min 10 chars)
+  const [message, setMessage] = useState("");                                      // Feedback banner display message text
+  const [isSuccess, setIsSuccess] = useState(false);                               // Flag determining whether banner style is success (teal) or error (red)
 
-  // tRPC mutation to change password
-  const changePassword = trpc.doctorAuth.changePassword.useMutation({
-    onSuccess: () => {
-      setMessage("Password changed successfully.");
-      setIsSuccess(true);
-      setCurrentPassword("");
-      setNewPassword("");
+  // tRPC mutation to securely authenticate and rotate doctor credentials
+  const changePassword = trpc.doctorAuth.changePassword.useMutation({              // Mutation hook communicating with backend doctorAuth router
+    onSuccess: () => {                                                             // Invoked if current password matches and update succeeds
+      setMessage("Password changed successfully.");                                // Set positive confirmation feedback
+      setIsSuccess(true);                                                          // Mark alert banner as successful state
+      setCurrentPassword("");                                                      // Clear current password input field
+      setNewPassword("");                                                          // Clear new password input field
     },
-    onError: (error) => {
-      setMessage(error.message);
-      setIsSuccess(false);
+    onError: (error) => {                                                          // Invoked if current password is wrong or validation fails
+      setMessage(error.message);                                                   // Display specific server validation or authentication error
+      setIsSuccess(false);                                                         // Mark alert banner as failure state
     },
   });
 
-  // Submit handler
-  const submit = (event: React.FormEvent) => {
-    event.preventDefault();
-    setMessage("");
-    changePassword.mutate({ currentPassword, newPassword });
+  // Submit event handler executing mutation
+  const submit = (event: React.FormEvent) => {                                     // Form submission handler
+    event.preventDefault();                                                        // Halt standard browser page navigation refresh
+    setMessage("");                                                                // Clear any existing banners
+    changePassword.mutate({ currentPassword, newPassword });                       // Dispatch payload to tRPC backend
   };
 
   return (

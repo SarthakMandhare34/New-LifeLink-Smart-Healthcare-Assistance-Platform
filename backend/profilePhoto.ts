@@ -1,3 +1,19 @@
+/**
+ * ============================================================================
+ * PATIENT PROFILE AVATAR BINARY UPLOAD PIPELINE (backend/profilePhoto.ts)
+ * ============================================================================
+ * 
+ * WHAT THIS MODULE DOES:
+ * Provides a high-performance binary HTTP POST endpoint (`/api/patient/profile-photo`)
+ * for direct patient avatar photo uploads.
+ * 
+ * SECURITY & VALIDATION FEATURES:
+ * 1. Magic Bytes Deep Inspection: Validates raw binary file signatures to prevent file spoofing.
+ * 2. Strict File Size Caps: Limits upload payloads strictly to 2 MB to prevent DoS attacks.
+ * 3. CSRF Guard: Requires custom header `x-lifelink-request: profile-photo` to thwart forged uploads.
+ * 4. User Ownership: Extracts patient identity strictly from cryptographically signed HTTP-only JWT cookies.
+ * 5. Event Publishing: Broadcasts `PROFILE_UPDATED` SSE events so all open browser tabs update instantly.
+ */
 import express, { type Express } from "express";                                        // Express framework and types
 import { createPatientEvent, updatePatientAvatarKey } from "./db";                         // Database mutations for avatar key and event publishing
 import { authSession } from "./auth/authUtil";                                             // JWT session validator

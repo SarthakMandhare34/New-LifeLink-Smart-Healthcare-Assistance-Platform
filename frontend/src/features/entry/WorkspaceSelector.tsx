@@ -1,11 +1,13 @@
 /**
  * ============================================================================
- * FRONTEND REACT CORE
+ * CARE WORKSPACE SELECTOR & GATEWAY PORTAL (frontend/src/features/entry/WorkspaceSelector.tsx)
  * ============================================================================
  * 
  * WHY THIS FILE IS SPECIAL:
- * This is the root configuration of the React application.
- * It sets up the Routing (which URL goes to which page) and global Theme Contexts.
+ * This is the initial landing gateway for the entire LifeLink healthcare platform.
+ * It provides role-differentiated access between patient-owned health passports and
+ * the restricted clinician consultation workstation, establishing strict visual
+ * and architectural boundaries between patient self-service and medical provider tools.
  */
 import { useState } from "react";                                                         // React state hook for tracking UI transitions
 import { ArrowRight, HeartPulse, LoaderCircle, ShieldCheck, Stethoscope } from "lucide-react"; // Healthcare and action icons
@@ -35,12 +37,12 @@ export const WorkspaceSelector = () => {
   const navigate = useNavigate();                                                          // Navigation function
   const [switchingTo, setSwitchingTo] = useState<Workspace | null>(null);                  // Active transition state ('patient' | 'clinician' | null)
 
-  // Smoothly transitions into the chosen portal with a subtle delay for glass animations
+  // Instantly navigates to the chosen portal without artificial timeouts
   const openWorkspace = (workspace: Workspace, path: string) => {
     if (switchingTo) return;                                                               // Prevent multiple clicks
     setSwitchingTo(workspace);                                                             // Trigger transition state
     const reducedMotion = window.matchMedia?.("(prefers-reduced-motion: reduce)").matches; // Check accessibility motion preference
-    window.setTimeout(() => navigate(path), reducedMotion ? 0 : 180);                      // Navigate after brief visual confirmation
+    navigate(path);                                                                        // Instant navigation without fake delays
   };
 
   const openingPatient = switchingTo === "patient";                                        // True while loading patient portal

@@ -1,18 +1,42 @@
-import { expect, test, describe, beforeAll, afterAll } from "vitest";
-import { config } from "dotenv";
+/**
+ * ============================================================================
+ * AUTOMATED INTEGRATION SUITE: SMART MEDICINE CABINET (backend/medicine.test.ts)
+ * ============================================================================
+ * 
+ * WHAT THIS SUITE VERIFIES:
+ * Tests patient home medication management, schedules, and reminders:
+ * 1. Inventory Management: Creation, modification, dosage adjustments, and removal of medicines.
+ * 2. IDOR Protection: Strictly enforces that Patient 2 cannot update or delete medications belonging to Patient 1.
+ * 3. Real-Time Push Notification: Ensures `MEDICINE_UPDATED` events are emitted to synchronize client cabinets.
+ */
+import { expect, test, describe, beforeAll, afterAll } from "vitest";                           // Vitest test runner
+import { config } from "dotenv";                                                                // Loads environment variables
 config();
-import { getDb, upsertUser, createPatientMedicine, removeOwnedPatientMedicine, listPatientMedicines, updateOwnedPatientMedicine } from "./db";
-import { appRouter } from "./routers";
-import { users, patientMedicines } from "./database/schema";
-import { eq } from "drizzle-orm";
+import { getDb, upsertUser, createPatientMedicine, removeOwnedPatientMedicine, listPatientMedicines, updateOwnedPatientMedicine } from "./db"; // Data access methods
+import { appRouter } from "./routers";                                                          // Root tRPC router
+import { users, patientMedicines } from "../database/schema";                                   // Schema table definitions
+import { eq } from "drizzle-orm";                                                               // Drizzle SQL operators
 
-let db: NonNullable<Awaited<ReturnType<typeof getDb>>>;
+let db: NonNullable<Awaited<ReturnType<typeof getDb>>>;                                        // Database handle
 
+// Helper to create typed mock caller matching trpc context
+function createCaller(user: { id: number; openId: string; role: "user" | "doctor" }) {
+  return appRouter.createCaller({
+    req: {} as any,
+    res: { cookie: () => {}, clearCookie: () => {} } as any,
+    user: user as any,
+    patientUser: null,
+    doctorUser: null,
+  } as any);
+}
+
+// Global setup inserting two test patients
 beforeAll(async () => {
-  const maybeDb = await getDb();
+  const maybeDb = await getDb();                                                               // Connect to database
   if (!maybeDb) throw new Error("Database not available");
   db = maybeDb;
 
+  // Insert Patient 1
   await upsertUser({
     openId: "test:patient-medicine-1",
     name: "Medicine Patient 1",
@@ -21,6 +45,7 @@ beforeAll(async () => {
     role: "user",
   });
   
+  // Insert Patient 2 (adversary for IDOR tests)
   await upsertUser({
     openId: "test:patient-medicine-2",
     name: "Medicine Patient 2",
@@ -30,25 +55,31 @@ beforeAll(async () => {
   });
 });
 
-describe("Medicine Cabinet CRUD", () => {
-  let patient1Id: number;
-  let patient2Id: number;
-  let medicineId: number;
+describe("Medicine Cabinet Integration", () => {
+  let patient1Id: number;                                                                       // ID of test Patient 1
+  let patient2Id: number;                                                                       // ID of test Patient 2
+  let medicineId: number;                                                                       // ID of medicine created during test
 
   beforeAll(async () => {
     const u1 = await db.select().from(users).where(eq(users.openId, "test:patient-medicine-1"));
     patient1Id = u1[0].id;
     const u2 = await db.select().from(users).where(eq(users.openId, "test:patient-medicine-2"));
     patient2Id = u2[0].id;
+
+    // Clear any previous test medicines
+    await db.delete(patientMedicines).where(eq(patientMedicines.userId, patient1Id));
+    await db.delete(patientMedicines).where(eq(patientMedicines.userId, patient2Id));
   });
 
+  // Cleanup created medicines after test completion
   afterAll(async () => {
     await db.delete(patientMedicines).where(eq(patientMedicines.userId, patient1Id));
     await db.delete(patientMedicines).where(eq(patientMedicines.userId, patient2Id));
   });
 
+  // Step 1: Patient adds new medication to their cabinet
   test("1. Patient creates medicine", async () => {
-    const caller = appRouter.createCaller({ user: { id: patient1Id, openId: "test:patient-medicine-1", role: "user" } });
+    const caller = createCaller({ id: patient1Id, openId: "test:patient-medicine-1", role: "user" });
     
     const response = await caller.patientMedicine.create({
       name: "Amoxicillin",
@@ -68,7 +99,7 @@ describe("Medicine Cabinet CRUD", () => {
   });
 
   test("2. Patient reads own medicine", async () => {
-    const caller = appRouter.createCaller({ user: { id: patient1Id, openId: "test:patient-medicine-1", role: "user" } });
+    const caller = createCaller({ id: patient1Id, openId: "test:patient-medicine-1", role: "user" });
     const list = await caller.patientMedicine.list();
     const med = list.find((m) => m.id === medicineId);
     expect(med).toBeDefined();
@@ -77,7 +108,7 @@ describe("Medicine Cabinet CRUD", () => {
   });
 
   test("3. Patient edits own medicine", async () => {
-    const caller = appRouter.createCaller({ user: { id: patient1Id, openId: "test:patient-medicine-1", role: "user" } });
+    const caller = createCaller({ id: patient1Id, openId: "test:patient-medicine-1", role: "user" });
     const response = await caller.patientMedicine.update({
       id: medicineId,
       values: { dosage: "250mg", quantity: 28 },
@@ -90,7 +121,7 @@ describe("Medicine Cabinet CRUD", () => {
   });
 
   test("4. Ownership: Patient cannot read/edit/delete another patient's medicine", async () => {
-    const caller2 = appRouter.createCaller({ user: { id: patient2Id, openId: "test:patient-medicine-2", role: "user" } });
+    const caller2 = createCaller({ id: patient2Id, openId: "test:patient-medicine-2", role: "user" });
     
     const list = await caller2.patientMedicine.list();
     expect(list.find((m) => m.id === medicineId)).toBeUndefined();
@@ -110,7 +141,7 @@ describe("Medicine Cabinet CRUD", () => {
   });
 
   test("5. Validation: Requires name, dosage, frequency, schedule", async () => {
-    const caller = appRouter.createCaller({ user: { id: patient1Id, openId: "test:patient-medicine-1", role: "user" } });
+    const caller = createCaller({ id: patient1Id, openId: "test:patient-medicine-1", role: "user" });
     
     // @ts-expect-error Testing invalid input
     await expect(caller.patientMedicine.create({
@@ -128,7 +159,7 @@ describe("Medicine Cabinet CRUD", () => {
   });
 
   test("6. Dashboard integration reflects medicine state", async () => {
-    const caller = appRouter.createCaller({ user: { id: patient1Id, openId: "test:patient-medicine-1", role: "user" } });
+    const caller = createCaller({ id: patient1Id, openId: "test:patient-medicine-1", role: "user" });
     const dashboard = await caller.patientDashboard.summary();
     const med = dashboard.medicines.find(m => m.id === medicineId);
     expect(med).toBeDefined();
@@ -136,7 +167,7 @@ describe("Medicine Cabinet CRUD", () => {
   });
 
   test("7. Patient deletes medicine", async () => {
-    const caller = appRouter.createCaller({ user: { id: patient1Id, openId: "test:patient-medicine-1", role: "user" } });
+    const caller = createCaller({ id: patient1Id, openId: "test:patient-medicine-1", role: "user" });
     const response = await caller.patientMedicine.remove({ id: medicineId });
     expect(response.success).toBe(true);
 

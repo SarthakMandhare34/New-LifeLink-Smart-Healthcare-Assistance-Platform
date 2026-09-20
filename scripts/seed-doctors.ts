@@ -9,110 +9,97 @@
  * WHAT THIS SCRIPT DOES:
  * 1. Connects to the local MySQL database using Drizzle ORM.
  * 2. Cleans out stale records to avoid duplicate or conflicting accounts.
- * 3. Seeds exactly 24 verified doctor workstations across 12 specialties 
- *    (Cardiology, Neurology, Orthopedics, Pediatrics, etc.) located along
- *    Mumbai's railway corridors (Western, Central, Harbour).
+ * 3. Seeds 55 authentic Indian doctor workstations across 12 specialties & General Practice
+ *    located along Mumbai's railway corridors (Western, Central, Harbour).
  * 4. Applies a memorable and consistent credential format for all clinicians:
- *    - Email: <specialty>@lifelink.com (e.g. cardiology@lifelink.com)
- *    - Password: <specialty-prefix>@lifelink (e.g. cardio@lifelink)
+ *    - Email: <id-slug>@lifelink.com (e.g. central-cardiology-csmt@lifelink.com)
+ *    - Password: <specialty>.<station>@lifelink (e.g. cardio.csmt@lifelink)
  * 5. Zero Pre-Stored Patients: Maintains 0 patient records so live user
  *    registration remains 100% dynamic and authentic.
  */
-import "dotenv/config";
-import { getDb, createSyntheticDoctorCredential } from "../backend/db";
-import { mockDoctorDirectory } from "../backend/discovery/mockDoctorDirectory";
-import { hashPatientPassword } from "../backend/auth/nativePatientAuth";
+import "dotenv/config";                                                               // Loads .env database connection strings
+import { getDb, createSyntheticDoctorCredential } from "../backend/db";                   // Drizzle DB connection and credential creation helper
+import { mockDoctorDirectory } from "../backend/discovery/mockDoctorDirectory";             // Standard clinical directory of 55 workstations
+import { hashPatientPassword } from "../backend/auth/nativePatientAuth";                   // Password hashing function using scrypt
 
 async function resetAndSeedDatabase() {
-  if (process.env.NODE_ENV === "production") {
+  if (process.env.NODE_ENV === "production") {                                             // Safety check preventing accidental production wiping
     throw new Error("DANGER: Database reset script (seed-doctors.ts) is strictly disabled in production (NODE_ENV=production).");
   }
 
   console.log("Connecting to database...");
-  const db = await getDb();
+  const db = await getDb();                                                                // Connect to MySQL
   if (!db) {
     throw new Error("Database connection failed. Make sure DATABASE_URL is set in .env.");
   }
 
   console.log("Clearing all existing users and associated tables...");
-  await db.execute("SET FOREIGN_KEY_CHECKS = 0;");
-  await db.execute("TRUNCATE TABLE patientPrescriptionItems;");
-  await db.execute("TRUNCATE TABLE patientPrescriptions;");
-  await db.execute("TRUNCATE TABLE patientAppointments;");
-  await db.execute("TRUNCATE TABLE patientMedicines;");
-  await db.execute("TRUNCATE TABLE patientEmergencyContacts;");
-  await db.execute("TRUNCATE TABLE patientProfiles;");
-  await db.execute("TRUNCATE TABLE patientAssessments;");
-  await db.execute("TRUNCATE TABLE patientEvents;");
-  await db.execute("TRUNCATE TABLE doctorEvents;");
-  await db.execute("TRUNCATE TABLE patientProviderIdentities;");
-  await db.execute("TRUNCATE TABLE patientCredentials;");
-  await db.execute("TRUNCATE TABLE syntheticDoctorCredentials;");
-  await db.execute("TRUNCATE TABLE users;");
-  await db.execute("SET FOREIGN_KEY_CHECKS = 1;");
+  await db.execute("SET FOREIGN_KEY_CHECKS = 0;");                                         // Temporarily disable foreign key constraints for bulk truncation
+  await db.execute("TRUNCATE TABLE patientPrescriptionItems;");                            // Wipe itemized medicines
+  await db.execute("TRUNCATE TABLE patientPrescriptions;");                                 // Wipe prescription headers
+  await db.execute("TRUNCATE TABLE patientAppointments;");                                  // Wipe booked appointments
+  await db.execute("TRUNCATE TABLE patientMedicines;");                                     // Wipe patient medicine cabinet
+  await db.execute("TRUNCATE TABLE patientEmergencyContacts;");                             // Wipe emergency contact records
+  await db.execute("TRUNCATE TABLE patientProfiles;");                                     // Wipe patient health passports
+  await db.execute("TRUNCATE TABLE patientAssessments;");                                   // Wipe Gemini AI triage logs
+  await db.execute("TRUNCATE TABLE patientEvents;");                                        // Wipe patient SSE events
+  await db.execute("TRUNCATE TABLE doctorEvents;");                                         // Wipe doctor SSE events
+  await db.execute("TRUNCATE TABLE patientProviderIdentities;");                            // Wipe Google OAuth accounts
+  await db.execute("TRUNCATE TABLE patientCredentials;");                                   // Wipe native patient passwords
+  await db.execute("TRUNCATE TABLE syntheticDoctorCredentials;");                           // Wipe clinician login credentials
+  await db.execute("TRUNCATE TABLE users;");                                                // Wipe core user accounts
+  await db.execute("SET FOREIGN_KEY_CHECKS = 1;");                                         // Re-enable foreign key constraints
   console.log("✅ All existing users and related data deleted successfully.");
 
-  // Doctor Accounts with email and password (dynamic real users will register and sign in live)
-  console.log("\nSeeding Doctor Accounts with clean emails and unique passwords...");
+  console.log(`\nSeeding ${mockDoctorDirectory.length} Doctor Accounts with authentic names and Mumbai hospital affiliations...`);
 
-  const SPECIALTY_PASSWORDS: Record<string, { short: string; password: string }> = {
-    cardiology: { short: "cardio", password: "cardio@lifelink" },
-    orthopedics: { short: "ortho", password: "ortho@lifelink" },
-    dermatology: { short: "derma", password: "derma@lifelink" },
-    neurology: { short: "neuro", password: "neuro@lifelink" },
-    pediatrics: { short: "pedia", password: "pedia@lifelink" },
-    generalpractice: { short: "general", password: "general@lifelink" },
-    ophthalmology: { short: "ophthal", password: "ophthal@lifelink" },
-    gastroenterology: { short: "gastro", password: "gastro@lifelink" },
-    psychiatry: { short: "psych", password: "psych@lifelink" },
-    endocrinology: { short: "endo", password: "endo@lifelink" },
-    pulmonology: { short: "pulmo", password: "pulmo@lifelink" },
-    gynecology: { short: "gynae", password: "gynae@lifelink" },
-  };
-
-  const seededDoctors: { Specialty: string; Email: string; Password: string; "Alias Login": string }[] = [];
+  const seededDoctors: { Doctor: string; Specialty: string; Hospital: string; Station: string; Email: string; Password: string }[] = [];
 
   for (const doctor of mockDoctorDirectory) {
-    const specialtySlug = doctor.specialty.toLowerCase().replace(/[^a-z]/g, "");
-    const stationSlug = doctor.station.toLowerCase().replace(/[^a-z]/g, "");
-    const isSharedSpecialty = mockDoctorDirectory.filter((d) => d.specialty === doctor.specialty).length > 1;
-    const doctorEmail = isSharedSpecialty
-      ? `${specialtySlug}.${stationSlug}@lifelink.com`
-      : `${specialtySlug}@lifelink.com`;
-    const config = SPECIALTY_PASSWORDS[specialtySlug] || { short: specialtySlug, password: `${specialtySlug}@lifelink` };
-    const doctorPassword = isSharedSpecialty ? `${config.short}.${stationSlug}@lifelink` : config.password;
-    const doctorPasswordHash = await hashPatientPassword(doctorPassword);
+    const specialtySlug = doctor.specialty.toLowerCase().replace(/[^a-z]/g, "");            // Clean specialty string
+    const stationSlug = doctor.station.toLowerCase().replace(/[^a-z]/g, "");                // Clean railway station string
+    
+    // Clean, unique email and password per workstation
+    const emailSlug = doctor.id.replace("mock-", "");
+    const doctorEmail = `${emailSlug}@lifelink.com`;
+    const doctorPassword = `${specialtySlug}.${stationSlug}@lifelink`;
+    const doctorPasswordHash = await hashPatientPassword(doctorPassword);                   // Cryptographically hash password using scrypt
 
     try {
+      // Persist synthetic doctor identity and credential into MySQL
       await createSyntheticDoctorCredential({
-        doctor,
-        email: doctorEmail,
-        passwordHash: doctorPasswordHash,
+        doctor,                                                                             // Doctor profile
+        email: doctorEmail,                                                                 // Work email
+        passwordHash: doctorPasswordHash,                                                   // Salted password hash
       });
 
       seededDoctors.push({
-        Specialty: `${doctor.specialty} (${doctor.station})`,
+        Doctor: doctor.name,
+        Specialty: doctor.specialty,
+        Hospital: doctor.hospital,
+        Station: `${doctor.station} (${doctor.railLine})`,
         Email: doctorEmail,
         Password: doctorPassword,
-        "Alias Login": `${config.short}@lifelink.com or ${doctorEmail}`,
       });
     } catch (e: any) {
       console.error(`Failed to seed ${doctor.name}: ${e.message}`);
     }
   }
 
-  console.log("\n========================================================");
-  console.log("   LIFELINK — DOCTORS SEEDING REPORT (ZERO PRE-STORED PATIENTS)");
-  console.log("========================================================\n");
+  // Print formatted report table to terminal
+  console.log("\n====================================================================================================");
+  console.log(`   LIFELINK — MUMBAI DOCTORS SEEDING REPORT (${seededDoctors.length} DOCTORS SEEDED)`);
+  console.log("====================================================================================================\n");
 
-  console.log("--- DOCTOR ACCOUNTS (Email & Password) ---");
+  console.log("--- MUMBAI DOCTOR ACCOUNTS ---");
   console.table(seededDoctors);
   console.log("👉 Login at http://localhost:5173/doctor/login using any Doctor Email and Password above.");
   console.log("ℹ️ Zero pre-stored patient accounts. Patients register dynamically in real time.\n");
 
-  process.exit(0);
+  process.exit(0);                                                                          // Clean exit code 0
 }
 
+// Top-level script execution with failure handling
 resetAndSeedDatabase().catch((err) => {
   console.error("Fatal error during seeding:", err);
   process.exit(1);

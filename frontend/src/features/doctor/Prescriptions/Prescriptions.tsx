@@ -1,12 +1,13 @@
 /**
  * ============================================================================
- * SHA-256 DIGITAL PRESCRIPTIONS UI
+ * DOCTOR RX MANAGEMENT & CRYPTOGRAPHIC SIGNING (frontend/src/features/doctor/Prescriptions/Prescriptions.tsx)
  * ============================================================================
  * 
  * WHY THIS FILE IS SPECIAL:
- * This handles the rendering of official medical prescriptions.
- * To stop prescription fraud (hackers changing 1 pill to 10 pills), it displays 
- * a cryptographic SHA-256 hash. If even one letter of the medicine changes, the hash breaks.
+ * This component provides doctors with a comprehensive audit ledger of all prescriptions
+ * issued under their clinician identity. It verifies that issued prescriptions contain valid
+ * SHA-256 cryptographic hashes that match the medications and dosages in MySQL, ensuring
+ * prescriptions cannot be manipulated by third parties before pharmacy dispensing.
  */
 import React from 'react';                                                                // Core React component engine
 import { useNavigate } from 'react-router-dom';                                                 // SPA route navigation hook

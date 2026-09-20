@@ -1,12 +1,13 @@
 /**
  * ============================================================================
- * CLINICIAN WORKSTATION PORTAL
+ * CLINICIAN CREDENTIAL RECOVERY & WORKSTATION ACCESS (frontend/src/features/doctor/ResetPassword.tsx)
  * ============================================================================
  * 
  * WHY THIS FILE IS SPECIAL:
- * This is the heavily restricted portal used by professional doctors.
- * It contains components for reviewing AI Triage reports, managing live consultation queues,
- * and writing clinical notes. It is isolated completely from the patient portal.
+ * This component provides administrative password management for clinical doctor accounts.
+ * To protect healthcare records from unauthorized credential resets, it requires an
+ * institutional provisioning passcode (`LIFELINK_DEMO_DOCTOR_ACCESS_CODE`) before committing
+ * salted password hash updates to the `syntheticDoctorCredentials` table in MySQL.
  */
 import { useState } from "react";                                                             // React state hook for form input tracking
 import { useNavigate } from "react-router-dom";                                                 // Navigation hook to redirect between views

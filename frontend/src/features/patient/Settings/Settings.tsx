@@ -1,11 +1,13 @@
 /**
  * ============================================================================
- * PATIENT PORTAL UI
+ * PATIENT WORKSPACE PREFERENCES & SECURITY (frontend/src/features/patient/Settings/Settings.tsx)
  * ============================================================================
  * 
  * WHY THIS FILE IS SPECIAL:
- * This manages the everyday user interfaces for patients (Dashboard, Health Passport, Medicines).
- * It uses modern React hooks to keep data perfectly synchronized and responsive.
+ * This component manages patient-facing configuration for notifications and privacy.
+ * It controls appointment reminder alerts, medication schedules, and outlines
+ * session isolation safeguards (secure cookie attributes, inactivity auto-logout,
+ * and zero cross-patient data exposure).
  */
 import React, { useState } from 'react';
 import { Card } from '../../../components/ui/Card';

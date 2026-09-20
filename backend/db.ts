@@ -15,11 +15,13 @@
  *    to the SSE/WebSocket event bus for live updates without polling.
  * 5. Strict Data Isolation: Enforces patient ownership on all private records (IDOR protection).
  */
-import { and, desc, eq, gt, inArray, or } from "drizzle-orm";
+import { and, desc, eq, gt, gte, inArray, lte, ne, or, sql } from "drizzle-orm";
 import { drizzle } from "drizzle-orm/mysql2";
 import {
   InsertPatientAssessment,
   InsertUser,
+  bookingErrors,
+  InsertBookingError,
   doctorEvents,
   patientAppointments,
   patientAssessments,
@@ -220,7 +222,7 @@ export async function getPatientAssessments(userId: number) {
   return db
     .select()
     .from(patientAssessments)
-    .where(eq(patientAssessments.userId, userId))
+    .where(and(eq(patientAssessments.userId, userId), ne(patientAssessments.urgency, "ERROR")))
     .orderBy(desc(patientAssessments.createdAt));
 }
 
@@ -719,6 +721,101 @@ export async function createPatientAppointment(userId: number, doctorId: string,
   if (!db) throw new Error("Database is not available");
   const result = await db.insert(patientAppointments).values({ userId, doctorId, scheduledAt, reason, status: "Requested" });
   return Number(result[0].insertId);
+}
+
+let hasCreatedBookingErrorsTable = false;
+
+export async function ensureBookingErrorsTable(): Promise<void> {
+  if (hasCreatedBookingErrorsTable) return;
+  const db = await getDb();
+  if (!db) return;
+  try {
+    await db.execute(sql.raw(`
+      CREATE TABLE IF NOT EXISTS \`bookingErrors\` (
+        \`id\` int NOT NULL AUTO_INCREMENT,
+        \`userId\` int DEFAULT NULL,
+        \`doctorId\` varchar(80) DEFAULT NULL,
+        \`attemptedAt\` timestamp NULL DEFAULT NULL,
+        \`errorMessage\` text NOT NULL,
+        \`errorCode\` varchar(64) NOT NULL,
+        \`createdAt\` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
+        PRIMARY KEY (\`id\`),
+        KEY \`bookingErrors_userId_users_id_fk\` (\`userId\`),
+        CONSTRAINT \`bookingErrors_userId_users_id_fk\` FOREIGN KEY (\`userId\`) REFERENCES \`users\` (\`id\`) ON DELETE CASCADE
+      ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+    `));
+    hasCreatedBookingErrorsTable = true;
+  } catch (err) {
+    console.warn("[Database] Could not auto-create bookingErrors table:", err);
+  }
+}
+
+export async function recordBookingError(
+  userId: number | null,
+  doctorId: string | null,
+  attemptedAt: Date | null,
+  errorMessage: string,
+  errorCode: string
+): Promise<void> {
+  const db = await getDb();
+  if (!db) return;
+  try {
+    await ensureBookingErrorsTable();
+    await db.insert(bookingErrors).values({
+      userId: userId ?? undefined,
+      doctorId: doctorId ?? undefined,
+      attemptedAt: attemptedAt ?? undefined,
+      errorMessage: errorMessage.trim(),
+      errorCode: errorCode.trim() || "BOOKING_ERROR",
+    });
+  } catch (error) {
+    console.error("[Database] Failed to record booking error:", error);
+  }
+}
+
+export async function checkDoctorSlotConflict(doctorId: string, scheduledAt: Date): Promise<boolean> {
+  const db = await getDb();
+  if (!db) return false;
+
+  const windowStart = new Date(scheduledAt.getTime() - 29 * 60 * 1000);
+  const windowEnd = new Date(scheduledAt.getTime() + 29 * 60 * 1000);
+
+  const conflicts = await db
+    .select({ id: patientAppointments.id })
+    .from(patientAppointments)
+    .where(
+      and(
+        eq(patientAppointments.doctorId, doctorId),
+        inArray(patientAppointments.status, ["Requested", "Pending", "Confirmed"]),
+        gte(patientAppointments.scheduledAt, windowStart),
+        lte(patientAppointments.scheduledAt, windowEnd)
+      )
+    )
+    .limit(1);
+
+  return conflicts.length > 0;
+}
+
+export async function getDoctorBookedSlots(doctorId: string, dateStr: string): Promise<string[]> {
+  const db = await getDb();
+  if (!db) return [];
+
+  const startOfDay = new Date(`${dateStr}T00:00:00.000Z`);
+  const endOfDay = new Date(`${dateStr}T23:59:59.999Z`);
+
+  const slots = await db
+    .select({ scheduledAt: patientAppointments.scheduledAt })
+    .from(patientAppointments)
+    .where(
+      and(
+        eq(patientAppointments.doctorId, doctorId),
+        inArray(patientAppointments.status, ["Requested", "Pending", "Confirmed"]),
+        gte(patientAppointments.scheduledAt, startOfDay),
+        lte(patientAppointments.scheduledAt, endOfDay)
+      )
+    );
+
+  return slots.map((s) => s.scheduledAt.toISOString());
 }
 
 export async function cancelOwnedPatientAppointment(userId: number, appointmentId: number) {

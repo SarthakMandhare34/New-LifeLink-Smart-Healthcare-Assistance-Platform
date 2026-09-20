@@ -25,6 +25,7 @@ import {
   patientDashboardRouter,
   patientDiscoveryRouter,
   patientMedicineRouter,
+  patientNotificationRouter,
   patientPrescriptionRouter,
   patientProfileRouter,
 } from "./routers/patient";                                                                // Specialized patient domain routers
@@ -54,6 +55,7 @@ export const appRouter = router({
   patientMedicine: patientMedicineRouter,                                                  // Patient medication schedule and tracking
   patientAppointment: patientAppointmentRouter,                                            // Patient specialist booking and cancellation
   patientPrescription: patientPrescriptionRouter,                                          // Patient digital prescription viewing
+  patientNotification: patientNotificationRouter,                                          // Centralized notification feed
   patientDiscovery: patientDiscoveryRouter,                                                // Mumbai specialist search and directory filtering
   assessment: router({
     list: protectedProcedure.query(({ ctx }) => getPatientAssessments(ctx.user.id)),       // History of patient symptom assessments

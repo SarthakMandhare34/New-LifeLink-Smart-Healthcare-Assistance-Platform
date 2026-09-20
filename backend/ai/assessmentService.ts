@@ -28,7 +28,7 @@ export const ALL_SYSTEM_SPECIALTIES = [
 /** Input schema validated by Zod before processing */
 export const assessmentRequestInput = z.object({
   symptoms: z.string().trim().min(1).max(10_000),
-  age: z.number().int().min(0).max(120),
+  age: z.number().int().min(0).max(100),
   gender: z.string().trim().min(1).max(32),
   conditions: z.string().trim().max(5_000).optional(),
   duration: z.string().trim().min(1).max(64),
@@ -130,9 +130,9 @@ SPECIALTY RESTRICTIONS:
 CRITICAL CLINICAL RULES FOR GENDER AND AGE:
 
 1. GENDER BIOLOGICAL CONSISTENCY:
-- If gender is "Man": Pregnancy, menstrual cycles, missed periods, uterine, ovarian, cervical, vaginal, and female reproductive conditions are biologically impossible. You must NEVER suggest pregnancy or female gynecological causes for a Man. Direct female-specific conditions to General Practice.
+- If gender is "Male" (or "Man"): Pregnancy, menstrual cycles, missed periods, uterine, ovarian, cervical, vaginal, and female reproductive conditions are biologically impossible. You must NEVER suggest pregnancy or female gynecological causes for a Male. Direct female-specific conditions to General Practice.
 - Male breast tissue enlargement/tenderness (Gynecomastia) or male hormonal issues in men are valid male conditions that MUST be assigned to "Endocrinology" (or "General Practice").
-- If gender is "Woman": Assess age-appropriately without making premature or inappropriate assumptions.
+- If gender is "Female" (or "Woman"): Assess age-appropriately without making premature or inappropriate assumptions.
 - If gender is "Other": Avoid unverified anatomical assumptions. Recommend in-person evaluation with a physician.
 
 2. PEDIATRIC & ADOLESCENT SAFEGUARDS (AGE UNDER 18):

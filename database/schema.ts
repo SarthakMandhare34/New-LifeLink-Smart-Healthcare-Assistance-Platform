@@ -35,7 +35,7 @@ export const patientAssessments = mysqlTable("patientAssessments", {
     .references(() => users.id, { onDelete: "cascade" }),        // Foreign key linking to the patient (deletes if user is deleted)
   symptoms: text("symptoms").notNull(),                          // Raw symptoms entered by the patient
   age: int("age").notNull(),                                     // Patient age at time of evaluation
-  gender: varchar("gender", { length: 32 }).notNull(),           // Patient gender ("Man", "Woman", "Other")
+  gender: varchar("gender", { length: 32 }).notNull(),           // Patient gender ("Male", "Female", "Other")
   conditions: text("conditions"),                                // Optional preexisting health conditions (e.g. "Asthma, Diabetes")
   duration: varchar("duration", { length: 64 }).notNull(),       // How long symptoms have persisted (e.g. "3 days")
   urgency: mysqlEnum("urgency", ["LOW", "MODERATE", "EMERGENCY", "ERROR"]).notNull(), // Clinical urgency tier assigned by triage
@@ -225,6 +225,19 @@ export const doctorEvents = mysqlTable("doctorEvents", {
   createdAt: timestamp("createdAt").defaultNow().notNull(),
 });
 
+// --- Table 14: Booking Error Audit Log ---
+// Records booking validation failures, past-date rejections, and scheduling conflicts for auditing
+export const bookingErrors = mysqlTable("bookingErrors", {
+  id: int("id").autoincrement().primaryKey(),                    // Unique error record ID
+  userId: int("userId")
+    .references(() => users.id, { onDelete: "cascade" }),        // Optional patient foreign key
+  doctorId: varchar("doctorId", { length: 80 }),                 // Optional specialist ID
+  attemptedAt: timestamp("attemptedAt"),                         // The appointment time attempted
+  errorMessage: text("errorMessage").notNull(),                  // Exact validation or conflict message
+  errorCode: varchar("errorCode", { length: 64 }).notNull(),     // Machine-readable audit category
+  createdAt: timestamp("createdAt").defaultNow().notNull(),      // Timestamp of failure event
+});
+
 // --- Type Exports for Application Use ---
 export type PatientCredential = typeof patientCredentials.$inferSelect;
 export type SyntheticDoctorCredential = typeof syntheticDoctorCredentials.$inferSelect;
@@ -236,3 +249,6 @@ export type PatientPrescription = typeof patientPrescriptions.$inferSelect;
 export type PatientPrescriptionItem = typeof patientPrescriptionItems.$inferSelect;
 export type PatientEvent = typeof patientEvents.$inferSelect;
 export type DoctorEvent = typeof doctorEvents.$inferSelect;
+export type BookingError = typeof bookingErrors.$inferSelect;
+export type InsertBookingError = typeof bookingErrors.$inferInsert;
+

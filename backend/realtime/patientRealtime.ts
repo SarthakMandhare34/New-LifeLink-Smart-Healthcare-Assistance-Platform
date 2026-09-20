@@ -17,7 +17,7 @@ import { authSession } from "../auth/authUtil";                                 
 import { doctorIdFromSyntheticOpenId } from "../syntheticDoctor";                          // Resolves clinician ID from session openId
 import { COOKIE_NAME, DOCTOR_COOKIE_NAME } from "../../shared/const";                       // Patient and clinician cookie identifiers
 
-const HEARTBEAT_MS = 25_000;                                                               // 25-second ping interval keeping cloud proxies from timing out
+const HEARTBEAT_MS = 15_000;                                                               // 15-second ping interval keeping cloud proxies from timing out
 
 // Parses and validates the Last-Event-ID header or query param for event resynchronization
 export function parseLastEventId(value: unknown) {
@@ -64,7 +64,7 @@ function openStream(res: Response) {
     "X-Accel-Buffering": "no",                                                             // Disable Nginx reverse-proxy buffering
   });
   res.flushHeaders();                                                                      // Flush headers to client immediately
-  res.write("retry: 3000\n\n");                                                            // Tell browser to reconnect after 3 seconds if disconnected
+  res.write("retry: 1500\n\n");                                                            // Fast automatic reconnection if network drops
 }
 
 // Registers GET /api/patient-events SSE streaming endpoint for patient portals
@@ -93,7 +93,7 @@ export function registerPatientRealtimeRoute(app: Express) {
     }
 
     const unsubscribe = subscribeToPatientEvents(user.id, (event) => writeEvent(res, event)); // Subscribe to live events
-    const heartbeat = setInterval(() => {                                                  // Ping client every 25 seconds
+    const heartbeat = setInterval(() => {                                                  // Ping client every 15 seconds
       if (res.writableEnded || res.destroyed) return;
       try { res.write(": keepalive\n\n"); } catch (e) { /* ignore */ }
     }, HEARTBEAT_MS);
@@ -137,7 +137,7 @@ export function registerDoctorRealtimeRoute(app: Express) {
     }
 
     const unsubscribe = subscribeToDoctorEvents(doctorId, (event) => writeDoctorEvent(res, event)); // Subscribe to live clinician updates
-    const heartbeat = setInterval(() => {                                                  // Ping client every 25 seconds
+    const heartbeat = setInterval(() => {                                                  // Ping client every 15 seconds
       if (res.writableEnded || res.destroyed) return;
       try { res.write(": keepalive\n\n"); } catch (e) { /* ignore */ }
     }, HEARTBEAT_MS);

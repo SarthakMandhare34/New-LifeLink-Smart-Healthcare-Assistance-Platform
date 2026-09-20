@@ -1,11 +1,13 @@
 /**
  * ============================================================================
- * PATIENT PORTAL UI
+ * PATIENT APPOINTMENTS MANAGEMENT (frontend/src/features/patient/Appointments/Appointments.tsx)
  * ============================================================================
  * 
  * WHY THIS FILE IS SPECIAL:
- * This manages the everyday user interfaces for patients (Dashboard, Health Passport, Medicines).
- * It uses modern React hooks to keep data perfectly synchronized and responsive.
+ * This component manages patient consultations with Mumbai railway transit clinic doctors.
+ * It separates active/upcoming bookings from past consultation records, enables
+ * real-time cancellation with optimistic UI updates, and links directly into
+ * specialist clinic profiles along Central, Western, and Harbour corridors.
  */
 import React, { useState } from 'react';
 import { Card } from '../../../components/ui/Card';

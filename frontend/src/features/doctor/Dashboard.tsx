@@ -1,12 +1,13 @@
 /**
  * ============================================================================
- * CLINICIAN WORKSTATION PORTAL
+ * DOCTOR CLINICAL WORKSTATION DASHBOARD (frontend/src/features/doctor/Dashboard.tsx)
  * ============================================================================
  * 
  * WHY THIS FILE IS SPECIAL:
- * This is the heavily restricted portal used by professional doctors.
- * It contains components for reviewing AI Triage reports, managing live consultation queues,
- * and writing clinical notes. It is isolated completely from the patient portal.
+ * This is the operational command center for licensed specialist clinicians across
+ * Mumbai railway transit clinics. It tracks active consultation queues in real time,
+ * displays upcoming appointments ordered by schedule, summarizes assigned patient rosters,
+ * and surfaces urgent AI triage reports requiring prompt medical evaluation.
  */
 import React from 'react';
 import { Card } from "../../components/ui/Card";

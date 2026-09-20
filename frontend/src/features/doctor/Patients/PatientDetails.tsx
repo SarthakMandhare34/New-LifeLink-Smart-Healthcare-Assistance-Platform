@@ -1,12 +1,13 @@
 /**
  * ============================================================================
- * CLINICIAN WORKSTATION PORTAL
+ * DOCTOR CLINICAL EHR INSPECTOR & RX SUITE (frontend/src/features/doctor/Patients/PatientDetails.tsx)
  * ============================================================================
  * 
  * WHY THIS FILE IS SPECIAL:
- * This is the heavily restricted portal used by professional doctors.
- * It contains components for reviewing AI Triage reports, managing live consultation queues,
- * and writing clinical notes. It is isolated completely from the patient portal.
+ * This is the comprehensive patient chart interface for authorized clinicians.
+ * It enforces relationship-based access control (only allowing doctors to view patients
+ * with confirmed/active appointments), displays the patient's full medical baseline,
+ * and integrates the digital prescription authoring engine with cryptographic SHA-256 signing.
  */
 import { useState } from "react";                                                             // React hook for form tracking
 import { useParams } from "react-router-dom";                                                   // Extracts URL parameters (patientId)

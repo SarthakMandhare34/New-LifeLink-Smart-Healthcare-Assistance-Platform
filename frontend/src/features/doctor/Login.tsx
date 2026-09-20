@@ -1,12 +1,13 @@
 /**
  * ============================================================================
- * CLINICIAN WORKSTATION PORTAL
+ * CLINICIAN WORKSTATION AUTHENTICATION PORTAL (frontend/src/features/doctor/Login.tsx)
  * ============================================================================
  * 
  * WHY THIS FILE IS SPECIAL:
- * This is the heavily restricted portal used by professional doctors.
- * It contains components for reviewing AI Triage reports, managing live consultation queues,
- * and writing clinical notes. It is isolated completely from the patient portal.
+ * This is the dedicated credential verification gateway for medical clinicians.
+ * It strictly issues independent `doctor_session_id` cookies to prevent token cross-contamination
+ * with patient sessions, verifies credentials against the synthetic doctor directory across
+ * 24 Mumbai railway transit clinic locations, and routes verified specialists into their practice suite.
  */
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";

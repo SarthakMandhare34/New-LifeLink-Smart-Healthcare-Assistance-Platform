@@ -1,12 +1,12 @@
 /**
  * ============================================================================
- * CLINICIAN WORKSTATION PORTAL
+ * DOCTOR CONSULTATION WORKSPACE (frontend/src/features/doctor/Consultations/Consultation.tsx)
  * ============================================================================
  * 
  * WHY THIS FILE IS SPECIAL:
- * This is the heavily restricted portal used by professional doctors.
- * It contains components for reviewing AI Triage reports, managing live consultation queues,
- * and writing clinical notes. It is isolated completely from the patient portal.
+ * This component provides the clinical encounter interface for licensed physicians.
+ * It filters active patient appointments needing clinical review, provides rapid
+ * access to patient medical histories, and initiates the diagnostic consultation workflow.
  */
 import { useNavigate } from "react-router-dom";                                                 // Router navigation hook
 import { Card } from "../../../components/ui/Card";                                             // Visual card container

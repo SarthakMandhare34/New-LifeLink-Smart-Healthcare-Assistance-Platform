@@ -16,6 +16,8 @@ import { Button } from '../../../components/ui/Button';
 import { Card } from '../../../components/ui/Card';
 import { Input } from '../../../components/ui/Input';
 import { Popup } from '../../../components/ui/Popup';
+import { ValidationMessage } from '../../../components/ui/ValidationMessage';
+import { formatUserFriendlyError } from '../../../lib/errorFormatting';
 import { trpc } from '../../../lib/trpc';
 
 type AssessmentResult = {
@@ -54,7 +56,7 @@ export const AIAssessment = () => {
 
   const [symptoms, setSymptoms] = useState('');                                            // Patient symptom description text
   const [age, setAge] = useState('');                                                      // Patient age input string
-  const [gender, setGender] = useState('');                                                // Stated biological gender ('Man', 'Woman', 'Other')
+  const [gender, setGender] = useState('');                                                // Stated biological gender ('Male', 'Female', 'Other')
   const [conditions, setConditions] = useState('');                                        // Pre-existing medical conditions
   const [duration, setDuration] = useState('');                                            // Symptom onset / duration
   const [result, setResult] = useState<AssessmentResult | null>(null);                     // Newly returned assessment result
@@ -84,8 +86,8 @@ export const AIAssessment = () => {
   const handleSubmit = async (event: React.FormEvent) => {
     event.preventDefault();                                                                // Prevent browser form reload
     const parsedAge = Number.parseInt(age, 10);                                            // Parse numeric age
-    if (!symptoms.trim() || Number.isNaN(parsedAge) || parsedAge < 0 || parsedAge > 120 || !gender || !duration.trim()) {
-      setApiError('Please fill out all required fields with valid values (Age between 0 and 120).'); // Validation failure
+    if (!symptoms.trim() || Number.isNaN(parsedAge) || parsedAge < 0 || parsedAge > 100 || !gender || !duration.trim()) {
+      setApiError('Please fill out all required fields with valid values (Age between 0 and 100).'); // Validation failure
       return;
     }
 
@@ -105,7 +107,7 @@ export const AIAssessment = () => {
       setIsResultModalOpen(true);                                                          // Open result modal popup
     } catch (error: any) {
       console.error('Assessment failed', error);
-      setApiError(error?.message || 'Live AI health assessment is temporarily unavailable. Please try again or seek appropriate professional medical care based on your symptoms.');
+      setApiError(formatUserFriendlyError(error, 'Live AI health assessment is temporarily unavailable. Please try again or seek appropriate professional medical care based on your symptoms.'));
     } finally {
       setIsProcessing(false);                                                              // Clear loading state
     }
@@ -141,45 +143,29 @@ export const AIAssessment = () => {
   };
 
   return (
-    <div style={{ display: 'flex', flexDirection: 'column', gap: '28px', fontFamily: 'Plus Jakarta Sans, sans-serif' }}>
-      
-      {/* Header */}
-      <section style={{ display: 'flex', alignItems: 'center', gap: '16px' }}>
-        <div style={{ width: '48px', height: '48px', borderRadius: '14px', background: 'rgba(217, 119, 6, 0.15)', display: 'grid', placeItems: 'center', color: 'var(--color-primary)', flexShrink: 0 }}>
-          <Stethoscope size={24} />
+    <div className="container" style={{ padding: 0, fontFamily: 'Plus Jakarta Sans, sans-serif' }}>
+      {/* Header section with icon and title */}
+      <header className="mb-4 flex items-center gap-3">
+        <div style={{ width: 44, height: 44, borderRadius: '14px', background: 'var(--color-primary-muted)', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+          <Activity size={24} color="var(--color-primary)" />
         </div>
         <div>
-          <h1 className="font-display" style={{ fontSize: '2rem', fontWeight: 700, margin: 0, color: 'var(--color-text)', letterSpacing: '-0.02em', fontFamily: 'Outfit, sans-serif' }}>
+          <h1 style={{ margin: 0, fontFamily: 'Outfit, sans-serif', color: 'var(--color-text)', fontSize: '2rem' }}>
             AI Health Assessment
           </h1>
-          <p style={{ color: 'var(--color-text-muted)', fontSize: '0.9rem', margin: '2px 0 0', fontStyle: 'italic' }}>
-            Decision support only. LifeLink does not diagnose, prescribe, or replace professional medical care.
+          <p className="caption" style={{ color: 'var(--color-text-muted)' }}>
+            Enter your symptoms below to get an intelligent preliminary clinical guidance and specialist routing recommendation.
           </p>
         </div>
-      </section>
+      </header>
 
-      {/* Assessment Form Card */}
-      <Card style={cardStyle}>
+      {/* Main Assessment Card */}
+      <Card variant="glass" style={cardStyle}>
         <form onSubmit={handleSubmit} style={{ display: 'flex', flexDirection: 'column', gap: '20px' }}>
           
+          {/* Validation Alert */}
           {apiError && (
-            <div
-              role="alert"
-              style={{
-                display: 'flex',
-                alignItems: 'center',
-                gap: '12px',
-                padding: '14px 16px',
-                background: 'rgba(220, 38, 38, 0.06)',
-                border: '1px solid rgba(220, 38, 38, 0.2)',
-                borderRadius: '12px',
-                color: 'var(--color-semantic-emergency)',
-                fontSize: '0.9rem',
-              }}
-            >
-              <AlertCircle size={20} style={{ flexShrink: 0 }} />
-              <span>{apiError}</span>
-            </div>
+            <ValidationMessage message={apiError} type="error" />
           )}
 
           {/* Symptoms Input */}
@@ -213,15 +199,27 @@ export const AIAssessment = () => {
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(min(100%, 200px), 1fr))', gap: '16px' }}>
             <label htmlFor="ai-assessment-age" style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
               <span style={{ fontSize: '0.92rem', fontWeight: 700, color: 'var(--color-text)' }}>
-                Age (0 – 120) <span style={{ color: 'var(--color-semantic-emergency)' }}>*</span>
+                Age (0 – 100) <span style={{ color: 'var(--color-semantic-emergency)' }}>*</span>
               </span>
               <Input 
                 id="ai-assessment-age"
                 type="number"
                 min={0}
-                max={120}
+                max={100}
                 value={age} 
-                onChange={(event) => setAge(event.target.value)} 
+                onChange={(event) => {
+                  const val = event.target.value;
+                  if (val === '') {
+                    setAge('');
+                    return;
+                  }
+                  const num = Number(val);
+                  if (!Number.isNaN(num)) {
+                    if (num < 0) setAge('0');
+                    else if (num > 100) setAge('100');
+                    else setAge(val);
+                  }
+                }} 
                 placeholder="e.g. 32"
                 required 
                 style={{ border: '1px solid var(--color-border)', background: 'var(--color-surface-white)', color: 'var(--color-text)', borderRadius: '12px' }}
@@ -251,8 +249,8 @@ export const AIAssessment = () => {
                 }}
               >
                 <option value="" disabled>Select gender</option>
-                <option value="Man">Man</option>
-                <option value="Woman">Woman</option>
+                <option value="Male">Male</option>
+                <option value="Female">Female</option>
                 <option value="Other">Other</option>
               </select>
             </label>

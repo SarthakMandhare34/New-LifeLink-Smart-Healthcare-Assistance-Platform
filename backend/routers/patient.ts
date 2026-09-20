@@ -1,10 +1,10 @@
 /**
  * ============================================================================
- * tRPC DOMAIN ROUTERS & BUSINESS LOGIC
+ * tRPC DOMAIN ROUTERS & BUSINESS LOGIC (backend/routers/patient.ts)
  * ============================================================================
  * 
  * WHY THIS FILE IS SPECIAL:
- * This file contains the actual rules for what patients and doctors can do.
+ * This file contains the actual rules for what patients can do.
  * It uses tRPC, which creates an unbreakable bridge between the front-end and back-end.
  * More importantly, every single function here enforces IDOR (Insecure Direct Object Reference) protection.
  * It strictly checks: "Does this prescription actually belong to the person requesting it?"
@@ -13,12 +13,14 @@ import { TRPCError } from "@trpc/server";
 import { z } from "zod";
 import {
   cancelOwnedPatientAppointment,
+  checkDoctorSlotConflict,
   createPatientAppointment,
   createDoctorEvent,
   createPatientEmergencyContact,
   createNativePatient,
   createPatientMedicine,
   createPatientEvent,
+  getDoctorBookedSlots,
   getNativePatientByEmail,
   getPatientDashboard,
   getPatientProfile,
@@ -26,6 +28,7 @@ import {
   getOwnedPatientPrescription,
   listPatientMedicines,
   listPatientPrescriptions,
+  recordBookingError,
   removeOwnedPatientMedicine,
   updateOwnedPatientMedicine,
   removeOwnedPatientEmergencyContact,
@@ -216,16 +219,44 @@ export const patientAppointmentRouter = router({
       doctor: getMockDoctorById(appointment.doctorId),
     }));
   }),
+  getDoctorAvailability: protectedProcedure
+    .input(z.object({ doctorId: z.string().trim().min(1), date: z.string().trim().min(1) }))
+    .query(async ({ input }) => {
+      const bookedSlots = await getDoctorBookedSlots(input.doctorId, input.date);
+      return { bookedSlots };
+    }),
   request: protectedProcedure.input(appointmentInput).mutation(async ({ ctx, input }) => {
     const doctor = getMockDoctorById(input.doctorId);                                      // Find targeted doctor
-    if (!doctor) throw new TRPCError({ code: "NOT_FOUND", message: "Selected controlled specialist was not found." });
-    if (input.scheduledAt.getTime() <= Date.now()) {                                       // Enforce booking in the future
-      throw new TRPCError({ code: "BAD_REQUEST", message: "Appointment time must be in the future." });
+    if (!doctor) {
+      await recordBookingError(ctx.user.id, input.doctorId, input.scheduledAt, "Selected controlled specialist was not found.", "DOCTOR_NOT_FOUND");
+      throw new TRPCError({ code: "NOT_FOUND", message: "Selected controlled specialist was not found." });
     }
-    const id = await createPatientAppointment(ctx.user.id, doctor.id, input.scheduledAt, input.reason); // Save appointment in DB
-    await createPatientEvent(ctx.user.id, "APPOINTMENT_UPDATED", String(id));              // Notify patient via SSE
-    await createDoctorEvent(doctor.id, ctx.user.id, "APPOINTMENT_UPDATED", String(id));    // Notify clinician via SSE
-    return { id, status: "Requested" as const };
+    
+    // Real-time validation against current date and time
+    if (input.scheduledAt.getTime() <= Date.now()) {
+      const errorMsg = "Invalid date or time. Please select a future date and time for your appointment.";
+      await recordBookingError(ctx.user.id, doctor.id, input.scheduledAt, errorMsg, "INVALID_PAST_DATE_TIME");
+      throw new TRPCError({ code: "BAD_REQUEST", message: errorMsg });
+    }
+
+    // Real-time slot conflict check
+    const hasConflict = await checkDoctorSlotConflict(doctor.id, input.scheduledAt);
+    if (hasConflict) {
+      const errorMsg = "This appointment time slot is no longer available. Please select another time slot.";
+      await recordBookingError(ctx.user.id, doctor.id, input.scheduledAt, errorMsg, "SLOT_CONFLICT");
+      throw new TRPCError({ code: "CONFLICT", message: errorMsg });
+    }
+
+    try {
+      const id = await createPatientAppointment(ctx.user.id, doctor.id, input.scheduledAt, input.reason); // Save appointment in DB
+      await createPatientEvent(ctx.user.id, "APPOINTMENT_UPDATED", String(id));              // Notify patient via SSE
+      await createDoctorEvent(doctor.id, ctx.user.id, "APPOINTMENT_UPDATED", String(id));    // Notify clinician via SSE
+      return { id, status: "Requested" as const };
+    } catch (err) {
+      const dbErrorMsg = err instanceof Error ? err.message : "Failed to record appointment";
+      await recordBookingError(ctx.user.id, doctor.id, input.scheduledAt, dbErrorMsg, "DATABASE_ERROR");
+      throw new TRPCError({ code: "INTERNAL_SERVER_ERROR", message: "Unable to schedule appointment. Please try again." });
+    }
   }),
   cancel: protectedProcedure.input(z.object({ id: z.number().int().positive() })).mutation(async ({ ctx, input }) => {
     const cancelled = await cancelOwnedPatientAppointment(ctx.user.id, input.id);           // Cancel appointment in DB
@@ -259,7 +290,7 @@ export const patientPrescriptionRouter = router({
     }),
 });
 
-// Zod schema for doctor directory search filters
+// Mumbai specialist directory and discovery search router
 const discoveryInput = z.object({
   city: z.literal("Mumbai").optional(),                                                    // Filter by city
   specialty: z.string().trim().min(1).max(160).optional(),                                 // Filter by medical specialty
@@ -269,8 +300,89 @@ const discoveryInput = z.object({
   query: z.string().trim().min(1).max(160).optional(),                                     // Keyword search
 }).optional();
 
-// Mumbai specialist directory and discovery search router
 export const patientDiscoveryRouter = router({
   facets: protectedProcedure.query(() => getMockDoctorDirectoryFacets()),                  // Retrieve available specialties, lines, and stations
   list: protectedProcedure.input(discoveryInput).query(({ input }) => filterMockDoctorDirectory(input)), // Execute filtered doctor search
+});
+
+// Centralized patient notification router delivering all appointment and prescription updates
+export const patientNotificationRouter = router({
+  list: protectedProcedure.query(async ({ ctx }) => {
+    const appointments = await listPatientAppointments(ctx.user.id);
+    const prescriptions = await listPatientPrescriptions(ctx.user.id);
+
+    const notifications: Array<{
+      id: string;
+      category: "APPOINTMENT" | "PRESCRIPTION";
+      title: string;
+      description: string;
+      timestamp: Date;
+      status?: string;
+      link: string;
+    }> = [];
+
+    for (const apt of appointments) {
+      const doc = getMockDoctorById(apt.doctorId);
+      const docName = doc?.name || "Specialist";
+      const aptDate = new Date(apt.scheduledAt).toLocaleDateString(undefined, { month: "short", day: "numeric", hour: "2-digit", minute: "2-digit" });
+
+      if (apt.status === "Requested" || apt.status === "Pending") {
+        notifications.push({
+          id: `apt-req-${apt.id}`,
+          category: "APPOINTMENT",
+          title: "Appointment Requested",
+          description: `Booking requested with ${docName} for ${aptDate}.`,
+          timestamp: apt.createdAt || apt.scheduledAt,
+          status: apt.status,
+          link: "/patient/appointments",
+        });
+      } else if (apt.status === "Confirmed") {
+        notifications.push({
+          id: `apt-conf-${apt.id}`,
+          category: "APPOINTMENT",
+          title: "Appointment Confirmed",
+          description: `Consultation confirmed with ${docName} for ${aptDate}.`,
+          timestamp: apt.scheduledAt,
+          status: apt.status,
+          link: "/patient/appointments",
+        });
+      } else if (apt.status === "Cancelled") {
+        notifications.push({
+          id: `apt-canc-${apt.id}`,
+          category: "APPOINTMENT",
+          title: "Appointment Cancelled",
+          description: `Appointment with ${docName} scheduled for ${aptDate} was cancelled.`,
+          timestamp: apt.createdAt || new Date(),
+          status: apt.status,
+          link: "/patient/appointments",
+        });
+      } else if (apt.status === "Completed") {
+        notifications.push({
+          id: `apt-comp-${apt.id}`,
+          category: "APPOINTMENT",
+          title: "Consultation Completed",
+          description: `Consultation completed with ${docName}.`,
+          timestamp: apt.scheduledAt,
+          status: apt.status,
+          link: "/patient/appointments",
+        });
+      }
+    }
+
+    for (const rx of prescriptions) {
+      const doc = getMockDoctorById(rx.doctorId);
+      const docName = doc?.name || "Prescribing Clinician";
+      notifications.push({
+        id: `rx-${rx.id}`,
+        category: "PRESCRIPTION",
+        title: "New Prescription Issued",
+        description: `Prescription #${rx.id} (${rx.items.length} medicines) issued by ${docName}.`,
+        timestamp: rx.createdAt,
+        link: "/patient/prescriptions",
+      });
+    }
+
+    notifications.sort((a, b) => new Date(b.timestamp).getTime() - new Date(a.timestamp).getTime());
+    return notifications.slice(0, 30);
+  }),
 });

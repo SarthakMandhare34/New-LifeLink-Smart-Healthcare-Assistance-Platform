@@ -1,18 +1,43 @@
-import { expect, test, describe, beforeAll, afterAll } from "vitest";
-import { config } from "dotenv";
+/**
+ * ============================================================================
+ * AUTOMATED INTEGRATION SUITE: DIGITAL HEALTH PASSPORT & EMERGENCY CONTACTS (backend/healthPassport.test.ts)
+ * ============================================================================
+ * 
+ * WHAT THIS SUITE VERIFIES:
+ * Tests the patient's Emergency Health Record (EHR) passport and emergency contacts:
+ * 1. Health Passport Updates: Validates updating blood group, phone number, allergies, and chronic conditions.
+ * 2. Contact Management: Tests creating, updating, and removing emergency contacts.
+ * 3. IDOR Defense: Verifies that Patient 2 cannot update or delete emergency contacts owned by Patient 1.
+ * 4. Real-Time Broadcasts: Ensures `PROFILE_UPDATED` SSE events fire upon modifications.
+ */
+import { expect, test, describe, beforeAll, afterAll } from "vitest";                           // Vitest test runner
+import { config } from "dotenv";                                                                // Loads environment variables
 config();
-import { getDb, upsertUser } from "./db";
-import { appRouter } from "./routers";
-import { users, patientProfiles, patientEmergencyContacts } from "./database/schema";
-import { eq } from "drizzle-orm";
+import { getDb, upsertUser } from "./db";                                                       // Database helpers
+import { appRouter } from "./routers";                                                          // Root tRPC router
+import { users, patientProfiles, patientEmergencyContacts } from "../database/schema";          // Schema tables
+import { eq } from "drizzle-orm";                                                               // Drizzle SQL operators
 
-let db: NonNullable<Awaited<ReturnType<typeof getDb>>>;
+let db: NonNullable<Awaited<ReturnType<typeof getDb>>>;                                        // Database handle
 
+// Helper to create typed mock caller matching trpc context
+function createCaller(user: { id: number; openId: string; role: "user" | "doctor" }) {
+  return appRouter.createCaller({
+    req: {} as any,
+    res: { cookie: () => {}, clearCookie: () => {} } as any,
+    user: user as any,
+    patientUser: null,
+    doctorUser: null,
+  } as any);
+}
+
+// Global setup inserting two test patients
 beforeAll(async () => {
-  const maybeDb = await getDb();
+  const maybeDb = await getDb();                                                               // Connect to database
   if (!maybeDb) throw new Error("Database not available");
   db = maybeDb;
 
+  // Insert Patient 1
   await upsertUser({
     openId: "test:patient-passport-1",
     name: "Passport Patient 1",
@@ -21,6 +46,7 @@ beforeAll(async () => {
     role: "user",
   });
 
+  // Insert Patient 2 (adversary for IDOR tests)
   await upsertUser({
     openId: "test:patient-passport-2",
     name: "Passport Patient 2",
@@ -31,9 +57,9 @@ beforeAll(async () => {
 });
 
 describe("Digital Health Passport & Emergency Contacts", () => {
-  let patient1Id: number;
-  let patient2Id: number;
-  let contact1Id: number;
+  let patient1Id: number;                                                                       // ID for Patient 1
+  let patient2Id: number;                                                                       // ID for Patient 2
+  let contact1Id: number;                                                                       // ID of created contact
 
   beforeAll(async () => {
     const u1 = await db.select().from(users).where(eq(users.openId, "test:patient-passport-1"));
@@ -41,7 +67,7 @@ describe("Digital Health Passport & Emergency Contacts", () => {
     const u2 = await db.select().from(users).where(eq(users.openId, "test:patient-passport-2"));
     patient2Id = u2[0].id;
 
-    // Ensure initial profiles exist
+    // Ensure baseline initial profiles exist in MySQL
     const p1 = await db.select().from(patientProfiles).where(eq(patientProfiles.userId, patient1Id));
     if (!p1.length) {
       await db.insert(patientProfiles).values({ userId: patient1Id, allergiesJson: "[]", conditionsJson: "[]" });
@@ -52,6 +78,7 @@ describe("Digital Health Passport & Emergency Contacts", () => {
     }
   });
 
+  // Cleanup created contacts after test completion
   afterAll(async () => {
     await db.delete(patientEmergencyContacts).where(eq(patientEmergencyContacts.userId, patient1Id));
     await db.delete(patientEmergencyContacts).where(eq(patientEmergencyContacts.userId, patient2Id));
@@ -60,7 +87,7 @@ describe("Digital Health Passport & Emergency Contacts", () => {
   // HEALTH PASSPORT TESTS
   describe("Health Passport", () => {
     test("1. Authenticated read: Patient 1 reads own passport", async () => {
-      const caller1 = appRouter.createCaller({ user: { id: patient1Id, openId: "test:patient-passport-1", role: "user" } });
+      const caller1 = createCaller({ id: patient1Id, openId: "test:patient-passport-1", role: "user" });
       const passport = await caller1.patientProfile.get();
 
       expect(passport).toBeDefined();
@@ -71,7 +98,7 @@ describe("Digital Health Passport & Emergency Contacts", () => {
     });
 
     test("2. Update: Patient 1 updates blood group, allergies, and conditions", async () => {
-      const caller1 = appRouter.createCaller({ user: { id: patient1Id, openId: "test:patient-passport-1", role: "user" } });
+      const caller1 = createCaller({ id: patient1Id, openId: "test:patient-passport-1", role: "user" });
       const updated = await caller1.patientProfile.update({
         bloodGroup: "O+",
         allergies: ["Penicillin", "Peanuts"],
@@ -92,7 +119,7 @@ describe("Digital Health Passport & Emergency Contacts", () => {
     });
 
     test("4. Validation: Rejects invalid passport inputs", async () => {
-      const caller1 = appRouter.createCaller({ user: { id: patient1Id, openId: "test:patient-passport-1", role: "user" } });
+      const caller1 = createCaller({ id: patient1Id, openId: "test:patient-passport-1", role: "user" });
       // bloodGroup exceeds max 12 chars
       await expect(caller1.patientProfile.update({
         bloodGroup: "VERY_LONG_INVALID_BLOOD_GROUP",
@@ -100,7 +127,7 @@ describe("Digital Health Passport & Emergency Contacts", () => {
     });
 
     test("5. Patient isolation / IDOR: Patient 2 cannot alter Patient 1 passport", async () => {
-      const caller2 = appRouter.createCaller({ user: { id: patient2Id, openId: "test:patient-passport-2", role: "user" } });
+      const caller2 = createCaller({ id: patient2Id, openId: "test:patient-passport-2", role: "user" });
       
       // Patient 2 updates their own profile
       await caller2.patientProfile.update({
@@ -124,7 +151,7 @@ describe("Digital Health Passport & Emergency Contacts", () => {
   // EMERGENCY CONTACTS TESTS
   describe("Emergency Contacts", () => {
     test("6. Create contact: Patient 1 creates an emergency contact", async () => {
-      const caller1 = appRouter.createCaller({ user: { id: patient1Id, openId: "test:patient-passport-1", role: "user" } });
+      const caller1 = createCaller({ id: patient1Id, openId: "test:patient-passport-1", role: "user" });
       const result = await caller1.patientProfile.emergencyContacts.create({
         name: "Jane Doe",
         relationship: "Spouse",
@@ -143,7 +170,7 @@ describe("Digital Health Passport & Emergency Contacts", () => {
     });
 
     test("7. Read contacts: Patient 1 reads emergency contacts in passport", async () => {
-      const caller1 = appRouter.createCaller({ user: { id: patient1Id, openId: "test:patient-passport-1", role: "user" } });
+      const caller1 = createCaller({ id: patient1Id, openId: "test:patient-passport-1", role: "user" });
       const passport = await caller1.patientProfile.get();
 
       const contact = passport?.emergencyContacts.find((c) => c.id === String(contact1Id));
@@ -154,7 +181,7 @@ describe("Digital Health Passport & Emergency Contacts", () => {
     });
 
     test("8. Update contact: Patient 1 updates own emergency contact", async () => {
-      const caller1 = appRouter.createCaller({ user: { id: patient1Id, openId: "test:patient-passport-1", role: "user" } });
+      const caller1 = createCaller({ id: patient1Id, openId: "test:patient-passport-1", role: "user" });
       const result = await caller1.patientProfile.emergencyContacts.update({
         id: contact1Id,
         values: {
@@ -173,7 +200,7 @@ describe("Digital Health Passport & Emergency Contacts", () => {
     });
 
     test("9. Ownership / IDOR: Patient 2 cannot update or delete Patient 1's contact", async () => {
-      const caller2 = appRouter.createCaller({ user: { id: patient2Id, openId: "test:patient-passport-2", role: "user" } });
+      const caller2 = createCaller({ id: patient2Id, openId: "test:patient-passport-2", role: "user" });
 
       // Patient 2 attempts to update Patient 1's contact
       await expect(caller2.patientProfile.emergencyContacts.update({
@@ -197,7 +224,7 @@ describe("Digital Health Passport & Emergency Contacts", () => {
     });
 
     test("10. Validation: Emergency contact inputs are validated", async () => {
-      const caller1 = appRouter.createCaller({ user: { id: patient1Id, openId: "test:patient-passport-1", role: "user" } });
+      const caller1 = createCaller({ id: patient1Id, openId: "test:patient-passport-1", role: "user" });
 
       // Invalid phone
       await expect(caller1.patientProfile.emergencyContacts.create({
@@ -215,7 +242,7 @@ describe("Digital Health Passport & Emergency Contacts", () => {
     });
 
     test("11. Delete contact: Patient 1 deletes own emergency contact", async () => {
-      const caller1 = appRouter.createCaller({ user: { id: patient1Id, openId: "test:patient-passport-1", role: "user" } });
+      const caller1 = createCaller({ id: patient1Id, openId: "test:patient-passport-1", role: "user" });
       const result = await caller1.patientProfile.emergencyContacts.remove({
         id: contact1Id,
       });
@@ -227,7 +254,7 @@ describe("Digital Health Passport & Emergency Contacts", () => {
     });
 
     test("12. Persistence after deletion: Contact remains absent on read", async () => {
-      const caller1 = appRouter.createCaller({ user: { id: patient1Id, openId: "test:patient-passport-1", role: "user" } });
+      const caller1 = createCaller({ id: patient1Id, openId: "test:patient-passport-1", role: "user" });
       const passport = await caller1.patientProfile.get();
 
       const contact = passport?.emergencyContacts.find((c) => c.id === String(contact1Id));

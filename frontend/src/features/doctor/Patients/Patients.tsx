@@ -1,12 +1,13 @@
 /**
  * ============================================================================
- * CLINICIAN WORKSTATION PORTAL
+ * DOCTOR AUTHORIZED PATIENT ROSTER (frontend/src/features/doctor/Patients/Patients.tsx)
  * ============================================================================
  * 
  * WHY THIS FILE IS SPECIAL:
- * This is the heavily restricted portal used by professional doctors.
- * It contains components for reviewing AI Triage reports, managing live consultation queues,
- * and writing clinical notes. It is isolated completely from the patient portal.
+ * This component displays the active clinical panel of patients assigned to the doctor.
+ * In compliance with digital health privacy standards, it restricts directory visibility
+ * strictly to patients with booked or completed appointments with this specialist station,
+ * preventing unauthorized browsing of unrelated patient records across Mumbai.
  */
 import { useNavigate } from "react-router-dom";                                                 // React router hook for navigation transitions
 import { Users, ArrowRight, UserCheck, Loader2 } from "lucide-react";                           // Roster, action, and loading icons

@@ -15,6 +15,7 @@ import { Input } from '../../components/ui/Input';
 import { LifeLinkLogo } from '../../components/brand/LifeLinkLogo';
 import { EntryThemeToggle } from '../../components/EntryThemeToggle';
 import { trpc } from '../../lib/trpc';
+import { formatUserFriendlyError } from '../../lib/errorFormatting';
 import { Activity, Lock, Mail, Eye, EyeOff, HeartPulse, ShieldCheck, Shield } from 'lucide-react';
 import { PATIENT_DASHBOARD_PATH } from '../patient/patientAuthRoutes';
 
@@ -67,7 +68,7 @@ export const PatientLogin = () => {
       await trpcUtils.auth.me.refetch();                                                   // Re-query current user context
       navigate(PATIENT_DASHBOARD_PATH, { replace: true });                                 // Navigate to patient dashboard
     } catch (err: unknown) {
-      setError(err instanceof Error ? err.message : 'Unable to sign in. Please try again.'); // Display failure message
+      setError(formatUserFriendlyError(err, 'Unable to sign in. Please check your credentials and try again.')); // Display user-friendly failure message
       setIsLoading(false);                                                                 // Reset loading state
     }
   };

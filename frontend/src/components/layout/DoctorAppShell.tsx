@@ -48,9 +48,34 @@ export const DoctorAppShell = () => {
   const utils = trpc.useUtils();                                                                // Cache invalidator
   const { theme, toggleTheme } = useTheme();                                                    // Theme toggle hook
   const [isMobileOpen, setIsMobileOpen] = useState(false);                                      // Mobile drawer open state
+  const [isNotificationOpen, setIsNotificationOpen] = useState(false);                          // Notification panel open state
+  const notificationRef = React.useRef<HTMLDivElement>(null);                                   // Notification container DOM ref
   
   // Query active clinician session
   const session = trpc.doctorAuth.me.useQuery(undefined, { retry: false, refetchOnWindowFocus: false });
+  
+  // Appointments query for clinician notification feed
+  const appointmentsQuery = trpc.doctorWorkspace.appointments.list.useQuery(undefined, {
+    enabled: Boolean(session.data),
+    staleTime: 5000,
+  });
+
+  const appointments = appointmentsQuery.data || [];
+  const pendingRequests = appointments.filter(a => a.status === 'Requested' || a.status === 'Pending');
+  const unreadCount = pendingRequests.length;
+
+  // Dismiss notification popover when clicking outside
+  useEffect(() => {
+    function handleClickOutside(event: MouseEvent) {
+      if (notificationRef.current && !notificationRef.current.contains(event.target as Node)) {
+        setIsNotificationOpen(false);
+      }
+    }
+    if (isNotificationOpen) {
+      document.addEventListener('mousedown', handleClickOutside);
+    }
+    return () => document.removeEventListener('mousedown', handleClickOutside);
+  }, [isNotificationOpen]);
   
   // Clinician logout mutation
   const logoutMutation = trpc.doctorAuth.logout.useMutation({
@@ -275,24 +300,172 @@ export const DoctorAppShell = () => {
               {theme === 'light' ? <Moon size={18} /> : <Sun size={18} />}
             </button>
 
-            {/* Notification bell */}
-            <button
-              className="icon-btn"
-              aria-label="Notifications"
-              style={{ 
-                position: 'relative', 
-                background: 'var(--color-background)', 
-                width: '36px', 
-                height: '36px', 
-                borderRadius: '4px', 
-                display: 'grid', 
-                placeItems: 'center', 
-                border: '1px solid var(--color-border)', 
-                cursor: 'pointer' 
-              }}
-            >
-              <Bell size={18} color="var(--color-text-muted)" />
-            </button>
+            {/* Centralized Clinician Notification bell with popover */}
+            <div ref={notificationRef} style={{ position: 'relative' }}>
+              <button
+                className="icon-btn"
+                aria-label="Notifications"
+                aria-haspopup="true"
+                aria-expanded={isNotificationOpen}
+                onClick={() => setIsNotificationOpen(!isNotificationOpen)}
+                style={{ 
+                  position: 'relative', 
+                  background: 'var(--color-background)', 
+                  width: '36px', 
+                  height: '36px', 
+                  borderRadius: '4px', 
+                  display: 'grid', 
+                  placeItems: 'center', 
+                  border: '1px solid var(--color-border)', 
+                  cursor: 'pointer' 
+                }}
+              >
+                <Bell size={18} color={unreadCount > 0 ? "var(--color-primary)" : "var(--color-text-muted)"} />
+                {unreadCount > 0 && (
+                  <span
+                    style={{
+                      position: 'absolute',
+                      top: '4px',
+                      right: '4px',
+                      width: '8px',
+                      height: '8px',
+                      borderRadius: '50%',
+                      background: 'var(--color-semantic-emergency, #e11d48)',
+                      boxShadow: '0 0 0 2px var(--color-background)',
+                    }}
+                  />
+                )}
+              </button>
+
+              {isNotificationOpen && (
+                <div
+                  role="region"
+                  aria-label="Clinician Notifications Panel"
+                  style={{
+                    position: 'absolute',
+                    top: 'calc(100% + 8px)',
+                    right: 0,
+                    width: 'min(90vw, 360px)',
+                    background: 'var(--color-surface-white)',
+                    border: '1px solid var(--color-border)',
+                    borderRadius: '8px',
+                    boxShadow: 'var(--shadow-lg, 0 10px 25px -5px rgba(0,0,0,0.1))',
+                    zIndex: 1000,
+                    overflow: 'hidden',
+                    display: 'flex',
+                    flexDirection: 'column',
+                    fontFamily: 'inherit',
+                  }}
+                >
+                  <div style={{
+                    padding: '12px 16px',
+                    borderBottom: '1px solid var(--color-border)',
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'space-between',
+                    background: 'var(--color-surface-interactive)',
+                  }}>
+                    <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+                      <Bell size={16} color="var(--color-primary)" />
+                      <strong style={{ fontSize: '0.92rem', color: 'var(--color-text)' }}>Consultation Requests</strong>
+                      {unreadCount > 0 && (
+                        <span style={{
+                          background: 'var(--color-primary)',
+                          color: '#FFF',
+                          fontSize: '0.72rem',
+                          fontWeight: 700,
+                          borderRadius: '8px',
+                          padding: '1px 6px',
+                        }}>
+                          {unreadCount} pending
+                        </span>
+                      )}
+                    </div>
+                  </div>
+
+                  <div style={{ maxHeight: '340px', overflowY: 'auto' }}>
+                    {appointments.length === 0 ? (
+                      <div style={{ padding: '24px 16px', textAlign: 'center', color: 'var(--color-text-muted)' }}>
+                        <Bell size={24} style={{ opacity: 0.3, margin: '0 auto 8px', display: 'block' }} />
+                        <p style={{ margin: 0, fontSize: '0.85rem' }}>No appointment notifications yet.</p>
+                      </div>
+                    ) : (
+                      appointments.slice(0, 8).map((appt) => (
+                        <div
+                          key={appt.id}
+                          onClick={() => {
+                            setIsNotificationOpen(false);
+                            navigate('/doctor/appointments');
+                          }}
+                          style={{
+                            padding: '12px 16px',
+                            borderBottom: '1px solid var(--color-border)',
+                            background: (appt.status === 'Requested' || appt.status === 'Pending') ? 'rgba(217, 119, 6, 0.05)' : 'transparent',
+                            cursor: 'pointer',
+                            display: 'flex',
+                            gap: '10px',
+                            alignItems: 'flex-start',
+                          }}
+                        >
+                          <div style={{
+                            width: '32px',
+                            height: '32px',
+                            borderRadius: '6px',
+                            background: appt.status === 'Requested' ? 'rgba(217, 119, 6, 0.12)' : 'var(--color-primary-muted)',
+                            display: 'grid',
+                            placeItems: 'center',
+                            color: appt.status === 'Requested' ? 'var(--color-semantic-warning, #d97706)' : 'var(--color-primary)',
+                            flexShrink: 0,
+                          }}>
+                            <Calendar size={16} />
+                          </div>
+                          <div style={{ flex: 1, minWidth: 0 }}>
+                            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', gap: '8px' }}>
+                              <strong style={{ fontSize: '0.85rem', color: 'var(--color-text)', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>
+                                {appt.patient.name}
+                              </strong>
+                              <span style={{
+                                fontSize: '0.7rem',
+                                fontWeight: 700,
+                                padding: '1px 6px',
+                                borderRadius: '4px',
+                                background: appt.status === 'Requested' ? 'rgba(217, 119, 6, 0.15)' : 'rgba(15, 118, 110, 0.12)',
+                                color: appt.status === 'Requested' ? '#b45309' : 'var(--color-primary)',
+                              }}>
+                                {appt.status}
+                              </span>
+                            </div>
+                            <p style={{ margin: '3px 0 0', fontSize: '0.8rem', color: 'var(--color-text-muted)' }}>
+                              {new Date(appt.scheduledAt).toLocaleDateString(undefined, { month: 'short', day: 'numeric', hour: '2-digit', minute: '2-digit' })}
+                            </p>
+                          </div>
+                        </div>
+                      ))
+                    )}
+                  </div>
+                  <div style={{ padding: '8px 16px', background: 'var(--color-surface-interactive)', borderTop: '1px solid var(--color-border)', textAlign: 'center' }}>
+                    <button
+                      type="button"
+                      onClick={() => {
+                        setIsNotificationOpen(false);
+                        navigate('/doctor/appointments');
+                      }}
+                      style={{
+                        background: 'transparent',
+                        border: 'none',
+                        color: 'var(--color-primary)',
+                        fontSize: '0.82rem',
+                        fontWeight: 600,
+                        cursor: 'pointer',
+                        padding: '4px',
+                      }}
+                    >
+                      View all consultations &rarr;
+                    </button>
+                  </div>
+                </div>
+              )}
+            </div>
 
             {/* Doctor Profile Monogram Badge: Responsive chip with collapsible text metadata on small phones */}
             <button

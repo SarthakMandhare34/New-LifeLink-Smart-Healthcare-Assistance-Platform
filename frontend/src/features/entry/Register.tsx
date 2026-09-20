@@ -1,11 +1,13 @@
 /**
  * ============================================================================
- * FRONTEND REACT CORE
+ * PATIENT REGISTRATION PORTAL (frontend/src/features/entry/Register.tsx)
  * ============================================================================
  * 
  * WHY THIS FILE IS SPECIAL:
- * This is the root configuration of the React application.
- * It sets up the Routing (which URL goes to which page) and global Theme Contexts.
+ * This component provides the secure self-service onboarding interface for new patients.
+ * It manages native email/password account creation with client-side credential verification,
+ * provides optional Google OAuth federation, and establishes the authenticated session
+ * required to access the patient-owned health passport and AI triage services.
  */
 import React, { useState, useEffect } from 'react';
 import { useNavigate, useSearchParams } from 'react-router-dom';
@@ -15,6 +17,7 @@ import { Input } from '../../components/ui/Input';
 import { LifeLinkLogo } from '../../components/brand/LifeLinkLogo';
 import { EntryThemeToggle } from '../../components/EntryThemeToggle';
 import { trpc } from '../../lib/trpc';
+import { formatUserFriendlyError } from '../../lib/errorFormatting';
 import { Activity, Lock, User as UserIcon, Mail, HeartPulse, ShieldCheck, Shield } from 'lucide-react';
 import { PATIENT_DASHBOARD_PATH } from '../patient/patientAuthRoutes';
 
@@ -72,7 +75,7 @@ export const PatientRegistration = () => {
       await trpcUtils.auth.me.refetch();                                                   // Update authenticated user context
       navigate(PATIENT_DASHBOARD_PATH, { replace: true });                                 // Direct new patient to dashboard
     } catch (err: unknown) {
-      setError(err instanceof Error ? err.message : 'Registration failed. Please try again.'); // Display failure reason
+      setError(formatUserFriendlyError(err, 'Registration failed. Please try again.')); // Display user-friendly failure reason
       setIsLoading(false);                                                                 // Reset loading state
     }
   };

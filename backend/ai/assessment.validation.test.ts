@@ -29,7 +29,10 @@ describe("assessment persistence input", () => {
   });
 
   it("rejects invalid assessment ages and missing demographic input", () => {
-    expect(() => assessmentRequestInput.parse({ ...validAssessment, age: 121 })).toThrow();
+    expect(() => assessmentRequestInput.parse({ ...validAssessment, age: 101 })).toThrow();
+    expect(() => assessmentRequestInput.parse({ ...validAssessment, age: -1 })).toThrow();
     expect(() => assessmentRequestInput.parse({ ...validAssessment, gender: "" })).toThrow();
+    expect(assessmentRequestInput.parse({ ...validAssessment, age: 100 }).age).toBe(100);
+    expect(assessmentRequestInput.parse({ ...validAssessment, age: 0 }).age).toBe(0);
   });
 });
