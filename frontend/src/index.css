@@ -1,178 +1,232 @@
 /* ============================================================================
-   LIFELINK DESIGN SYSTEM — NORDIC CLINICAL
-   SWISS × SCANDINAVIAN + ZEN-LIKE RESTRAINT
+   LIFELINK DESIGN SYSTEM — SWISS INTERNATIONAL TYPOGRAPHIC STYLE
+   MODERN CLINICAL INFORMATION INTERFACE & EDITORIAL GRID SYSTEM
    ============================================================================
-   Authoritative visual direction:
-   - Swiss structural discipline: consistent grid, strong typographic hierarchy, deliberate proportions
-   - Scandinavian warmth: warm neutral stone surfaces, subtle tactile quality, generous breathing room
-   - Zen-like restraint: visual calm, zero unnecessary decoration, solid opaque surfaces
-   - Clinical clarity: immediate legibility, high contrast, reserved semantic colors
+   Core Visual Contract:
+   - Structural Discipline: Structured grid, strong typographic hierarchy, deliberate whitespace
+   - Dominant Canvas: 70–80% white / near-white, 10–15% black/gray structure, 5–10% blue, 2–5% red
+   - Intentional Colors: Swiss Red (#E30613) for high priority / patient CTA / emergency;
+                         Swiss Blue (#0057B8) for clinician workstation / information / secondary;
+                         Swiss White / Gray for physical clinical surfaces & borders
+   - Engineered Geometry: 0–4px rectangular corners, flat opaque surfaces, 1px structural borders
+   - Minimal Shadows: Default NO SHADOW. Borders provide structural separation.
    ============================================================================ */
 
 /* 1. Base Shared Variables & Geometry Tokens */
 :root {
-  /* Spacing System (8px rhythm) */
+  /* Swiss Core Color System */
+  --swiss-red: #E30613;
+  --swiss-red-dark: #B8000B;
+  --swiss-red-soft: #FDECEC;
+
+  --swiss-blue: #0057B8;
+  --swiss-blue-dark: #003B7A;
+  --swiss-blue-soft: #EAF2FB;
+
+  --swiss-white: #FFFFFF;
+  --swiss-off-white: #F7F7F5;
+  --swiss-gray-100: #EDEDED;
+  --swiss-gray-300: #D9D9D9;
+  --swiss-gray-500: #8A8A8A;
+  --swiss-gray-700: #333333;
+  --swiss-black: #111111;
+
+  /* Strict Swiss Spacing System */
+  --spacing-0: 4px;
   --spacing-1: 8px;
   --spacing-2: 12px;
   --spacing-3: 16px;
-  --spacing-4: 20px;
+  --spacing-4: 20px; /* Transitional compatibility mapped carefully */
   --spacing-5: 24px;
   --spacing-6: 32px;
-  --spacing-7: 48px;
+  --spacing-7: 40px;
+  --spacing-8: 48px;
+  --spacing-9: 64px;
+  --spacing-10: 80px;
 
-  /* Typography Scale */
-  --text-h1: 26px;      /* Page title (24-28px) */
-  --text-h2: 18px;      /* Section title (17-20px) */
-  --text-h3: 16px;      /* Card title (15-17px) */
-  --text-body: 14px;    /* Body (14-15px) */
-  --text-caption: 12px; /* Metadata / Labels (12-13px) */
-  --text-clinical: 24px;/* Tabular clinical metrics (20-28px) */
+  --swiss-space-1: 4px;
+  --swiss-space-2: 8px;
+  --swiss-space-3: 12px;
+  --swiss-space-4: 16px;
+  --swiss-space-5: 24px;
+  --swiss-space-6: 32px;
+  --swiss-space-7: 40px;
+  --swiss-space-8: 48px;
+  --swiss-space-9: 64px;
+  --swiss-space-10: 80px;
 
-  /* Standardized Corner Geometry (Section 8) */
-  --border-radius-lg: 10px;    /* Cards / Panels / Dialogs: 10px */
-  --border-radius-md: 10px;    /* Cards / Panels: 10px */
-  --border-radius-sm: 8px;     /* Small sub-panels / elements */
-  --border-radius-btn: 8px;    /* Buttons / Inputs / Selects: 8px */
-  --border-radius-input: 8px;  /* Clean form inputs: 8px */
-  --border-radius-badge: 6px;  /* Badges / Chips: 6px */
+  /* Swiss Typography Scale */
+  --font-family-base: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  --text-display: clamp(32px, 3.8vw, 42px); /* Large editorial display */
+  --text-h1: clamp(26px, 3vw, 34px);        /* Page heading (32-40px target) */
+  --text-h2: clamp(20px, 2.2vw, 26px);      /* Section heading (22-28px target) */
+  --text-h3: 18px;                          /* Card heading (16-20px target) */
+  --text-body: 15px;                        /* Body (14-16px target) */
+  --text-caption: 12px;                     /* Metadata (12-13px target) */
+  --text-label: 11px;                       /* Labels uppercase (11-13px target) */
+  --text-clinical: 24px;                    /* Tabular clinical metrics */
+
+  /* Standardized Swiss Engineered Geometry (0–4px radius) */
+  --border-radius-lg: 2px;    /* Cards / Panels: 0-4px (strictly 2px) */
+  --border-radius-md: 2px;    /* Cards / Panels: 2px */
+  --border-radius-sm: 2px;    /* Sub-panels: 2px */
+  --border-radius-btn: 2px;   /* Buttons / Inputs: 2px */
+  --border-radius-input: 2px; /* Clean form inputs: 2px */
+  --border-radius-badge: 2px; /* Badges: 2px */
+  --border-radius-dialog: 4px;/* Dialogs / Modals: 4px */
 
   /* Transitions — Restrained and purposeful */
   --transition-fast: 0.12s ease-out;
   --transition-normal: 0.2s ease-in-out;
-  --transition-smooth: 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+  --transition-smooth: 0.22s cubic-bezier(0.16, 1, 0.3, 1);
   --ease-out: cubic-bezier(0.16, 1, 0.3, 1);
 
-  /* Semantic Urgency Colors (Section 5) */
-  --color-semantic-emergency: #DC2626; /* Pure Red: Emergency & Danger */
-  --color-semantic-emergency-hover: #B91C1C;
-  --color-semantic-warning: #D97706;   /* Amber: Warning / Elevated Attention Only */
-  --color-semantic-success: #059669;   /* Emerald Green: Confirmed Success */
-  --color-success: #059669;            /* Explicit success token for component consumption */
-  --color-semantic-info: #0284C7;      /* Restrained Blue/Cyan */
+  /* Semantic Healthcare Urgency Colors */
+  --color-semantic-emergency: var(--swiss-red);      /* Pure Red: Emergency & Danger */
+  --color-semantic-emergency-hover: var(--swiss-red-dark);
+  --color-semantic-warning: #D97706;                 /* Restrained Amber: Clinical Attention Only */
+  --color-semantic-success: #059669;                 /* Restrained Emerald Green: Confirmed Authentic */
+  --color-success: #059669;
+  --color-semantic-info: var(--swiss-blue);          /* Information Blue */
 
   /* Tabular Figures */
   font-variant-numeric: tabular-nums;
 }
 
 /* ═══════════════════════════════════════════════════════════════════════
-   LIGHT MODE — Nordic Clinical Foundation (Section 4)
+   LIGHT MODE — Swiss Dominant White & Crisp Gray Grid System
    ═══════════════════════════════════════════════════════════════════════ */
 :root[data-theme="light"], :root {
-  /* Warm Scandinavian Neutral Canvas & Surfaces */
-  --color-background: #FAFAF9;              /* Warm Stone-50 Canvas */
-  --color-surface-white: #FFFFFF;           /* Solid Pure White Surfaces */
-  --color-surface-glass: #FFFFFF;           /* Solid Opaque Surface (Glassmorphism Purged) */
-  --color-surface-interactive: #F5F5F4;     /* Stone-100 Subtle Interactive Surface */
+  /* Swiss Neutral Canvas & Surfaces (70-80% White dominant) */
+  --color-background: var(--swiss-off-white);          /* #F7F7F5 Structural Off-White Canvas */
+  --color-surface-white: var(--swiss-white);           /* #FFFFFF Solid Pure White Primary Surface */
+  --color-surface-glass: var(--swiss-white);           /* Solid Opaque Surface */
+  --color-surface-subtle: var(--swiss-gray-100);       /* #EDEDED Subtle Plate */
+  --color-surface-interactive: #F2F4F8;                /* Very soft crisp hover tint */
   
-  /* Typography — Deep Warm Stone Ink */
-  --color-text: #1C1917;                    /* Stone-900 Warm Ink */
-  --color-text-muted: #78716C;              /* Stone-500 Calm Secondary Text */
-  --color-text-dark: #1C1917;
+  /* Typography — Deep Clinical Charcoal / Ink */
+  --color-text: var(--swiss-black);                    /* #111111 High-contrast Ink */
+  --color-text-muted: var(--swiss-gray-500);           /* #8A8A8A Secondary Metadata */
+  --color-text-dark: var(--swiss-black);
 
-  /* Hairline Borders & Inputs */
-  --color-border: #E7E5E4;                  /* Stone-200 Subtle Border */
-  --color-input-border: #D6D3D1;            /* Stone-300 Accessible Input Outline */
-  --color-glass-border: #E7E5E4;
+  /* Hairline Borders & Inputs (Structural Lines over Shadows) */
+  --color-border: var(--swiss-gray-300);               /* #D9D9D9 1px Structural Border */
+  --color-border-strong: var(--swiss-black);           /* #111111 Strong Architectural Rule */
+  --color-input-border: var(--swiss-gray-300);         /* Accessible 1px Form Boundary */
+  --color-glass-border: var(--swiss-gray-300);
 
-  /* Primary Accent — Muted Scandinavian Teal (Section 4) */
-  --color-primary: #1A7F74;                 /* Scandinavian Teal: Calm, Trust, Health */
-  --color-primary-hover: #15695F;           /* Deep Teal Hover */
-  --color-primary-active: #11534B;
-  --color-primary-muted: rgba(26, 127, 116, 0.08); /* 8% Soft Teal Tint */
-  --color-secondary: #F5F5F4;
-  --color-accent: #1A7F74;
-  --color-accent-hover: #15695F;
-  --color-accent-muted: rgba(26, 127, 116, 0.08);
+  /* Primary Brand & High-Priority Actions — Swiss Red (#E30613) */
+  --color-primary: var(--swiss-red);                   /* Swiss Red: High Priority Action */
+  --color-primary-hover: var(--swiss-red-dark);        /* #B8000B Dark Red Hover */
+  --color-primary-active: #990008;
+  --color-primary-muted: var(--swiss-red-soft);        /* #FDECEC Red Soft Tint */
+  --color-secondary: var(--swiss-white);
+  --color-accent: var(--swiss-blue);
+  --color-accent-hover: var(--swiss-blue-dark);
+  --color-accent-muted: var(--swiss-blue-soft);
 
-  /* Doctor Portal — Deeper Forest Clinical Teal (Section 6) */
-  --color-doctor-primary: #1E6B5A;          /* Deep Clinical Forest Teal */
-  --color-doctor-primary-hover: #175446;
-  --color-doctor-accent: #A16207;           /* Restrained Warm Accent */
-  --color-doctor-accent-hover: #854D0E;
-  --color-doctor-bg: #FAFAF9;
-  --color-doctor-surface: #FFFFFF;
-  --color-doctor-border: #E7E5E4;
-  --color-doctor-input-border: #D6D3D1;
-  --color-doctor-text: #1C1917;
+  /* Doctor Portal — Swiss Information Blue (#0057B8) */
+  --color-doctor-primary: var(--swiss-blue);           /* Swiss Information Blue */
+  --color-doctor-primary-hover: var(--swiss-blue-dark);/* #003B7A Dark Blue Hover */
+  --color-doctor-accent: var(--swiss-blue);
+  --color-doctor-accent-hover: var(--swiss-blue-dark);
+  --color-doctor-bg: var(--swiss-off-white);
+  --color-doctor-surface: var(--swiss-white);
+  --color-doctor-border: var(--swiss-gray-300);
+  --color-doctor-input-border: var(--swiss-gray-300);
+  --color-doctor-text: var(--swiss-black);
 
-  /* Restrained Elevation Shadows (Section 9) */
-  --shadow-sm: 0 1px 2px rgba(28, 25, 23, 0.04);
-  --shadow-md: 0 1px 3px rgba(28, 25, 23, 0.06), 0 1px 2px rgba(28, 25, 23, 0.04);
-  --shadow-lg: 0 4px 12px rgba(28, 25, 23, 0.08);
+  /* Shadows — Default NO SHADOW. Structural borders replace shadows. */
+  --shadow-sm: none;
+  --shadow-md: none;
+  --shadow-lg: 0 4px 16px rgba(17, 17, 17, 0.08);     /* Restrained floating modal shadow only */
 
-  /* Legacy liquid tokens mapped to clean solid values */
-  --liquid-edge: #E7E5E4;
-  --liquid-edge-muted: #E7E5E4;
-  --liquid-panel: #FFFFFF;
-  --liquid-panel-strong: #FFFFFF;
-  --liquid-panel-end: #FFFFFF;
-  --liquid-edge-strong: #E7E5E4;
+  /* Legacy liquid tokens mapped to clean Swiss solid values */
+  --liquid-edge: var(--swiss-gray-300);
+  --liquid-edge-muted: var(--swiss-gray-300);
+  --liquid-panel: var(--swiss-white);
+  --liquid-panel-strong: var(--swiss-white);
+  --liquid-panel-end: var(--swiss-white);
+  --liquid-edge-strong: var(--swiss-gray-300);
   --liquid-highlight: transparent;
   --liquid-sheen: transparent;
-  --liquid-shadow: 0 1px 3px rgba(28, 25, 23, 0.05);
+  --liquid-shadow: none;
   --liquid-inset: none;
 }
 
 /* ═══════════════════════════════════════════════════════════════════════
-   DARK MODE — Deep Warm Charcoal & Dark Neutral Surfaces (Section 23)
+   DARK MODE — Swiss Controlled Dark System (Decision 5 & Requirement 22)
    ═══════════════════════════════════════════════════════════════════════ */
 :root[data-theme="dark"] {
-  /* Warm Charcoal Canvas & Surfaces */
-  --color-background: #1C1917;              /* Deep Warm Stone Charcoal */
-  --color-surface-white: #292524;           /* Stone-800 Dark Surface */
-  --color-surface-glass: #292524;           /* Solid Opaque Dark Surface */
-  --color-surface-interactive: #34302C;     /* Subtle Interactive Hover */
+  /* Swiss Dark Palette */
+  --swiss-dark-bg: #111111;
+  --swiss-dark-surface: #1A1A1A;
+  --swiss-dark-surface-elevated: #222222;
+  --swiss-dark-border: #3A3A3A;
+  --swiss-dark-text: #F5F5F5;
+  --swiss-dark-text-muted: #B8B8B8;
+  --swiss-dark-red: #FF3B45;
+  --swiss-dark-blue: #4D8DFF;
+  --swiss-dark-blue-hover: #6EA3FF;
+
+  /* Surfaces & Canvas */
+  --color-background: var(--swiss-dark-bg);            /* #111111 Deep Neutral Canvas */
+  --color-surface-white: var(--swiss-dark-surface);     /* #1A1A1A Dark Surface */
+  --color-surface-glass: var(--swiss-dark-surface);     /* Solid Opaque Dark Surface */
+  --color-surface-subtle: var(--swiss-dark-surface-elevated); /* #222222 Elevated Plate */
+  --color-surface-interactive: #242424;                /* Interactive Dark Hover */
   
-  /* Typography — Warm Off-White */
-  --color-text: #FAFAF9;                    /* Stone-50 Warm Off-White */
-  --color-text-muted: #A8A29E;              /* Stone-400 Calm Secondary Text */
-  --color-text-dark: #FAFAF9;
+  /* Typography — Swiss Off-White */
+  --color-text: var(--swiss-dark-text);                /* #F5F5F5 Primary Text */
+  --color-text-muted: var(--swiss-dark-text-muted);    /* #B8B8B8 Secondary Text */
+  --color-text-dark: var(--swiss-dark-text);
 
-  /* Hairline Borders & Inputs */
-  --color-border: #44403C;                  /* Stone-700 Hairline Border */
-  --color-input-border: #57534E;            /* Stone-600 Input Outline */
-  --color-glass-border: #44403C;
+  /* Structural Borders */
+  --color-border: var(--swiss-dark-border);            /* #3A3A3A Structural Dark Border */
+  --color-border-strong: #555555;
+  --color-input-border: var(--swiss-dark-border);      /* #3A3A3A Input Outline */
+  --color-glass-border: var(--swiss-dark-border);
 
-  /* Primary Accent — Crisp Scandinavian Teal in Dark Mode */
-  --color-primary: #2DD4BF;                 /* Teal-400: High Readability & Contrast */
-  --color-primary-hover: #5EEAD4;
-  --color-primary-active: #14B8A6;
-  --color-primary-muted: rgba(45, 212, 191, 0.12);
-  --color-secondary: #292524;
-  --color-accent: #2DD4BF;
-  --color-accent-hover: #5EEAD4;
-  --color-accent-muted: rgba(45, 212, 191, 0.12);
+  /* Primary Accent — Swiss Red in Dark Mode */
+  --color-primary: var(--swiss-red);
+  --color-primary-hover: var(--swiss-dark-red);
+  --color-primary-active: #B8000B;
+  --color-primary-muted: rgba(227, 6, 19, 0.16);
+  --color-secondary: var(--swiss-dark-surface);
+  --color-accent: var(--swiss-dark-blue);
+  --color-accent-hover: var(--swiss-dark-blue-hover);
+  --color-accent-muted: rgba(77, 141, 255, 0.16);
 
-  /* Doctor Portal — Dark */
-  --color-doctor-primary: #2DD4BF;
-  --color-doctor-primary-hover: #5EEAD4;
-  --color-doctor-accent: #FBBF24;
-  --color-doctor-accent-hover: #FCD34D;
-  --color-doctor-bg: #1C1917;
-  --color-doctor-surface: #292524;
-  --color-doctor-border: #44403C;
-  --color-doctor-input-border: #57534E;
-  --color-doctor-text: #FAFAF9;
+  /* Doctor Portal — Swiss Blue in Dark Mode */
+  --color-doctor-primary: var(--swiss-dark-blue);
+  --color-doctor-primary-hover: var(--swiss-dark-blue-hover);
+  --color-doctor-accent: var(--swiss-dark-blue);
+  --color-doctor-accent-hover: var(--swiss-dark-blue-hover);
+  --color-doctor-bg: var(--swiss-dark-bg);
+  --color-doctor-surface: var(--swiss-dark-surface);
+  --color-doctor-border: var(--swiss-dark-border);
+  --color-doctor-input-border: var(--swiss-dark-border);
+  --color-doctor-text: var(--swiss-dark-text);
 
-  /* Restrained Dark Shadows */
-  --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.4);
-  --shadow-md: 0 2px 6px rgba(0, 0, 0, 0.5);
-  --shadow-lg: 0 8px 24px rgba(0, 0, 0, 0.6);
+  /* Dark Shadows — Default NO SHADOW */
+  --shadow-sm: none;
+  --shadow-md: none;
+  --shadow-lg: 0 4px 20px rgba(0, 0, 0, 0.45);
 
-  /* Legacy liquid tokens mapped to dark solid values */
-  --liquid-edge: #44403C;
-  --liquid-edge-muted: #44403C;
-  --liquid-panel: #292524;
-  --liquid-panel-strong: #292524;
-  --liquid-panel-end: #292524;
-  --liquid-edge-strong: #44403C;
+  /* Legacy liquid tokens mapped to dark Swiss values */
+  --liquid-edge: var(--swiss-dark-border);
+  --liquid-edge-muted: var(--swiss-dark-border);
+  --liquid-panel: var(--swiss-dark-surface);
+  --liquid-panel-strong: var(--swiss-dark-surface);
+  --liquid-panel-end: var(--swiss-dark-surface);
+  --liquid-edge-strong: var(--swiss-dark-border);
   --liquid-highlight: transparent;
   --liquid-sheen: transparent;
-  --liquid-shadow: 0 2px 6px rgba(0, 0, 0, 0.5);
+  --liquid-shadow: none;
   --liquid-inset: none;
 }
 
-/* 2. Global Reset & Typography Normalization (Section 7) */
+/* 2. Global Reset & Swiss Typography Normalization */
 * {
   box-sizing: border-box;
   margin: 0;
@@ -180,57 +234,57 @@
 }
 
 body {
-  font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, sans-serif;
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
   background-color: var(--color-background);
   color: var(--color-text);
   font-size: var(--text-body);
-  line-height: 1.6;
-  letter-spacing: -0.01em;
+  line-height: 1.55;
+  letter-spacing: -0.011em;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   text-rendering: optimizeLegibility;
-  background-attachment: fixed;
   min-height: 100vh;
   transition: background-color var(--transition-normal), color var(--transition-normal);
 }
 
-/* Background layer invariant test preservation — hidden visually per Section 10 */
+/* Background branding orb purged — Swiss clean background */
 body::before {
   content: '';
+  display: none !important;
   position: fixed;
   inset: 0;
   z-index: 0;
   pointer-events: none;
-  background: url('/assets/branding/lifelink-logo-lockup.jpg') center 46% / min(78vw, 980px) auto no-repeat;
-  filter: blur(30px);
-  opacity: 0;
-  display: none;
 }
 
 #root { position: relative; z-index: 1; min-height: 100vh; }
 
-/* Typographic Hierarchy (Section 7) */
+/* Typographic Hierarchy — Swiss Structural Inter System */
 h1, h2, h3, h4, h5, h6 {
-  font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, sans-serif;
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
   color: var(--color-text);
-  margin-bottom: var(--spacing-3);
-  line-height: 1.3;
-  letter-spacing: -0.02em;
+  margin-bottom: var(--spacing-2);
+  line-height: 1.25;
+  letter-spacing: -0.022em;
+  font-weight: 700;
 }
 
 h1 {
   font-size: var(--text-h1);
   font-weight: 700;
+  letter-spacing: -0.03em;
 }
 
 h2 {
   font-size: var(--text-h2);
-  font-weight: 600;
+  font-weight: 700;
+  letter-spacing: -0.02em;
 }
 
 h3 {
   font-size: var(--text-h3);
-  font-weight: 600;
+  font-weight: 650;
+  letter-spacing: -0.015em;
 }
 
 p {
@@ -240,6 +294,7 @@ p {
 .caption {
   font-size: var(--text-caption);
   color: var(--color-text-muted);
+  font-weight: 500;
 }
 
 .clinical-value, .stat-number, .stat-value {
@@ -247,10 +302,10 @@ p {
   font-weight: 700;
   color: var(--color-primary);
   font-variant-numeric: tabular-nums;
-  letter-spacing: -0.02em;
+  letter-spacing: -0.025em;
 }
 
-/* 3. Surface System — Solid & Opaque (Section 3) */
+/* 3. Surface System — Swiss Solid, Modular & Opaque (Section 3, 5, 8) */
 .solid-clinical-surface,
 .card,
 .glass-surface,
@@ -259,10 +314,10 @@ p {
   border: 1px solid var(--color-border) !important;
   border-radius: var(--border-radius-md) !important;
   padding: var(--spacing-5);
-  box-shadow: var(--shadow-sm) !important;
+  box-shadow: none !important;
   backdrop-filter: none !important;
   -webkit-backdrop-filter: none !important;
-  transition: border-color var(--transition-fast), box-shadow var(--transition-fast), transform var(--transition-fast);
+  transition: border-color var(--transition-fast);
 }
 
 .card-header {
@@ -272,7 +327,7 @@ p {
 }
 
 .interactive-surface {
-  transition: transform var(--transition-fast), box-shadow var(--transition-fast), border-color var(--transition-fast);
+  transition: border-color var(--transition-fast), background-color var(--transition-fast);
   cursor: pointer;
 }
 
@@ -280,186 +335,201 @@ p {
 .card.interactive-surface:hover,
 .clinical-glass-card.interactive-surface:hover,
 .glass-surface.interactive-surface:hover {
-  transform: translateY(-2px);
-  box-shadow: var(--shadow-md) !important;
-  border-color: var(--color-primary) !important;
-  background-color: var(--color-surface-white) !important;
+  border-color: var(--swiss-blue) !important;
+  background-color: var(--color-surface-interactive) !important;
+  box-shadow: none !important;
 }
 
 .interactive-surface.selected {
-  border-color: var(--color-primary) !important;
-  box-shadow: 0 0 0 2px var(--color-primary-muted), var(--shadow-md) !important;
-  transform: translateY(-2px);
+  border-color: var(--swiss-red) !important;
+  box-shadow: none !important;
 }
 
-/* 4. Button System — Flat, Solid & Warm (Section 4, 8) */
+/* 4. Button System — Swiss Engineered Rectangles (Section 10) */
 .btn {
   display: inline-flex;
   align-items: center;
   justify-content: center;
   gap: var(--spacing-2);
-  padding: 9px 18px;
+  padding: 8px 16px;
   border-radius: var(--border-radius-btn);
   font-weight: 600;
   font-size: var(--text-body);
   cursor: pointer;
   border: 1px solid transparent;
   transition: all var(--transition-fast);
-  box-shadow: none;
+  box-shadow: none !important;
   user-select: none;
   text-decoration: none;
   letter-spacing: -0.01em;
+  font-family: inherit;
 }
 
 .btn:active:not(:disabled) {
-  transform: translateY(1px) scale(.98);
+  opacity: 0.92;
 }
 
 .btn:disabled {
-  opacity: 0.55;
+  opacity: 0.5;
   cursor: not-allowed;
   filter: grayscale(0.5);
 }
 
+/* PRIMARY CTA: Swiss Red #E30613 */
 .btn-primary {
-  background: var(--color-primary) !important;
-  border: 1px solid var(--color-primary) !important;
+  background: var(--swiss-red) !important;
+  border: 1px solid var(--swiss-red) !important;
   color: #FFFFFF !important;
-  box-shadow: var(--shadow-sm) !important;
+  box-shadow: none !important;
   text-shadow: none !important;
 }
 
 .btn-primary:hover:not(:disabled) {
-  background: var(--color-primary-hover) !important;
-  border-color: var(--color-primary-hover) !important;
-  transform: translateY(-1px);
-  box-shadow: 0 2px 8px rgba(26, 127, 116, 0.20) !important;
+  background: var(--swiss-red-dark) !important;
+  border-color: var(--swiss-red-dark) !important;
+  box-shadow: none !important;
 }
 
+/* DOCTOR PRIMARY ACTION: Swiss Blue #0057B8 */
 .doctor-btn-primary,
 .doctor-content .btn-primary,
 #doctor-sidebar .btn-primary,
 .doctor-setup-layout .btn-primary {
-  background: var(--color-doctor-primary) !important;
-  border: 1px solid var(--color-doctor-primary) !important;
+  background: var(--swiss-blue) !important;
+  border: 1px solid var(--swiss-blue) !important;
   color: #FFFFFF !important;
+  box-shadow: none !important;
 }
 
 .doctor-btn-primary:hover:not(:disabled),
 .doctor-content .btn-primary:hover:not(:disabled),
 #doctor-sidebar .btn-primary:hover:not(:disabled),
 .doctor-setup-layout .btn-primary:hover:not(:disabled) {
-  background: var(--color-doctor-primary-hover) !important;
-  border-color: var(--color-doctor-primary-hover) !important;
-  transform: translateY(-1px);
-  box-shadow: 0 2px 8px rgba(30, 107, 90, 0.24) !important;
+  background: var(--swiss-blue-dark) !important;
+  border-color: var(--swiss-blue-dark) !important;
+  box-shadow: none !important;
 }
 
+/* SECONDARY: Supporting Blue Action #0057B8 */
 .btn-secondary {
-  background: var(--color-surface-white) !important;
-  border: 1px solid var(--color-border) !important;
-  color: var(--color-text) !important;
-  box-shadow: var(--shadow-sm) !important;
+  background: var(--swiss-blue) !important;
+  border: 1px solid var(--swiss-blue) !important;
+  color: #FFFFFF !important;
+  box-shadow: none !important;
 }
 
 .btn-secondary:hover:not(:disabled) {
-  background: var(--color-surface-interactive) !important;
-  border-color: var(--color-border) !important;
-  color: var(--color-text) !important;
-  transform: translateY(-1px);
+  background: var(--swiss-blue-dark) !important;
+  border-color: var(--swiss-blue-dark) !important;
+  color: #FFFFFF !important;
 }
 
+/* OUTLINE: Crisp Structural Boundary */
 .btn-outline {
-  background: transparent !important;
-  border: 1px solid var(--color-border) !important;
-  color: var(--color-primary) !important;
+  background: var(--color-surface-white) !important;
+  border: 1px solid var(--color-text) !important;
+  color: var(--color-text) !important;
   box-shadow: none !important;
 }
 
 .btn-outline:hover:not(:disabled) {
-  background: var(--color-primary-muted) !important;
-  border-color: var(--color-primary) !important;
-  color: var(--color-primary-hover) !important;
-  transform: translateY(-1px);
+  background: var(--color-surface-interactive) !important;
+  color: var(--color-text) !important;
 }
 
+/* BLUE OUTLINE: Information Outline */
+.btn-outline-blue {
+  background: var(--color-surface-white) !important;
+  border: 1px solid var(--swiss-blue) !important;
+  color: var(--swiss-blue) !important;
+  box-shadow: none !important;
+}
+
+.btn-outline-blue:hover:not(:disabled) {
+  background: var(--swiss-blue-soft) !important;
+  color: var(--swiss-blue-dark) !important;
+}
+
+/* DANGER: Swiss Red */
 .btn-danger {
-  background: var(--color-semantic-emergency) !important;
-  border: 1px solid var(--color-semantic-emergency) !important;
+  background: var(--swiss-red) !important;
+  border: 1px solid var(--swiss-red) !important;
   color: #FFFFFF !important;
-  box-shadow: var(--shadow-sm) !important;
+  box-shadow: none !important;
 }
 
 .btn-danger:hover:not(:disabled) {
-  background: var(--color-semantic-emergency-hover) !important;
-  border-color: var(--color-semantic-emergency-hover) !important;
-  transform: translateY(-1px);
-  box-shadow: 0 2px 8px rgba(220, 38, 38, 0.28) !important;
+  background: var(--swiss-red-dark) !important;
+  border-color: var(--swiss-red-dark) !important;
+  box-shadow: none !important;
 }
 
-/* 5. Badges & Status Indicators (Section 5, 8) */
+/* 5. Badges & Status Indicators (Section 15, 24) */
 .badge {
   display: inline-flex;
   align-items: center;
   gap: 4px;
-  padding: 3px 10px;
+  padding: 2px 8px;
   border-radius: var(--border-radius-badge);
-  font-size: var(--text-caption);
+  font-size: var(--text-label);
   font-weight: 600;
-  letter-spacing: 0.02em;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
 }
 
 .badge-success {
-  background-color: rgba(5, 150, 105, 0.08) !important;
+  background-color: #ECFDF5 !important;
   color: #059669 !important;
-  border: 1px solid rgba(5, 150, 105, 0.22) !important;
+  border: 1px solid #A7F3D0 !important;
 }
 
 .badge-warning, .badge-amber {
-  background-color: rgba(217, 119, 6, 0.08) !important;
+  background-color: #FFFBEB !important;
   color: #B45309 !important;
-  border: 1px solid rgba(217, 119, 6, 0.22) !important;
+  border: 1px solid #FDE68A !important;
 }
 
 .badge-danger {
-  background-color: rgba(220, 38, 38, 0.08) !important;
-  color: var(--color-semantic-emergency) !important;
-  border: 1px solid rgba(220, 38, 38, 0.20) !important;
+  background-color: var(--swiss-red-soft) !important;
+  color: var(--swiss-red) !important;
+  border: 1px solid #FECACA !important;
 }
 
-.badge-neutral, .badge-teal {
-  background-color: var(--color-primary-muted) !important;
-  color: var(--color-primary) !important;
-  border: 1px solid var(--color-border) !important;
+.badge-neutral, .badge-teal, .badge-info, .badge-blue {
+  background-color: var(--swiss-blue-soft) !important;
+  color: var(--swiss-blue) !important;
+  border: 1px solid #BFDBFE !important;
 }
 
 :root[data-theme="dark"] .badge-success {
-  background-color: rgba(16, 185, 129, 0.14) !important;
+  background-color: rgba(5, 150, 105, 0.18) !important;
   color: #34D399 !important;
-  border-color: rgba(16, 185, 129, 0.3) !important;
+  border-color: rgba(5, 150, 105, 0.35) !important;
 }
 
 :root[data-theme="dark"] .badge-warning,
 :root[data-theme="dark"] .badge-amber {
-  background-color: rgba(245, 158, 11, 0.14) !important;
+  background-color: rgba(217, 119, 6, 0.18) !important;
   color: #FBBF24 !important;
-  border-color: rgba(245, 158, 11, 0.3) !important;
+  border-color: rgba(217, 119, 6, 0.35) !important;
 }
 
 :root[data-theme="dark"] .badge-danger {
-  background-color: rgba(239, 68, 68, 0.14) !important;
-  color: #F87171 !important;
-  border-color: rgba(239, 68, 68, 0.3) !important;
+  background-color: rgba(227, 6, 19, 0.18) !important;
+  color: #FF6B72 !important;
+  border-color: rgba(227, 6, 19, 0.35) !important;
 }
 
 :root[data-theme="dark"] .badge-neutral,
-:root[data-theme="dark"] .badge-teal {
-  background-color: rgba(45, 212, 191, 0.14) !important;
-  color: #2DD4BF !important;
-  border-color: rgba(45, 212, 191, 0.3) !important;
+:root[data-theme="dark"] .badge-teal,
+:root[data-theme="dark"] .badge-info,
+:root[data-theme="dark"] .badge-blue {
+  background-color: rgba(77, 141, 255, 0.18) !important;
+  color: #82B1FF !important;
+  border-color: rgba(77, 141, 255, 0.35) !important;
 }
 
-/* 6. Form Controls (Inputs, Selects, Textareas) (Section 8) */
+/* 6. Form Controls (Inputs, Selects, Textareas) — Swiss Form Design (Section 22) */
 .liquid-input,
 input:not([type="checkbox"]):not([type="radio"]):not([type="range"]),
 textarea,
@@ -468,12 +538,12 @@ select {
   border-radius: var(--border-radius-input) !important;
   background: var(--color-surface-white) !important;
   color: var(--color-text) !important;
-  padding: 10px 14px;
+  padding: 9px 12px;
   font-family: inherit;
   font-size: var(--text-body);
   width: 100%;
-  box-shadow: inset 0 1px 2px rgba(28, 25, 23, 0.03);
-  transition: border-color var(--transition-fast), box-shadow var(--transition-fast);
+  box-shadow: none !important;
+  transition: border-color var(--transition-fast);
   outline: none;
 }
 
@@ -481,58 +551,66 @@ select {
 input:not([type="checkbox"]):not([type="radio"]):not([type="range"]):hover:not(:focus),
 textarea:hover:not(:focus),
 select:hover:not(:focus) {
-  border-color: var(--color-primary) !important;
+  border-color: var(--color-text) !important;
 }
 
 .liquid-input:focus,
 input:not([type="checkbox"]):not([type="radio"]):not([type="range"]):focus,
 textarea:focus,
 select:focus {
-  border-color: var(--color-primary) !important;
-  box-shadow: 0 0 0 3px var(--color-primary-muted) !important;
-  outline: none !important;
+  border-color: var(--swiss-blue) !important;
+  outline: 2px solid var(--swiss-blue) !important;
+  outline-offset: 0 !important;
+  box-shadow: none !important;
 }
 
 :root[data-theme="dark"] .liquid-input,
 :root[data-theme="dark"] input:not([type="checkbox"]):not([type="radio"]):not([type="range"]),
 :root[data-theme="dark"] textarea,
 :root[data-theme="dark"] select {
-  background: #292524 !important;
+  background: var(--swiss-dark-surface) !important;
   border-color: var(--color-input-border) !important;
   color: var(--color-text) !important;
-  box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.3);
+  box-shadow: none !important;
 }
 
 :root[data-theme="dark"] .liquid-input:focus,
 :root[data-theme="dark"] input:not([type="checkbox"]):not([type="radio"]):not([type="range"]):focus,
 :root[data-theme="dark"] textarea:focus,
 :root[data-theme="dark"] select:focus {
-  border-color: var(--color-primary) !important;
-  box-shadow: 0 0 0 3px rgba(45, 212, 191, 0.2) !important;
+  border-color: var(--swiss-dark-blue) !important;
+  outline: 2px solid var(--swiss-dark-blue) !important;
+  box-shadow: none !important;
 }
 
-/* 7. Clinical Panels & Emergency State (Section 20) */
+/* 7. Clinical Panels & Emergency State (Section 21) */
 .emergency-panel {
-  background-color: rgba(220, 38, 38, 0.04);
+  background-color: var(--swiss-red-soft);
   color: var(--color-text);
-  border: 1px solid rgba(220, 38, 38, 0.2);
-  border-left: 4px solid var(--color-semantic-emergency);
+  border: 1px solid #FECACA;
+  border-left: 4px solid var(--swiss-red);
   padding: var(--spacing-5);
   border-radius: var(--border-radius-md);
   display: flex;
   justify-content: space-between;
   align-items: center;
-  box-shadow: var(--shadow-sm);
+  box-shadow: none !important;
+}
+
+:root[data-theme="dark"] .emergency-panel {
+  background-color: rgba(227, 6, 19, 0.12);
+  border-color: rgba(227, 6, 19, 0.35);
+  border-left-color: var(--swiss-red);
 }
 
 .emergency-panel h3, .emergency-panel h2 {
-  color: var(--color-semantic-emergency);
+  color: var(--swiss-red);
   margin-bottom: var(--spacing-1);
 }
 
 .alert-panel {
-  background-color: rgba(217, 119, 6, 0.06);
-  border: 1px solid rgba(217, 119, 6, 0.22);
+  background-color: #FFFBEB;
+  border: 1px solid #FDE68A;
   border-left: 4px solid var(--color-semantic-warning);
   color: var(--color-text);
   padding: var(--spacing-3) var(--spacing-4);
@@ -540,28 +618,33 @@ select:focus {
   margin-bottom: var(--spacing-4);
 }
 
+:root[data-theme="dark"] .alert-panel {
+  background-color: rgba(217, 119, 6, 0.12);
+  border-color: rgba(217, 119, 6, 0.3);
+}
+
 /* Assessment Urgency States */
 .urgency-low {
-  background-color: rgba(5, 150, 105, 0.04);
+  background-color: #F0FDF4;
   border-left: 4px solid var(--color-semantic-success);
 }
 .urgency-moderate {
-  background-color: rgba(217, 119, 6, 0.05);
+  background-color: #FFFBEB;
   border-left: 4px solid var(--color-semantic-warning);
 }
 .urgency-emergency {
-  background-color: rgba(220, 38, 38, 0.05);
-  border-left: 4px solid var(--color-semantic-emergency);
+  background-color: var(--swiss-red-soft);
+  border-left: 4px solid var(--swiss-red);
 }
 
-/* 8. Shell Layout (Patient & Doctor Portals) */
+/* 8. Shell Layout (Patient & Doctor Portals) — Swiss Alignment */
 .app-layout, .doctor-layout {
   display: flex;
   min-height: 100vh;
 }
 
 .app-sidebar, .doctor-sidebar {
-  width: 260px;
+  width: 250px;
   flex-shrink: 0;
   background-color: var(--color-surface-white);
   border-right: 1px solid var(--color-border);
@@ -571,12 +654,12 @@ select:focus {
   top: 0;
   height: 100vh;
   z-index: 40;
-  transition: all var(--transition-normal);
+  transition: border-color var(--transition-fast);
 }
 
 .app-sidebar-header, .doctor-sidebar-brand {
-  min-height: 76px;
-  padding: var(--spacing-4) var(--spacing-5);
+  min-height: 64px;
+  padding: 0 var(--spacing-5);
   display: flex;
   align-items: center;
   border-bottom: 1px solid var(--color-border);
@@ -591,31 +674,32 @@ select:focus {
   color: var(--color-text);
   text-decoration: none;
   font-weight: 700;
-  font-size: 1.15rem;
+  font-size: 1.1rem;
 }
 .app-sidebar-brand-link:hover { text-decoration: none; }
-.app-sidebar-brand-name { color: var(--color-text); font-size: 1.15rem; font-weight: 700; letter-spacing: -0.02em; }
+.app-sidebar-brand-name { color: var(--color-text); font-size: 1.1rem; font-weight: 700; letter-spacing: -0.02em; }
 
 .app-sidebar-nav, .doctor-sidebar-nav {
-  padding: var(--spacing-4) var(--spacing-3);
+  padding: var(--spacing-3) var(--spacing-2);
   flex-grow: 1;
   overflow-y: auto;
   display: flex;
   flex-direction: column;
-  gap: 4px;
+  gap: 2px;
 }
 
 .app-sidebar-nav-item, .doctor-nav-item {
   display: flex;
   align-items: center;
   gap: var(--spacing-3);
-  padding: 10px 14px;
+  padding: 9px 12px;
   border-radius: var(--border-radius-btn);
   color: var(--color-text-muted);
   font-weight: 500;
   text-decoration: none;
   transition: all var(--transition-fast);
-  min-height: 44px;
+  min-height: 42px;
+  border-left: 3px solid transparent;
 }
 
 .app-sidebar-nav-item:hover, .doctor-nav-item:hover {
@@ -624,21 +708,43 @@ select:focus {
   text-decoration: none;
 }
 
-.app-sidebar-nav-item.active, .doctor-nav-item.active {
-  background-color: var(--color-primary-muted);
-  color: var(--color-primary);
-  font-weight: 600;
+/* Patient active state: thin 3px RED indicator */
+.app-sidebar-nav-item.active {
+  background-color: var(--color-surface-interactive);
+  color: var(--color-text);
+  font-weight: 700;
+  border-left: 3px solid var(--swiss-red);
+  border-radius: 0 2px 2px 0;
+}
+
+/* Doctor active state: thin 3px BLUE indicator */
+.doctor-nav-item.active,
+.doctor-sidebar .app-sidebar-nav-item.active {
+  background-color: var(--color-surface-interactive);
+  color: var(--color-text);
+  font-weight: 700;
+  border-left: 3px solid var(--swiss-blue);
+  border-radius: 0 2px 2px 0;
 }
 
 .app-sidebar-nav-item.sos {
   margin-top: auto;
-  background-color: rgba(220, 38, 38, 0.06);
-  color: var(--color-semantic-emergency);
-  border: 1px solid rgba(220, 38, 38, 0.16);
+  background-color: var(--swiss-red-soft);
+  color: var(--swiss-red);
+  border: 1px solid #FECACA;
+  border-left: 3px solid var(--swiss-red);
+  font-weight: 600;
+  border-radius: 0 2px 2px 0;
+}
+
+:root[data-theme="dark"] .app-sidebar-nav-item.sos {
+  background-color: rgba(227, 6, 19, 0.15);
+  border-color: rgba(227, 6, 19, 0.35);
+  border-left-color: var(--swiss-red);
 }
 
 .app-sidebar-nav-item.sos:hover {
-  background-color: rgba(220, 38, 38, 0.12);
+  background-color: #FCDCDC;
 }
 
 .app-main, .doctor-main {
@@ -704,10 +810,10 @@ select:focus {
   max-width: 100%;
   overflow: hidden;
   border-radius: var(--border-radius-sm);
-  background: #FAF7F2;
-  border: 1px solid #E0D8CE;
+  background: var(--swiss-white);
+  border: 1px solid var(--swiss-gray-300);
   padding: 4px 10px;
-  box-shadow: 0 1px 2px rgba(28, 25, 23, 0.04);
+  box-shadow: none;
 }
 
 .lifelink-logo {
@@ -767,11 +873,11 @@ select:focus {
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  background: #FAF7F2;
-  border: 1px solid #E0D8CE;
+  background: var(--swiss-white);
+  border: 1px solid var(--swiss-gray-300);
   border-radius: var(--border-radius-md);
   padding: 10px 20px;
-  box-shadow: var(--shadow-sm);
+  box-shadow: none;
   max-width: min(320px, 92vw);
   margin: 0 auto;
 }
@@ -782,24 +888,24 @@ select:focus {
 }
 
 /* Mobile Brand Link */
-.app-mobile-brand { display: none; align-items: center; gap: 7px; min-width: 0; color: var(--color-text); font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, sans-serif; font-size: 14px; font-weight: 800; letter-spacing: -.035em; text-decoration: none; }
-.app-mobile-brand:hover { color: var(--color-primary); text-decoration: none; }
+.app-mobile-brand { display: none; align-items: center; gap: 7px; min-width: 0; color: var(--color-text); font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif; font-size: 14px; font-weight: 800; letter-spacing: -.035em; text-decoration: none; }
+.app-mobile-brand:hover { color: var(--swiss-red); text-decoration: none; }
 .app-mobile-brand-symbol { width: 32px; height: 32px; flex: 0 0 auto; }
 .app-mobile-menu-button { display: none; align-items: center; justify-content: center; width: 44px; height: 44px; border: 0; background: transparent; cursor: pointer; color: var(--color-text); border-radius: var(--border-radius-btn); }
 .app-sidebar-backdrop { display: none; }
 
-/* 10. Workspace Selector & Portal Header (Section 12) */
+/* 10. Workspace Selector & Portal Header — Institutional Swiss Gateway (Section 12) */
 .workspace-entry {
   min-height: 100vh;
-  padding: 1.25rem 1.5rem 2.5rem;
+  padding: 1.5rem 1.5rem 3rem;
   color: var(--color-text);
   background: var(--color-background);
 }
 
 .workspace-portal-header {
-  width: min(100%, 1320px);
-  min-height: 58px;
-  margin: 0 auto clamp(1.25rem, 2.5vw, 2rem);
+  width: min(100%, 1280px);
+  min-height: 54px;
+  margin: 0 auto clamp(1.25rem, 2.5vw, 2.5rem);
   padding: 0.6rem 1.25rem;
   display: flex;
   align-items: center;
@@ -807,7 +913,7 @@ select:focus {
   border: 1px solid var(--color-border);
   border-radius: var(--border-radius-md);
   background: var(--color-surface-white);
-  box-shadow: var(--shadow-sm);
+  box-shadow: none;
   color: var(--color-text);
 }
 
@@ -821,16 +927,16 @@ select:focus {
 .workspace-portal-mark {
   display: grid;
   place-items: center;
-  width: 34px;
-  height: 34px;
+  width: 32px;
+  height: 32px;
   flex: 0 0 auto;
   overflow: hidden;
   border-radius: var(--border-radius-sm);
-  background: var(--color-surface-interactive);
+  background: var(--color-surface-white);
   border: 1px solid var(--color-border);
 }
 .workspace-portal-brand > span { display: grid; gap: 0.05rem; min-width: 0; }
-.workspace-portal-brand strong { font-size: 0.95rem; letter-spacing: -0.01em; color: var(--color-text); }
+.workspace-portal-brand strong { font-size: 0.95rem; letter-spacing: -0.01em; color: var(--color-text); font-weight: 700; }
 .workspace-portal-brand small { color: var(--color-text-muted); font-size: 0.72rem; white-space: nowrap; font-weight: 500; }
 
 .workspace-portal-assurance {
@@ -848,7 +954,7 @@ select:focus {
 }
 
 .workspace-entry-shell {
-  width: min(100%, 1080px);
+  width: min(100%, 1040px);
   margin: 0 auto;
 }
 
@@ -857,7 +963,7 @@ select:focus {
   flex-direction: column;
   align-items: center;
   max-width: 720px;
-  margin: 0 auto 2rem;
+  margin: 0 auto 2.5rem;
   text-align: center;
 }
 
@@ -876,20 +982,32 @@ select:focus {
   border: 1px solid var(--color-border);
   border-radius: var(--border-radius-badge);
   background: var(--color-surface-interactive);
-  color: var(--color-primary);
+  color: var(--color-text);
   font-size: 0.72rem;
   font-weight: 600;
-  letter-spacing: 0.04em;
+  letter-spacing: 0.06em;
   text-transform: uppercase;
   padding: 0.25rem 0.65rem;
 }
 
+.workspace-choice-label.patient {
+  color: var(--swiss-red);
+  border-color: #FECACA;
+  background: var(--swiss-red-soft);
+}
+
+.workspace-choice-label.doctor {
+  color: var(--swiss-blue);
+  border-color: #BFDBFE;
+  background: var(--swiss-blue-soft);
+}
+
 .workspace-entry-header h1 {
   margin: 0.75rem 0 0.4rem;
-  font-size: clamp(1.75rem, 3vw, 2.4rem);
+  font-size: clamp(2rem, 3.4vw, 2.75rem);
   font-weight: 700;
   color: var(--color-text);
-  letter-spacing: -0.02em;
+  letter-spacing: -0.03em;
 }
 
 .workspace-entry-header > p {
@@ -907,20 +1025,30 @@ select:focus {
 
 .workspace-choice-card {
   display: flex;
-  min-height: 360px;
+  min-height: 380px;
   flex-direction: column;
-  padding: clamp(1.25rem, 2.5vw, 1.85rem);
+  padding: clamp(1.5rem, 2.5vw, 2rem);
   background: var(--color-surface-white);
   border: 1px solid var(--color-border);
   border-radius: var(--border-radius-md);
-  box-shadow: var(--shadow-sm);
-  transition: transform var(--transition-fast), box-shadow var(--transition-fast), border-color var(--transition-fast);
+  box-shadow: none !important;
+  transition: border-color var(--transition-fast);
 }
 
-.workspace-choice-card:hover {
-  transform: translateY(-2px);
-  border-color: var(--color-primary);
-  box-shadow: var(--shadow-md);
+.workspace-choice-card.patient-choice-card {
+  border-top: 3px solid var(--swiss-red);
+}
+
+.workspace-choice-card.patient-choice-card:hover {
+  border-color: var(--swiss-red);
+}
+
+.workspace-choice-card.doctor-choice-card {
+  border-top: 3px solid var(--swiss-blue);
+}
+
+.workspace-choice-card.doctor-choice-card:hover {
+  border-color: var(--swiss-blue);
 }
 
 .workspace-choice-topline {
@@ -937,21 +1065,23 @@ select:focus {
   width: 2.5rem;
   height: 2.5rem;
   border-radius: var(--border-radius-sm);
-  background: var(--color-primary-muted);
-  border: 1px solid var(--color-border);
-  color: var(--color-primary);
+  background: var(--swiss-red-soft);
+  border: 1px solid #FECACA;
+  color: var(--swiss-red);
 }
 
 .workspace-choice-icon.doctor {
-  background: rgba(30, 107, 90, 0.08);
-  color: var(--color-doctor-primary);
+  background: var(--swiss-blue-soft);
+  border-color: #BFDBFE;
+  color: var(--swiss-blue);
 }
 
 .workspace-choice-card h2 {
-  margin: 1rem 0 0.35rem;
+  margin: 1.25rem 0 0.35rem;
   font-size: 1.35rem;
   font-weight: 700;
   color: var(--color-text);
+  letter-spacing: -0.02em;
 }
 
 .workspace-choice-card > p {
@@ -981,11 +1111,11 @@ select:focus {
 .workspace-choice-list svg {
   flex: 0 0 auto;
   margin-top: 0.15rem;
-  color: var(--color-primary);
+  color: var(--swiss-red);
 }
 
 .workspace-choice-card.doctor-choice-card .workspace-choice-list svg {
-  color: var(--color-doctor-primary);
+  color: var(--swiss-blue);
 }
 
 .workspace-choice-action {
@@ -1001,17 +1131,17 @@ select:focus {
   margin: 1.5rem 0 0;
   padding: 0.9rem 1.15rem;
   border: 1px solid var(--color-border);
-  border-left: 4px solid var(--color-primary);
+  border-left: 3px solid var(--swiss-blue);
   border-radius: var(--border-radius-sm);
   background: var(--color-surface-white);
   color: var(--color-text);
-  box-shadow: var(--shadow-sm);
+  box-shadow: none !important;
 }
 
 .workspace-entry-note svg {
   flex: 0 0 auto;
   margin-top: 0.1rem;
-  color: var(--color-primary);
+  color: var(--swiss-blue);
 }
 
 .workspace-entry-note p {
@@ -1024,7 +1154,15 @@ select:focus {
   background: var(--color-surface-white);
   border-color: var(--color-border);
   color: var(--color-text);
-  box-shadow: var(--shadow-md);
+  box-shadow: none !important;
+}
+
+:root[data-theme="dark"] .workspace-choice-card.patient-choice-card {
+  border-top-color: var(--swiss-red);
+}
+
+:root[data-theme="dark"] .workspace-choice-card.doctor-choice-card {
+  border-top-color: var(--swiss-dark-blue);
 }
 
 :root[data-theme="dark"] .workspace-choice-card h2 {
@@ -1038,11 +1176,11 @@ select:focus {
 :root[data-theme="dark"] .workspace-entry-note {
   background: var(--color-surface-white);
   border-color: var(--color-border);
-  border-left-color: var(--color-primary);
+  border-left-color: var(--swiss-dark-blue);
   color: var(--color-text);
 }
 
-/* 11. Authentication Pages (Section 13) */
+/* 11. Authentication Pages (Section 15) */
 .auth-page {
   min-height: 100vh;
   display: flex;
@@ -1053,7 +1191,7 @@ select:focus {
 }
 
 .auth-split-layout {
-  width: min(100%, 1100px);
+  width: min(100%, 1080px);
   margin: auto;
   display: flex;
   align-items: center;
@@ -1071,12 +1209,12 @@ select:focus {
 }
 
 .auth-card {
-  width: min(100%, 440px);
+  width: min(100%, 420px);
   padding: clamp(24px, 4vw, 36px);
   background: var(--color-surface-white) !important;
   border: 1px solid var(--color-border) !important;
   border-radius: var(--border-radius-md) !important;
-  box-shadow: var(--shadow-md) !important;
+  box-shadow: none !important;
 }
 
 .auth-card-header {
@@ -1087,6 +1225,7 @@ select:focus {
 .auth-card-header h1 {
   margin: 0 0 var(--spacing-2);
   font-size: clamp(22px, 2.8vw, 26px);
+  font-weight: 700;
 }
 
 .auth-card-header > p:last-child {
@@ -1097,7 +1236,7 @@ select:focus {
 
 .auth-form {
   display: grid;
-  gap: var(--spacing-4);
+  gap: var(--spacing-3);
 }
 
 .auth-field {
@@ -1122,7 +1261,7 @@ select:focus {
   padding: 0;
   border: 0;
   background: transparent;
-  color: var(--color-primary);
+  color: var(--swiss-blue);
   font: inherit;
   font-size: var(--text-caption);
   font-weight: 600;
@@ -1147,7 +1286,7 @@ select:focus {
   font-size: var(--text-caption);
   font-weight: 600;
   cursor: pointer;
-  box-shadow: var(--shadow-sm);
+  box-shadow: none;
   transition: all var(--transition-fast);
 }
 
@@ -1155,7 +1294,7 @@ select:focus {
   background: var(--color-surface-interactive);
 }
 
-/* 12. Patient Dashboard System (Section 14) */
+/* 12. Patient Dashboard System (Section 13) */
 .dashboard-workspace {
   display: grid;
   gap: var(--spacing-5);
@@ -1211,11 +1350,12 @@ select:focus {
   flex: 0 0 auto;
   align-items: center;
   justify-content: center;
-  width: 40px;
-  height: 40px;
+  width: 38px;
+  height: 38px;
   border-radius: var(--border-radius-sm);
-  color: var(--color-primary);
-  background: var(--color-primary-muted);
+  color: var(--swiss-blue);
+  background: var(--swiss-blue-soft);
+  border: 1px solid #BFDBFE;
 }
 
 .dashboard-assessment-summary,
@@ -1227,7 +1367,7 @@ select:focus {
 }
 
 .dashboard-assessment-summary {
-  border-left: 4px solid var(--color-primary);
+  border-left: 3px solid var(--swiss-blue);
 }
 
 .dashboard-health-grid {
@@ -1250,18 +1390,16 @@ select:focus {
   border: 1px solid var(--color-border);
   border-radius: var(--border-radius-md);
   background: var(--color-surface-white);
-  box-shadow: var(--shadow-sm);
-  transition: all var(--transition-fast);
+  box-shadow: none !important;
+  transition: border-color var(--transition-fast);
 }
 
 .dashboard-stat-card:hover {
-  transform: translateY(-2px);
-  border-color: var(--color-primary);
-  box-shadow: var(--shadow-md);
+  border-color: var(--swiss-blue);
 }
 
 .dashboard-stat-card svg {
-  color: var(--color-primary);
+  color: var(--swiss-blue);
 }
 
 .dashboard-stat-card span {
@@ -1294,11 +1432,11 @@ select:focus {
   text-align: left;
   cursor: pointer;
   font: inherit;
-  transition: all var(--transition-fast);
+  transition: border-color var(--transition-fast);
 }
 
 .dashboard-care-row:hover {
-  border-color: var(--color-primary);
+  border-color: var(--swiss-blue);
 }
 
 .dashboard-quick-action {
@@ -1307,45 +1445,97 @@ select:focus {
   align-items: center;
   gap: var(--spacing-3);
   width: 100%;
-  min-height: 46px;
-  padding: 10px 14px;
+  min-height: 44px;
+  padding: 9px 14px;
   border: 1px solid var(--color-border);
   border-radius: var(--border-radius-btn);
   color: var(--color-text);
   background: var(--color-surface-white);
-  box-shadow: var(--shadow-sm);
+  box-shadow: none !important;
   font: inherit;
   font-size: 0.92rem;
   font-weight: 600;
   text-align: left;
   cursor: pointer;
-  transition: all var(--transition-fast);
+  transition: border-color var(--transition-fast);
 }
 
 .dashboard-quick-action:hover {
-  border-color: var(--color-primary);
-  transform: translateY(-1px);
-  box-shadow: var(--shadow-md);
+  border-color: var(--swiss-red);
 }
 
 .dashboard-quick-action svg {
-  color: var(--color-primary);
+  color: var(--swiss-red);
 }
 
-/* Patient profile circular avatar */
+/* Patient profile square avatar & photo upload */
+.profile-photo-picker {
+  position: relative;
+  display: inline-block;
+  cursor: pointer;
+  width: 80px;
+  height: 80px;
+  flex-shrink: 0;
+}
+
+.profile-photo-picker:focus-within {
+  outline: 2px solid var(--swiss-red);
+  outline-offset: 2px;
+}
+
+.profile-photo-input {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+
 .patient-profile-avatar {
   display: grid;
-  width: 76px;
-  height: 76px;
+  width: 80px;
+  height: 80px;
   place-items: center;
   overflow: hidden;
   border: 2px solid var(--color-border);
-  border-radius: 50%;
+  border-radius: 4px;
   color: #fff;
-  background: var(--color-primary);
-  box-shadow: var(--shadow-sm);
-  font-size: 1.5rem;
+  background: var(--swiss-red);
+  box-shadow: none !important;
+  font-size: 1.6rem;
   font-weight: 700;
+  transition: border-color var(--transition-fast), filter var(--transition-fast);
+}
+
+.profile-photo-picker:hover .patient-profile-avatar {
+  border-color: var(--swiss-red);
+  filter: brightness(0.95);
+}
+
+.profile-photo-edit {
+  position: absolute;
+  right: -4px;
+  bottom: -4px;
+  width: 26px;
+  height: 26px;
+  border-radius: 2px;
+  background: var(--color-text);
+  color: #ffffff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 2px solid var(--color-surface-white);
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.15);
+  transition: transform var(--transition-fast), background var(--transition-fast);
+}
+
+.profile-photo-picker:hover .profile-photo-edit {
+  background: var(--swiss-red);
+  transform: scale(1.08);
 }
 
 .patient-profile-avatar img,
@@ -1354,6 +1544,53 @@ select:focus {
   height: 100%;
   display: block;
   object-fit: cover;
+}
+
+/* Layout & Spacing Utilities */
+.flex { display: flex; }
+.flex-col { display: flex; flex-direction: column; }
+.flex-row { display: flex; flex-direction: row; }
+.flex-wrap { flex-wrap: wrap; }
+.items-center { align-items: center; }
+.items-start { align-items: flex-start; }
+.items-end { align-items: flex-end; }
+.justify-between { justify-content: space-between; }
+.justify-center { justify-content: center; }
+.justify-end { justify-content: flex-end; }
+.flex-1 { flex: 1 1 0%; }
+
+.gap-1 { gap: var(--spacing-1); }
+.gap-2 { gap: var(--spacing-2); }
+.gap-3 { gap: var(--spacing-3); }
+.gap-4 { gap: var(--spacing-4); }
+.gap-5 { gap: var(--spacing-5); }
+.gap-6 { gap: var(--spacing-6); }
+
+.mb-1 { margin-bottom: var(--spacing-1); }
+.mb-2 { margin-bottom: var(--spacing-2); }
+.mb-3 { margin-bottom: var(--spacing-3); }
+.mb-4 { margin-bottom: var(--spacing-4); }
+.mb-5 { margin-bottom: var(--spacing-5); }
+.mb-6 { margin-bottom: var(--spacing-6); }
+
+.mt-1 { margin-top: var(--spacing-1); }
+.mt-2 { margin-top: var(--spacing-2); }
+.mt-3 { margin-top: var(--spacing-3); }
+.mt-4 { margin-top: var(--spacing-4); }
+.mt-5 { margin-top: var(--spacing-5); }
+.mt-6 { margin-top: var(--spacing-6); }
+
+.w-full { width: 100%; }
+.h-full { height: 100%; }
+
+@media (min-width: 640px) {
+  .sm\:flex-row { flex-direction: row !important; }
+}
+
+.responsive-list-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(min(100%, 320px), 1fr));
+  gap: var(--spacing-4);
 }
 
 /* 13. Accessible Dialogs & Modals (Section 19) */
@@ -1380,13 +1617,13 @@ dialog.popup::backdrop {
   padding: var(--spacing-5);
 }
 
-/* 14. Clinical Tables (Section 18) */
+/* 14. Clinical Tables — Swiss Structural Tabular Grid (Section 23) */
 .clinical-table-container {
   border-radius: var(--border-radius-md);
   overflow-x: auto;
   border: 1px solid var(--color-border);
   background: var(--color-surface-white);
-  box-shadow: var(--shadow-sm);
+  box-shadow: none !important;
 }
 
 .clinical-table {
@@ -1396,11 +1633,11 @@ dialog.popup::backdrop {
 }
 
 .clinical-table th {
-  background: var(--color-surface-interactive);
+  background: var(--swiss-gray-100);
   color: var(--color-text);
-  font-weight: 600;
-  font-size: 12px;
-  letter-spacing: 0.03em;
+  font-weight: 700;
+  font-size: 11px;
+  letter-spacing: 0.05em;
   text-transform: uppercase;
   padding: 10px 14px;
   text-align: left;
@@ -1408,7 +1645,7 @@ dialog.popup::backdrop {
 }
 
 .clinical-table td {
-  padding: 11px 14px;
+  padding: 10px 14px;
   border-bottom: 1px solid var(--color-border);
   color: var(--color-text);
   font-size: 13px;
@@ -1416,11 +1653,11 @@ dialog.popup::backdrop {
 }
 
 .clinical-table tr:nth-child(even) td {
-  background: rgba(245, 245, 244, 0.4);
+  background: rgba(247, 247, 245, 0.6);
 }
 
 .clinical-table tr:hover td {
-  background: var(--color-surface-interactive);
+  background: var(--swiss-blue-soft);
 }
 
 .clinical-table tr:last-child td {
@@ -1428,32 +1665,32 @@ dialog.popup::backdrop {
 }
 
 :root[data-theme="dark"] .clinical-table th {
-  background: #34302C;
-  color: #FAFAF9;
-  border-bottom-color: #44403C;
+  background: var(--swiss-dark-surface-elevated);
+  color: var(--swiss-dark-text);
+  border-bottom-color: var(--swiss-dark-border);
 }
 
 :root[data-theme="dark"] .clinical-table td {
-  border-color: #44403C;
-  color: #FAFAF9;
+  border-color: var(--swiss-dark-border);
+  color: var(--swiss-dark-text);
 }
 
 :root[data-theme="dark"] .clinical-table tr:nth-child(even) td {
-  background: rgba(52, 48, 44, 0.4);
+  background: rgba(34, 34, 34, 0.5);
 }
 
 :root[data-theme="dark"] .clinical-table tr:hover td {
-  background: #34302C;
+  background: rgba(77, 141, 255, 0.12);
 }
 
-/* 15. High-Contrast Focus Ring (Section 24) */
+/* 15. High-Contrast Swiss Focus Ring (Section 30) */
 a:focus-visible,
 button:focus-visible,
 input:focus-visible,
 select:focus-visible,
 textarea:focus-visible,
 div[tabindex="0"]:focus-visible {
-  outline: 2px solid var(--color-primary) !important;
+  outline: 2px solid var(--swiss-blue) !important;
   outline-offset: 2px !important;
 }
 
@@ -1683,11 +1920,6 @@ div[tabindex="0"]:focus-visible {
   to { opacity: 1; transform: translateY(0); }
 }
 
-@keyframes lifelink-orb-drift {
-  0%, 100% { transform: translate3d(0, 0, 0); }
-  50% { transform: translate3d(4px, -4px, 0); }
-}
-
 @media (prefers-reduced-motion: no-preference) {
   .auth-card {
     animation: lifelink-auth-card-in 560ms cubic-bezier(0.16, 1, 0.3, 1) both;
@@ -1700,8 +1932,6 @@ div[tabindex="0"]:focus-visible {
   .auth-form > *:nth-child(1) { animation-delay: 120ms; }
   .auth-form > *:nth-child(2) { animation-delay: 185ms; }
   .auth-form > *:nth-child(3) { animation-delay: 250ms; }
-
-  .auth-page::before { animation: lifelink-orb-drift 22s ease-in-out infinite; }
 
   .btn:active:not(:disabled) { transform: translateY(1px) scale(.98); }
 }
