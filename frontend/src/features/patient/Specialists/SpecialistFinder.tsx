@@ -17,7 +17,7 @@ import { Badge } from '../../../components/ui/Badge';                           
 import { Popup } from '../../../components/ui/Popup';                                          // Modal confirmation dialog
 import { ValidationMessage } from '../../../components/ui/ValidationMessage';
 import { formatUserFriendlyError } from '../../../lib/errorFormatting';
-import { UserCheck, MapPin, Building, Route, TrainFront, AlertCircle, RefreshCw, RotateCcw, CheckCircle, Clock, Sun, Moon } from 'lucide-react'; // Specialist directory and transit icons
+import { UserCheck, MapPin, Building, Route, AlertCircle, RefreshCw, RotateCcw, CheckCircle, Clock, Sun, Moon } from 'lucide-react'; // Specialist directory and clinic icons
 import { useNavigate, useSearchParams } from 'react-router-dom';                                 // Navigation and query parameter synchronization hooks
 import { trpc } from '../../../lib/trpc';                                                       // Type-safe tRPC client bridge
 import { MumbaiDoctorMap } from '../../../components/MumbaiDoctorMap';                          // Interactive OpenStreetMap visualization component
@@ -268,7 +268,7 @@ export const SpecialistFinder = () => {
   // Error boundary state
   if (directoryQuery.isError || facetsQuery.isError) return (
     <div className="container" style={{ padding: 0 }}>
-      <div role="alert"><Card variant="glass" className="discovery-load-error">
+      <div role="alert"><Card variant="solid" className="discovery-load-error">
         <div className="discovery-load-error-icon"><AlertCircle size={24} aria-hidden="true" /></div>
         <div>
           <h1>{SPECIALIST_LOAD_ERROR_TITLE}</h1>
@@ -284,22 +284,22 @@ export const SpecialistFinder = () => {
   const facets = facetsQuery.data;
 
   return (
-    <div className="container" style={{ padding: 0, fontFamily: "'Plus Jakarta Sans', sans-serif" }}>
+    <div className="container" style={{ padding: 0 }}>
       {/* Page header */}
       <header className="mb-4 flex items-center justify-between">
         <div className="flex items-center gap-3">
-          <div style={{ width: 44, height: 44, borderRadius: '8px', background: 'var(--color-primary-muted)', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-            <UserCheck size={24} color="var(--color-primary)" />                                               {/* Specialist finder icon */}
+          <div style={{ width: 40, height: 40, borderRadius: 'var(--border-radius-sm)', background: 'var(--color-primary-muted)', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+            <UserCheck size={22} color="var(--color-primary)" />
           </div>
           <div>
-            <h1 style={{ margin: 0, fontFamily: "'Plus Jakarta Sans', sans-serif", fontWeight: 700, letterSpacing: '-0.02em', color: 'var(--color-text)', fontSize: '2rem' }}>Specialist Finder</h1>
-            <p className="caption" style={{ color: 'var(--color-text-muted)' }}>Browse available Mumbai specialists by clinical specialty, view clinics on the live map, and request appointments in real time.</p>
+            <h1 style={{ margin: 0, fontWeight: 700, letterSpacing: '-0.02em', color: 'var(--color-text)', fontSize: '2rem' }}>Specialist Finder</h1>
+            <p className="caption" style={{ color: 'var(--color-text-muted)', margin: '2px 0 0' }}>Browse available Mumbai specialists by clinical specialty, view clinics on the live map, and request appointments in real time.</p>
           </div>
         </div>
 
         {/* Real-time sync badge: appears only during in-flight background query refetching */}
         {directoryQuery.isFetching && !directoryQuery.isLoading && (
-          <div className="flex items-center gap-2 px-3 py-1.5 rounded-full border border-teal-200 bg-teal-50 text-teal-700 text-xs font-semibold animate-pulse">
+          <div className="badge badge-neutral" style={{ display: 'inline-flex', alignItems: 'center', gap: '6px' }}>
             <RefreshCw size={12} className="animate-spin" /> Updating live…
           </div>
         )}
@@ -404,8 +404,8 @@ export const SpecialistFinder = () => {
                           disabled={isUnavailable}
                           onClick={() => handleSlotSelect(slot.id)}
                           style={{
-                            padding: '7px 11px',
-                            borderRadius: '8px',
+                            padding: '6px 10px',
+                            borderRadius: 'var(--border-radius-sm)',
                             fontSize: '0.8rem',
                             fontWeight: 600,
                             border: '1px solid',
@@ -427,8 +427,8 @@ export const SpecialistFinder = () => {
                             cursor: isUnavailable ? 'not-allowed' : 'pointer',
                             opacity: isUnavailable ? 0.55 : 1,
                             textDecoration: isUnavailable ? 'line-through' : 'none',
-                            boxShadow: isSelected ? '0 2px 8px rgba(13, 148, 136, 0.3)' : 'none',
-                            transition: 'all 0.15s ease',
+                            boxShadow: 'none',
+                            transition: 'border-color 0.12s ease',
                           }}
                           title={isBooked ? 'Slot already booked' : isPast ? 'Past time' : `Book ${slot.label}`}
                         >
@@ -461,8 +461,8 @@ export const SpecialistFinder = () => {
                           disabled={isUnavailable}
                           onClick={() => handleSlotSelect(slot.id)}
                           style={{
-                            padding: '7px 11px',
-                            borderRadius: '8px',
+                            padding: '6px 10px',
+                            borderRadius: 'var(--border-radius-sm)',
                             fontSize: '0.8rem',
                             fontWeight: 600,
                             border: '1px solid',
@@ -484,8 +484,8 @@ export const SpecialistFinder = () => {
                             cursor: isUnavailable ? 'not-allowed' : 'pointer',
                             opacity: isUnavailable ? 0.55 : 1,
                             textDecoration: isUnavailable ? 'line-through' : 'none',
-                            boxShadow: isSelected ? '0 2px 8px rgba(13, 148, 136, 0.3)' : 'none',
-                            transition: 'all 0.15s ease',
+                            boxShadow: 'none',
+                            transition: 'border-color 0.12s ease',
                           }}
                           title={isBooked ? 'Slot already booked' : isPast ? 'Past time' : `Book ${slot.label}`}
                         >
@@ -535,7 +535,7 @@ export const SpecialistFinder = () => {
           <Card variant="default" className="directory-map-card">
             <div className="flex items-center gap-2 mb-3">
               <Route size={20} color="var(--color-accent)" />
-              <div><h2 style={{ margin: 0, fontSize: '1.2rem', fontFamily: "'Plus Jakarta Sans', sans-serif", fontWeight: 700, letterSpacing: '-0.02em', color: 'var(--color-text)' }}>Mumbai Specialists Live Map</h2><p className="caption" style={{ color: 'var(--color-text-muted)' }}>Geographically locked to Mumbai Metropolitan Region (MMR). High-speed live clinic locations.</p></div>
+              <div><h2 style={{ margin: 0, fontSize: '1.2rem', fontWeight: 700, letterSpacing: '-0.02em', color: 'var(--color-text)' }}>Mumbai Specialists Live Map</h2><p className="caption" style={{ color: 'var(--color-text-muted)' }}>Geographically locked to Mumbai Metropolitan Region (MMR). High-speed live clinic locations.</p></div>
             </div>
             <MumbaiDoctorMap
               doctors={displayedDoctors}
@@ -549,7 +549,7 @@ export const SpecialistFinder = () => {
         {/* Directory heading below map */}
         <div className="discovery-results-heading">
           <div>
-            <h2 style={{ fontSize: '1.4rem', margin: 0, fontFamily: "'Plus Jakarta Sans', sans-serif", fontWeight: 700, letterSpacing: '-0.02em', color: 'var(--color-text)' }}>Mumbai Specialist Directory</h2>
+            <h2 style={{ fontSize: '1.4rem', margin: 0, fontWeight: 700, letterSpacing: '-0.02em', color: 'var(--color-text)' }}>Mumbai Specialist Directory</h2>
             <p className="caption" style={{ color: 'var(--color-text-muted)' }}>{displayedDoctors.length} {displayedDoctors.length === 1 ? 'specialist' : 'specialists'} available in Mumbai.</p>
           </div>
           <Badge status="neutral">Live Directory</Badge>
@@ -565,15 +565,15 @@ export const SpecialistFinder = () => {
                     <div>
                       <div className="flex justify-between items-start mb-2">
                         <div>
-                          <h3 style={{ margin: 0, color: 'var(--color-text)', fontFamily: "'Plus Jakarta Sans', sans-serif", fontWeight: 700, letterSpacing: '-0.02em', fontSize: '1.1rem' }}>{doctor.name}</h3>
+                          <h3 style={{ margin: 0, color: 'var(--color-text)', fontWeight: 700, letterSpacing: '-0.02em', fontSize: '1.1rem' }}>{doctor.name}</h3>
                           <p style={{ color: 'var(--color-primary)', fontWeight: 700, margin: '2px 0 0 0', fontSize: '0.9rem' }}>{doctor.specialty}</p>
                         </div>
                         <Badge status="neutral">Controlled directory</Badge>
                       </div>
                       <div className="flex-col gap-1 mt-2">
                         <div className="caption flex items-center gap-1" style={{ color: 'var(--color-text-muted)' }}><Building size={14} /> {doctor.hospital}</div>
-                        <div className="caption flex items-center gap-1" style={{ color: 'var(--color-text-muted)' }}><MapPin size={14} /> {doctor.locality}, {doctor.city} • {doctor.station} station</div>
-                        <div className="caption flex items-center gap-1" style={{ color: 'var(--color-text-muted)' }}><TrainFront size={14} /> {doctor.railLines.join(" + ")} connectivity</div>
+                        <div className="caption flex items-center gap-1" style={{ color: 'var(--color-text-muted)' }}><MapPin size={14} /> {doctor.locality}, {doctor.city}</div>
+                        <div className="caption flex items-center gap-1" style={{ color: 'var(--color-text-muted)' }}><Clock size={14} /> OPD Hours: 10:00 AM – 7:00 PM • Mon – Sat</div>
                       </div>
                     </div>
                     <div style={{ marginTop: 'var(--spacing-4)', paddingTop: 'var(--spacing-3)', borderTop: '1px solid var(--color-border)' }}>
@@ -605,9 +605,9 @@ export const SpecialistFinder = () => {
 
       {/* Booking confirmation popup dialog */}
       <Popup isOpen={showSuccessPopup} onClose={() => navigate('/patient/appointments')} title="Appointment Requested" maxWidth="400px">
-        <div style={{ textAlign: 'center', padding: '16px 0', fontFamily: "'Plus Jakarta Sans', sans-serif" }}>
+        <div style={{ textAlign: 'center', padding: '16px 0' }}>
           <CheckCircle size={48} color="var(--color-primary)" style={{ margin: '0 auto 16px' }} />
-          <h3 style={{ margin: '0 0 8px', color: 'var(--color-text)', fontFamily: "'Plus Jakarta Sans', sans-serif", fontWeight: 700, letterSpacing: '-0.02em', fontSize: '1.2rem' }}>Request Sent</h3>
+          <h3 style={{ margin: '0 0 8px', color: 'var(--color-text)', fontWeight: 700, letterSpacing: '-0.02em', fontSize: '1.2rem' }}>Request Sent</h3>
           <p style={{ color: 'var(--color-text-muted)', fontSize: '0.9rem', marginBottom: '24px' }}>
             Your appointment request has been submitted to the assigned specialist workspace successfully.
           </p>

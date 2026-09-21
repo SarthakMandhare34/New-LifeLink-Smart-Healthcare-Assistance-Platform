@@ -3,11 +3,11 @@
   align-items: flex-start;
   gap: var(--spacing-2);
   padding: var(--spacing-3);
-  border: 1px solid rgba(13, 148, 136, 0.22);
+  border: 1px solid var(--color-border);
   border-radius: var(--border-radius-md);
-  background: rgba(13, 148, 136, 0.07);
+  background: var(--color-surface-interactive);
   color: var(--color-text);
-  font-family: 'Plus Jakarta Sans', sans-serif;
+
   font-size: var(--text-caption);
 }
 
@@ -21,7 +21,7 @@
 
 .discovery-location-control { display: flex; align-items: center; justify-content: space-between; gap: var(--spacing-3); padding: 10px 12px; border: 1px solid var(--color-border); border-radius: var(--border-radius-md); background: var(--color-surface-interactive); }
 .discovery-search-guidance { margin: 5px 0 0; }
-.discovery-location-title { margin: 0 0 3px; color: var(--color-text-muted); font-size: var(--text-caption); font-weight: 700; font-family: 'Plus Jakarta Sans', sans-serif; }
+.discovery-location-title { margin: 0 0 3px; color: var(--color-text-muted); font-size: var(--text-caption); font-weight: 700; }
 .discovery-location-copy { max-width: 720px; margin: 0; color: var(--color-text); }
 .discovery-location-actions { display: flex; align-items: center; gap: var(--spacing-2); flex-shrink: 0; }
 
@@ -31,7 +31,7 @@
   color: var(--color-text-muted);
   font-size: var(--text-caption);
   font-weight: 700;
-  font-family: 'Plus Jakarta Sans', sans-serif;
+
 }
 
 .discovery-filter-select,
@@ -43,7 +43,7 @@
   border: 1px solid var(--color-border);
   border-radius: var(--border-radius-input);
   background: var(--color-surface-white);
-  font-family: 'Plus Jakarta Sans', sans-serif;
+
   font-size: 0.92rem;
 }
 
@@ -56,9 +56,29 @@
   gap: var(--spacing-5);
 }
 
-/* Full-width doctor card grid below the map */
+/* Full-width doctor card multi-column grid below the map */
 .discovery-full-grid {
-  grid-template-columns: repeat(auto-fill, minmax(min(100%, 300px), 1fr));
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: var(--spacing-4);
+}
+
+@media (min-width: 1400px) {
+  .discovery-full-grid {
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+  }
+}
+
+@media (max-width: 1024px) {
+  .discovery-full-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+@media (max-width: 640px) {
+  .discovery-full-grid {
+    grid-template-columns: 1fr;
+  }
 }
 
 .discovery-results-heading { display: flex; align-items: flex-start; justify-content: space-between; gap: var(--spacing-3); margin: 0; }
@@ -121,18 +141,18 @@
   padding: clamp(var(--spacing-4), 4vw, var(--spacing-6));
 }
 
-.discovery-load-error h1 { margin: 0; font-size: var(--text-h2); font-family: 'Plus Jakarta Sans', sans-serif; font-weight: 700; letter-spacing: -0.02em; color: var(--color-text); }
+.discovery-load-error h1 { margin: 0; font-size: var(--text-h2); font-weight: 700; letter-spacing: -0.02em; color: var(--color-text); }
 .discovery-load-error .caption { max-width: 520px; margin: 8px 0 0; color: var(--color-text-muted); }
 .discovery-load-error button { margin-top: var(--spacing-4); }
 .discovery-load-error-icon {
   display: grid;
   flex: 0 0 auto;
-  width: 46px;
-  height: 46px;
+  width: 44px;
+  height: 44px;
   place-items: center;
-  border-radius: 8px;
+  border-radius: var(--border-radius-sm);
   color: var(--color-semantic-emergency);
-  background: rgba(220, 38, 38, 0.11);
+  background: var(--swiss-red-soft);
 }
 
 .discovery-empty-state {
@@ -159,7 +179,6 @@
   position: relative;
   display: grid;
   gap: var(--spacing-4);
-  font-family: 'Plus Jakarta Sans', sans-serif;
 }
 
 .discovery-refinement-content > * { min-width: 0; }
@@ -190,7 +209,6 @@
   border: 1px solid var(--color-border);
   border-radius: var(--border-radius-input);
   background: var(--color-surface-white);
-  font-family: 'Plus Jakarta Sans', sans-serif;
   line-height: 1.5;
   outline: none;
 }
@@ -207,7 +225,7 @@
 }
 
 .discovery-search-field > svg { flex: 0 0 auto; color: var(--color-accent); }
-.discovery-search-field input { background: transparent; border: none; outline: none; width: 100%; color: var(--color-text); font-family: 'Plus Jakarta Sans', sans-serif; }
+.discovery-search-field input { background: transparent; border: none; outline: none; width: 100%; color: var(--color-text); }
 .discovery-search-field .discovery-search-guidance { margin: 6px 0 0; color: var(--color-text-muted); }
 
 .discovery-refinement-card .discovery-location-control {
