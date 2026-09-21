@@ -18,10 +18,10 @@ import {
   Calendar, Activity, Pill, FileText, TriangleAlert, ArrowRight, Clock,
   MapPin, ShieldCheck, CheckCircle2
 } from 'lucide-react';
-import { Card } from '../../components/ui/Card';
-import { Button } from '../../components/ui/Button';
-import { trpc } from '../../lib/trpc';
-import { useAuth } from '../../_core/hooks/useAuth';
+import { Card } from '../../../components/ui/Card';
+import { Button } from '../../../components/ui/Button';
+import { trpc } from '../../../lib/trpc';
+import { useAuth } from '../../../_core/hooks/useAuth';
 
 // Swiss semantic triage badge styling
 function urgencyBadge(urgency: string) {
