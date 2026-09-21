@@ -51,27 +51,27 @@ export const DoctorAppointments = () => {
   // Error boundary state
   if (appointments.isError) return <p role="alert">Unable to load assigned appointments. Please try again.</p>;
 
-  // Dynamic left border indicator color matching appointment lifecycle - No Blue/Green/Purple
+  // Dynamic left border indicator color matching appointment lifecycle
   const getBorderColor = (status: string) => {
     switch (status) {
-      case "Completed": return "4px solid var(--color-doctor-accent)";
-      case "Confirmed": return "4px solid var(--color-doctor-primary)";
-      case "Cancelled": return "4px solid #991B1B";
-      default: return "4px solid var(--color-doctor-accent)";
+      case "Completed": return "3px solid var(--color-text-secondary)";
+      case "Confirmed": return "3px solid var(--color-doctor-primary)";
+      case "Cancelled": return "3px solid var(--color-semantic-error)";
+      default: return "3px solid var(--color-doctor-primary)";
     }
   };
 
-  // Status badge with matching icon and pill styling
+  // Status badge with matching icon and standardized 6px pill styling
   const getStatusBadge = (status: string) => {
     switch (status) {
       case "Completed":
-        return <span style={{ display: "inline-flex", alignItems: "center", gap: 4, background: "var(--color-surface-interactive)", color: "var(--color-text)", border: "1px solid var(--color-border)", padding: "3px 10px", borderRadius: 12, fontSize: 13, fontWeight: 600 }}><CheckCheck size={14} /> Completed</span>;
+        return <span style={{ display: "inline-flex", alignItems: "center", gap: 4, background: "var(--color-surface-interactive)", color: "var(--color-text-secondary)", border: "1px solid var(--color-border)", padding: "3px 8px", borderRadius: "6px", fontSize: "0.78rem", fontWeight: 600 }}><CheckCheck size={13} /> Completed</span>;
       case "Confirmed":
-        return <span style={{ display: "inline-flex", alignItems: "center", gap: 4, background: "rgba(14, 114, 121, 0.12)", color: "var(--color-doctor-primary)", border: "1px solid rgba(14, 114, 121, 0.25)", padding: "3px 10px", borderRadius: 12, fontSize: 13, fontWeight: 600 }}><CheckCircle2 size={14} /> Confirmed (Active)</span>;
+        return <span style={{ display: "inline-flex", alignItems: "center", gap: 4, background: "rgba(30, 107, 90, 0.12)", color: "var(--color-doctor-primary)", border: "1px solid rgba(30, 107, 90, 0.25)", padding: "3px 8px", borderRadius: "6px", fontSize: "0.78rem", fontWeight: 600 }}><CheckCircle2 size={13} /> Confirmed (Active)</span>;
       case "Cancelled":
-        return <span style={{ display: "inline-flex", alignItems: "center", gap: 4, background: "rgba(153, 27, 27, 0.12)", color: "#991B1B", border: "1px solid rgba(153, 27, 27, 0.25)", padding: "3px 10px", borderRadius: 12, fontSize: 13, fontWeight: 600 }}><XCircle size={14} /> Cancelled</span>;
+        return <span style={{ display: "inline-flex", alignItems: "center", gap: 4, background: "rgba(197, 48, 48, 0.1)", color: "var(--color-semantic-error)", border: "1px solid rgba(197, 48, 48, 0.25)", padding: "3px 8px", borderRadius: "6px", fontSize: "0.78rem", fontWeight: 600 }}><XCircle size={13} /> Cancelled</span>;
       default:
-        return <span style={{ display: "inline-flex", alignItems: "center", gap: 4, background: "var(--color-surface-interactive)", color: "var(--color-doctor-accent)", border: "1px solid var(--color-border)", padding: "3px 10px", borderRadius: 12, fontSize: 13, fontWeight: 600 }}><Clock size={14} /> {status}</span>;
+        return <span style={{ display: "inline-flex", alignItems: "center", gap: 4, background: "var(--color-surface-interactive)", color: "var(--color-text-secondary)", border: "1px solid var(--color-border)", padding: "3px 8px", borderRadius: "6px", fontSize: "0.78rem", fontWeight: 600 }}><Clock size={13} /> {status}</span>;
     }
   };
 
@@ -87,7 +87,7 @@ export const DoctorAppointments = () => {
 
       {/* Dismissible feedback notification message */}
       {feedbackMessage && (
-        <div style={{ background: "var(--color-surface-interactive)", border: "1px solid var(--color-doctor-accent)", color: "var(--color-text)", padding: "var(--spacing-3)", borderRadius: "var(--border-radius-md)", display: "flex", justifyContent: "space-between", alignItems: "center" }}>
+        <div style={{ background: "var(--color-surface-interactive)", border: "1px solid var(--color-border)", color: "var(--color-text)", padding: "var(--spacing-3)", borderRadius: "var(--border-radius-sm)", display: "flex", justifyContent: "space-between", alignItems: "center" }}>
           <span><strong>Status updated:</strong> {feedbackMessage}</span>
           <button type="button" aria-label="Dismiss status notification" onClick={() => setFeedbackMessage(null)} style={{ background: "none", border: "none", cursor: "pointer", color: "var(--color-text)", fontWeight: "bold", fontSize: "1.2rem", padding: "4px 8px" }}>×</button>
         </div>
@@ -95,8 +95,10 @@ export const DoctorAppointments = () => {
 
       {/* Empty appointment list fallback */}
       {!appointments.data?.length ? (
-        <Card style={{ textAlign: "center", padding: "var(--spacing-6) var(--spacing-4)" }}>
-          <p>No assigned appointments yet.</p>
+        <Card style={{ textAlign: "center", padding: "var(--spacing-8) var(--spacing-4)" }}>
+          <Clock size={36} style={{ color: "var(--color-text-secondary)", opacity: 0.5, margin: "0 auto var(--spacing-3)" }} />
+          <p style={{ margin: 0, fontWeight: 600, color: "var(--color-text)" }}>No assigned appointments yet.</p>
+          <p className="caption" style={{ margin: "4px 0 0", color: "var(--color-text-secondary)" }}>When patients book consultations with you, they will appear here for review.</p>
         </Card>
       ) : (
         /* Appointment item cards list */
@@ -125,7 +127,7 @@ export const DoctorAppointments = () => {
                     {getStatusBadge(appointment.status)}                                        {/* Status badge */}
                   </div>
                   <p className="caption" style={{ margin: "var(--spacing-1) 0" }}>
-                    Scheduled: {new Date(appointment.scheduledAt).toLocaleString()}             {/* Formatted visit date & time */}
+                    Scheduled: <span style={{ fontVariantNumeric: "tabular-nums" }}>{new Date(appointment.scheduledAt).toLocaleString()}</span>
                   </p>
                   <p style={{ margin: "var(--spacing-2) 0" }}>
                     <strong>Booking reason:</strong> {appointment.reason}                       {/* Patient's reported symptom / reason */}
@@ -164,7 +166,6 @@ export const DoctorAppointments = () => {
                     <>
                       <Button
                         variant="primary"
-                        style={{ background: "#27272A", borderColor: "#18181B", color: "#F4F4F5" }}
                         disabled={updateStatus.isPending}
                         onClick={() => updateStatus.mutate({ id: appointment.id, status: "Completed" })} // Mark consultation finished
                       >
@@ -182,7 +183,7 @@ export const DoctorAppointments = () => {
 
                   {/* Static notice for Completed visits */}
                   {isCompleted && (
-                    <span className="caption" style={{ color: "#065f46", fontWeight: 600, alignSelf: "center" }}>
+                    <span className="caption" style={{ color: "var(--color-semantic-success)", fontWeight: 600, alignSelf: "center" }}>
                       Consultation Complete
                     </span>
                   )}

@@ -167,7 +167,7 @@ export const DoctorAppShell = () => {
           className="app-sidebar-header" 
           style={{ 
             padding: '16px 18px', 
-            borderBottom: '2px solid var(--color-border)', 
+            borderBottom: '1px solid var(--color-border)', 
             display: 'flex', 
             flexDirection: 'column', 
             alignItems: 'center', 
@@ -195,7 +195,7 @@ export const DoctorAppShell = () => {
           </div>
         </div>
 
-        {/* Doctor workspace navigation links: Classic institutional list layout with 4px corners and active left-border indicator */}
+        {/* Doctor workspace navigation links: Structured Nordic Clinical list layout with 8px corners and active left-border indicator */}
         <nav 
           className="app-sidebar-nav" 
           style={{ 
@@ -218,7 +218,7 @@ export const DoctorAppShell = () => {
                 alignItems: 'center',
                 gap: '12px',
                 padding: '9px 12px',
-                borderRadius: '4px',
+                borderRadius: '8px',
                 fontSize: '0.88rem',
                 fontWeight: isActive ? 600 : 500,
                 color: isActive ? 'var(--color-text)' : 'var(--color-text-muted)',
@@ -245,7 +245,7 @@ export const DoctorAppShell = () => {
               gap: '12px',
               width: '100%', 
               padding: '9px 12px', 
-              borderRadius: '4px',
+              borderRadius: '8px',
               border: 'none', 
               background: 'transparent',
               color: 'var(--color-text-muted)', 
@@ -295,7 +295,7 @@ export const DoctorAppShell = () => {
               aria-label="Toggle theme" 
               onClick={toggleTheme} 
               title="Toggle theme"
-              style={{ borderRadius: '4px', border: '1px solid var(--color-border)', width: '36px', height: '36px', display: 'grid', placeItems: 'center' }}
+              style={{ borderRadius: '8px', border: '1px solid var(--color-border)', width: '36px', height: '36px', display: 'grid', placeItems: 'center' }}
             >
               {theme === 'light' ? <Moon size={18} /> : <Sun size={18} />}
             </button>
@@ -313,7 +313,7 @@ export const DoctorAppShell = () => {
                   background: 'var(--color-background)', 
                   width: '36px', 
                   height: '36px', 
-                  borderRadius: '4px', 
+                  borderRadius: '8px', 
                   display: 'grid', 
                   placeItems: 'center', 
                   border: '1px solid var(--color-border)', 
@@ -348,7 +348,7 @@ export const DoctorAppShell = () => {
                     width: 'min(90vw, 360px)',
                     background: 'var(--color-surface-white)',
                     border: '1px solid var(--color-border)',
-                    borderRadius: '8px',
+                    borderRadius: '10px',
                     boxShadow: 'var(--shadow-lg, 0 10px 25px -5px rgba(0,0,0,0.1))',
                     zIndex: 1000,
                     overflow: 'hidden',
@@ -477,7 +477,7 @@ export const DoctorAppShell = () => {
                 gap: '8px', 
                 background: 'var(--color-surface-white)', 
                 border: '1px solid var(--color-border)', 
-                borderRadius: '4px', 
+                borderRadius: '8px', 
                 padding: '4px 8px 4px 4px', 
                 cursor: 'pointer' 
               }}
@@ -487,14 +487,15 @@ export const DoctorAppShell = () => {
                 style={{ 
                   width: '32px', 
                   height: '32px', 
-                  borderRadius: '3px', 
+                  borderRadius: '50%', 
                   background: 'var(--color-surface-interactive)', 
                   border: '1px solid var(--color-doctor-accent)',
                   color: 'var(--color-text)', 
                   fontWeight: 700, 
                   fontSize: '0.80rem', 
                   display: 'grid', 
-                  placeItems: 'center' 
+                  placeItems: 'center',
+                  overflow: 'hidden'
                 }}
               >
                 {initials}

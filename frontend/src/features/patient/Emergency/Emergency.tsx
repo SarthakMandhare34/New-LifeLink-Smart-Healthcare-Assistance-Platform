@@ -71,7 +71,7 @@ export const Emergency = () => {
       {/* Emergency header banner */}
       <header style={{ marginBottom: 'var(--spacing-5)' }}>
         <div className="flex items-center gap-3">
-          <div style={{ width: 52, height: 52, borderRadius: '16px', background: 'rgba(187, 44, 44, 0.12)', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+          <div style={{ width: 52, height: 52, borderRadius: '8px', background: 'rgba(187, 44, 44, 0.12)', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
             <ShieldAlert size={28} color="#B01E1E" />                                           {/* Emergency alert badge */}
           </div>
           <div>
@@ -98,7 +98,7 @@ export const Emergency = () => {
         </Card>
 
         {/* Health Passport Emergency Contacts Card */}
-        <Card variant="glass" style={{ padding: 'var(--spacing-5)' }}>
+        <Card variant="default" style={{ padding: 'var(--spacing-5)' }}>
           <div className="flex items-center gap-2 mb-3">
             <UsersRound size={22} color="var(--color-primary)" />
             <div>

@@ -21,7 +21,7 @@
 
 .discovery-location-control { display: flex; align-items: center; justify-content: space-between; gap: var(--spacing-3); padding: 10px 12px; border: 1px solid var(--color-border); border-radius: var(--border-radius-md); background: var(--color-surface-interactive); }
 .discovery-search-guidance { margin: 5px 0 0; }
-.discovery-location-title { margin: 0 0 3px; color: var(--color-text-muted); font-size: var(--text-caption); font-weight: 700; font-family: 'Outfit', sans-serif; }
+.discovery-location-title { margin: 0 0 3px; color: var(--color-text-muted); font-size: var(--text-caption); font-weight: 700; font-family: 'Plus Jakarta Sans', sans-serif; }
 .discovery-location-copy { max-width: 720px; margin: 0; color: var(--color-text); }
 .discovery-location-actions { display: flex; align-items: center; gap: var(--spacing-2); flex-shrink: 0; }
 
@@ -31,7 +31,7 @@
   color: var(--color-text-muted);
   font-size: var(--text-caption);
   font-weight: 700;
-  font-family: 'Outfit', sans-serif;
+  font-family: 'Plus Jakarta Sans', sans-serif;
 }
 
 .discovery-filter-select,
@@ -63,7 +63,7 @@
 
 .discovery-results-heading { display: flex; align-items: flex-start; justify-content: space-between; gap: var(--spacing-3); margin: 0; }
 .discovery-results-heading .caption { margin: 4px 0 0; color: var(--color-text-muted); }
-.directory-map-card { overflow: hidden; border: 1px solid var(--color-border) !important; box-shadow: 0 8px 32px var(--color-card-shadow, rgba(0, 0, 0, 0.04)) !important; background: var(--color-surface-white) !important; }
+.directory-map-card { overflow: hidden; border: 1px solid var(--color-border) !important; box-shadow: none !important; background: var(--color-surface-white) !important; }
 .mumbai-directory-map-wrap { position: relative; }
 .mumbai-directory-map { height: 520px !important; border: 1px solid var(--color-border); border-radius: var(--border-radius-md); overflow: hidden; }
 .mumbai-map-error { position: absolute; inset: 0; display: flex; flex-direction: column; align-items: center; justify-content: center; margin: 0; padding: var(--spacing-5); border: 1px solid var(--color-border); border-radius: var(--border-radius-md); background: var(--color-surface-white); color: var(--color-text-muted); font-size: var(--text-caption); text-align: center; }
@@ -121,7 +121,7 @@
   padding: clamp(var(--spacing-4), 4vw, var(--spacing-6));
 }
 
-.discovery-load-error h1 { margin: 0; font-size: var(--text-h2); font-family: 'Outfit', sans-serif; color: var(--color-text); }
+.discovery-load-error h1 { margin: 0; font-size: var(--text-h2); font-family: 'Plus Jakarta Sans', sans-serif; font-weight: 700; letter-spacing: -0.02em; color: var(--color-text); }
 .discovery-load-error .caption { max-width: 520px; margin: 8px 0 0; color: var(--color-text-muted); }
 .discovery-load-error button { margin-top: var(--spacing-4); }
 .discovery-load-error-icon {
@@ -130,7 +130,7 @@
   width: 46px;
   height: 46px;
   place-items: center;
-  border-radius: 14px;
+  border-radius: 8px;
   color: var(--color-semantic-emergency);
   background: rgba(220, 38, 38, 0.11);
 }
@@ -152,7 +152,7 @@
   padding: clamp(18px, 2.7vw, 30px) !important;
   border-color: var(--color-border) !important;
   background: var(--color-surface-white) !important;
-  box-shadow: 0 8px 32px var(--color-card-shadow, rgba(0, 0, 0, 0.04)) !important;
+  box-shadow: none !important;
 }
 
 .discovery-refinement-content {
@@ -202,7 +202,7 @@
   gap: var(--spacing-3);
   padding: 12px 14px;
   border: 1px solid var(--color-border);
-  border-radius: calc(var(--border-radius-md) + 2px);
+  border-radius: var(--border-radius-input);
   background: var(--color-surface-interactive);
 }
 

@@ -288,11 +288,11 @@ export const SpecialistFinder = () => {
       {/* Page header */}
       <header className="mb-4 flex items-center justify-between">
         <div className="flex items-center gap-3">
-          <div style={{ width: 44, height: 44, borderRadius: '14px', background: 'var(--color-primary-muted)', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+          <div style={{ width: 44, height: 44, borderRadius: '8px', background: 'var(--color-primary-muted)', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
             <UserCheck size={24} color="var(--color-primary)" />                                               {/* Specialist finder icon */}
           </div>
           <div>
-            <h1 style={{ margin: 0, fontFamily: "'Outfit', sans-serif", color: 'var(--color-text)', fontSize: '2rem' }}>Specialist Finder</h1>
+            <h1 style={{ margin: 0, fontFamily: "'Plus Jakarta Sans', sans-serif", fontWeight: 700, letterSpacing: '-0.02em', color: 'var(--color-text)', fontSize: '2rem' }}>Specialist Finder</h1>
             <p className="caption" style={{ color: 'var(--color-text-muted)' }}>Browse available Mumbai specialists by clinical specialty, view clinics on the live map, and request appointments in real time.</p>
           </div>
         </div>
@@ -306,7 +306,7 @@ export const SpecialistFinder = () => {
       </header>
 
       {/* Filter and appointment parameters card */}
-      <Card variant="glass" className="discovery-refinement-card mb-4">
+      <Card variant="default" className="discovery-refinement-card mb-4">
         <div className="discovery-refinement-content">
           {/* Specialty dropdown filter */}
           <div className="discovery-filter-grid" style={{ gridTemplateColumns: '1fr' }}>
@@ -532,10 +532,10 @@ export const SpecialistFinder = () => {
       <div className="discovery-workspace">
         {/* Full-width interactive map */}
         <aside className="discovery-map-pane">
-          <Card variant="glass" className="directory-map-card">
+          <Card variant="default" className="directory-map-card">
             <div className="flex items-center gap-2 mb-3">
               <Route size={20} color="var(--color-accent)" />
-              <div><h2 style={{ margin: 0, fontSize: '1.2rem', fontFamily: "'Outfit', sans-serif", color: 'var(--color-text)' }}>Mumbai Specialists Live Map</h2><p className="caption" style={{ color: 'var(--color-text-muted)' }}>Geographically locked to Mumbai Metropolitan Region (MMR). High-speed live clinic locations.</p></div>
+              <div><h2 style={{ margin: 0, fontSize: '1.2rem', fontFamily: "'Plus Jakarta Sans', sans-serif", fontWeight: 700, letterSpacing: '-0.02em', color: 'var(--color-text)' }}>Mumbai Specialists Live Map</h2><p className="caption" style={{ color: 'var(--color-text-muted)' }}>Geographically locked to Mumbai Metropolitan Region (MMR). High-speed live clinic locations.</p></div>
             </div>
             <MumbaiDoctorMap
               doctors={displayedDoctors}
@@ -549,7 +549,7 @@ export const SpecialistFinder = () => {
         {/* Directory heading below map */}
         <div className="discovery-results-heading">
           <div>
-            <h2 style={{ fontSize: '1.4rem', margin: 0, fontFamily: "'Outfit', sans-serif", color: 'var(--color-text)' }}>Mumbai Specialist Directory</h2>
+            <h2 style={{ fontSize: '1.4rem', margin: 0, fontFamily: "'Plus Jakarta Sans', sans-serif", fontWeight: 700, letterSpacing: '-0.02em', color: 'var(--color-text)' }}>Mumbai Specialist Directory</h2>
             <p className="caption" style={{ color: 'var(--color-text-muted)' }}>{displayedDoctors.length} {displayedDoctors.length === 1 ? 'specialist' : 'specialists'} available in Mumbai.</p>
           </div>
           <Badge status="neutral">Live Directory</Badge>
@@ -561,11 +561,11 @@ export const SpecialistFinder = () => {
             {displayedDoctors.map((doctor) => {
               const isSelected = selectedDocId === doctor.id;
               return (
-                  <Card key={doctor.id} variant="glass" interactive selected={isSelected} className="h-full flex-col justify-between" onClick={() => selectDoctor(doctor.id)}>
+                  <Card key={doctor.id} variant="default" interactive selected={isSelected} className="h-full flex-col justify-between" onClick={() => selectDoctor(doctor.id)}>
                     <div>
                       <div className="flex justify-between items-start mb-2">
                         <div>
-                          <h3 style={{ margin: 0, color: 'var(--color-text)', fontFamily: "'Outfit', sans-serif", fontSize: '1.1rem' }}>{doctor.name}</h3>
+                          <h3 style={{ margin: 0, color: 'var(--color-text)', fontFamily: "'Plus Jakarta Sans', sans-serif", fontWeight: 700, letterSpacing: '-0.02em', fontSize: '1.1rem' }}>{doctor.name}</h3>
                           <p style={{ color: 'var(--color-primary)', fontWeight: 700, margin: '2px 0 0 0', fontSize: '0.9rem' }}>{doctor.specialty}</p>
                         </div>
                         <Badge status="neutral">Controlled directory</Badge>
@@ -597,7 +597,7 @@ export const SpecialistFinder = () => {
 
             {/* Empty state when 0 doctors match filter */}
             {displayedDoctors.length === 0 && (
-                <Card variant="glass" className="discovery-empty-state" style={{ textAlign: 'center', padding: 'var(--spacing-6)' }}><p className="text-muted" style={{ margin: 0 }}>No specialist entries match the selected filter.</p>{activeFilterCount > 0 && <Button type="button" variant="outline" size="sm" onClick={clearFilters}><RotateCcw size={15} aria-hidden="true" /> Reset filters</Button>}</Card>
+                <Card variant="default" className="discovery-empty-state" style={{ textAlign: 'center', padding: 'var(--spacing-6)' }}><p className="text-muted" style={{ margin: 0 }}>No specialist entries match the selected filter.</p>{activeFilterCount > 0 && <Button type="button" variant="outline" size="sm" onClick={clearFilters}><RotateCcw size={15} aria-hidden="true" /> Reset filters</Button>}</Card>
             )}
           </div>
         </section>
@@ -607,7 +607,7 @@ export const SpecialistFinder = () => {
       <Popup isOpen={showSuccessPopup} onClose={() => navigate('/patient/appointments')} title="Appointment Requested" maxWidth="400px">
         <div style={{ textAlign: 'center', padding: '16px 0', fontFamily: "'Plus Jakarta Sans', sans-serif" }}>
           <CheckCircle size={48} color="var(--color-primary)" style={{ margin: '0 auto 16px' }} />
-          <h3 style={{ margin: '0 0 8px', color: 'var(--color-text)', fontFamily: "'Outfit', sans-serif", fontSize: '1.2rem' }}>Request Sent</h3>
+          <h3 style={{ margin: '0 0 8px', color: 'var(--color-text)', fontFamily: "'Plus Jakarta Sans', sans-serif", fontWeight: 700, letterSpacing: '-0.02em', fontSize: '1.2rem' }}>Request Sent</h3>
           <p style={{ color: 'var(--color-text-muted)', fontSize: '0.9rem', marginBottom: '24px' }}>
             Your appointment request has been submitted to the assigned specialist workspace successfully.
           </p>

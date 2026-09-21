@@ -80,52 +80,38 @@ export const DoctorResetPassword = () => {
       {/* Split layout: Branding panel + Form card */}
       <div className="doctor-setup-layout auth-split-layout" style={{ flex: 1, display: 'flex', width: '100%', position: 'relative', zIndex: 1 }}>
         {/* Ambient background clinical grid watermark */}
-        <div style={{ position: 'absolute', bottom: '2%', left: '4%', opacity: 0.08, pointerEvents: 'none', color: 'var(--color-doctor-primary)' }}>
+        <div className="ambient-ecg-decoration" style={{ position: 'absolute', bottom: '2%', left: '4%', opacity: 0.08, pointerEvents: 'none', color: 'var(--color-doctor-primary)' }}>
           <Activity size={340} strokeWidth={1} />
         </div>
 
-        {/* Branding Panel (Left Column): Structured Showcase */}
+        {/* Branding Panel (Left Column): Clean Nordic Clinical Identity */}
         <div className="auth-branding-panel" style={{ flex: 1, display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems: 'center', padding: 'var(--spacing-6)', zIndex: 1 }}>
           <div style={{ textAlign: 'center', maxWidth: '440px', display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
             
-            {/* Structured Logo Mount */}
-            <div 
-              style={{ 
-                background: '#FAF5EC', 
-                border: '2px solid #D4B07B', 
-                borderRadius: '8px', 
-                padding: '24px 36px', 
-                boxShadow: '0 8px 24px rgba(0, 0, 0, 0.25)',
-                marginBottom: '28px',
-                display: 'inline-flex',
-                alignItems: 'center',
-                justifyContent: 'center',
-                maxWidth: 'min(460px, 94vw)',
-                width: '100%'
-              }}
-            >
-              <LifeLinkLogo className="lifelink-logo-auth" style={{ width: '100%', maxWidth: '420px', height: 'auto', margin: 0, padding: 0, border: 'none', background: 'transparent', boxShadow: 'none' }} />
+            {/* Proportional Brand Treatment */}
+            <div style={{ marginBottom: '20px', display: 'inline-flex', alignItems: 'center', justifyContent: 'center' }}>
+              <LifeLinkLogo className="lifelink-logo-auth" style={{ width: '100%', maxWidth: '240px', height: 'auto', margin: 0, padding: 0, border: 'none', background: 'transparent', boxShadow: 'none' }} />
             </div>
             
             {/* Clinician Subtitle & Motto */}
             <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '14px' }}>
               <span 
                 style={{ 
-                  background: 'var(--color-doctor-primary)', 
-                  color: 'var(--color-surface-white)', 
+                  background: 'rgba(30, 107, 90, 0.08)', 
+                  color: 'var(--color-doctor-primary)', 
                   fontSize: '0.74rem', 
-                  fontWeight: 700, 
-                  letterSpacing: '0.08em', 
+                  fontWeight: 600, 
+                  letterSpacing: '0.06em', 
                   textTransform: 'uppercase', 
-                  padding: '4px 12px', 
-                  borderRadius: '4px',
-                  border: '1px solid var(--color-doctor-border)'
+                  padding: '5px 14px', 
+                  borderRadius: '6px',
+                  border: '1px solid var(--color-border)'
                 }}
               >
                 Doctor Portal • Account Recovery
               </span>
 
-              <h2 className="font-display" style={{ fontSize: '1.5rem', fontWeight: 700, margin: '6px 0 0', color: 'var(--color-doctor-text)', letterSpacing: '-0.01em' }}>
+              <h2 style={{ fontSize: '1.6rem', fontWeight: 700, margin: '6px 0 0', color: 'var(--color-doctor-text)', letterSpacing: '-0.02em', fontFamily: 'Plus Jakarta Sans, sans-serif' }}>
                 Care. Connect. Cure.
               </h2>
               <p style={{ fontSize: '0.92rem', color: 'var(--color-text-muted)', margin: 0, lineHeight: 1.5, maxWidth: '380px' }}>
@@ -135,33 +121,33 @@ export const DoctorResetPassword = () => {
           </div>
         </div>
 
-        {/* Form Container (Right Column): Classic American Institutional Card */}
+        {/* Form Container (Right Column): Solid Clinical Card */}
         <div style={{ flex: 1.1, display: 'flex', justifyContent: 'center', alignItems: 'center', padding: 'var(--spacing-4)', zIndex: 1 }}>
           <Card 
-            className="clinical-glass-card" 
+            className="card" 
             style={{ 
               width: '100%', 
-              maxWidth: '520px', 
+              maxWidth: '460px', 
               maxHeight: '90vh', 
               overflowY: 'auto', 
               padding: 'clamp(24px, 4vw, 36px)', 
-              borderRadius: '4px', 
-              background: 'var(--color-doctor-surface)', 
-              border: '1px solid var(--color-doctor-border)', 
-              boxShadow: 'var(--shadow-md)' 
+              borderRadius: '10px', 
+              background: 'var(--color-surface-white)', 
+              border: '1px solid var(--color-border)', 
+              boxShadow: 'var(--shadow-sm)' 
             }}
           >
             {/* Form Header */}
             <header className="auth-card-header" style={{ textAlign: 'center', marginBottom: '24px' }}>
-              {/* Responsive Mobile Logo Showcase: Guarantees full brand visibility on mobile devices where left branding column is hidden */}
+              {/* Responsive Mobile Logo Showcase */}
               <div className="auth-card-mobile-logo-wrap">
                 <LifeLinkLogo className="lifelink-logo-auth auth-card-mobile-logo" />
               </div>
 
-              <h1 id="doctor-reset-heading" className="font-display" style={{ fontSize: '1.65rem', fontWeight: 700, marginBottom: '6px', color: 'var(--color-doctor-text)', letterSpacing: '-0.02em' }}>
+              <h1 id="doctor-reset-heading" style={{ fontSize: '1.5rem', fontWeight: 700, marginBottom: '6px', color: 'var(--color-doctor-text)', letterSpacing: '-0.02em', fontFamily: 'Plus Jakarta Sans, sans-serif' }}>
                 Reset Doctor Password
               </h1>
-              <p style={{ color: 'var(--color-text-muted)', fontSize: '0.90rem', margin: 0 }}>
+              <p style={{ color: 'var(--color-text-muted)', fontSize: '0.88rem', margin: 0 }}>
                 Use your owner provisioning code to set a new password
               </p>
             </header>
@@ -176,7 +162,7 @@ export const DoctorResetPassword = () => {
                   textAlign: 'center', 
                   background: 'var(--color-surface-interactive)', 
                   border: '1px solid var(--color-border)', 
-                  borderRadius: '4px', 
+                  borderRadius: '8px', 
                   padding: '10px 14px', 
                   fontSize: '0.88rem', 
                   color: 'var(--color-text)' 
@@ -203,7 +189,7 @@ export const DoctorResetPassword = () => {
                     onChange={(event) => setEmail(event.target.value)}
                     autoComplete="username"
                     required
-                    style={{ width: '100%', paddingLeft: '42px', borderRadius: '4px', minHeight: '44px', border: '1px solid var(--color-doctor-input-border, var(--color-doctor-border))', fontSize: '0.90rem', background: 'var(--color-surface-white)', color: 'var(--color-doctor-text)' }}
+                    style={{ width: '100%', paddingLeft: '42px', borderRadius: '8px', minHeight: '44px', border: '1px solid var(--color-border)', fontSize: '0.90rem', background: 'var(--color-surface-white)', color: 'var(--color-doctor-text)' }}
                   />
                 </div>
               </div>
@@ -224,7 +210,7 @@ export const DoctorResetPassword = () => {
                     onChange={(event) => setPassword(event.target.value)}
                     autoComplete="new-password"
                     required
-                    style={{ width: '100%', paddingLeft: '42px', borderRadius: '4px', minHeight: '44px', border: '1px solid var(--color-doctor-input-border, var(--color-doctor-border))', fontSize: '0.90rem', background: 'var(--color-surface-white)', color: 'var(--color-doctor-text)' }}
+                    style={{ width: '100%', paddingLeft: '42px', borderRadius: '8px', minHeight: '44px', border: '1px solid var(--color-border)', fontSize: '0.90rem', background: 'var(--color-surface-white)', color: 'var(--color-doctor-text)' }}
                   />
                 </div>
               </div>
@@ -244,7 +230,7 @@ export const DoctorResetPassword = () => {
                     onChange={(event) => setProvisioningCode(event.target.value)}
                     autoComplete="off"
                     required
-                    style={{ width: '100%', paddingLeft: '42px', borderRadius: '4px', minHeight: '44px', border: '1px solid var(--color-doctor-input-border, var(--color-doctor-border))', fontSize: '0.90rem', background: 'var(--color-surface-white)', color: 'var(--color-doctor-text)' }}
+                    style={{ width: '100%', paddingLeft: '42px', borderRadius: '8px', minHeight: '44px', border: '1px solid var(--color-border)', fontSize: '0.90rem', background: 'var(--color-surface-white)', color: 'var(--color-doctor-text)' }}
                   />
                 </div>
               </div>
@@ -260,7 +246,7 @@ export const DoctorResetPassword = () => {
                   padding: '11px', 
                   fontSize: '0.96rem', 
                   fontWeight: 600, 
-                  borderRadius: '4px', 
+                  borderRadius: '8px', 
                   background: 'var(--color-doctor-primary)', 
                   color: '#FFFFFF', 
                   border: 'none', 

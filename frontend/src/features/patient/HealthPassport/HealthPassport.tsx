@@ -65,7 +65,7 @@ function urgencyBadgeStyle(urgency: string) {
   if (urgency === 'ERROR') {                                                                    // Assessment parsing or routing error
     return { bg: 'rgba(225, 29, 72, 0.12)', color: '#e11d48', border: '1px solid rgba(225, 29, 72, 0.2)' };
   }
-  return { bg: 'rgba(180, 83, 9, 0.12)', color: 'var(--color-semantic-success)', border: '1px solid rgba(180, 83, 9, 0.25)' }; // Routine standard care
+  return { bg: 'var(--color-primary-muted)', color: 'var(--color-primary)', border: '1px solid rgba(26, 127, 116, 0.25)' }; // Routine standard care
 }
 
 // =========================================================================================
@@ -296,7 +296,7 @@ export const HealthPassport = () => {
   const cardStyle = {
     background: 'var(--color-surface-white)',
     padding: '24px',
-    borderRadius: '16px',
+    borderRadius: '10px',
     border: '1px solid var(--color-border)',
     boxShadow: 'var(--shadow-sm)',
     display: 'flex',
@@ -307,7 +307,7 @@ export const HealthPassport = () => {
   const iconCircleStyle = {
     width: '40px',
     height: '40px',
-    borderRadius: '12px',
+    borderRadius: '8px',
     background: 'var(--color-primary-muted)',
     display: 'grid',
     placeItems: 'center',
@@ -316,16 +316,16 @@ export const HealthPassport = () => {
   };
 
   return (
-    <div style={{ display: 'flex', flexDirection: 'column', gap: '28px', fontFamily: 'Oxanium, sans-serif' }}>
+    <div style={{ display: 'flex', flexDirection: 'column', gap: '28px', fontFamily: "'Plus Jakarta Sans', sans-serif" }}>
       
       {/* Header with Title and Edit Toggle */}
       <header style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', flexWrap: 'wrap', gap: '16px' }}>
         <div style={{ display: 'flex', alignItems: 'center', gap: '16px' }}>
-          <div style={{ width: '48px', height: '48px', borderRadius: '14px', background: 'var(--color-primary-muted)', display: 'grid', placeItems: 'center', color: 'var(--color-primary)', flexShrink: 0 }}>
+          <div style={{ width: '48px', height: '48px', borderRadius: '8px', background: 'var(--color-primary-muted)', display: 'grid', placeItems: 'center', color: 'var(--color-primary)', flexShrink: 0 }}>
             <FileHeart size={26} />
           </div>
           <div>
-            <h1 className="font-display" style={{ fontSize: '2rem', fontWeight: 700, margin: 0, color: 'var(--color-text)', fontFamily: 'Oxanium, sans-serif' }}>
+            <h1 className="font-display" style={{ fontSize: '2rem', fontWeight: 700, margin: 0, color: 'var(--color-text)' }}>
               Digital Health Passport
             </h1>
             <p style={{ color: 'var(--color-text-muted)', fontSize: '0.92rem', margin: '3px 0 0' }}>
@@ -339,7 +339,7 @@ export const HealthPassport = () => {
           <Button
             variant="outline"
             onClick={handleEditClick}
-            style={{ display: 'flex', gap: '8px', alignItems: 'center', borderRadius: '12px', borderColor: 'var(--color-primary)', color: 'var(--color-primary)', fontWeight: 600 }}
+            style={{ display: 'flex', gap: '8px', alignItems: 'center', borderRadius: '8px', borderColor: 'var(--color-primary)', color: 'var(--color-primary)', fontWeight: 600 }}
           >
             <Edit2 size={16} /> Edit Passport
           </Button>
@@ -349,7 +349,7 @@ export const HealthPassport = () => {
               variant="outline"
               onClick={handleCancelPassportEdit}
               disabled={isSaving}
-              style={{ display: 'flex', gap: '6px', alignItems: 'center', borderRadius: '12px' }}
+              style={{ display: 'flex', gap: '6px', alignItems: 'center', borderRadius: '8px' }}
             >
               <X size={16} /> Cancel
             </Button>
@@ -362,7 +362,7 @@ export const HealthPassport = () => {
                 display: 'flex',
                 gap: '6px',
                 alignItems: 'center',
-                borderRadius: '12px',
+                borderRadius: '8px',
                 background: !isPassportValid ? 'var(--color-surface-interactive)' : 'var(--color-primary)',
                 borderColor: !isPassportValid ? 'var(--color-border)' : 'var(--color-primary)',
                 color: !isPassportValid ? 'var(--color-text-muted)' : '#FFF',
@@ -388,7 +388,7 @@ export const HealthPassport = () => {
             padding: '12px 16px',
             background: 'rgba(220, 38, 38, 0.08)',
             border: '1px solid rgba(220, 38, 38, 0.25)',
-            borderRadius: '12px',
+            borderRadius: '10px',
             color: 'var(--color-semantic-emergency)',
             fontSize: '0.9rem',
           }}
@@ -410,7 +410,7 @@ export const HealthPassport = () => {
           <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '16px' }}>
             <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
               <div style={iconCircleStyle}><Droplets size={20} /></div>                         {/* Blood droplet icon */}
-              <h2 style={{ margin: 0, fontSize: '1.1rem', fontWeight: 700, color: 'var(--color-text)', fontFamily: 'Oxanium, sans-serif' }}>
+              <h2 style={{ margin: 0, fontSize: '1.1rem', fontWeight: 700, color: 'var(--color-text)' }}>
                 Blood Group
               </h2>
             </div>
@@ -436,14 +436,13 @@ export const HealthPassport = () => {
                     style={{
                       height: '46px',
                       padding: '0 14px',
-                      borderRadius: '12px',
+                      borderRadius: '8px',
                       border: !isBloodGroupValid ? '1px solid var(--color-semantic-emergency)' : '1px solid var(--color-border)',
                       background: 'var(--color-background)',
                       color: 'var(--color-text)',
                       fontSize: '1.1rem',
                       fontWeight: 700,
                       outline: 'none',
-                      fontFamily: 'Oxanium, sans-serif',
                     }}
                   >
                     <option value="">-- Select Blood Group (Required) --</option>
@@ -462,7 +461,7 @@ export const HealthPassport = () => {
             ) : (
               <div>
                 {patient.bloodGroup ? (
-                  <strong style={{ fontSize: '2.6rem', color: 'var(--color-text)', lineHeight: 1, fontFamily: 'Oxanium, sans-serif', fontWeight: 800 }}>
+                  <strong style={{ fontSize: '2.6rem', color: 'var(--color-text)', lineHeight: 1, fontWeight: 800, fontVariantNumeric: 'tabular-nums' }}>
                     {patient.bloodGroup}                                                        {/* Bold high-contrast blood group display */}
                   </strong>
                 ) : (
@@ -480,7 +479,7 @@ export const HealthPassport = () => {
           <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '16px' }}>
             <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
               <div style={iconCircleStyle}><ShieldAlert size={20} /></div>                      {/* Warning shield icon */}
-              <h2 style={{ margin: 0, fontSize: '1.1rem', fontWeight: 700, color: 'var(--color-text)', fontFamily: 'Oxanium, sans-serif' }}>
+              <h2 style={{ margin: 0, fontSize: '1.1rem', fontWeight: 700, color: 'var(--color-text)' }}>
                 Allergies
               </h2>
             </div>
@@ -502,7 +501,7 @@ export const HealthPassport = () => {
                       background: 'var(--color-background)',
                       borderColor: !areAllergiesValid ? 'var(--color-semantic-emergency)' : 'var(--color-border)',
                       color: 'var(--color-text)',
-                      borderRadius: '12px'
+                      borderRadius: '8px'
                     }}
                   />
                 </label>
@@ -521,7 +520,7 @@ export const HealthPassport = () => {
                       key={allergy}
                       style={{
                         padding: '6px 12px',
-                        borderRadius: '8px',
+                        borderRadius: '6px',
                         background: 'rgba(245, 158, 11, 0.14)',
                         color: 'var(--color-primary)',
                         border: '1px solid var(--color-border)',
@@ -547,7 +546,7 @@ export const HealthPassport = () => {
           <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '16px' }}>
             <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
               <div style={iconCircleStyle}><Activity size={20} /></div>                         {/* Activity/pulse icon */}
-              <h2 style={{ margin: 0, fontSize: '1.1rem', fontWeight: 700, color: 'var(--color-text)', fontFamily: 'Oxanium, sans-serif' }}>
+              <h2 style={{ margin: 0, fontSize: '1.1rem', fontWeight: 700, color: 'var(--color-text)' }}>
                 Existing Conditions
               </h2>
             </div>
@@ -569,7 +568,7 @@ export const HealthPassport = () => {
                       background: 'var(--color-background)',
                       borderColor: !areConditionsValid ? 'var(--color-semantic-emergency)' : 'var(--color-border)',
                       color: 'var(--color-text)',
-                      borderRadius: '12px'
+                      borderRadius: '8px'
                     }}
                   />
                 </label>
@@ -588,7 +587,7 @@ export const HealthPassport = () => {
                       key={condition}
                       style={{
                         padding: '6px 12px',
-                        borderRadius: '8px',
+                        borderRadius: '6px',
                         background: 'rgba(15, 118, 110, 0.14)',
                         color: 'var(--color-accent)',
                         border: '1px solid var(--color-border)',
@@ -619,7 +618,7 @@ export const HealthPassport = () => {
             <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
               <div style={iconCircleStyle}><Users size={20} /></div>                            {/* Users icon */}
               <div>
-                <h2 id="emergency-contacts-title" style={{ margin: 0, fontSize: '1.25rem', fontWeight: 700, color: 'var(--color-text)', fontFamily: 'Oxanium, sans-serif' }}>
+                <h2 id="emergency-contacts-title" style={{ margin: 0, fontSize: '1.25rem', fontWeight: 700, color: 'var(--color-text)' }}>
                   Emergency Contacts
                 </h2>
                 <p style={{ margin: '2px 0 0', color: 'var(--color-text-muted)', fontSize: '0.85rem' }}>
@@ -636,7 +635,7 @@ export const HealthPassport = () => {
                 display: 'flex',
                 alignItems: 'center',
                 gap: '6px',
-                borderRadius: '12px',
+                borderRadius: '8px',
                 background: 'var(--color-primary)',
                 borderColor: 'var(--color-primary)',
                 color: '#FFF',
@@ -715,7 +714,7 @@ export const HealthPassport = () => {
           <div style={{ display: 'flex', alignItems: 'center', gap: '10px', marginBottom: '16px' }}>
             <div style={iconCircleStyle}><Clock size={20} /></div>                              {/* Clock / history icon */}
             <div>
-              <h2 id="assessment-history-title" style={{ margin: 0, fontSize: '1.25rem', fontWeight: 700, color: 'var(--color-text)', fontFamily: 'Oxanium, sans-serif' }}>
+              <h2 id="assessment-history-title" style={{ margin: 0, fontSize: '1.25rem', fontWeight: 700, color: 'var(--color-text)' }}>
                 Health History & Previous Assessments
               </h2>
               <p style={{ margin: '2px 0 0', color: 'var(--color-text-muted)', fontSize: '0.85rem' }}>
@@ -736,7 +735,7 @@ export const HealthPassport = () => {
                     key={item.id}
                     style={{
                       padding: '16px',
-                      borderRadius: '12px',
+                      borderRadius: '10px',
                       background: 'var(--color-background)',
                       border: '1px solid var(--color-border)',
                       display: 'flex',
@@ -789,7 +788,7 @@ export const HealthPassport = () => {
         title={contactDraft.id ? 'Edit Emergency Contact' : 'Add Emergency Contact'}
         maxWidth="500px"
       >
-        <form onSubmit={handleSaveContact} style={{ display: 'flex', flexDirection: 'column', gap: '16px', fontFamily: 'Oxanium, sans-serif' }}>
+        <form onSubmit={handleSaveContact} style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
           {contactError && (
             <div
               role="alert"
@@ -824,7 +823,7 @@ export const HealthPassport = () => {
                 onChange={(e) => setContactDraft({ ...contactDraft, name: e.target.value })}
                 placeholder="e.g. Sarah Jenkins"
                 style={{
-                  borderRadius: '10px',
+                  borderRadius: '8px',
                   borderColor: contactDraft.name.length > 0 && !isContactNameValid ? 'var(--color-semantic-emergency)' : 'var(--color-border)',
                   background: 'var(--color-background)',
                   color: 'var(--color-text)'
@@ -850,7 +849,7 @@ export const HealthPassport = () => {
                 onChange={(e) => setContactDraft({ ...contactDraft, relationship: e.target.value })}
                 placeholder="e.g. Spouse, Parent, Sibling, Friend"
                 style={{
-                  borderRadius: '10px',
+                  borderRadius: '8px',
                   borderColor: contactDraft.relationship.length > 0 && !isContactRelationshipValid ? 'var(--color-semantic-emergency)' : 'var(--color-border)',
                   background: 'var(--color-background)',
                   color: 'var(--color-text)'
@@ -876,7 +875,7 @@ export const HealthPassport = () => {
                 onChange={(e) => setContactDraft({ ...contactDraft, phone: e.target.value })}
                 placeholder="e.g. +91 98765 43210"
                 style={{
-                  borderRadius: '10px',
+                  borderRadius: '8px',
                   borderColor: contactDraft.phone.length > 0 && !isContactPhoneValid ? 'var(--color-semantic-emergency)' : 'var(--color-border)',
                   background: 'var(--color-background)',
                   color: 'var(--color-text)'
@@ -895,7 +894,7 @@ export const HealthPassport = () => {
               variant="outline"
               onClick={closeContactModal}
               disabled={isSavingContact}
-              style={{ borderRadius: '10px' }}
+              style={{ borderRadius: '8px' }}
             >
               Cancel
             </Button>
@@ -904,7 +903,7 @@ export const HealthPassport = () => {
               variant="primary"
               disabled={isSavingContact || !isContactValid}
               style={{
-                borderRadius: '10px',
+                borderRadius: '8px',
                 background: !isContactValid ? 'var(--color-surface-interactive)' : 'var(--color-primary)',
                 borderColor: !isContactValid ? 'var(--color-border)' : 'var(--color-primary)',
                 color: !isContactValid ? 'var(--color-text-muted)' : '#FFF',
@@ -928,7 +927,7 @@ export const HealthPassport = () => {
         title="Delete Emergency Contact"
         maxWidth="440px"
       >
-        <div style={{ display: 'flex', flexDirection: 'column', gap: '16px', fontFamily: 'Oxanium, sans-serif' }}>
+        <div style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
           {deleteError && (
             <div
               role="alert"
@@ -959,7 +958,7 @@ export const HealthPassport = () => {
               variant="outline"
               onClick={() => setContactToDelete(null)}
               disabled={isDeletingContact}
-              style={{ borderRadius: '10px' }}
+              style={{ borderRadius: '8px' }}
             >
               Cancel
             </Button>
@@ -968,7 +967,7 @@ export const HealthPassport = () => {
               variant="danger"
               onClick={confirmDeleteContact}
               disabled={isDeletingContact}
-              style={{ borderRadius: '10px', fontWeight: 700 }}
+              style={{ borderRadius: '8px', fontWeight: 700 }}
             >
               {isDeletingContact ? 'Removing…' : 'Remove Contact'}
             </Button>

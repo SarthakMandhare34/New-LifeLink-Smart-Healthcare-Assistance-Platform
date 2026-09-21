@@ -18,15 +18,29 @@ export const RouteLoader: React.FC = () => {
       role="status"
       aria-label="Loading workspace section"
     >
-      {/* Liquid-glass container card with soft backdrop blur and pulse animation */}
-      <div className="flex flex-col items-center gap-3 p-6 rounded-2xl bg-card/60 backdrop-blur-md border border-border/50 shadow-sm animate-pulse">
+      {/* Solid Nordic Clinical surface card */}
+      <div 
+        className="flex flex-col items-center gap-3.5 p-6 border shadow-xs"
+        style={{
+          backgroundColor: 'var(--color-surface-white)',
+          borderColor: 'var(--color-border)',
+          borderRadius: 'var(--border-radius-card)',
+        }}
+      >
         {/* Circular spinning activity indicator */}
         <div 
-          className="w-9 h-9 rounded-full border-2 border-primary/25 border-t-primary animate-spin" 
+          className="w-8 h-8 rounded-full border-2 animate-spin" 
+          style={{
+            borderColor: 'var(--color-primary-muted)',
+            borderTopColor: 'var(--color-primary)',
+          }}
           aria-hidden="true"
         />
         {/* User-friendly status message */}
-        <span className="text-xs font-medium text-muted-foreground tracking-wide">
+        <span 
+          className="text-xs font-medium tracking-wide"
+          style={{ color: 'var(--color-text-secondary)' }}
+        >
           Loading workspace...
         </span>
       </div>

@@ -146,7 +146,7 @@ export const PatientView = () => {
                   Accept Appointment
                 </Button>
               ) : appointment.status === "Confirmed" ? (
-                <Button size="sm" variant="primary" style={{ background: "var(--color-surface-interactive)", borderColor: "var(--color-border)", color: "var(--color-text)" }} disabled={updateStatus.isPending} aria-label={`Mark appointment on ${new Date(appointment.scheduledAt).toLocaleDateString()} completed`} onClick={() => updateStatus.mutate({ id: appointment.id, status: "Completed" })}>
+                <Button size="sm" variant="secondary" disabled={updateStatus.isPending} aria-label={`Mark appointment on ${new Date(appointment.scheduledAt).toLocaleDateString()} completed`} onClick={() => updateStatus.mutate({ id: appointment.id, status: "Completed" })}>
                   ✓ Mark Completed
                 </Button>
               ) : null}
@@ -212,7 +212,7 @@ export const PatientView = () => {
                 <Input placeholder="Dosage" aria-label={`Dosage ${index + 1}`} value={item.dosage} onChange={(event) => updateItem(index, "dosage", event.target.value)} required />
                 <Input placeholder="Instructions" aria-label={`Instructions ${index + 1}`} value={item.instructions} onChange={(event) => updateItem(index, "instructions", event.target.value)} required />
                 {items.length > 1 ? (
-                  <Button type="button" variant="outline" size="sm" onClick={() => removeItem(index)} aria-label={`Remove item ${index + 1}`} style={{ borderColor: "var(--color-semantic-emergency)", color: "var(--color-semantic-emergency)", height: "38px", padding: "0 8px" }}>
+                  <Button type="button" variant="outline" size="sm" onClick={() => removeItem(index)} aria-label={`Remove item ${index + 1}`} style={{ borderColor: "rgba(197, 48, 48, 0.3)", color: "var(--color-semantic-error)", height: "38px", padding: "0 8px" }}>
                     <Trash2 size={14} />
                   </Button>
                 ) : null}

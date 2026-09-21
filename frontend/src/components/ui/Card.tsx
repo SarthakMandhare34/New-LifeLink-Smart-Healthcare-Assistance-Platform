@@ -44,18 +44,16 @@ interface CardProps {
 export const Card: React.FC<CardProps> = ({ 
   children, 
   className = '', 
-  variant = 'glass',
+  variant = 'default',
   interactive = false,
   selected = false,
   style,
   onClick
 }) => {
   // Step 1: Select the CSS base surface class based on the requested variant
-  let baseClass = 'glass-surface';                                                              // Default translucent glassmorphism
-  if (variant === 'solid' || variant === 'default') {
-    baseClass = 'solid-clinical-surface';                                                       // Opaque clinical surface
-  } else if (variant === 'emergency') {
-    baseClass = 'emergency-panel';                                                              // Urgent red-accented emergency surface
+  let baseClass = 'solid-clinical-surface';
+  if (variant === 'emergency') {
+    baseClass = 'emergency-panel';
   }
 
   // Step 2: Automatically detect if this card can be clicked

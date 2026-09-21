@@ -126,18 +126,18 @@ export const Profile = () => {
   return (
     <div className="container patient-profile-page" style={{ padding: 0 }}>
       {/* Profile Header */}
-      <header className="patient-profile-heading">
-        <div className="patient-profile-heading-icon">
-          <User size={24} color="var(--color-primary)" />
+      <header className="patient-profile-heading flex items-center gap-3 mb-4">
+        <div style={{ width: 48, height: 48, borderRadius: '8px', background: 'var(--color-primary-muted)', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
+          <User size={24} style={{ color: 'var(--color-primary)' }} />
         </div>
         <div>
           <h1 style={{ margin: 0 }}>Patient Profile</h1>
-          <p className="caption">Manage identity information and contact preferences.</p>
+          <p className="caption" style={{ margin: '4px 0 0' }}>Manage identity information and contact preferences.</p>
         </div>
       </header>
 
       {/* Main Profile Card */}
-      <Card variant="glass" className="patient-profile-card">
+      <Card className="patient-profile-card" style={{ padding: 'var(--spacing-6)' }}>
         {/* Avatar and Identity banner */}
         <div className="patient-profile-identity">
           <label className="profile-photo-picker">
@@ -145,7 +145,7 @@ export const Profile = () => {
             <span className="patient-profile-avatar">
               {profile.avatarUrl ? <img src={profile.avatarUrl} alt="" /> : <span>{profileInitial}</span>}
             </span>
-            <span className="profile-photo-edit" aria-hidden="true">{isPhotoSaving ? <Loader2 size={14} /> : <Camera size={14} />}</span>
+            <span className="profile-photo-edit" aria-hidden="true">{isPhotoSaving ? <Loader2 size={14} className="animate-spin" /> : <Camera size={14} />}</span>
           </label>
           <div>
             <h2 style={{ margin: 0, fontSize: 'var(--text-h2)' }}>{profile.name}</h2>
@@ -180,7 +180,7 @@ export const Profile = () => {
 
           <div>
             <label htmlFor="profile-email" style={{ display: 'block', marginBottom: 'var(--spacing-1)', fontWeight: 600, fontSize: 'var(--text-caption)' }}>Registered Email Address</label>
-            <Input id="profile-email" type="email" value={profile.email} readOnly style={{ background: 'var(--color-background)', color: 'var(--color-text-muted)', cursor: 'not-allowed' }} />
+            <Input id="profile-email" type="email" value={profile.email} readOnly style={{ background: 'var(--color-surface-interactive)', color: 'var(--color-text-secondary)', cursor: 'not-allowed' }} />
           </div>
 
           <div>
@@ -192,7 +192,7 @@ export const Profile = () => {
             <Button type="submit" variant="primary" disabled={isSaving}>
               {isSaving ? 'Saving Changes...' : 'Save Profile Changes'}
             </Button>
-            {success && <span style={{ color: 'var(--color-success)', fontWeight: 600, fontSize: 'var(--text-caption)' }}>Profile updated successfully!</span>}
+            {success && <span style={{ color: 'var(--color-semantic-success)', fontWeight: 600, fontSize: 'var(--text-caption)' }}>Profile updated successfully!</span>}
           </div>
         </form>
       </Card>

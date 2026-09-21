@@ -14,9 +14,14 @@ const documentSource = readFileSync(new URL('../index.html', import.meta.url), '
 const globalStyles = readFileSync(new URL('./index.css', import.meta.url), 'utf8');
 
 describe('LifeLink typography', () => {
-  it('loads Oxanium and applies it to the global body and heading hierarchy', () => {
-    expect(documentSource).toContain('family=Oxanium');
-    expect(globalStyles).toContain("font-family: 'Oxanium'");
-    expect(globalStyles).toContain(".app-mobile-brand { display: none; align-items: center; gap: 7px; min-width: 0; color: var(--color-text); font-family: 'Oxanium'");
+  it('loads Plus Jakarta Sans and applies it to the global body and heading hierarchy', () => {
+    expect(documentSource).toContain('family=Plus+Jakarta+Sans');
+    expect(globalStyles).toContain("font-family: 'Plus Jakarta Sans'");
+    expect(globalStyles).toContain(".app-mobile-brand { display: none; align-items: center; gap: 7px; min-width: 0; color: var(--color-text); font-family: 'Plus Jakarta Sans'");
+  });
+
+  it('verifies that Oxanium and Outfit fonts are purged from index.css', () => {
+    expect(globalStyles).not.toContain("'Outfit'");
+    expect(globalStyles).not.toContain("'Oxanium'");
   });
 });

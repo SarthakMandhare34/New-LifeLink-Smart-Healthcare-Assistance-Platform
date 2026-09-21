@@ -83,48 +83,34 @@ export const DoctorLogin = () => {
           <Activity size={340} strokeWidth={1} />
         </div>
 
-        {/* Branding Panel (Left Column): Structured Institutional Showcase */}
+        {/* Branding Panel (Left Column): Clean Nordic Clinical Identity */}
         <div className="auth-branding-panel" style={{ flex: 1, display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems: 'center', padding: 'var(--spacing-6)', zIndex: 1 }}>
           <div style={{ textAlign: 'center', maxWidth: '440px', display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
             
-            {/* Structured Logo Mount: Crisp elevated plate guaranteeing high contrast and sharp brand visibility */}
-            <div 
-              style={{ 
-                background: '#FAF5EC', 
-                border: '2px solid #D4B07B', 
-                borderRadius: '8px', 
-                padding: '24px 36px', 
-                boxShadow: '0 8px 24px rgba(0, 0, 0, 0.25)',
-                marginBottom: '28px',
-                display: 'inline-flex',
-                alignItems: 'center',
-                justifyContent: 'center',
-                maxWidth: 'min(460px, 94vw)',
-                width: '100%'
-              }}
-            >
-              <LifeLinkLogo className="lifelink-logo-auth" style={{ width: '100%', maxWidth: '420px', height: 'auto', margin: 0, padding: 0, border: 'none', background: 'transparent', boxShadow: 'none' }} />
+            {/* Proportional Brand Treatment (Section 11) */}
+            <div style={{ marginBottom: '20px', display: 'inline-flex', alignItems: 'center', justifyContent: 'center' }}>
+              <LifeLinkLogo className="lifelink-logo-auth" style={{ width: '100%', maxWidth: '240px', height: 'auto', margin: 0, padding: 0, border: 'none', background: 'transparent', boxShadow: 'none' }} />
             </div>
             
             {/* Institutional Clinician Subtitle & Motto */}
             <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '14px' }}>
               <span 
                 style={{ 
-                  background: 'var(--color-doctor-primary)', 
-                  color: '#FFFFFF', 
+                  background: 'rgba(30, 107, 90, 0.08)', 
+                  color: 'var(--color-doctor-primary)', 
                   fontSize: '0.74rem', 
-                  fontWeight: 700, 
-                  letterSpacing: '0.08em', 
+                  fontWeight: 600, 
+                  letterSpacing: '0.06em', 
                   textTransform: 'uppercase', 
                   padding: '5px 14px', 
-                  borderRadius: '4px',
-                  border: '1px solid var(--color-doctor-border)'
+                  borderRadius: '6px',
+                  border: '1px solid var(--color-border)'
                 }}
               >
                 Healthcare Provider Suite
               </span>
 
-              <h2 className="font-display" style={{ fontSize: '1.6rem', fontWeight: 700, margin: '6px 0 0', color: 'var(--color-doctor-text)', letterSpacing: '-0.01em' }}>
+              <h2 style={{ fontSize: '1.6rem', fontWeight: 700, margin: '6px 0 0', color: 'var(--color-doctor-text)', letterSpacing: '-0.02em', fontFamily: 'Plus Jakarta Sans, sans-serif' }}>
                 Care. Connect. Cure.
               </h2>
               <p style={{ fontSize: '0.92rem', color: 'var(--color-text-muted)', margin: 0, lineHeight: 1.5, maxWidth: '380px' }}>
@@ -134,20 +120,20 @@ export const DoctorLogin = () => {
           </div>
         </div>
 
-        {/* Form Container (Right Column): Classic American Institutional Card */}
+        {/* Form Container (Right Column): Solid Clinical Card */}
         <div style={{ flex: 1.1, display: 'flex', justifyContent: 'center', alignItems: 'center', padding: 'var(--spacing-4)', zIndex: 1 }}>
           <Card 
-            className="clinical-glass-card" 
+            className="card" 
             style={{ 
               width: '100%', 
-              maxWidth: '500px', 
+              maxWidth: '460px', 
               maxHeight: '90vh', 
               overflowY: 'auto', 
               padding: 'clamp(24px, 4vw, 36px)',
-              background: 'var(--color-doctor-surface)',
-              border: '1px solid var(--color-doctor-border)',
-              borderRadius: '6px',
-              boxShadow: 'var(--shadow-lg)'
+              background: 'var(--color-surface-white)',
+              border: '1px solid var(--color-border)',
+              borderRadius: '10px',
+              boxShadow: 'var(--shadow-md)'
             }}
           >
             {/* Form Card Header */}

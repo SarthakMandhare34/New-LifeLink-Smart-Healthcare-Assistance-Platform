@@ -111,48 +111,34 @@ export const PatientRegistration = () => {
           <Activity size={340} strokeWidth={1} />
         </div>
 
-        {/* Branding Panel (Left Column): Structured Institutional Showcase */}
+        {/* Branding Panel (Left Column): Clean Nordic Clinical Identity */}
         <div className="auth-branding-panel" style={{ flex: 1, display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems: 'center', padding: 'var(--spacing-6)', zIndex: 1 }}>
           <div style={{ textAlign: 'center', maxWidth: '440px', display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
             
-            {/* Structured Logo Mount: Warm ivory plate ensuring crystal-clear contrast in both light and dark modes */}
-            <div 
-              className="auth-branding-logo-mount"
-              style={{ 
-                background: '#FAF5EC', 
-                border: '1px solid #D4B07B', 
-                borderRadius: '8px', 
-                padding: '20px 32px', 
-                boxShadow: '0 4px 18px rgba(183, 107, 0, 0.12)',
-                marginBottom: '28px',
-                display: 'inline-flex',
-                alignItems: 'center',
-                justifyContent: 'center',
-                maxWidth: 'min(460px, 94vw)',
-                width: '100%'
-              }}
-            >
-              <LifeLinkLogo className="lifelink-logo-auth" style={{ width: '100%', maxWidth: '420px', height: 'auto', margin: 0, padding: 0, border: 'none', background: 'transparent', boxShadow: 'none' }} />
+            {/* Proportional Brand Treatment (Section 11) */}
+            <div style={{ marginBottom: '20px', display: 'inline-flex', alignItems: 'center', justifyContent: 'center' }}>
+              <LifeLinkLogo className="lifelink-logo-auth" style={{ width: '100%', maxWidth: '240px', height: 'auto', margin: 0, padding: 0, border: 'none', background: 'transparent', boxShadow: 'none' }} />
             </div>
             
             {/* System Subtitle & Motto */}
             <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '14px' }}>
               <span 
                 style={{ 
-                  background: 'var(--color-primary)', 
-                  color: '#FFFFFF', 
+                  background: 'var(--color-primary-muted)', 
+                  color: 'var(--color-primary)', 
                   fontSize: '0.74rem', 
-                  fontWeight: 700, 
-                  letterSpacing: '0.08em', 
+                  fontWeight: 600, 
+                  letterSpacing: '0.06em', 
                   textTransform: 'uppercase', 
                   padding: '4px 12px', 
-                  borderRadius: '4px' 
+                  borderRadius: '6px',
+                  border: '1px solid var(--color-border)'
                 }}
               >
                 Smart Healthcare & Wellness Platform
               </span>
 
-              <h2 className="font-display" style={{ fontSize: '1.5rem', fontWeight: 700, margin: '6px 0 0', color: 'var(--color-text)', letterSpacing: '-0.01em', fontFamily: 'Outfit, sans-serif' }}>
+              <h2 style={{ fontSize: '1.5rem', fontWeight: 700, margin: '6px 0 0', color: 'var(--color-text)', letterSpacing: '-0.02em', fontFamily: 'Plus Jakarta Sans, sans-serif' }}>
                 Care. Connect. Cure.
               </h2>
               <p style={{ fontSize: '0.92rem', color: 'var(--color-text-muted)', margin: 0, lineHeight: 1.5, maxWidth: '380px' }}>
@@ -162,10 +148,10 @@ export const PatientRegistration = () => {
           </div>
         </div>
 
-        {/* Form Container (Right Column): High-contrast glass card */}
+        {/* Form Container (Right Column): Solid Clinical Surface */}
         <div style={{ flex: 1.1, display: 'flex', justifyContent: 'center', alignItems: 'center', padding: 'var(--spacing-4)', zIndex: 1 }}>
           <Card 
-            className="clinical-glass-card" 
+            className="card" 
             style={{ 
               width: '100%', 
               maxWidth: '520px', 
@@ -174,7 +160,7 @@ export const PatientRegistration = () => {
               padding: 'clamp(24px, 4vw, 36px)',
               background: 'var(--color-surface-white)',
               border: '1px solid var(--color-border)',
-              borderRadius: '8px',
+              borderRadius: '10px',
               boxShadow: 'var(--shadow-md)'
             }}
           >
@@ -184,7 +170,7 @@ export const PatientRegistration = () => {
                 <LifeLinkLogo className="lifelink-logo-auth auth-card-mobile-logo" />
               </div>
 
-              <h1 id="patient-register-heading" className="font-display" style={{ fontSize: '1.65rem', fontWeight: 700, marginBottom: '6px', color: 'var(--color-text)', letterSpacing: '-0.02em', fontFamily: 'Outfit, sans-serif' }}>
+              <h1 id="patient-register-heading" style={{ fontSize: '1.65rem', fontWeight: 700, marginBottom: '6px', color: 'var(--color-text)', letterSpacing: '-0.02em', fontFamily: 'Plus Jakarta Sans, sans-serif' }}>
                 Create Patient Account
               </h1>
               <p style={{ color: 'var(--color-text-muted)', fontSize: '0.90rem', margin: 0 }}>

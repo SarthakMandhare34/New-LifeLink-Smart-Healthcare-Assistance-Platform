@@ -125,19 +125,20 @@ export const MedicineCabinet = () => {
   return (
     <div className="container" style={{ padding: 0 }}>
       {/* Header section with icon, title, and action button */}
+      {/* Header section with icon, title, and action button */}
       <header className="mb-4 flex flex-wrap justify-between items-start gap-3">
         <div className="flex items-center gap-3">
-          <div style={{ width: 44, height: 44, borderRadius: '14px', background: 'rgba(0,27,48,0.08)', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-            <Pill size={24} color="var(--color-primary)" />                                     {/* Medication pill icon */}
+          <div style={{ width: 48, height: 48, borderRadius: '8px', background: 'var(--color-primary-muted)', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
+            <Pill size={24} style={{ color: 'var(--color-primary)' }} />
           </div>
           <div>
-            <h1 style={{ margin: 0 }}>Smart Medicine Cabinet</h1>                               {/* Page main title */}
-            <p className="caption">Manage active medications, schedules, and stock alerts.</p>  {/* Subtitle description */}
+            <h1 style={{ margin: 0 }}>Smart Medicine Cabinet</h1>
+            <p className="caption" style={{ margin: '4px 0 0' }}>Manage active medications, schedules, and stock alerts.</p>
           </div>
         </div>
         {!showForm && (
           <Button variant="primary" onClick={handleOpenAdd}>
-            <Plus size={16} /> Add Medication                                                   {/* Open new medication form */}
+            <Plus size={16} /> Add Medication
           </Button>
         )}
       </header>
@@ -147,7 +148,7 @@ export const MedicineCabinet = () => {
 
       {/* Inline medication entry / edit form */}
       {showForm && (
-        <Card variant="glass" className="mb-4">
+        <Card className="mb-4" style={{ padding: 'var(--spacing-5)' }}>
           <form onSubmit={handleSubmit} className="flex-col gap-3">
             <h3 style={{ margin: 0 }}>{editingId ? 'Edit Medication Record' : 'Add New Medication'}</h3>
             <div>
@@ -184,30 +185,30 @@ export const MedicineCabinet = () => {
         {activeMedicines.map((med) => (
             <Card 
               key={med.id}                                                                      // Unique medication record ID
-              variant="solid" 
               style={{ 
                 height: '100%', 
-                borderLeft: '4px solid var(--color-success)',                                   // Visual green indicator for active regimen
+                borderLeft: '3px solid var(--color-semantic-success)',                           // Visual indicator for active regimen
                 display: 'flex',
                 flexDirection: 'column',
                 justifyContent: 'space-between',
-                opacity: processingId === med.id ? 0.5 : 1                                      // Dimmed when being removed
+                padding: 'var(--spacing-5)',
+                opacity: processingId === med.id ? 0.5 : 1
               }}
             >
               <div>
                 <div className="flex justify-between items-start mb-2">
                   <div className="flex items-center gap-2">
-                    <Pill color="var(--color-primary)" size={20} />
+                    <Pill style={{ color: 'var(--color-primary)' }} size={20} />
                     <h3 style={{ margin: 0 }}>{med.name}</h3>
                   </div>
-                  <Badge status="success">Active</Badge>                                        {/* Status badge */}
+                  <Badge status="success">Active</Badge>
                 </div>
 
                 {/* Dosage and scheduling details badge group */}
-                <div className="flex flex-wrap gap-4 mt-3" style={{ background: 'var(--color-background)', padding: 'var(--spacing-2) var(--spacing-3)', borderRadius: 'var(--border-radius-sm)' }}>
+                <div className="flex flex-wrap gap-4 mt-3" style={{ background: 'var(--color-surface-interactive)', padding: 'var(--spacing-2) var(--spacing-3)', borderRadius: 'var(--border-radius-sm)', border: '1px solid var(--color-border)' }}>
                   <div>
                     <span className="caption">Dosage</span>
-                    <div style={{ fontWeight: 600 }}>{med.dosage}</div>
+                    <div style={{ fontWeight: 600, fontVariantNumeric: 'tabular-nums' }}>{med.dosage}</div>
                   </div>
                   <div>
                     <span className="caption">Schedule</span>
@@ -246,8 +247,10 @@ export const MedicineCabinet = () => {
 
         {/* Empty state message when cabinet has 0 items */}
         {activeMedicines.length === 0 && (
-          <Card variant="glass" style={{ textAlign: 'center', padding: 'var(--spacing-6)' }}>
-            <p className="text-muted" style={{ margin: 0 }}>No active medications in cabinet.</p>
+          <Card style={{ textAlign: 'center', padding: 'var(--spacing-8) var(--spacing-4)', gridColumn: '1 / -1' }}>
+            <Pill size={36} style={{ color: 'var(--color-text-secondary)', opacity: 0.5, margin: '0 auto var(--spacing-3)' }} />
+            <p style={{ margin: 0, fontWeight: 600, color: 'var(--color-text)' }}>No active medications in cabinet.</p>
+            <p className="caption" style={{ margin: '4px 0 0', color: 'var(--color-text-secondary)' }}>Add your medications to track schedules, dosages, and reminders.</p>
           </Card>
         )}
       </div>

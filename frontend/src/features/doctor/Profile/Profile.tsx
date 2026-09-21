@@ -33,7 +33,7 @@ export const DoctorProfile = () => {
     <div className="dashboard-workspace">
       {/* Profile header banner */}
       <header className="mb-4 flex items-center gap-3" style={{ marginBottom: 'var(--spacing-5)' }}>
-        <div style={{ width: 52, height: 52, borderRadius: '14px', background: 'var(--color-primary)', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+        <div style={{ width: 52, height: 52, borderRadius: '8px', background: 'var(--color-primary)', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
           <Stethoscope size={26} color="#FFF" />                                                {/* Clinician stethoscope icon */}
         </div>
         <div>
@@ -45,7 +45,7 @@ export const DoctorProfile = () => {
       {/* Bento grid layout */}
       <section className="bento-grid">
         {/* Identity & Credentials Card */}
-        <Card variant="glass" className="bento-col-8" style={{ padding: 'clamp(16px, 4vw, 28px)' }}>
+        <Card variant="default" className="bento-col-8" style={{ padding: 'clamp(16px, 4vw, 28px)' }}>
           <div style={{ display: 'flex', alignItems: 'center', gap: '20px', marginBottom: '28px' }}>
             {/* Clinician initial monogram avatar */}
             <div style={{
@@ -65,7 +65,7 @@ export const DoctorProfile = () => {
           {/* Clinical metadata badge grid */}
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(min(100%, 200px), 1fr))', gap: '20px' }}>
             {/* Specialty tag */}
-            <div style={{ padding: '16px', background: 'var(--color-surface-interactive)', borderRadius: '10px', border: '1px solid var(--color-border)' }}>
+            <div style={{ padding: '16px', background: 'var(--color-surface-interactive)', borderRadius: '8px', border: '1px solid var(--color-border)' }}>
               <div className="flex items-center gap-2" style={{ marginBottom: '6px' }}>
                 <Stethoscope size={16} color="var(--color-primary)" />
                 <span className="caption" style={{ textTransform: 'uppercase', letterSpacing: '0.08em' }}>Specialty</span>
@@ -73,7 +73,7 @@ export const DoctorProfile = () => {
               <strong style={{ fontSize: '1.05rem' }}>{data.specialty || 'Not set'}</strong>
             </div>
             {/* Locality tag */}
-            <div style={{ padding: '16px', background: 'var(--color-surface-interactive)', borderRadius: '10px', border: '1px solid var(--color-border)' }}>
+            <div style={{ padding: '16px', background: 'var(--color-surface-interactive)', borderRadius: '8px', border: '1px solid var(--color-border)' }}>
               <div className="flex items-center gap-2" style={{ marginBottom: '6px' }}>
                 <MapPin size={16} color="var(--color-primary)" />
                 <span className="caption" style={{ textTransform: 'uppercase', letterSpacing: '0.08em' }}>Locality</span>
@@ -81,7 +81,7 @@ export const DoctorProfile = () => {
               <strong style={{ fontSize: '1.05rem' }}>{data.locality || 'Mumbai'}</strong>
             </div>
             {/* Rail transit connectivity tag */}
-            <div style={{ padding: '16px', background: 'var(--color-surface-interactive)', borderRadius: '10px', border: '1px solid var(--color-border)' }}>
+            <div style={{ padding: '16px', background: 'var(--color-surface-interactive)', borderRadius: '8px', border: '1px solid var(--color-border)' }}>
               <div className="flex items-center gap-2" style={{ marginBottom: '6px' }}>
                 <Building size={16} color="var(--color-primary)" />
                 <span className="caption" style={{ textTransform: 'uppercase', letterSpacing: '0.08em' }}>Rail Line</span>
@@ -92,9 +92,9 @@ export const DoctorProfile = () => {
         </Card>
 
         {/* Directory Verification Notice Card */}
-        <Card variant="glass" className="bento-col-4" style={{ padding: 'clamp(16px, 4vw, 28px)', display: 'flex', flexDirection: 'column', justifyContent: 'space-between' }}>
+        <Card variant="default" className="bento-col-4" style={{ padding: 'clamp(16px, 4vw, 28px)', display: 'flex', flexDirection: 'column', justifyContent: 'space-between' }}>
           <div>
-            <div style={{ width: 44, height: 44, borderRadius: '12px', background: 'var(--color-surface-interactive)', display: 'flex', alignItems: 'center', justifyContent: 'center', marginBottom: '16px' }}>
+            <div style={{ width: 44, height: 44, borderRadius: '8px', background: 'var(--color-surface-interactive)', display: 'flex', alignItems: 'center', justifyContent: 'center', marginBottom: '16px' }}>
               <ShieldCheck size={22} color="var(--color-primary)" />
             </div>
             <h3 style={{ margin: '0 0 12px' }}>Directory status</h3>
@@ -102,7 +102,7 @@ export const DoctorProfile = () => {
               This is a controlled LifeLink directory account. Specialist records are not verified clinician credentials or medical registrations.
             </p>
           </div>
-          <div style={{ padding: '14px', borderRadius: '10px', background: 'var(--color-surface-interactive)', marginTop: '20px' }}>
+          <div style={{ padding: '14px', borderRadius: '8px', background: 'var(--color-surface-interactive)', marginTop: '20px' }}>
             <p style={{ margin: 0, color: 'var(--color-primary)', fontWeight: 600, fontSize: '14px' }}>
               Account type: Controlled directory specialist
             </p>

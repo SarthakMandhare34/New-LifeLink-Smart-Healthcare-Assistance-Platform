@@ -17,12 +17,12 @@ import { Button } from '../../components/ui/Button';                            
 import { trpc } from '../../lib/trpc';                                                          // Type-safe tRPC client bridge
 import { useAuth } from '../../_core/hooks/useAuth';                                            // Authentication state hook supplying active user
 
-// Dynamic badge coloring function based on triage urgency - Strictly No Blue, Green, or Purple
+// Dynamic badge coloring function based on triage urgency
 function urgencyColor(urgency: string) {
-  if (urgency === 'EMERGENCY') return { bg: 'rgba(153, 27, 27, 0.12)', color: '#991B1B' }; // Urgent red styling
-  if (urgency === 'MODERATE') return { bg: 'rgba(180, 83, 9, 0.12)', color: '#B45309' };     // Moderate amber styling
-  if (urgency === 'ERROR') return { bg: 'rgba(153, 27, 27, 0.12)', color: '#991B1B' };        // Parse warning styling
-  return { bg: 'rgba(39, 39, 42, 0.08)', color: '#27272A' };                                  // Routine charcoal styling
+  if (urgency === 'EMERGENCY') return { bg: 'rgba(197, 48, 48, 0.1)', color: 'var(--color-semantic-error)' };
+  if (urgency === 'MODERATE') return { bg: 'rgba(180, 83, 9, 0.12)', color: 'var(--color-semantic-warning)' };
+  if (urgency === 'ERROR') return { bg: 'rgba(197, 48, 48, 0.1)', color: 'var(--color-semantic-error)' };
+  return { bg: 'var(--color-primary-muted)', color: 'var(--color-primary)' };
 }
 
 // =========================================================================================
@@ -30,7 +30,6 @@ function urgencyColor(urgency: string) {
 // Serves as the primary patient portal landing screen upon successful authentication.
 // Aggregates upcoming scheduled visits, latest AI symptom triage result, active medicine cabinet,
 // verified doctor prescriptions, and one-touch emergency hotline access.
-// Styled in Classic American Registry Deep Cordovan Wine (#581825) & Soft Bone (#FAF7F2).
 // =========================================================================================
 export const PatientDashboard = () => {
   const { user } = useAuth();                                                                   // Logged-in session credentials
@@ -50,7 +49,7 @@ export const PatientDashboard = () => {
   if (!dashboardQuery.data?.profile) {
     return (
       <div className="dashboard-loading" style={{ padding: '32px', textAlign: 'center' }}>
-        <p className="caption" style={{ color: 'var(--color-semantic-emergency)', fontWeight: 600 }}>Your patient medical profile could not be loaded. Please refresh and try again.</p>
+        <p className="caption" style={{ color: 'var(--color-semantic-error)', fontWeight: 600 }}>Your patient medical profile could not be loaded. Please refresh and try again.</p>
       </div>
     );
   }
@@ -74,7 +73,7 @@ export const PatientDashboard = () => {
     minHeight: '210px',
     background: 'var(--color-surface-white)',
     border: '1px solid var(--color-border)',
-    borderRadius: '8px',
+    borderRadius: '10px',
     boxShadow: 'var(--shadow-sm)',
   };
 
@@ -82,7 +81,7 @@ export const PatientDashboard = () => {
   const iconWrapperStyle = {
     width: '36px',
     height: '36px',
-    borderRadius: '4px',
+    borderRadius: '6px',
     background: 'var(--color-primary-muted)',
     display: 'grid',
     placeItems: 'center',
@@ -104,7 +103,7 @@ export const PatientDashboard = () => {
           background: 'var(--color-surface-white)',
           border: '1px solid var(--color-border)',
           borderLeft: '4px solid var(--color-primary)',
-          borderRadius: '8px',
+          borderRadius: '10px',
           boxShadow: 'var(--shadow-sm)'
         }}
       >
@@ -154,7 +153,7 @@ export const PatientDashboard = () => {
             <div style={{ display: 'flex', flexDirection: 'column', gap: '6px' }}>
               <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
                 <Clock size={14} color="var(--color-text-muted)" />
-                <span style={{ fontSize: '0.92rem', fontWeight: 700, color: 'var(--color-text)' }}>
+                <span style={{ fontSize: '0.92rem', fontWeight: 700, color: 'var(--color-text)', fontVariantNumeric: 'tabular-nums' }}>
                   {new Date(upcomingAppointment.scheduledAt).toLocaleDateString(undefined, { month: 'short', day: 'numeric', year: 'numeric' })}
                   {' '}•{' '}
                   {new Date(upcomingAppointment.scheduledAt).toLocaleTimeString(undefined, { hour: '2-digit', minute: '2-digit' })}
@@ -204,7 +203,7 @@ export const PatientDashboard = () => {
                 Recorded: {new Date(latestAssessment.createdAt).toLocaleDateString(undefined, { month: 'short', day: 'numeric', year: 'numeric' })}
               </p>
               <span style={{
-                display: 'inline-flex', padding: '3px 8px', borderRadius: '4px', fontSize: '0.72rem', fontWeight: 700, letterSpacing: '0.05em', textTransform: 'uppercase', alignSelf: 'flex-start',
+                display: 'inline-flex', padding: '3px 8px', borderRadius: '6px', fontSize: '0.72rem', fontWeight: 700, letterSpacing: '0.05em', textTransform: 'uppercase', alignSelf: 'flex-start',
                 background: urgencyColor(latestAssessment.urgency).bg,
                 color: urgencyColor(latestAssessment.urgency).color,
                 border: '1px solid currentColor',
@@ -253,11 +252,11 @@ export const PatientDashboard = () => {
           {medicines.length > 0 ? (
             <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
               {medicines.slice(0, 2).map((med, idx) => (
-                <div key={idx} style={{ display: 'flex', alignItems: 'center', gap: '10px', padding: '10px 12px', background: 'var(--color-background)', borderRadius: '4px', border: '1px solid var(--color-border)' }}>
-                  <Pill size={15} color="var(--color-primary)" />
+                <div key={idx} style={{ display: 'flex', alignItems: 'center', gap: '10px', padding: '10px 12px', background: 'var(--color-surface-interactive)', borderRadius: '6px', border: '1px solid var(--color-border)' }}>
+                  <Pill size={15} style={{ color: 'var(--color-primary)' }} />
                   <div>
                     <strong style={{ fontSize: '0.88rem', color: 'var(--color-text)', display: 'block', fontWeight: 700 }}>{med.name}</strong>
-                    <span style={{ fontSize: '0.78rem', color: 'var(--color-text-muted)' }}>{med.dosage}</span>
+                    <span style={{ fontSize: '0.78rem', color: 'var(--color-text-muted)', fontVariantNumeric: 'tabular-nums' }}>{med.dosage}</span>
                   </div>
                 </div>
               ))}
@@ -336,12 +335,12 @@ export const PatientDashboard = () => {
             background: 'rgba(220, 38, 38, 0.08)',
             border: '1px solid rgba(220, 38, 38, 0.25)',
             borderLeft: '4px solid var(--color-semantic-emergency)',
-            borderRadius: '8px',
+            borderRadius: '10px',
             boxShadow: 'var(--shadow-sm)',
           }}
         >
           <div style={{ display: 'flex', alignItems: 'center', gap: '16px' }}>
-            <div style={{ width: '40px', height: '40px', borderRadius: '4px', background: 'rgba(220, 38, 38, 0.14)', border: '1px solid rgba(220, 38, 38, 0.3)', display: 'grid', placeItems: 'center', flexShrink: 0 }}>
+            <div style={{ width: '40px', height: '40px', borderRadius: '6px', background: 'rgba(220, 38, 38, 0.14)', border: '1px solid rgba(220, 38, 38, 0.3)', display: 'grid', placeItems: 'center', flexShrink: 0 }}>
               <TriangleAlert size={20} color="var(--color-semantic-emergency)" />
             </div>
             <div>

@@ -80,12 +80,12 @@ export const Appointments = () => {
   return (
     <div className="container" style={{ padding: 0 }}>
       <header className="mb-4 flex items-center gap-3">
-        <div style={{ width: 44, height: 44, borderRadius: '14px', background: 'rgba(0,27,48,0.08)', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-          <CalendarIcon size={24} color="var(--color-primary)" />
+        <div style={{ width: 48, height: 48, borderRadius: '8px', background: 'var(--color-primary-muted)', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
+          <CalendarIcon size={24} style={{ color: 'var(--color-primary)' }} />
         </div>
         <div>
           <h1 style={{ margin: 0 }}>Appointments</h1>
-          <p className="caption">Manage your scheduled clinical consultations and history.</p>
+          <p className="caption" style={{ margin: '4px 0 0' }}>Manage your scheduled clinical consultations and history.</p>
         </div>
       </header>
 
@@ -93,71 +93,69 @@ export const Appointments = () => {
 
       <div className="mb-6">
         <h2 className="mb-3" style={{ fontSize: 'var(--text-h2)' }}>Upcoming Consultations</h2>
-        <BentoGrid>
+        <div className="responsive-list-grid" style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(min(100%, 340px), 1fr))', gap: 'var(--spacing-4)' }}>
           {upcoming.map((appointment) => {
             const doctor = appointment.doctor;
             return (
-              <BentoItem key={appointment.id} colSpan={2}>
-                <Card variant="glass" className="h-full flex-col justify-between" style={{ opacity: cancellingId === appointment.id ? 0.5 : 1 }}>
-                  <div>
-                    <div className="flex justify-between items-start mb-3">
-                      <div className="flex items-center gap-3">
-                        <div style={{ width: 40, height: 40, borderRadius: '50%', background: 'var(--color-primary)', color: 'var(--color-text-dark)', display: 'flex', alignItems: 'center', justifyContent: 'center', fontWeight: 'bold' }}>
-                          {doctor?.name.charAt(0) || <User size={20} />}
-                        </div>
-                        <div>
-                          <h3 style={{ margin: 0 }}>{doctor?.name || 'Controlled directory specialist'}</h3>
-                          <span className="caption">{doctor?.specialty || 'Specialty not recorded'} • {doctor?.hospital || 'Controlled directory'}</span>
-                        </div>
+              <Card key={appointment.id} className="h-full flex-col justify-between" style={{ opacity: cancellingId === appointment.id ? 0.5 : 1, padding: 'var(--spacing-5)' }}>
+                <div>
+                  <div className="flex justify-between items-start mb-3">
+                    <div className="flex items-center gap-3">
+                      <div style={{ width: 40, height: 40, borderRadius: '50%', background: 'var(--color-primary)', color: '#FFFFFF', display: 'flex', alignItems: 'center', justifyContent: 'center', fontWeight: 'bold', flexShrink: 0 }}>
+                        {doctor?.name.charAt(0) || <User size={20} />}
                       </div>
-                      <Badge variant={getStatusVariant(appointment.status) as any}>
-                        {getStatusIcon(appointment.status)} {appointment.status}
-                      </Badge>
-                    </div>
-
-                    <div style={{ padding: 'var(--spacing-3)', background: 'var(--color-surface-interactive)', borderRadius: 'var(--border-radius-md)', border: '1px solid var(--color-border)' }}>
-                      <div className="flex justify-between items-center">
-                        <span className="caption">Date & Time</span>
-                        <strong style={{ color: 'var(--color-primary)' }}>
-                          {new Date(appointment.scheduledAt).toLocaleDateString(undefined, { weekday: 'short', month: 'short', day: 'numeric' })} at {new Date(appointment.scheduledAt).toLocaleTimeString([], { hour: 'numeric', minute: '2-digit' })}
-                        </strong>
+                      <div>
+                        <h3 style={{ margin: 0, fontSize: '1rem' }}>{doctor?.name || 'Controlled directory specialist'}</h3>
+                        <span className="caption" style={{ fontSize: '0.78rem' }}>{doctor?.specialty || 'Specialty not recorded'} • {doctor?.hospital || 'Controlled directory'}</span>
                       </div>
                     </div>
+                    <Badge variant={getStatusVariant(appointment.status) as any}>
+                      {getStatusIcon(appointment.status)} {appointment.status}
+                    </Badge>
                   </div>
 
-                  <div style={{ marginTop: 'var(--spacing-4)', textAlign: 'right' }}>
-                    <Button
-                      variant="outline"
-                      size="sm"
-                      onClick={() => requestCancel(appointment.id)}
-                      disabled={cancellingId === appointment.id}
-                      aria-label={`Cancel appointment with ${doctor?.name || 'specialist'} on ${new Date(appointment.scheduledAt).toLocaleDateString()}`}
-                    >
-                      {cancellingId === appointment.id ? 'Cancelling...' : 'Cancel Appointment'}
-                    </Button>
+                  <div style={{ padding: 'var(--spacing-3)', background: 'var(--color-surface-interactive)', borderRadius: 'var(--border-radius-sm)', border: '1px solid var(--color-border)' }}>
+                    <div className="flex justify-between items-center">
+                      <span className="caption">Date & Time</span>
+                      <strong style={{ color: 'var(--color-primary)', fontVariantNumeric: 'tabular-nums' }}>
+                        {new Date(appointment.scheduledAt).toLocaleDateString(undefined, { weekday: 'short', month: 'short', day: 'numeric' })} at {new Date(appointment.scheduledAt).toLocaleTimeString([], { hour: 'numeric', minute: '2-digit' })}
+                      </strong>
+                    </div>
                   </div>
-                </Card>
-              </BentoItem>
+                </div>
+
+                <div style={{ marginTop: 'var(--spacing-4)', textAlign: 'right' }}>
+                  <Button
+                    variant="outline"
+                    size="sm"
+                    onClick={() => requestCancel(appointment.id)}
+                    disabled={cancellingId === appointment.id}
+                    aria-label={`Cancel appointment with ${doctor?.name || 'specialist'} on ${new Date(appointment.scheduledAt).toLocaleDateString()}`}
+                  >
+                    {cancellingId === appointment.id ? 'Cancelling...' : 'Cancel Appointment'}
+                  </Button>
+                </div>
+              </Card>
             );
           })}
 
           {upcoming.length === 0 && (
-            <BentoItem colSpan={4}>
-              <Card variant="glass" style={{ textAlign: 'center', padding: 'var(--spacing-6)' }}>
-                <p className="text-muted" style={{ margin: 0 }}>No upcoming appointments scheduled.</p>
-              </Card>
-            </BentoItem>
+            <Card style={{ textAlign: 'center', padding: 'var(--spacing-8) var(--spacing-4)', gridColumn: '1 / -1' }}>
+              <CalendarIcon size={36} style={{ color: 'var(--color-text-secondary)', opacity: 0.5, margin: '0 auto var(--spacing-3)' }} />
+              <p style={{ margin: 0, fontWeight: 600, color: 'var(--color-text)' }}>No upcoming appointments scheduled.</p>
+              <p className="caption" style={{ margin: '4px 0 0', color: 'var(--color-text-secondary)' }}>Book a consultation with a specialist to see your schedule here.</p>
+            </Card>
           )}
-        </BentoGrid>
+        </div>
       </div>
 
       <div>
         <h2 className="mb-3" style={{ fontSize: 'var(--text-h2)' }}>Consultation History</h2>
-        <div className="flex-col gap-3">
+        <div style={{ display: 'flex', flexDirection: 'column', gap: 'var(--spacing-3)' }}>
           {past.map((appointment) => {
             const doctor = appointment.doctor;
             return (
-              <Card key={appointment.id} variant="solid" className="flex flex-col sm:flex-row justify-between sm:items-center gap-3" style={{ opacity: 0.95 }}>
+              <Card key={appointment.id} className="flex flex-col sm:flex-row justify-between sm:items-center gap-3" style={{ padding: 'var(--spacing-4)' }}>
                 <div>
                   <div className="flex items-center gap-2 mb-1">
                     <h3 style={{ margin: 0, fontSize: 'var(--text-h3)' }}>{doctor?.name || 'Controlled directory specialist'}</h3>
@@ -166,7 +164,7 @@ export const Appointments = () => {
                     </Badge>
                   </div>
                   <span className="caption">
-                    {doctor?.specialty || 'Specialty not recorded'} • {new Date(appointment.scheduledAt).toLocaleDateString()} at {new Date(appointment.scheduledAt).toLocaleTimeString([], { hour: 'numeric', minute: '2-digit' })}
+                    {doctor?.specialty || 'Specialty not recorded'} • <span style={{ fontVariantNumeric: 'tabular-nums' }}>{new Date(appointment.scheduledAt).toLocaleDateString()} at {new Date(appointment.scheduledAt).toLocaleTimeString([], { hour: 'numeric', minute: '2-digit' })}</span>
                   </span>
                   {appointment.reason && (
                     <p className="caption" style={{ margin: '4px 0 0', color: 'var(--color-text-muted)' }}>
@@ -182,7 +180,11 @@ export const Appointments = () => {
               </Card>
             );
           })}
-          {past.length === 0 && <p className="text-muted caption">No past appointments recorded.</p>}
+          {past.length === 0 && (
+            <Card style={{ textAlign: 'center', padding: 'var(--spacing-6) var(--spacing-4)' }}>
+              <p className="caption" style={{ margin: 0, color: 'var(--color-text-secondary)' }}>No past appointments recorded.</p>
+            </Card>
+          )}
         </div>
       </div>
 

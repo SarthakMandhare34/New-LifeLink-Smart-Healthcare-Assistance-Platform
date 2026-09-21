@@ -25,6 +25,9 @@ export const ThemeProvider = ({ children }: { children: ReactNode }) => {
   const [theme, setTheme] = useState<Theme>(() => {
     const saved = localStorage.getItem('lifelink_theme');                                  // Read previously stored theme from browser storage
     if (saved === 'light' || saved === 'dark') return saved;                               // Use saved user preference
+    if (typeof window !== 'undefined' && window.matchMedia?.('(prefers-color-scheme: dark)').matches) {
+      return 'dark';                                                                       // Respect system dark mode preference
+    }
     return 'light';                                                                        // Default to light mode for crisp hospital aesthetic
   });
 

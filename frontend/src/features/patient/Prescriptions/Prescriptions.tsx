@@ -57,11 +57,11 @@ export const Prescriptions = () => {
             variant="outline"                                                                   // Outline button style
             size="sm"                                                                          // Compact button size
             onClick={() => setSelectedRxId(null)}                                              // Reset selected ID to return to summary list
-            style={{ display: 'inline-flex', alignItems: 'center', gap: '6px', borderRadius: '10px' }}
+            style={{ display: 'inline-flex', alignItems: 'center', gap: '6px', borderRadius: '8px' }}
           >
             <ArrowLeft size={16} /> Back to Prescriptions                                      {/* Back navigation button */}
           </Button>
-          <h1 className="font-display" style={{ margin: 0, fontSize: '1.75rem', fontWeight: 700, color: 'var(--color-text)', fontFamily: 'Outfit, sans-serif' }}>
+          <h1 className="font-display" style={{ margin: 0, fontSize: '1.75rem', fontWeight: 700, color: 'var(--color-text)', fontFamily: 'Plus Jakarta Sans, sans-serif', letterSpacing: '-0.02em' }}>
             Prescription Details
           </h1>
         </header>
@@ -73,7 +73,7 @@ export const Prescriptions = () => {
           </div>
         ) : detailQuery.isError || !rx ? (
           /* Error or unauthorized state */
-          <Card style={{ padding: '32px', textAlign: 'center', background: 'var(--color-surface-white)', border: '1px solid var(--color-border)', borderRadius: '16px' }}>
+          <Card style={{ padding: '32px', textAlign: 'center', background: 'var(--color-surface-white)', border: '1px solid var(--color-border)', borderRadius: '10px' }}>
             <p role="alert" style={{ color: 'var(--color-semantic-emergency)', margin: 0, fontWeight: 600 }}>
               Prescription record not found or access is not authorized.
             </p>
@@ -87,8 +87,7 @@ export const Prescriptions = () => {
               width: '100%',
               background: 'var(--color-surface-white)',
               border: '1px solid var(--color-border)',
-              borderRadius: '20px',
-              boxShadow: 'var(--shadow-md)',
+              borderRadius: '10px',
               padding: 'clamp(16px, 4vw, 28px)',
             }}
           >
@@ -97,7 +96,7 @@ export const Prescriptions = () => {
               <div>
                 <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '4px' }}>
                   <Stethoscope size={18} color="var(--color-accent)" />                                     {/* Specialist icon */}
-                  <h2 style={{ fontSize: '1.25rem', margin: 0, fontWeight: 700, color: 'var(--color-text)', fontFamily: 'Outfit, sans-serif' }}>
+                  <h2 style={{ fontSize: '1.25rem', margin: 0, fontWeight: 700, color: 'var(--color-text)', fontFamily: 'Plus Jakarta Sans, sans-serif', letterSpacing: '-0.02em' }}>
                     {prescribingDoctor?.name || 'Controlled Directory Specialist'}             {/* Doctor name display */}
                   </h2>
                 </div>
@@ -141,7 +140,7 @@ export const Prescriptions = () => {
             {/* Prescribed Items (Rx) */}
             <div style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
               <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-                <span style={{ fontSize: '1.75rem', fontFamily: 'Outfit, sans-serif', fontWeight: 800, color: 'var(--color-primary)', letterSpacing: '-0.02em' }}>
+                <span style={{ fontSize: '1.75rem', fontFamily: 'Plus Jakarta Sans, sans-serif', fontWeight: 800, color: 'var(--color-primary)', letterSpacing: '-0.02em' }}>
                   Rx                                                                            {/* Classic Latin prescription symbol */}
                 </span>
                 <h3 style={{ margin: 0, fontSize: '1rem', color: 'var(--color-text-muted)', textTransform: 'uppercase', letterSpacing: '0.05em' }}>
@@ -158,7 +157,7 @@ export const Prescriptions = () => {
                       style={{
                         padding: '16px',
                         background: 'var(--color-background)',
-                        borderRadius: '12px',
+                        borderRadius: '8px',
                         border: '1px solid var(--color-border)',
                       }}
                     >
@@ -198,7 +197,7 @@ export const Prescriptions = () => {
                     marginTop: '12px',
                     padding: '16px',
                     background: 'var(--color-primary-muted)',
-                    borderRadius: '12px',
+                    borderRadius: '8px',
                     border: '1px dashed var(--color-primary)',
                   }}
                 >
@@ -224,11 +223,11 @@ export const Prescriptions = () => {
     <div style={{ display: 'flex', flexDirection: 'column', gap: '24px', fontFamily: 'Plus Jakarta Sans, sans-serif' }}>
       {/* Header banner */}
       <header style={{ display: 'flex', alignItems: 'center', gap: '16px' }}>
-        <div style={{ width: '48px', height: '48px', borderRadius: '14px', background: 'var(--color-primary-muted)', display: 'grid', placeItems: 'center', color: 'var(--color-primary)', flexShrink: 0 }}>
+        <div style={{ width: '48px', height: '48px', borderRadius: '8px', background: 'var(--color-primary-muted)', display: 'grid', placeItems: 'center', color: 'var(--color-primary)', flexShrink: 0 }}>
           <FileText size={26} />                                                                {/* Prescriptions header icon */}
         </div>
         <div>
-          <h1 className="font-display" style={{ margin: 0, fontSize: '2rem', fontWeight: 700, color: 'var(--color-text)', fontFamily: 'Outfit, sans-serif' }}>
+          <h1 className="font-display" style={{ margin: 0, fontSize: '2rem', fontWeight: 700, color: 'var(--color-text)', fontFamily: 'Plus Jakarta Sans, sans-serif', letterSpacing: '-0.02em' }}>
             Prescriptions
           </h1>
           <p style={{ color: 'var(--color-text-muted)', fontSize: '0.92rem', margin: '3px 0 0' }}>
@@ -239,7 +238,7 @@ export const Prescriptions = () => {
 
       {/* Empty state when patient has no prescriptions */}
       {prescriptions.length === 0 ? (
-        <Card style={{ textAlign: 'center', padding: '56px 24px', background: 'var(--color-surface-white)', border: '1px solid var(--color-border)', borderRadius: '16px' }}>
+        <Card style={{ textAlign: 'center', padding: '56px 24px', background: 'var(--color-surface-white)', border: '1px solid var(--color-border)', borderRadius: '10px' }}>
           <FileText size={44} color="var(--color-text-muted)" style={{ margin: '0 auto 12px', opacity: 0.7 }} />
           <p style={{ margin: 0, fontSize: '1rem', color: 'var(--color-text-muted)', fontStyle: 'italic' }}>
             No prescriptions issued yet.
@@ -251,13 +250,13 @@ export const Prescriptions = () => {
           {prescriptions.map((prescription) => (
             <Card
               key={prescription.id}                                                             // React key
-              variant="glass"                                                                   // Glassmorphic styling
+              variant="default"                                                                 // Solid surface
               className="h-full flex-col justify-between"                                       // Layout classes
               onClick={() => setSelectedRxId(prescription.id)}                                  // Opens detail modal on click
               style={{
                 background: 'var(--color-surface-white)',
                 border: '1px solid var(--color-border)',
-                borderRadius: '16px',
+                borderRadius: '10px',
                 padding: '22px',
                 display: 'flex',
                 flexDirection: 'column',
@@ -267,11 +266,11 @@ export const Prescriptions = () => {
               <div>
                 <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', gap: '10px', marginBottom: '12px' }}>
                   <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
-                    <div style={{ width: '38px', height: '38px', borderRadius: '10px', background: 'var(--color-primary-muted)', display: 'grid', placeItems: 'center', color: 'var(--color-primary)', flexShrink: 0 }}>
+                    <div style={{ width: '38px', height: '38px', borderRadius: '8px', background: 'var(--color-primary-muted)', display: 'grid', placeItems: 'center', color: 'var(--color-primary)', flexShrink: 0 }}>
                       <FileText size={20} />
                     </div>
                     <div>
-                      <h3 style={{ margin: 0, fontSize: '1.05rem', fontWeight: 700, color: 'var(--color-text)', fontFamily: 'Outfit, sans-serif' }}>
+                      <h3 style={{ margin: 0, fontSize: '1.05rem', fontWeight: 700, color: 'var(--color-text)', fontFamily: 'Plus Jakarta Sans, sans-serif', letterSpacing: '-0.02em' }}>
                         {prescription.doctor?.name || 'Assigned Specialist'}                    {/* Prescribing doctor */}
                       </h3>
                       <span style={{ fontSize: '0.82rem', color: 'var(--color-text-muted)' }}>
@@ -288,7 +287,7 @@ export const Prescriptions = () => {
                   style={{
                     padding: '12px',
                     background: 'var(--color-background)',
-                    borderRadius: '10px',
+                    borderRadius: '8px',
                     border: '1px solid var(--color-border)',
                     marginTop: '8px',
                   }}
@@ -313,7 +312,7 @@ export const Prescriptions = () => {
                     event.stopPropagation();                                                    // Avoid bubbling to parent card
                     setSelectedRxId(prescription.id);                                           // Select this prescription for detail inspection
                   }}
-                  style={{ borderRadius: '10px' }}
+                  style={{ borderRadius: '8px' }}
                   aria-label={`View details for prescription from ${prescription.doctor?.name || 'specialist'} on ${new Date(prescription.issuedAt).toLocaleDateString()}`}
                 >
                   View Details

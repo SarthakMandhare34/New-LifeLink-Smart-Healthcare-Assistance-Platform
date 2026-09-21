@@ -41,51 +41,51 @@ export const Patients = () => {
     <div className="dashboard-workspace">
       {/* Roster header banner */}
       <header className="mb-4 flex items-center gap-3" style={{ marginBottom: 'var(--spacing-5)' }}>
-        <div style={{ width: 52, height: 52, borderRadius: '14px', background: 'var(--color-primary)', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-          <Users size={26} color="#FFF" />                                                      {/* Patient group icon */}
+        <div style={{ width: 48, height: 48, borderRadius: '8px', background: 'var(--color-primary-muted)', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
+          <Users size={24} style={{ color: 'var(--color-primary)' }} />
         </div>
         <div>
-          <h1 style={{ margin: 0 }}>Patient Roster</h1>                                         {/* Page title */}
+          <h1 style={{ margin: 0 }}>Patient Roster</h1>
           <p className="caption" style={{ margin: '4px 0 0' }}>Patients authorized via assigned appointments</p>
         </div>
         <div style={{ marginLeft: 'auto' }}>
-          <Badge style={{ background: 'var(--color-surface-interactive)', color: 'var(--color-primary)', border: 'none', padding: '8px 16px', fontSize: '14px', fontWeight: 700 }}>
-            {patients.data?.length ?? 0} Patients                                               {/* Patient counter badge */}
+          <Badge style={{ background: 'rgba(30, 107, 90, 0.1)', color: 'var(--color-doctor-primary)', border: '1px solid var(--color-border)', borderRadius: '6px', padding: '6px 14px', fontSize: '0.82rem', fontWeight: 600 }}>
+            {patients.data?.length ?? 0} Patients
           </Badge>
         </div>
       </header>
 
       {/* Empty roster state */}
       {!patients.data?.length ? (
-        <Card variant="glass" style={{ padding: '60px 40px', textAlign: 'center' }}>
-          <UserCheck size={48} color="var(--color-primary-muted)" style={{ marginBottom: '16px' }} />
-          <h2 style={{ color: 'var(--color-text-muted)', marginBottom: '8px' }}>No authorized patients yet</h2>
-          <p className="caption">Patients appear here once an appointment is assigned and confirmed to your account.</p>
-          <Button variant="primary" style={{ marginTop: '24px' }} onClick={() => navigate('/doctor/appointments')}>
-            Review Appointments <ArrowRight size={16} />                                         {/* Quick link to appointments */}
+        <Card style={{ padding: 'var(--spacing-10) var(--spacing-6)', textAlign: 'center' }}>
+          <UserCheck size={44} style={{ color: 'var(--color-text-secondary)', opacity: 0.5, margin: '0 auto var(--spacing-3)' }} />
+          <h2 style={{ margin: '0 0 var(--spacing-2)', fontSize: '1.2rem', color: 'var(--color-text)' }}>No authorized patients yet</h2>
+          <p className="caption" style={{ margin: '0 auto', maxWidth: '440px' }}>Patients appear here once an appointment is assigned and confirmed to your account.</p>
+          <Button variant="primary" style={{ marginTop: 'var(--spacing-4)' }} onClick={() => navigate('/doctor/appointments')}>
+            Review Appointments <ArrowRight size={16} />
           </Button>
         </Card>
       ) : (
         /* Patient cards grid */
-        <section className="bento-grid">
+        <section className="responsive-list-grid" style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(320px, 1fr))', gap: 'var(--spacing-4)' }}>
           {patients.data.map((patient) => (
-            <Card key={patient.id} variant="glass" className="bento-col-6 interactive-surface" style={{ padding: 'clamp(16px, 4vw, 24px)', cursor: 'pointer' }}
-              onClick={() => navigate(`/doctor/patients/${patient.id}`)}>                       {/* Navigate to patient health passport view */}
+            <Card key={patient.id} style={{ padding: 'var(--spacing-5)', cursor: 'pointer' }}
+              onClick={() => navigate(`/doctor/patients/${patient.id}`)}>
               <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', flexWrap: 'wrap', gap: '12px' }}>
-                <div style={{ display: 'flex', alignItems: 'center', gap: '16px' }}>
+                <div style={{ display: 'flex', alignItems: 'center', gap: '14px' }}>
                   {/* Patient initial circular avatar */}
-                  <div style={{ width: 48, height: 48, borderRadius: '50%', background: 'var(--color-primary-muted)', display: 'flex', alignItems: 'center', justifyContent: 'center', color: 'var(--color-primary)', fontSize: '1.2rem', fontWeight: 700, flexShrink: 0 }}>
-                    {patient.name.charAt(0).toUpperCase()}                                      {/* First letter avatar */}
+                  <div style={{ width: 44, height: 44, borderRadius: '50%', background: 'var(--color-primary-muted)', display: 'flex', alignItems: 'center', justifyContent: 'center', color: 'var(--color-primary)', fontSize: '1.1rem', fontWeight: 700, flexShrink: 0 }}>
+                    {patient.name.charAt(0).toUpperCase()}
                   </div>
                   <div>
-                    <strong style={{ fontSize: '1.05rem', display: 'block' }}>{patient.name}</strong> {/* Patient full legal name */}
-                    <p className="caption" style={{ margin: '4px 0 0' }}>Appointment-authorized access</p>
+                    <strong style={{ fontSize: '1rem', display: 'block', color: 'var(--color-text)' }}>{patient.name}</strong>
+                    <p className="caption" style={{ margin: '2px 0 0', fontSize: '0.75rem' }}>Appointment-authorized access</p>
                   </div>
                 </div>
                 {/* Direct action button */}
-                <Button variant="outline" size="sm" style={{ background: 'var(--color-surface-white)', flexShrink: 0 }}
+                <Button variant="secondary" size="sm" style={{ flexShrink: 0 }}
                   onClick={(e) => { e.stopPropagation(); navigate(`/doctor/patients/${patient.id}`); }}>
-                  View record <ArrowRight size={14} />                                          {/* Direct view link */}
+                  View record <ArrowRight size={14} />
                 </Button>
               </div>
             </Card>

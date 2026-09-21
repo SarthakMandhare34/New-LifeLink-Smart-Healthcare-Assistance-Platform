@@ -68,15 +68,14 @@ export const DoctorSettings = () => {
           background: 'var(--color-surface-white)',
           border: '1px solid var(--color-border)',
           borderLeft: '4px solid var(--color-primary)',
-          borderRadius: '12px',
-          boxShadow: 'var(--shadow-sm)',
+          borderRadius: '10px',
         }}
       >
         <div
           style={{
             width: '52px',
             height: '52px',
-            borderRadius: '12px',
+            borderRadius: '8px',
             background: 'var(--color-primary-muted)',
             border: '1px solid var(--color-border)',
             display: 'grid',
@@ -88,7 +87,7 @@ export const DoctorSettings = () => {
           <Settings size={26} />
         </div>
         <div>
-          <h1 style={{ margin: 0, fontSize: '1.65rem', fontWeight: 700, color: 'var(--color-text)', letterSpacing: '-0.02em', fontFamily: 'Outfit, sans-serif' }}>
+          <h1 style={{ margin: 0, fontSize: '1.65rem', fontWeight: 700, color: 'var(--color-text)', letterSpacing: '-0.02em', fontFamily: 'Plus Jakarta Sans, sans-serif' }}>
             Workspace Settings
           </h1>
           <p style={{ margin: '4px 0 0', color: 'var(--color-text-muted)', fontSize: '0.92rem' }}>
@@ -102,13 +101,12 @@ export const DoctorSettings = () => {
         
         {/* Change Password Card */}
         <Card
-          variant="glass"
+          variant="default"
           style={{
             padding: '28px',
             background: 'var(--color-surface-white)',
             border: '1px solid var(--color-border)',
-            borderRadius: '12px',
-            boxShadow: 'var(--shadow-sm)',
+            borderRadius: '10px',
             display: 'flex',
             flexDirection: 'column',
             justifyContent: 'space-between',
@@ -117,10 +115,10 @@ export const DoctorSettings = () => {
         >
           <div>
             <div style={{ display: 'flex', alignItems: 'center', gap: '12px', marginBottom: '24px', paddingBottom: '16px', borderBottom: '1px solid var(--color-border)' }}>
-              <div style={{ width: '38px', height: '38px', borderRadius: '10px', background: 'var(--color-primary-muted)', display: 'grid', placeItems: 'center', color: 'var(--color-primary)' }}>
+              <div style={{ width: '38px', height: '38px', borderRadius: '8px', background: 'var(--color-primary-muted)', display: 'grid', placeItems: 'center', color: 'var(--color-primary)' }}>
                 <Lock size={18} />
               </div>
-              <h2 style={{ margin: 0, fontSize: '1.25rem', fontWeight: 700, color: 'var(--color-text)', fontFamily: 'Outfit, sans-serif' }}>
+              <h2 style={{ margin: 0, fontSize: '1.25rem', fontWeight: 700, color: 'var(--color-text)', fontFamily: 'Plus Jakarta Sans, sans-serif', letterSpacing: '-0.02em' }}>
                 Change Password
               </h2>
             </div>
@@ -137,7 +135,7 @@ export const DoctorSettings = () => {
                   alignItems: 'center',
                   gap: '10px',
                   padding: '14px 16px',
-                  borderRadius: '10px',
+                  borderRadius: '8px',
                   marginBottom: '20px',
                   background: isSuccess ? 'rgba(13, 148, 136, 0.12)' : 'rgba(220, 38, 38, 0.12)',
                   color: isSuccess ? 'var(--color-semantic-success)' : 'var(--color-semantic-emergency)',
@@ -206,13 +204,12 @@ export const DoctorSettings = () => {
 
         {/* Account Information Card */}
         <Card
-          variant="glass"
+          variant="default"
           style={{
             padding: '28px',
             background: 'var(--color-surface-white)',
             border: '1px solid var(--color-border)',
-            borderRadius: '12px',
-            boxShadow: 'var(--shadow-sm)',
+            borderRadius: '10px',
             display: 'flex',
             flexDirection: 'column',
             justifyContent: 'space-between',
@@ -221,26 +218,26 @@ export const DoctorSettings = () => {
         >
           <div>
             <div style={{ display: 'flex', alignItems: 'center', gap: '12px', marginBottom: '24px', paddingBottom: '16px', borderBottom: '1px solid var(--color-border)' }}>
-              <div style={{ width: '38px', height: '38px', borderRadius: '10px', background: 'var(--color-primary-muted)', display: 'grid', placeItems: 'center', color: 'var(--color-primary)' }}>
+              <div style={{ width: '38px', height: '38px', borderRadius: '8px', background: 'var(--color-primary-muted)', display: 'grid', placeItems: 'center', color: 'var(--color-primary)' }}>
                 <ShieldCheck size={20} />
               </div>
-              <h2 style={{ margin: 0, fontSize: '1.25rem', fontWeight: 700, color: 'var(--color-text)', fontFamily: 'Outfit, sans-serif' }}>
+              <h2 style={{ margin: 0, fontSize: '1.25rem', fontWeight: 700, color: 'var(--color-text)', fontFamily: 'Plus Jakarta Sans, sans-serif', letterSpacing: '-0.02em' }}>
                 Account Information & Privacy Boundary
               </h2>
             </div>
 
             <div style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
-              <div style={{ padding: '18px 20px', background: 'var(--color-surface-interactive)', borderRadius: '10px', border: '1px solid var(--color-border)' }}>
+              <div style={{ padding: '18px 20px', background: 'var(--color-surface-interactive)', borderRadius: '8px', border: '1px solid var(--color-border)' }}>
                 <p className="caption" style={{ margin: '0 0 4px', textTransform: 'uppercase', letterSpacing: '0.08em', color: 'var(--color-text-muted)', fontWeight: 700 }}>Account Type</p>
                 <strong style={{ fontSize: '1rem', color: 'var(--color-text)' }}>Controlled Directory Doctor</strong>
               </div>
 
-              <div style={{ padding: '18px 20px', background: 'var(--color-surface-interactive)', borderRadius: '10px', border: '1px solid var(--color-border)' }}>
+              <div style={{ padding: '18px 20px', background: 'var(--color-surface-interactive)', borderRadius: '8px', border: '1px solid var(--color-border)' }}>
                 <p className="caption" style={{ margin: '0 0 4px', textTransform: 'uppercase', letterSpacing: '0.08em', color: 'var(--color-text-muted)', fontWeight: 700 }}>Access Level</p>
                 <strong style={{ fontSize: '1rem', color: 'var(--color-text)' }}>Appointment-restricted patient context</strong>
               </div>
 
-              <div style={{ padding: '18px 20px', background: 'var(--color-primary-muted)', borderRadius: '10px', border: '1px solid var(--color-border)', display: 'flex', alignItems: 'flex-start', gap: '12px' }}>
+              <div style={{ padding: '18px 20px', background: 'var(--color-primary-muted)', borderRadius: '8px', border: '1px solid var(--color-border)', display: 'flex', alignItems: 'flex-start', gap: '12px' }}>
                 <UserCheck size={20} color="var(--color-primary)" style={{ flexShrink: 0, marginTop: '2px' }} />
                 <p style={{ margin: 0, fontSize: '0.88rem', color: 'var(--color-text)', lineHeight: 1.6 }}>
                   <strong>Note:</strong> This is a controlled LifeLink directory account. Records here are not verified doctor identities, credentials, or medical registrations.

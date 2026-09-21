@@ -16,29 +16,29 @@ import { Users, Calendar, Clock, Activity, ArrowRight, Stethoscope } from "lucid
 import { useNavigate } from "react-router-dom";
 import { trpc } from "../../lib/trpc";
 
-// Returns color styling object for triage urgency badge - Strictly No Blue, Green, or Purple
+// Returns color styling object for triage urgency badge
 function urgencyBadge(urgency: string) {
-  if (urgency === 'EMERGENCY') {                                                           // High-risk emergency condition
-    return { bg: 'rgba(153, 27, 27, 0.12)', color: '#991B1B', border: '1px solid rgba(153, 27, 27, 0.25)' };
+  if (urgency === 'EMERGENCY') {
+    return { bg: 'rgba(197, 48, 48, 0.1)', color: 'var(--color-semantic-error)', border: '1px solid rgba(197, 48, 48, 0.25)' };
   }
-  if (urgency === 'MODERATE') {                                                            // Moderate clinical attention needed
-    return { bg: 'rgba(184, 134, 11, 0.12)', color: '#B8860B', border: '1px solid rgba(184, 134, 11, 0.25)' };
+  if (urgency === 'MODERATE') {
+    return { bg: 'rgba(184, 134, 11, 0.12)', color: 'var(--color-semantic-warning)', border: '1px solid rgba(184, 134, 11, 0.25)' };
   }
-  if (urgency === 'ERROR') {                                                               // Non-medical or gibberish query
-    return { bg: 'rgba(153, 27, 27, 0.12)', color: '#991B1B', border: '1px solid rgba(153, 27, 27, 0.25)' };
+  if (urgency === 'ERROR') {
+    return { bg: 'rgba(197, 48, 48, 0.1)', color: 'var(--color-semantic-error)', border: '1px solid rgba(197, 48, 48, 0.25)' };
   }
-  return { bg: 'rgba(12, 95, 102, 0.08)', color: '#0C5F66', border: '1px solid #B0D4D4' }; // Low urgency / routine teal
+  return { bg: 'rgba(30, 107, 90, 0.08)', color: 'var(--color-doctor-primary)', border: '1px solid var(--color-border)' };
 }
 
 // Returns color styling object for appointment status pill
 function statusBadge(status: string) {
   if (status === 'Confirmed' || status === 'Completed') {
-    return { bg: 'rgba(184, 134, 11, 0.12)', color: '#B8860B', border: '1px solid rgba(184, 134, 11, 0.25)' };
+    return { bg: 'rgba(30, 107, 90, 0.1)', color: 'var(--color-doctor-primary)', border: '1px solid rgba(30, 107, 90, 0.25)' };
   }
   if (status === 'Cancelled') {
-    return { bg: 'rgba(153, 27, 27, 0.12)', color: '#991B1B', border: '1px solid rgba(153, 27, 27, 0.25)' };
+    return { bg: 'rgba(197, 48, 48, 0.1)', color: 'var(--color-semantic-error)', border: '1px solid rgba(197, 48, 48, 0.25)' };
   }
-  return { bg: 'rgba(12, 95, 102, 0.08)', color: '#0C5F66', border: '1px solid #B0D4D4' }; // Neutral teal for pending
+  return { bg: 'var(--color-surface-interactive)', color: 'var(--color-text-secondary)', border: '1px solid var(--color-border)' };
 }
 
 // Doctor clinical workstation dashboard displaying real-time queues and metrics
@@ -51,12 +51,12 @@ export const DoctorDashboard = () => {
 
   if (dashboard.isLoading) return (                                                        // Loading state view
     <div className="dashboard-loading" style={{ padding: '40px', textAlign: 'center' }}>
-      <p className="caption" style={{ color: '#27272A', fontFamily: 'Plus Jakarta Sans, sans-serif' }}>Loading clinical workspace…</p>
+      <p className="caption" style={{ color: 'var(--color-text-secondary)', fontFamily: 'Plus Jakarta Sans, sans-serif' }}>Loading clinical workspace…</p>
     </div>
   );
   if (dashboard.isError || !dashboard.data) return (                                       // Error state view
     <div style={{ padding: '40px', textAlign: 'center' }}>
-      <p role="alert" style={{ color: 'var(--color-semantic-emergency)', fontFamily: 'Plus Jakarta Sans, sans-serif' }}>Unable to load the clinical workspace. Please try again.</p>
+      <p role="alert" style={{ color: 'var(--color-semantic-error)', fontFamily: 'Plus Jakarta Sans, sans-serif' }}>Unable to load the clinical workspace. Please try again.</p>
     </div>
   );
 
@@ -91,7 +91,7 @@ export const DoctorDashboard = () => {
     gap: '16px',
     background: 'var(--color-doctor-surface)',
     border: '1px solid var(--color-doctor-border)',
-    borderRadius: '6px',
+    borderRadius: '10px',
     boxShadow: 'var(--shadow-sm)',
   };
 
@@ -103,14 +103,14 @@ export const DoctorDashboard = () => {
     minHeight: '130px',
     background: 'var(--color-doctor-surface)',
     border: '1px solid var(--color-doctor-border)',
-    borderRadius: '6px',
+    borderRadius: '10px',
     boxShadow: 'var(--shadow-sm)',
   };
 
   const iconWrapperStyle = {
     width: '36px',
     height: '36px',
-    borderRadius: '4px',
+    borderRadius: '6px',
     background: 'var(--color-surface-interactive)',
     display: 'grid',
     placeItems: 'center',
@@ -132,7 +132,7 @@ export const DoctorDashboard = () => {
           background: 'var(--color-doctor-surface)',
           border: '1px solid var(--color-doctor-border)',
           borderLeft: '4px solid var(--color-doctor-primary)',
-          borderRadius: '6px',
+          borderRadius: '10px',
           boxShadow: 'var(--shadow-sm)'
         }}
       >
@@ -275,7 +275,7 @@ export const DoctorDashboard = () => {
                         gap: '8px',
                         padding: '12px 14px',
                         background: 'var(--color-surface-interactive)',
-                        borderRadius: '4px',
+                        borderRadius: '6px',
                         border: '1px solid var(--color-border)',
                       }}
                     >
@@ -300,7 +300,7 @@ export const DoctorDashboard = () => {
                       <span
                         style={{
                           padding: '3px 8px',
-                          borderRadius: '4px',
+                          borderRadius: '6px',
                           fontSize: '0.72rem',
                           fontWeight: 700,
                           letterSpacing: '0.04em',
@@ -318,7 +318,7 @@ export const DoctorDashboard = () => {
                 })}
               </div>
             ) : (
-              <div style={{ padding: '24px 16px', textAlign: 'center', background: 'var(--color-surface-interactive)', borderRadius: '4px', border: '1px dashed var(--color-border)' }}>
+              <div style={{ padding: '24px 16px', textAlign: 'center', background: 'var(--color-surface-interactive)', borderRadius: '6px', border: '1px dashed var(--color-border)' }}>
                 <p style={{ fontSize: '0.88rem', color: 'var(--color-text-muted)', margin: '0 0 12px', fontStyle: 'italic' }}>No upcoming appointments scheduled.</p>
                 <Button
                   size="sm"
@@ -362,7 +362,7 @@ export const DoctorDashboard = () => {
                       style={{
                         padding: '12px 14px',
                         background: 'var(--color-surface-interactive)',
-                        borderRadius: '4px',
+                        borderRadius: '6px',
                         border: '1px solid var(--color-border)',
                         display: 'flex',
                         flexDirection: 'column',
@@ -389,7 +389,7 @@ export const DoctorDashboard = () => {
                         <span
                           style={{
                             padding: '3px 8px',
-                            borderRadius: '4px',
+                            borderRadius: '6px',
                             fontSize: '0.72rem',
                             fontWeight: 700,
                             letterSpacing: '0.04em',
@@ -415,7 +415,7 @@ export const DoctorDashboard = () => {
                 })}
               </div>
             ) : (
-              <div style={{ padding: '24px 16px', textAlign: 'center', background: 'var(--color-surface-interactive)', borderRadius: '4px', border: '1px dashed var(--color-border)' }}>
+              <div style={{ padding: '24px 16px', textAlign: 'center', background: 'var(--color-surface-interactive)', borderRadius: '6px', border: '1px dashed var(--color-border)' }}>
                 <p style={{ fontSize: '0.88rem', color: 'var(--color-text-muted)', margin: 0, fontStyle: 'italic' }}>
                   No recent assessments submitted by assigned patients.
                 </p>
@@ -466,7 +466,7 @@ export const DoctorDashboard = () => {
                         justifyContent: 'space-between',
                         padding: '10px 12px',
                         background: 'var(--color-surface-interactive)',
-                        borderRadius: '4px',
+                        borderRadius: '6px',
                         border: '1px solid var(--color-border)',
                         cursor: 'pointer',
                         transition: 'border-color 0.15s ease',
@@ -484,7 +484,7 @@ export const DoctorDashboard = () => {
                           style={{
                             width: '34px',
                             height: '34px',
-                            borderRadius: '4px',
+                            borderRadius: '6px',
                             background: 'var(--color-surface-white)',
                             border: '1px solid var(--color-border)',
                             color: 'var(--color-text)',
@@ -508,7 +508,7 @@ export const DoctorDashboard = () => {
                 })}
               </div>
             ) : (
-              <div style={{ padding: '20px 16px', textAlign: 'center', background: 'var(--color-surface-interactive)', borderRadius: '4px', border: '1px dashed var(--color-border)' }}>
+              <div style={{ padding: '20px 16px', textAlign: 'center', background: 'var(--color-surface-interactive)', borderRadius: '6px', border: '1px dashed var(--color-border)' }}>
                 <p style={{ fontSize: '0.85rem', color: 'var(--color-text-muted)', margin: 0, fontStyle: 'italic' }}>No authorized patient records yet.</p>
               </div>
             )}
@@ -532,9 +532,9 @@ export const DoctorDashboard = () => {
                   const isCompleted = apt.status === 'Completed';
                   const isCancelled = apt.status === 'Cancelled';
                   const dotColor = isCompleted
-                    ? 'var(--color-doctor-accent)'
+                    ? 'var(--color-semantic-success)'
                     : isCancelled
-                    ? '#991B1B'
+                    ? 'var(--color-semantic-error)'
                     : 'var(--color-text-muted)';
                   return (
                     <div key={apt.id || idx} style={{ display: 'flex', alignItems: 'center', gap: '12px', padding: '6px 0', borderBottom: '1px solid var(--color-border)' }}>

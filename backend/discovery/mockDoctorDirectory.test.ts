@@ -1,7 +1,7 @@
 import { describe, expect, it } from "vitest";
-import { filterMockDoctorDirectory, getMockDoctorDirectoryFacets, mockDoctorDirectory } from "./mockDoctorDirectory";
-import { MUMBAI_RAIL_LINES, getMumbaiRailStation } from "@shared/mumbaiRailNetwork";
-import { MUMBAI_STATION_COORDINATES } from "@shared/mumbaiStationCoordinates";
+import { filterMockDoctorDirectory, getMockDoctorDirectoryFacets, mockDoctorDirectory, type MockDoctorDirectoryEntry } from "./mockDoctorDirectory";
+import { getMumbaiRailStation } from "../../shared/mumbaiRailNetwork";
+import { MUMBAI_STATION_COORDINATES } from "../../shared/mumbaiStationCoordinates";
 
 describe("controlled Mumbai specialist directory", () => {
   it("keeps a comprehensive, explicitly controlled catalog with authentic Indian doctors & hospital affiliations", () => {
@@ -41,8 +41,8 @@ describe("controlled Mumbai specialist directory", () => {
   });
 
   it("preserves supplied shared-station associations without multiplying the catalog", () => {
-    expect(filterMockDoctorDirectory({ station: "CSMT", railLine: "Central" })).toSatisfy((list) => list.length >= 1);
-    expect(filterMockDoctorDirectory({ station: "Andheri", railLine: "Western" })).toSatisfy((list) => list.length >= 1);
+    expect(filterMockDoctorDirectory({ station: "CSMT", railLine: "Central" })).toSatisfy((list: MockDoctorDirectoryEntry[]) => list.length >= 1);
+    expect(filterMockDoctorDirectory({ station: "Andheri", railLine: "Western" })).toSatisfy((list: MockDoctorDirectoryEntry[]) => list.length >= 1);
     expect(getMumbaiRailStation("CSMT")?.lines).toEqual(["Central", "Harbour"]);
     expect(getMumbaiRailStation("Panvel")?.lines).toEqual(["Harbour"]);
   });
@@ -55,7 +55,7 @@ describe("controlled Mumbai specialist directory", () => {
       specialties: expect.arrayContaining(["Cardiology", "Dermatology", "General Practice", "Pediatrics"]),
       railLines: ["Central", "Harbour", "Western"],
     });
-    expect(filterMockDoctorDirectory({ query: "cardio" })).toSatisfy((entries) => entries.length >= 3 && entries.every((entry) => entry.specialty === "Cardiology"));
-    expect(filterMockDoctorDirectory({ query: "Rajesh" })).toSatisfy((entries) => entries.length >= 1 && entries.some((entry) => entry.name.includes("Rajesh")));
+    expect(filterMockDoctorDirectory({ query: "cardio" })).toSatisfy((entries: MockDoctorDirectoryEntry[]) => entries.length >= 3 && entries.every((entry: MockDoctorDirectoryEntry) => entry.specialty === "Cardiology"));
+    expect(filterMockDoctorDirectory({ query: "Rajesh" })).toSatisfy((entries: MockDoctorDirectoryEntry[]) => entries.length >= 1 && entries.some((entry: MockDoctorDirectoryEntry) => entry.name.includes("Rajesh")));
   });
 });

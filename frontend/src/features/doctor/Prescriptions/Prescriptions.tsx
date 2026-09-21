@@ -45,9 +45,8 @@ export const DoctorPrescriptions = () => {
   const cardStyle = {
     background: 'var(--color-doctor-surface)',
     padding: 'clamp(16px, 4vw, 24px)',
-    borderRadius: '16px',
+    borderRadius: '10px',
     border: '1px solid var(--color-doctor-border)',
-    boxShadow: 'var(--shadow-sm)',
     display: 'flex',
     flexDirection: 'column' as const,
   };
@@ -57,7 +56,7 @@ export const DoctorPrescriptions = () => {
       
       {/* Workspace Header */}
       <header style={{ display: 'flex', alignItems: 'center', gap: '16px' }}>
-        <div style={{ width: '48px', height: '48px', borderRadius: '14px', background: 'rgba(14, 114, 121, 0.15)', display: 'grid', placeItems: 'center', color: 'var(--color-doctor-primary)', flexShrink: 0 }}>
+        <div style={{ width: '48px', height: '48px', borderRadius: '8px', background: 'rgba(14, 114, 121, 0.15)', display: 'grid', placeItems: 'center', color: 'var(--color-doctor-primary)', flexShrink: 0 }}>
           <FileText size={26} />                                                                {/* Prescriptions header icon */}
         </div>
         <div>
@@ -116,7 +115,7 @@ export const DoctorPrescriptions = () => {
                 </div>
 
                 {/* Prescribed medication items list */}
-                <div style={{ padding: '10px', background: 'var(--color-surface-interactive)', borderRadius: '10px', border: '1px solid var(--color-border)', marginBottom: '10px' }}>
+                <div style={{ padding: '10px', background: 'var(--color-surface-interactive)', borderRadius: '8px', border: '1px solid var(--color-border)', marginBottom: '10px' }}>
                   <span style={{ fontSize: '0.75rem', color: 'var(--color-text-muted)', fontWeight: 700, textTransform: 'uppercase' }}>
                     Prescribed Items:
                   </span>
@@ -180,7 +179,7 @@ export const DoctorPrescriptions = () => {
             <Button
               variant="primary"
               onClick={() => navigate('/doctor/appointments')}
-              style={{ alignSelf: 'center', borderRadius: '10px' }}
+              style={{ alignSelf: 'center', borderRadius: '8px' }}
             >
               Review Appointments <ArrowRight size={16} />
             </Button>
@@ -204,7 +203,7 @@ export const DoctorPrescriptions = () => {
                   <Button
                     variant="outline"
                     size="sm"
-                    style={{ flex: 1, borderRadius: '10px' }}
+                    style={{ flex: 1, borderRadius: '8px' }}
                     onClick={() => navigate(`/doctor/patients/${patient.id}`)}
                   >
                     View Record
@@ -212,7 +211,7 @@ export const DoctorPrescriptions = () => {
                   <Button
                     variant="primary"
                     size="sm"
-                    style={{ flex: 1, borderRadius: '10px', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '4px' }}
+                    style={{ flex: 1, borderRadius: '8px', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '4px' }}
                     onClick={() => navigate(`/doctor/patients/${patient.id}`)} // Opens patient record to issue Rx
                   >
                     <Plus size={14} /> Write Rx
