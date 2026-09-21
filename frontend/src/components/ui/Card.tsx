@@ -13,33 +13,26 @@ import React from 'react';                                                      
 interface CardProps {
   children: React.ReactNode;                                                                    // Card child content
   className?: string;                                                                           // Extra classes
-  variant?: 'default' | 'glass' | 'solid' | 'emergency';                                        // Surface treatment variants
-  interactive?: boolean;                                                                        // Hover elevation flag
+  variant?: 'default' | 'solid' | 'emergency' | 'document';                                     // Swiss surface treatment variants (glass purged)
+  interactive?: boolean;                                                                        // Hover highlight flag
   selected?: boolean;                                                                           // Selected ring indicator
   style?: React.CSSProperties;                                                                  // Inline styles
   onClick?: (e: React.MouseEvent<HTMLDivElement>) => void;                                      // Click callback
 }
 
 // =========================================================================================
-// REUSABLE CARD CONTAINER COMPONENT (frontend/src/components/ui/Card.tsx)
+// SWISS REUSABLE CARD CONTAINER COMPONENT (frontend/src/components/ui/Card.tsx)
 // =========================================================================================
 //
 // WHAT THIS COMPONENT DOES:
-// This is the universal visual card container used across all patient and doctor views.
-// It wraps medical records, dashboard stats, triage recommendations, and action buttons.
+// This is the universal visual card container across the Swiss International Typographic system.
+// It presents structured healthcare data on flat, opaque, physical clinical surfaces (1px borders,
+// 0–2px radius, zero glassmorphism, default zero shadow).
 //
-// KEY DESIGN & ACCESSIBILITY FEATURES:
-// 1. Multiple Surface Variants:
-//    - 'glass': Liquid-glass surface with blur and translucent background.
-//    - 'solid' / 'default': High-contrast solid clinical background.
-//    - 'emergency': Red-accented alert styling for urgent triage and SOS dialogs.
-// 2. Automatic Interactivity:
-//    If an `onClick` function is passed (or `interactive=true`), the card automatically
-//    becomes focusable (`tabIndex={0}`), announces itself as a button to screen readers
-//    (`role="button"`), and responds to tactile hover/elevation effects (`.interactive-surface`).
-// 3. Accessible Keyboard Navigation (WCAG 2.1 AA):
-//    Users navigating with a keyboard can press Enter or Space to activate the card,
-//    ensuring complete accessibility without needing a mouse.
+// VARIANTS:
+// - 'default' / 'solid': High-contrast solid clinical white/dark surface.
+// - 'emergency': Swiss Red alert styling for acute triage and SOS confirmations.
+// - 'document': Clean clinical sheet styling for medical reports and prescriptions.
 // =========================================================================================
 export const Card: React.FC<CardProps> = ({ 
   children, 
@@ -50,10 +43,12 @@ export const Card: React.FC<CardProps> = ({
   style,
   onClick
 }) => {
-  // Step 1: Select the CSS base surface class based on the requested variant
+  // Step 1: Select the CSS base surface class based on the Swiss variant
   let baseClass = 'solid-clinical-surface';
   if (variant === 'emergency') {
     baseClass = 'emergency-panel';
+  } else if (variant === 'document') {
+    baseClass = 'solid-clinical-surface swiss-document-surface';
   }
 
   // Step 2: Automatically detect if this card can be clicked

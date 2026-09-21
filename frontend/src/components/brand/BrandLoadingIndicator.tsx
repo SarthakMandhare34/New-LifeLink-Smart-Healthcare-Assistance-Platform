@@ -69,14 +69,14 @@ export function BrandLoadingIndicator({
           style={{
             width: sizePx,
             height: sizePx,
-            borderRadius: "14px",
+            borderRadius: "2px",
             overflow: "hidden",
             display: "flex",
             alignItems: "center",
             justifyContent: "center",
             background: "var(--color-surface-white, #FFFFFF)",
-            border: "1px solid var(--color-border, #E0D8CE)",
-            boxShadow: "0 4px 16px rgba(0, 0, 0, 0.08)",
+            border: "1px solid var(--swiss-gray-300, #D9D9D9)",
+            boxShadow: "none",
             zIndex: 1,
           }}
         >
@@ -100,7 +100,7 @@ export function BrandLoadingIndicator({
           style={{
             margin: 0,
             color: "var(--color-text-muted, #71717A)",
-            fontFamily: "'Plus Jakarta Sans', sans-serif",
+            fontFamily: "'Inter', sans-serif",
             animationDuration: "2s",
           }}
         >

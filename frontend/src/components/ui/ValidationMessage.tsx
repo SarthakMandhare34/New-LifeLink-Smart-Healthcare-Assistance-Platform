@@ -66,14 +66,14 @@ export const ValidationMessage: React.FC<ValidationMessageProps> = ({
         gap: '8px',
         padding: '8px 12px',
         marginTop: '6px',
-        borderRadius: '8px',
+        borderRadius: '2px',
         backgroundColor: bg,
         border: `1px solid ${border}`,
         color,
         fontSize: '0.84rem',
         fontWeight: 500,
         lineHeight: 1.4,
-        fontFamily: "'Plus Jakarta Sans', sans-serif",
+        fontFamily: "'Inter', sans-serif",
         ...style,
       }}
     >

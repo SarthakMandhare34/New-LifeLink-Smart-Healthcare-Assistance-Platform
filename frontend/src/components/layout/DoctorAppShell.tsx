@@ -188,14 +188,14 @@ export const DoctorAppShell = () => {
 
           {/* Clinician subtitle */}
           <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
-            <span style={{ fontSize: '0.68rem', fontWeight: 700, letterSpacing: '0.08em', textTransform: 'uppercase', color: '#B45309' }}>
-              Doctor Workspace
+            <span style={{ fontSize: '0.68rem', fontWeight: 700, letterSpacing: '0.08em', textTransform: 'uppercase', color: 'var(--swiss-blue)' }}>
+              Doctor Workstation
             </span>
-            <span style={{ display: 'inline-block', width: '6px', height: '6px', borderRadius: '50%', background: '#D97706' }} title="Provider Session Active" />
+            <span style={{ display: 'inline-block', width: '6px', height: '6px', borderRadius: '1px', background: 'var(--swiss-blue)' }} title="Provider Session Active" />
           </div>
         </div>
 
-        {/* Doctor workspace navigation links: Structured Nordic Clinical list layout with 8px corners and active left-border indicator */}
+        {/* Doctor workspace navigation links: Swiss list layout with 2px corners and 3px blue active indicator */}
         <nav 
           className="app-sidebar-nav" 
           style={{ 
@@ -218,12 +218,12 @@ export const DoctorAppShell = () => {
                 alignItems: 'center',
                 gap: '12px',
                 padding: '9px 12px',
-                borderRadius: '8px',
+                borderRadius: '2px',
                 fontSize: '0.88rem',
-                fontWeight: isActive ? 600 : 500,
-                color: isActive ? 'var(--color-text)' : 'var(--color-text-muted)',
-                background: isActive ? 'var(--color-surface-interactive)' : 'transparent',
-                borderLeft: isActive ? '3px solid var(--color-doctor-accent)' : '3px solid transparent',
+                fontWeight: isActive ? 700 : 500,
+                color: isActive ? 'var(--swiss-blue)' : 'var(--swiss-gray-700)',
+                background: isActive ? 'var(--swiss-blue-soft)' : 'transparent',
+                borderLeft: isActive ? '3px solid var(--swiss-blue)' : '3px solid transparent',
                 textDecoration: 'none',
                 transition: 'background 0.15s, color 0.15s, border-color 0.15s'
               })}
@@ -245,14 +245,14 @@ export const DoctorAppShell = () => {
               gap: '12px',
               width: '100%', 
               padding: '9px 12px', 
-              borderRadius: '8px',
+              borderRadius: '2px', 
               border: 'none', 
-              background: 'transparent',
-              color: 'var(--color-text-muted)', 
-              fontSize: '0.88rem',
+              background: 'transparent', 
+              color: 'var(--swiss-gray-700)', 
+              fontSize: '0.88rem', 
               fontWeight: 500, 
               cursor: 'pointer', 
-              textAlign: 'left',
+              textAlign: 'left', 
               transition: 'background 0.15s, color 0.15s'
             }}
             title="Sign out of clinician workspace"
@@ -295,7 +295,7 @@ export const DoctorAppShell = () => {
               aria-label="Toggle theme" 
               onClick={toggleTheme} 
               title="Toggle theme"
-              style={{ borderRadius: '8px', border: '1px solid var(--color-border)', width: '36px', height: '36px', display: 'grid', placeItems: 'center' }}
+              style={{ borderRadius: '2px', border: '1px solid var(--swiss-gray-300)', width: '36px', height: '36px', display: 'grid', placeItems: 'center' }}
             >
               {theme === 'light' ? <Moon size={18} /> : <Sun size={18} />}
             </button>
@@ -310,17 +310,17 @@ export const DoctorAppShell = () => {
                 onClick={() => setIsNotificationOpen(!isNotificationOpen)}
                 style={{ 
                   position: 'relative', 
-                  background: 'var(--color-background)', 
+                  background: isNotificationOpen ? 'var(--swiss-gray-100)' : 'transparent', 
                   width: '36px', 
                   height: '36px', 
-                  borderRadius: '8px', 
+                  borderRadius: '2px', 
                   display: 'grid', 
                   placeItems: 'center', 
-                  border: '1px solid var(--color-border)', 
+                  border: '1px solid var(--swiss-gray-300)', 
                   cursor: 'pointer' 
                 }}
               >
-                <Bell size={18} color={unreadCount > 0 ? "var(--color-primary)" : "var(--color-text-muted)"} />
+                <Bell size={18} color={unreadCount > 0 ? "var(--swiss-blue)" : "var(--swiss-gray-600)"} />
                 {unreadCount > 0 && (
                   <span
                     style={{
@@ -329,9 +329,8 @@ export const DoctorAppShell = () => {
                       right: '4px',
                       width: '8px',
                       height: '8px',
-                      borderRadius: '50%',
-                      background: 'var(--color-semantic-emergency, #e11d48)',
-                      boxShadow: '0 0 0 2px var(--color-background)',
+                      borderRadius: '1px',
+                      background: 'var(--swiss-blue)',
                     }}
                   />
                 )}
@@ -346,10 +345,10 @@ export const DoctorAppShell = () => {
                     top: 'calc(100% + 8px)',
                     right: 0,
                     width: 'min(90vw, 360px)',
-                    background: 'var(--color-surface-white)',
-                    border: '1px solid var(--color-border)',
-                    borderRadius: '10px',
-                    boxShadow: 'var(--shadow-lg, 0 10px 25px -5px rgba(0,0,0,0.1))',
+                    background: 'var(--swiss-white)',
+                    border: '1px solid var(--swiss-gray-300)',
+                    borderRadius: '2px',
+                    boxShadow: 'none',
                     zIndex: 1000,
                     overflow: 'hidden',
                     display: 'flex',
@@ -359,22 +358,22 @@ export const DoctorAppShell = () => {
                 >
                   <div style={{
                     padding: '12px 16px',
-                    borderBottom: '1px solid var(--color-border)',
+                    borderBottom: '1px solid var(--swiss-gray-300)',
                     display: 'flex',
                     alignItems: 'center',
                     justifyContent: 'space-between',
-                    background: 'var(--color-surface-interactive)',
+                    background: 'var(--swiss-off-white)',
                   }}>
                     <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-                      <Bell size={16} color="var(--color-primary)" />
-                      <strong style={{ fontSize: '0.92rem', color: 'var(--color-text)' }}>Consultation Requests</strong>
+                      <Bell size={16} color="var(--swiss-blue)" />
+                      <strong style={{ fontSize: '0.92rem', color: 'var(--swiss-black)' }}>Consultation Requests</strong>
                       {unreadCount > 0 && (
                         <span style={{
-                          background: 'var(--color-primary)',
+                          background: 'var(--swiss-blue)',
                           color: '#FFF',
                           fontSize: '0.72rem',
                           fontWeight: 700,
-                          borderRadius: '8px',
+                          borderRadius: '2px',
                           padding: '1px 6px',
                         }}>
                           {unreadCount} pending
@@ -385,7 +384,7 @@ export const DoctorAppShell = () => {
 
                   <div style={{ maxHeight: '340px', overflowY: 'auto' }}>
                     {appointments.length === 0 ? (
-                      <div style={{ padding: '24px 16px', textAlign: 'center', color: 'var(--color-text-muted)' }}>
+                      <div style={{ padding: '24px 16px', textAlign: 'center', color: 'var(--swiss-gray-600)' }}>
                         <Bell size={24} style={{ opacity: 0.3, margin: '0 auto 8px', display: 'block' }} />
                         <p style={{ margin: 0, fontSize: '0.85rem' }}>No appointment notifications yet.</p>
                       </div>
@@ -399,8 +398,8 @@ export const DoctorAppShell = () => {
                           }}
                           style={{
                             padding: '12px 16px',
-                            borderBottom: '1px solid var(--color-border)',
-                            background: (appt.status === 'Requested' || appt.status === 'Pending') ? 'rgba(217, 119, 6, 0.05)' : 'transparent',
+                            borderBottom: '1px solid var(--swiss-gray-200)',
+                            background: (appt.status === 'Requested' || appt.status === 'Pending') ? 'var(--swiss-blue-soft)' : 'transparent',
                             cursor: 'pointer',
                             display: 'flex',
                             gap: '10px',
@@ -410,32 +409,33 @@ export const DoctorAppShell = () => {
                           <div style={{
                             width: '32px',
                             height: '32px',
-                            borderRadius: '6px',
-                            background: appt.status === 'Requested' ? 'rgba(217, 119, 6, 0.12)' : 'var(--color-primary-muted)',
+                            borderRadius: '2px',
+                            background: appt.status === 'Requested' ? 'rgba(217, 119, 6, 0.12)' : 'var(--swiss-blue-soft)',
                             display: 'grid',
                             placeItems: 'center',
-                            color: appt.status === 'Requested' ? 'var(--color-semantic-warning, #d97706)' : 'var(--color-primary)',
+                            color: appt.status === 'Requested' ? '#B45309' : 'var(--swiss-blue)',
                             flexShrink: 0,
                           }}>
                             <Calendar size={16} />
                           </div>
                           <div style={{ flex: 1, minWidth: 0 }}>
                             <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', gap: '8px' }}>
-                              <strong style={{ fontSize: '0.85rem', color: 'var(--color-text)', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>
+                              <strong style={{ fontSize: '0.85rem', color: 'var(--swiss-black)', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>
                                 {appt.patient.name}
                               </strong>
                               <span style={{
                                 fontSize: '0.7rem',
                                 fontWeight: 700,
                                 padding: '1px 6px',
-                                borderRadius: '4px',
-                                background: appt.status === 'Requested' ? 'rgba(217, 119, 6, 0.15)' : 'rgba(15, 118, 110, 0.12)',
-                                color: appt.status === 'Requested' ? '#b45309' : 'var(--color-primary)',
+                                borderRadius: '2px',
+                                background: appt.status === 'Requested' ? 'rgba(217, 119, 6, 0.15)' : 'var(--swiss-blue-soft)',
+                                color: appt.status === 'Requested' ? '#b45309' : 'var(--swiss-blue)',
+                                border: '1px solid currentColor',
                               }}>
                                 {appt.status}
                               </span>
                             </div>
-                            <p style={{ margin: '3px 0 0', fontSize: '0.8rem', color: 'var(--color-text-muted)' }}>
+                            <p style={{ margin: '3px 0 0', fontSize: '0.8rem', color: 'var(--swiss-gray-600)' }}>
                               {new Date(appt.scheduledAt).toLocaleDateString(undefined, { month: 'short', day: 'numeric', hour: '2-digit', minute: '2-digit' })}
                             </p>
                           </div>
@@ -443,7 +443,7 @@ export const DoctorAppShell = () => {
                       ))
                     )}
                   </div>
-                  <div style={{ padding: '8px 16px', background: 'var(--color-surface-interactive)', borderTop: '1px solid var(--color-border)', textAlign: 'center' }}>
+                  <div style={{ padding: '8px 16px', background: 'var(--swiss-off-white)', borderTop: '1px solid var(--swiss-gray-300)', textAlign: 'center' }}>
                     <button
                       type="button"
                       onClick={() => {
@@ -453,7 +453,7 @@ export const DoctorAppShell = () => {
                       style={{
                         background: 'transparent',
                         border: 'none',
-                        color: 'var(--color-primary)',
+                        color: 'var(--swiss-blue)',
                         fontSize: '0.82rem',
                         fontWeight: 600,
                         cursor: 'pointer',
@@ -467,7 +467,7 @@ export const DoctorAppShell = () => {
               )}
             </div>
 
-            {/* Doctor Profile Monogram Badge: Responsive chip with collapsible text metadata on small phones */}
+            {/* Doctor Profile Monogram Badge */}
             <button
               type="button"
               onClick={() => navigate('/doctor/profile')}
@@ -475,9 +475,9 @@ export const DoctorAppShell = () => {
                 display: 'flex', 
                 alignItems: 'center', 
                 gap: '8px', 
-                background: 'var(--color-surface-white)', 
-                border: '1px solid var(--color-border)', 
-                borderRadius: '8px', 
+                background: 'var(--swiss-white)', 
+                border: '1px solid var(--swiss-gray-300)', 
+                borderRadius: '2px', 
                 padding: '4px 8px 4px 4px', 
                 cursor: 'pointer' 
               }}
@@ -485,12 +485,12 @@ export const DoctorAppShell = () => {
             >
               <div 
                 style={{ 
-                  width: '32px', 
-                  height: '32px', 
-                  borderRadius: '50%', 
-                  background: 'var(--color-surface-interactive)', 
-                  border: '1px solid var(--color-doctor-accent)',
-                  color: 'var(--color-text)', 
+                  width: '30px', 
+                  height: '30px', 
+                  borderRadius: '2px', 
+                  background: 'var(--swiss-blue-soft)', 
+                  border: '1px solid var(--swiss-blue)',
+                  color: 'var(--swiss-blue)', 
                   fontWeight: 700, 
                   fontSize: '0.80rem', 
                   display: 'grid', 
@@ -501,10 +501,10 @@ export const DoctorAppShell = () => {
                 {initials}
               </div>
               <div className="app-header-user-meta" style={{ display: 'flex', flexDirection: 'column', alignItems: 'flex-start', lineHeight: 1.2 }}>
-                <span style={{ fontSize: '0.82rem', fontWeight: 600, color: 'var(--color-text)' }}>{session.data?.displayName || 'Doctor'}</span>
-                <span style={{ fontSize: '0.68rem', color: 'var(--color-doctor-accent)', fontWeight: 600 }}>Active Clinician</span>
+                <span style={{ fontSize: '0.82rem', fontWeight: 600, color: 'var(--swiss-black)' }}>{session.data?.displayName || 'Doctor'}</span>
+                <span style={{ fontSize: '0.68rem', color: 'var(--swiss-blue)', fontWeight: 600 }}>Active Clinician</span>
               </div>
-              <ChevronDown size={14} color="var(--color-text-muted)" />
+              <ChevronDown size={14} color="var(--swiss-gray-600)" />
             </button>
           </div>
         </header>
