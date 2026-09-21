@@ -4,15 +4,24 @@ import { getMumbaiRailStation } from "../../shared/mumbaiRailNetwork";
 import { MUMBAI_STATION_COORDINATES } from "../../shared/mumbaiStationCoordinates";
 
 describe("controlled Mumbai specialist directory", () => {
-  it("keeps a comprehensive, explicitly controlled catalog with authentic Indian doctors & hospital affiliations", () => {
+  it("keeps a comprehensive, explicitly controlled catalog with fictional Indian doctors, hospital affiliations, and off-rail clinic locations", () => {
     expect(mockDoctorDirectory).toHaveLength(52);
     expect(new Set(mockDoctorDirectory.map((entry) => entry.specialty))).toHaveLength(12);
+    expect(new Set(mockDoctorDirectory.map((entry) => entry.name)).size).toBe(52);                               // All 52 doctor names must be completely unique
+
     mockDoctorDirectory.forEach((entry) => {
       expect(entry.isMock).toBe(true);
       expect(entry.name).toMatch(/^Dr\.\s/);                                                                     // Must start with "Dr. "
-      expect(entry.hospital.length).toBeGreaterThan(5);                                                          // Real hospital affiliation
-      expect(entry.latitude).toBe(MUMBAI_STATION_COORDINATES[entry.station].latitude);
-      expect(entry.longitude).toBe(MUMBAI_STATION_COORDINATES[entry.station].longitude);
+      expect(entry.hospital.length).toBeGreaterThan(5);                                                          // Fictional clinical facility affiliation
+      expect(entry.locality.length).toBeGreaterThan(3);                                                          // Authentic medical district locality
+      // Verifies clinic coordinates reside safely within the Mumbai Metropolitan Region
+      expect(entry.latitude).toBeGreaterThanOrEqual(18.82);
+      expect(entry.latitude).toBeLessThanOrEqual(19.38);
+      expect(entry.longitude).toBeGreaterThanOrEqual(72.72);
+      expect(entry.longitude).toBeLessThanOrEqual(73.12);
+      // Verifies clinic coordinates are placed in surrounding medical avenues rather than directly on railway platform tracks
+      const stationCoord = MUMBAI_STATION_COORDINATES[entry.station];
+      expect(entry.latitude !== stationCoord.latitude || entry.longitude !== stationCoord.longitude).toBe(true);
     });
   });
 
