@@ -51,27 +51,27 @@ export const DoctorAppointments = () => {
   // Error boundary state
   if (appointments.isError) return <p role="alert">Unable to load assigned appointments. Please try again.</p>;
 
-  // Dynamic left border indicator color matching appointment lifecycle
+  // Left border accent color depending on current status
   const getBorderColor = (status: string) => {
     switch (status) {
-      case "Completed": return "3px solid var(--color-text-secondary)";
-      case "Confirmed": return "3px solid var(--color-doctor-primary)";
-      case "Cancelled": return "3px solid var(--color-semantic-error)";
-      default: return "3px solid var(--color-doctor-primary)";
+      case "Completed": return "3px solid var(--swiss-gray-400)";
+      case "Confirmed": return "3px solid var(--swiss-blue)";
+      case "Cancelled": return "3px solid var(--swiss-red)";
+      default: return "3px solid var(--swiss-blue)";
     }
   };
 
-  // Status badge with matching icon and standardized 6px pill styling
+  // Status badge with matching icon and standardized 2px pill styling
   const getStatusBadge = (status: string) => {
     switch (status) {
       case "Completed":
-        return <span style={{ display: "inline-flex", alignItems: "center", gap: 4, background: "var(--color-surface-interactive)", color: "var(--color-text-secondary)", border: "1px solid var(--color-border)", padding: "3px 8px", borderRadius: "6px", fontSize: "0.78rem", fontWeight: 600 }}><CheckCheck size={13} /> Completed</span>;
+        return <span style={{ display: "inline-flex", alignItems: "center", gap: 4, background: "var(--swiss-gray-100)", color: "var(--swiss-gray-700)", border: "1px solid var(--swiss-gray-300)", padding: "3px 8px", borderRadius: "2px", fontSize: "0.78rem", fontWeight: 700 }}><CheckCheck size={13} /> Completed</span>;
       case "Confirmed":
-        return <span style={{ display: "inline-flex", alignItems: "center", gap: 4, background: "rgba(30, 107, 90, 0.12)", color: "var(--color-doctor-primary)", border: "1px solid rgba(30, 107, 90, 0.25)", padding: "3px 8px", borderRadius: "6px", fontSize: "0.78rem", fontWeight: 600 }}><CheckCircle2 size={13} /> Confirmed (Active)</span>;
+        return <span style={{ display: "inline-flex", alignItems: "center", gap: 4, background: "var(--swiss-blue-soft)", color: "var(--swiss-blue)", border: "1px solid var(--swiss-blue)", padding: "3px 8px", borderRadius: "2px", fontSize: "0.78rem", fontWeight: 700 }}><CheckCircle2 size={13} /> Confirmed (Active)</span>;
       case "Cancelled":
-        return <span style={{ display: "inline-flex", alignItems: "center", gap: 4, background: "rgba(197, 48, 48, 0.1)", color: "var(--color-semantic-error)", border: "1px solid rgba(197, 48, 48, 0.25)", padding: "3px 8px", borderRadius: "6px", fontSize: "0.78rem", fontWeight: 600 }}><XCircle size={13} /> Cancelled</span>;
+        return <span style={{ display: "inline-flex", alignItems: "center", gap: 4, background: "var(--swiss-red-soft)", color: "var(--swiss-red)", border: "1px solid var(--swiss-red)", padding: "3px 8px", borderRadius: "2px", fontSize: "0.78rem", fontWeight: 700 }}><XCircle size={13} /> Cancelled</span>;
       default:
-        return <span style={{ display: "inline-flex", alignItems: "center", gap: 4, background: "var(--color-surface-interactive)", color: "var(--color-text-secondary)", border: "1px solid var(--color-border)", padding: "3px 8px", borderRadius: "6px", fontSize: "0.78rem", fontWeight: 600 }}><Clock size={13} /> {status}</span>;
+        return <span style={{ display: "inline-flex", alignItems: "center", gap: 4, background: "rgba(217, 119, 6, 0.1)", color: "#B45309", border: "1px solid #D97706", padding: "3px 8px", borderRadius: "2px", fontSize: "0.78rem", fontWeight: 700 }}><Clock size={13} /> {status}</span>;
     }
   };
 

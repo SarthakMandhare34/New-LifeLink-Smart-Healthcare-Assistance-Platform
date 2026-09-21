@@ -63,22 +63,22 @@ export const Consultation = () => {
                 alignItems: "center",
                 flexWrap: "wrap",
                 gap: "var(--spacing-3)",
-                borderLeft: appointment.status === "Confirmed" ? "3px solid var(--color-doctor-primary)" : "3px solid var(--color-semantic-warning)",
+                borderLeft: appointment.status === "Confirmed" ? "3px solid var(--swiss-blue)" : "3px solid #D97706",
               }}
             >
               <div>
                 <div style={{ display: "flex", alignItems: "center", gap: "var(--spacing-2)", marginBottom: "4px" }}>
-                  <User size={18} style={{ color: "var(--color-doctor-primary)" }} />
+                  <User size={18} style={{ color: "var(--swiss-blue)" }} />
                   <h3 style={{ margin: 0 }}>{appointment.patient.name}</h3>                     {/* Patient name */}
                   <span
                     style={{
-                      background: appointment.status === "Confirmed" ? "rgba(30, 107, 90, 0.12)" : "rgba(184, 134, 11, 0.12)",
-                      color: appointment.status === "Confirmed" ? "var(--color-doctor-primary)" : "var(--color-semantic-warning)",
-                      border: appointment.status === "Confirmed" ? "1px solid rgba(30, 107, 90, 0.25)" : "1px solid rgba(184, 134, 11, 0.25)",
+                      background: appointment.status === "Confirmed" ? "var(--swiss-blue-soft)" : "rgba(217, 119, 6, 0.1)",
+                      color: appointment.status === "Confirmed" ? "var(--swiss-blue)" : "#B45309",
+                      border: appointment.status === "Confirmed" ? "1px solid var(--swiss-blue)" : "1px solid #D97706",
                       padding: "3px 8px",
-                      borderRadius: "6px",
+                      borderRadius: "2px",
                       fontSize: "0.75rem",
-                      fontWeight: 600,
+                      fontWeight: 700,
                     }}
                   >
                     {appointment.status === "Confirmed" ? "Confirmed (Ready)" : "Requested"}     {/* Status tag */}

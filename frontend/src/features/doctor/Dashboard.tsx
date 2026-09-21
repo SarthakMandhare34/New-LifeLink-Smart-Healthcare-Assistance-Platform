@@ -3,347 +3,411 @@
  * DOCTOR CLINICAL WORKSTATION DASHBOARD (frontend/src/features/doctor/Dashboard.tsx)
  * ============================================================================
  * 
- * WHY THIS FILE IS SPECIAL:
- * This is the operational command center for licensed specialist clinicians across
- * Mumbai railway transit clinics. It tracks active consultation queues in real time,
- * displays upcoming appointments ordered by schedule, summarizes assigned patient rosters,
- * and surfaces urgent AI triage reports requiring prompt medical evaluation.
+ * SWISS INTERNATIONAL TYPOGRAPHIC STYLE HEALTHCARE UI
+ * Information-dense clinician workstation:
+ * - Structured clinical metrics (4 operational stat blocks)
+ * - Upcoming appointments tabular ledger
+ * - Triage assessments decision-support stream
+ * - Authorized patient registry
+ * - Practice activity timeline
+ * - Blue (#0057B8) primary accent & zero decorative shadows
  */
 import React from 'react';
-import { Card } from "../../components/ui/Card";
-import { Button } from "../../components/ui/Button";
-import { Users, Calendar, Clock, Activity, ArrowRight, Stethoscope } from "lucide-react";
 import { useNavigate } from "react-router-dom";
+import { Users, Calendar, Clock, Activity, ArrowRight, Stethoscope, FileText, CheckCircle2 } from "lucide-react";
+import { Button } from "../../components/ui/Button";
 import { trpc } from "../../lib/trpc";
 
-// Returns color styling object for triage urgency badge
+// Swiss semantic triage badge styling
 function urgencyBadge(urgency: string) {
   if (urgency === 'EMERGENCY') {
-    return { bg: 'rgba(197, 48, 48, 0.1)', color: 'var(--color-semantic-error)', border: '1px solid rgba(197, 48, 48, 0.25)' };
+    return { bg: 'var(--swiss-red-soft)', color: 'var(--swiss-red)', border: '1px solid var(--swiss-red)' };
   }
   if (urgency === 'MODERATE') {
-    return { bg: 'rgba(184, 134, 11, 0.12)', color: 'var(--color-semantic-warning)', border: '1px solid rgba(184, 134, 11, 0.25)' };
+    return { bg: 'rgba(217, 119, 6, 0.1)', color: '#B45309', border: '1px solid #D97706' };
   }
-  if (urgency === 'ERROR') {
-    return { bg: 'rgba(197, 48, 48, 0.1)', color: 'var(--color-semantic-error)', border: '1px solid rgba(197, 48, 48, 0.25)' };
-  }
-  return { bg: 'rgba(30, 107, 90, 0.08)', color: 'var(--color-doctor-primary)', border: '1px solid var(--color-border)' };
+  return { bg: 'var(--swiss-blue-soft)', color: 'var(--swiss-blue)', border: '1px solid var(--swiss-blue)' };
 }
 
-// Returns color styling object for appointment status pill
+// Swiss semantic appointment status styling
 function statusBadge(status: string) {
   if (status === 'Confirmed' || status === 'Completed') {
-    return { bg: 'rgba(30, 107, 90, 0.1)', color: 'var(--color-doctor-primary)', border: '1px solid rgba(30, 107, 90, 0.25)' };
+    return { bg: 'var(--swiss-blue-soft)', color: 'var(--swiss-blue)', border: '1px solid var(--swiss-blue)' };
   }
   if (status === 'Cancelled') {
-    return { bg: 'rgba(197, 48, 48, 0.1)', color: 'var(--color-semantic-error)', border: '1px solid rgba(197, 48, 48, 0.25)' };
+    return { bg: 'var(--swiss-red-soft)', color: 'var(--swiss-red)', border: '1px solid var(--swiss-red)' };
   }
-  return { bg: 'var(--color-surface-interactive)', color: 'var(--color-text-secondary)', border: '1px solid var(--color-border)' };
+  if (status === 'Requested' || status === 'Pending') {
+    return { bg: 'rgba(217, 119, 6, 0.1)', color: '#B45309', border: '1px solid #D97706' };
+  }
+  return { bg: 'var(--swiss-gray-100)', color: 'var(--swiss-gray-800)', border: '1px solid var(--swiss-gray-300)' };
 }
 
-// Doctor clinical workstation dashboard displaying real-time queues and metrics
 export const DoctorDashboard = () => {
-  const navigate = useNavigate();                                                          // Programmatic page navigation hook
-  const dashboard = trpc.doctorWorkspace.dashboard.useQuery();                             // Query aggregated dashboard statistics from backend
-  const session = trpc.doctorAuth.me.useQuery(undefined, { retry: false, refetchOnWindowFocus: false }); // Current clinician identity
-  const patientsQuery = trpc.doctorWorkspace.patients.useQuery(undefined, { enabled: Boolean(session.data) }); // Unique patient roster
-  const appointmentsQuery = trpc.doctorWorkspace.appointments.list.useQuery(undefined, { enabled: Boolean(session.data) }); // Appointment list
+  const navigate = useNavigate();
+  const dashboard = trpc.doctorWorkspace.dashboard.useQuery();
+  const session = trpc.doctorAuth.me.useQuery(undefined, { retry: false, refetchOnWindowFocus: false });
+  const patientsQuery = trpc.doctorWorkspace.patients.useQuery(undefined, { enabled: Boolean(session.data) });
+  const appointmentsQuery = trpc.doctorWorkspace.appointments.list.useQuery(undefined, { enabled: Boolean(session.data) });
 
-  if (dashboard.isLoading) return (                                                        // Loading state view
-    <div className="dashboard-loading" style={{ padding: '40px', textAlign: 'center' }}>
-      <p className="caption" style={{ color: 'var(--color-text-secondary)', fontFamily: 'Plus Jakarta Sans, sans-serif' }}>Loading clinical workspace…</p>
-    </div>
-  );
-  if (dashboard.isError || !dashboard.data) return (                                       // Error state view
-    <div style={{ padding: '40px', textAlign: 'center' }}>
-      <p role="alert" style={{ color: 'var(--color-semantic-error)', fontFamily: 'Plus Jakarta Sans, sans-serif' }}>Unable to load the clinical workspace. Please try again.</p>
-    </div>
-  );
+  if (dashboard.isLoading) {
+    return (
+      <div className="dashboard-loading" style={{ padding: '40px', textAlign: 'center' }}>
+        <p className="caption" style={{ color: 'var(--swiss-gray-700)', fontWeight: 600 }}>
+          Loading clinical workstation…
+        </p>
+      </div>
+    );
+  }
 
-  const { pendingCount, upcomingCount, patientCount, assessmentCount = 0, recentAssessments = [] } = dashboard.data; // Unpack metrics
-  const recentPatients = patientsQuery.data ?? [];                                         // Assigned patient list
+  if (dashboard.isError || !dashboard.data) {
+    return (
+      <div style={{ padding: '40px', textAlign: 'center' }}>
+        <p role="alert" style={{ color: 'var(--swiss-red)', fontWeight: 600 }}>
+          Unable to load the clinical workstation. Please try again.
+        </p>
+      </div>
+    );
+  }
 
-  // Upcoming appointments: strictly scheduled in the future with active status, ordered nearest first
+  const { pendingCount, upcomingCount, patientCount, assessmentCount = 0, recentAssessments = [] } = dashboard.data;
+  const recentPatients = patientsQuery.data ?? [];
+
+  // Upcoming appointments: strictly scheduled in future with active status, chronological
   const now = Date.now();
   const upcomingAppointments = (appointmentsQuery.data ?? [])
     .filter(
       (a) =>
-        ['Requested', 'Pending', 'Confirmed'].includes(a.status) &&                        // Active status check
-        new Date(a.scheduledAt).getTime() >= now                                           // Future timestamp check
+        ['Requested', 'Pending', 'Confirmed'].includes(a.status) &&
+        new Date(a.scheduledAt).getTime() >= now
     )
-    .sort((a, b) => new Date(a.scheduledAt).getTime() - new Date(b.scheduledAt).getTime()); // Ascending chronological sort
+    .sort((a, b) => new Date(a.scheduledAt).getTime() - new Date(b.scheduledAt).getTime());
 
-  // Recent activity: actual appointments ordered by most recent creation/schedule timestamp
+  // Recent activity: appointments ordered by most recent
   const recentActivity = (appointmentsQuery.data ?? [])
     .slice()
-    .sort((a, b) => new Date(b.createdAt || b.scheduledAt).getTime() - new Date(a.createdAt || a.scheduledAt).getTime()) // Descending order
-    .slice(0, 5);                                                                          // Top 5 records
+    .sort((a, b) => new Date(b.createdAt || b.scheduledAt).getTime() - new Date(a.createdAt || a.scheduledAt).getTime())
+    .slice(0, 5);
 
-  const displayName = session.data?.displayName                                            // Format doctor title
+  const displayName = session.data?.displayName
     ? `Dr. ${session.data.displayName.replace(/^Dr\.?\s*/i, '')}`
     : 'Doctor';
 
-  // Technical Graphite & Clinical Ash Bone styling
-  const cardStyle = {
+  // Swiss card & stat tokens: 1px border, 2px radius, no shadow
+  const cardStyle: React.CSSProperties = {
     padding: '20px 24px',
     display: 'flex',
-    flexDirection: 'column' as const,
+    flexDirection: 'column',
     gap: '16px',
-    background: 'var(--color-doctor-surface)',
-    border: '1px solid var(--color-doctor-border)',
-    borderRadius: '10px',
-    boxShadow: 'var(--shadow-sm)',
+    background: 'var(--swiss-white)',
+    border: '1px solid var(--swiss-gray-300)',
+    borderRadius: '2px',
+    boxShadow: 'none',
   };
 
-  const statCardStyle = {
-    padding: '18px 20px',
+  const statCardStyle: React.CSSProperties = {
+    padding: '16px 20px',
     display: 'flex',
-    flexDirection: 'column' as const,
-    justifyContent: 'space-between' as const,
-    minHeight: '130px',
-    background: 'var(--color-doctor-surface)',
-    border: '1px solid var(--color-doctor-border)',
-    borderRadius: '10px',
-    boxShadow: 'var(--shadow-sm)',
-  };
-
-  const iconWrapperStyle = {
-    width: '36px',
-    height: '36px',
-    borderRadius: '6px',
-    background: 'var(--color-surface-interactive)',
-    display: 'grid',
-    placeItems: 'center',
-    color: 'var(--color-doctor-primary)',
-    border: '1px solid var(--color-doctor-border)',
-    flexShrink: 0,
+    flexDirection: 'column',
+    justifyContent: 'space-between',
+    minHeight: '120px',
+    background: 'var(--swiss-white)',
+    border: '1px solid var(--swiss-gray-300)',
+    borderRadius: '2px',
+    boxShadow: 'none',
   };
 
   return (
-    <div style={{ display: 'flex', flexDirection: 'column', gap: '24px' }}>
+    <div style={{ display: 'flex', flexDirection: 'column', gap: '24px', width: '100%' }}>
 
-      {/* Institutional Clinician Header - Technical Graphite Slate Accent */}
+      {/* CLINICIAN WORKSTATION HEADER - SWISS BLUE ACCENT */}
       <section
         style={{
           display: 'flex',
           flexDirection: 'column',
           gap: '6px',
-          padding: '20px 24px',
-          background: 'var(--color-doctor-surface)',
-          border: '1px solid var(--color-doctor-border)',
-          borderLeft: '4px solid var(--color-doctor-primary)',
-          borderRadius: '10px',
-          boxShadow: 'var(--shadow-sm)'
+          padding: '24px 28px',
+          background: 'var(--swiss-white)',
+          border: '1px solid var(--swiss-gray-300)',
+          borderLeft: '4px solid var(--swiss-blue)',
+          borderRadius: '2px',
+          boxShadow: 'none',
         }}
+        aria-label="Clinician identity and schedule overview"
       >
-        <span style={{ fontSize: '0.72rem', fontWeight: 700, color: 'var(--color-doctor-accent)', textTransform: 'uppercase', letterSpacing: '0.06em' }}>
-          Clinical Practice Dashboard
-        </span>
-        <h1 style={{ fontSize: '1.65rem', fontWeight: 700, margin: '2px 0', color: 'var(--color-doctor-text)', letterSpacing: '-0.02em' }}>
-          Welcome, {displayName}
-        </h1>
-        <p style={{ color: 'var(--color-text-muted)', fontSize: '0.9rem', margin: 0 }}>
-          Assigned practice schedule and real-time consultation workspace
-        </p>
+        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', flexWrap: 'wrap', gap: '12px' }}>
+          <div>
+            <span style={{ 
+              fontSize: '0.72rem', 
+              fontWeight: 700, 
+              color: 'var(--swiss-blue)', 
+              textTransform: 'uppercase', 
+              letterSpacing: '0.08em',
+              display: 'block',
+              marginBottom: '2px'
+            }}>
+              Clinical Practice Workstation &bull; Licensed Provider Session
+            </span>
+            <h1 style={{ 
+              fontSize: 'clamp(1.5rem, 2.5vw, 2rem)', 
+              fontWeight: 800, 
+              margin: '2px 0 6px', 
+              color: 'var(--swiss-black)', 
+              letterSpacing: '-0.02em',
+              lineHeight: 1.2
+            }}>
+              Welcome, {displayName}
+            </h1>
+            <p style={{ color: 'var(--swiss-gray-600)', fontSize: '0.88rem', margin: 0 }}>
+              Authorized consultation schedule, assigned patient charts, and clinical decision support
+            </p>
+          </div>
+
+          <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+            <Button
+              variant="outline"
+              size="sm"
+              onClick={() => navigate('/doctor/consultation')}
+              style={{ display: 'flex', alignItems: 'center', gap: '6px', borderRadius: '2px', fontWeight: 600 }}
+            >
+              <Stethoscope size={15} color="var(--swiss-blue)" /> Open Examination Room
+            </Button>
+            <Button
+              variant="primary"
+              size="sm"
+              onClick={() => navigate('/doctor/prescriptions')}
+              style={{ display: 'flex', alignItems: 'center', gap: '6px', borderRadius: '2px', fontWeight: 600, background: 'var(--swiss-blue)' }}
+            >
+              <FileText size={15} /> Issue Prescription
+            </Button>
+          </div>
+        </div>
       </section>
 
-      {/* 4 Operational Stat Cards */}
+      {/* 4 OPERATIONAL CLINICAL METRIC CARDS */}
       <section
-        style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(min(100%, 200px), 1fr))', gap: '16px' }}
-        aria-label="Clinical practice statistics"
+        style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(min(100%, 210px), 1fr))', gap: '16px' }}
+        aria-label="Practice operational metrics"
       >
-        {/* 1. Upcoming Appointments — actual future/confirmed */}
+        {/* 1. Upcoming Appointments */}
         <div style={statCardStyle}>
           <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start' }}>
-            <span style={{ fontSize: '0.75rem', fontWeight: 700, color: 'var(--color-text)', textTransform: 'uppercase', letterSpacing: '0.05em' }}>
-              Upcoming Appointments
+            <span style={{ fontSize: '0.74rem', fontWeight: 700, color: 'var(--swiss-gray-700)', textTransform: 'uppercase', letterSpacing: '0.06em' }}>
+              Upcoming Consultations
             </span>
-            <div style={iconWrapperStyle}>
-              <Calendar size={18} />
-            </div>
+            <Calendar size={18} color="var(--swiss-blue)" />
           </div>
           <div>
-            <div style={{ fontSize: '2rem', fontWeight: 800, lineHeight: 1.1, color: 'var(--color-text)', marginBottom: '4px', fontVariantNumeric: 'tabular-nums' }}>
+            <div style={{ fontSize: '2.1rem', fontWeight: 800, lineHeight: 1.1, color: 'var(--swiss-black)', marginBottom: '4px', fontVariantNumeric: 'tabular-nums' }}>
               {upcomingCount}
             </div>
-            <span style={{ fontSize: '0.75rem', color: 'var(--color-text-muted)' }}>Scheduled future visits</span>
+            <span style={{ fontSize: '0.75rem', color: 'var(--swiss-gray-600)' }}>Scheduled future visits</span>
           </div>
         </div>
 
-        {/* 2. Pending Requests — awaiting clinical action */}
-        <div style={statCardStyle}>
+        {/* 2. Pending Requests */}
+        <div style={{
+          ...statCardStyle,
+          borderLeft: pendingCount > 0 ? '3px solid #D97706' : '1px solid var(--swiss-gray-300)'
+        }}>
           <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start' }}>
-            <span style={{ fontSize: '0.75rem', fontWeight: 700, color: 'var(--color-doctor-accent)', textTransform: 'uppercase', letterSpacing: '0.05em' }}>
+            <span style={{ fontSize: '0.74rem', fontWeight: 700, color: pendingCount > 0 ? '#B45309' : 'var(--swiss-gray-700)', textTransform: 'uppercase', letterSpacing: '0.06em' }}>
               Pending Requests
             </span>
-            <div style={{ ...iconWrapperStyle, background: 'rgba(180, 83, 9, 0.12)', color: 'var(--color-doctor-accent)', borderColor: 'rgba(180, 83, 9, 0.25)' }}>
-              <Clock size={18} />
-            </div>
+            <Clock size={18} color={pendingCount > 0 ? '#B45309' : 'var(--swiss-gray-500)'} />
           </div>
           <div>
-            <div style={{ fontSize: '2rem', fontWeight: 800, lineHeight: 1.1, color: 'var(--color-text)', marginBottom: '4px', fontVariantNumeric: 'tabular-nums' }}>
+            <div style={{ fontSize: '2.1rem', fontWeight: 800, lineHeight: 1.1, color: 'var(--swiss-black)', marginBottom: '4px', fontVariantNumeric: 'tabular-nums' }}>
               {pendingCount}
             </div>
-            <span style={{ fontSize: '0.75rem', color: pendingCount > 0 ? 'var(--color-doctor-accent)' : 'var(--color-text-muted)', fontWeight: pendingCount > 0 ? 700 : 500 }}>
-              {pendingCount > 0 ? 'Requires clinical action' : 'All requests cleared'}
+            <span style={{ fontSize: '0.75rem', color: pendingCount > 0 ? '#B45309' : 'var(--swiss-gray-600)', fontWeight: pendingCount > 0 ? 700 : 500 }}>
+              {pendingCount > 0 ? 'Requires clinical review' : 'All requests cleared'}
             </span>
           </div>
         </div>
 
-        {/* 3. Accessible Patients — authorized via appointments */}
+        {/* 3. Authorized Patients */}
         <div style={statCardStyle}>
           <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start' }}>
-            <span style={{ fontSize: '0.75rem', fontWeight: 700, color: 'var(--color-text)', textTransform: 'uppercase', letterSpacing: '0.05em' }}>
-              Accessible Patients
+            <span style={{ fontSize: '0.74rem', fontWeight: 700, color: 'var(--swiss-gray-700)', textTransform: 'uppercase', letterSpacing: '0.06em' }}>
+              Assigned Patients
             </span>
-            <div style={iconWrapperStyle}>
-              <Users size={18} />
-            </div>
+            <Users size={18} color="var(--swiss-blue)" />
           </div>
           <div>
-            <div style={{ fontSize: '2rem', fontWeight: 800, lineHeight: 1.1, color: 'var(--color-text)', marginBottom: '4px', fontVariantNumeric: 'tabular-nums' }}>
+            <div style={{ fontSize: '2.1rem', fontWeight: 800, lineHeight: 1.1, color: 'var(--swiss-black)', marginBottom: '4px', fontVariantNumeric: 'tabular-nums' }}>
               {patientCount}
             </div>
-            <span style={{ fontSize: '0.75rem', color: 'var(--color-text-muted)' }}>Authorized patient charts</span>
+            <span style={{ fontSize: '0.75rem', color: 'var(--swiss-gray-600)' }}>Authorized medical charts</span>
           </div>
         </div>
 
-        {/* 4. Recent Assessments — count of assessments submitted by authorized patients */}
+        {/* 4. Triage Assessments */}
         <div style={statCardStyle}>
           <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start' }}>
-            <span style={{ fontSize: '0.75rem', fontWeight: 700, color: 'var(--color-text)', textTransform: 'uppercase', letterSpacing: '0.05em' }}>
+            <span style={{ fontSize: '0.74rem', fontWeight: 700, color: 'var(--swiss-gray-700)', textTransform: 'uppercase', letterSpacing: '0.06em' }}>
               Triage Assessments
             </span>
-            <div style={{ ...iconWrapperStyle, background: 'var(--color-surface-interactive)', color: 'var(--color-text)', borderColor: 'var(--color-border)' }}>
-              <Activity size={18} />
-            </div>
+            <Activity size={18} color="var(--swiss-blue)" />
           </div>
           <div>
-            <div style={{ fontSize: '2rem', fontWeight: 800, lineHeight: 1.1, color: 'var(--color-text)', marginBottom: '4px', fontVariantNumeric: 'tabular-nums' }}>
+            <div style={{ fontSize: '2.1rem', fontWeight: 800, lineHeight: 1.1, color: 'var(--swiss-black)', marginBottom: '4px', fontVariantNumeric: 'tabular-nums' }}>
               {assessmentCount}
             </div>
-            <span style={{ fontSize: '0.75rem', color: 'var(--color-text-muted)' }}>Submitted clinical records</span>
+            <span style={{ fontSize: '0.75rem', color: 'var(--swiss-gray-600)' }}>Submitted clinical records</span>
           </div>
         </div>
       </section>
 
-      {/* Main 2-Column Clinical Layout */}
+      {/* MAIN 2-COLUMN STRUCTURED CLINICAL WORKSPACE */}
       <section
         style={{
           display: 'grid',
-          gridTemplateColumns: 'repeat(auto-fit, minmax(min(100%, 360px), 1fr))',
+          gridTemplateColumns: 'repeat(auto-fit, minmax(min(100%, 380px), 1fr))',
           gap: '24px',
           alignItems: 'start',
         }}
-        aria-label="Clinical practice activity"
+        aria-label="Clinical operational panels"
       >
-        {/* Left Column: Upcoming Appointments + Recent Assessments */}
+        {/* LEFT COLUMN: UPCOMING CONSULTATIONS & RECENT ASSESSMENTS */}
         <div style={{ display: 'flex', flexDirection: 'column', gap: '24px' }}>
 
-          {/* 1. Upcoming Appointments */}
+          {/* 1. Upcoming Consultations — Structured Ledger */}
           <div style={cardStyle}>
-            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', borderBottom: '1px solid var(--color-border)', paddingBottom: '10px' }}>
+            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', borderBottom: '1px solid var(--swiss-gray-300)', paddingBottom: '10px' }}>
               <div>
-                <h2 style={{ fontSize: '1.05rem', fontWeight: 700, margin: 0, color: 'var(--color-text)' }}>
+                <h2 style={{ fontSize: '1.05rem', fontWeight: 800, margin: 0, color: 'var(--swiss-black)', letterSpacing: '-0.01em' }}>
                   Upcoming Consultations
                 </h2>
-                <p style={{ margin: '2px 0 0', fontSize: '0.8rem', color: 'var(--color-text-muted)' }}>Chronological clinical schedule</p>
+                <p style={{ margin: '2px 0 0', fontSize: '0.78rem', color: 'var(--swiss-gray-600)' }}>
+                  Chronological schedule ordered by visit time
+                </p>
               </div>
               <button
+                type="button"
                 onClick={() => navigate('/doctor/appointments')}
                 aria-label="View all upcoming appointments"
-                style={{ background: 'none', border: 'none', color: 'var(--color-doctor-accent)', fontSize: '0.85rem', fontWeight: 700, cursor: 'pointer', display: 'flex', alignItems: 'center', gap: '4px' }}
+                style={{ 
+                  background: 'none', 
+                  border: 'none', 
+                  color: 'var(--swiss-blue)', 
+                  fontSize: '0.84rem', 
+                  fontWeight: 700, 
+                  cursor: 'pointer', 
+                  display: 'flex', 
+                  alignItems: 'center', 
+                  gap: '4px' 
+                }}
               >
                 View All <ArrowRight size={14} />
               </button>
             </div>
 
             {upcomingAppointments.length > 0 ? (
-              <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
-                {upcomingAppointments.slice(0, 4).map((apt: any, idx: number) => {
-                  const aptDate = new Date(apt.scheduledAt);
-                  const badge = statusBadge(apt.status);
-                  const patientName = apt.patient?.name || apt.patientName || 'Patient';
-                  return (
-                    <div
-                      key={apt.id || idx}
-                      style={{
-                        display: 'flex',
-                        alignItems: 'center',
-                        justifyContent: 'space-between',
-                        flexWrap: 'wrap',
-                        gap: '8px',
-                        padding: '12px 14px',
-                        background: 'var(--color-surface-interactive)',
-                        borderRadius: '6px',
-                        border: '1px solid var(--color-border)',
-                      }}
-                    >
-                      <div style={{ display: 'flex', alignItems: 'center', gap: '14px', minWidth: 0, flex: '1 1 200px' }}>
-                        <div style={{ width: '82px', flexShrink: 0 }}>
-                          <span style={{ fontSize: '0.85rem', fontWeight: 700, color: 'var(--color-text)', display: 'block' }}>
-                            {aptDate.toLocaleDateString(undefined, { month: 'short', day: 'numeric' })}
-                          </span>
-                          <span style={{ fontSize: '0.75rem', color: 'var(--color-text-muted)', display: 'block' }}>
-                            {aptDate.toLocaleTimeString(undefined, { hour: '2-digit', minute: '2-digit' })}
-                          </span>
-                        </div>
-                        <div style={{ minWidth: 0 }}>
-                          <strong style={{ display: 'block', fontSize: '0.9rem', color: 'var(--color-text)', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
-                            {patientName}
-                          </strong>
-                          <span style={{ fontSize: '0.78rem', color: 'var(--color-text-muted)', display: 'block', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
+              <div style={{ overflowX: 'auto' }}>
+                <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: '0.86rem' }}>
+                  <thead>
+                    <tr style={{ borderBottom: '1px solid var(--swiss-gray-300)', textAlign: 'left' }}>
+                      <th style={{ padding: '8px 10px', fontSize: '0.72rem', fontWeight: 700, color: 'var(--swiss-gray-600)', textTransform: 'uppercase', letterSpacing: '0.06em' }}>Time</th>
+                      <th style={{ padding: '8px 10px', fontSize: '0.72rem', fontWeight: 700, color: 'var(--swiss-gray-600)', textTransform: 'uppercase', letterSpacing: '0.06em' }}>Patient</th>
+                      <th style={{ padding: '8px 10px', fontSize: '0.72rem', fontWeight: 700, color: 'var(--swiss-gray-600)', textTransform: 'uppercase', letterSpacing: '0.06em' }}>Reason</th>
+                      <th style={{ padding: '8px 10px', fontSize: '0.72rem', fontWeight: 700, color: 'var(--swiss-gray-600)', textTransform: 'uppercase', letterSpacing: '0.06em', textAlign: 'right' }}>Status</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {upcomingAppointments.slice(0, 5).map((apt: any, idx: number) => {
+                      const aptDate = new Date(apt.scheduledAt);
+                      const badge = statusBadge(apt.status);
+                      const patientName = apt.patient?.name || apt.patientName || 'Patient';
+                      return (
+                        <tr 
+                          key={apt.id || idx}
+                          style={{ 
+                            borderBottom: '1px solid var(--swiss-gray-200)',
+                            transition: 'background 0.15s'
+                          }}
+                        >
+                          <td style={{ padding: '10px', whiteSpace: 'nowrap' }}>
+                            <strong style={{ display: 'block', fontSize: '0.84rem', color: 'var(--swiss-black)' }}>
+                              {aptDate.toLocaleDateString(undefined, { month: 'short', day: 'numeric' })}
+                            </strong>
+                            <span style={{ fontSize: '0.75rem', color: 'var(--swiss-gray-600)', fontVariantNumeric: 'tabular-nums' }}>
+                              {aptDate.toLocaleTimeString(undefined, { hour: '2-digit', minute: '2-digit' })}
+                            </span>
+                          </td>
+                          <td style={{ padding: '10px' }}>
+                            <strong style={{ display: 'block', color: 'var(--swiss-black)', fontSize: '0.88rem' }}>
+                              {patientName}
+                            </strong>
+                          </td>
+                          <td style={{ padding: '10px', color: 'var(--swiss-gray-700)', fontSize: '0.82rem' }}>
                             {apt.reason || 'General Consultation'}
-                          </span>
-                        </div>
-                      </div>
-                      <span
-                        style={{
-                          padding: '3px 8px',
-                          borderRadius: '6px',
-                          fontSize: '0.72rem',
-                          fontWeight: 700,
-                          letterSpacing: '0.04em',
-                          textTransform: 'uppercase',
-                          background: badge.bg,
-                          color: badge.color,
-                          border: badge.border,
-                          flexShrink: 0,
-                        }}
-                      >
-                        {apt.status}
-                      </span>
-                    </div>
-                  );
-                })}
+                          </td>
+                          <td style={{ padding: '10px', textAlign: 'right' }}>
+                            <span style={{
+                              display: 'inline-block',
+                              padding: '2px 8px',
+                              borderRadius: '2px',
+                              fontSize: '0.72rem',
+                              fontWeight: 700,
+                              textTransform: 'uppercase',
+                              letterSpacing: '0.04em',
+                              background: badge.bg,
+                              color: badge.color,
+                              border: badge.border,
+                            }}>
+                              {apt.status}
+                            </span>
+                          </td>
+                        </tr>
+                      );
+                    })}
+                  </tbody>
+                </table>
               </div>
             ) : (
-              <div style={{ padding: '24px 16px', textAlign: 'center', background: 'var(--color-surface-interactive)', borderRadius: '6px', border: '1px dashed var(--color-border)' }}>
-                <p style={{ fontSize: '0.88rem', color: 'var(--color-text-muted)', margin: '0 0 12px', fontStyle: 'italic' }}>No upcoming appointments scheduled.</p>
+              <div style={{ padding: '24px 16px', textAlign: 'center', background: 'var(--swiss-off-white)', borderRadius: '2px', border: '1px dashed var(--swiss-gray-300)' }}>
+                <p style={{ fontSize: '0.88rem', color: 'var(--swiss-gray-600)', margin: '0 0 12px', fontStyle: 'italic' }}>
+                  No upcoming consultations scheduled.
+                </p>
                 <Button
                   size="sm"
                   variant="primary"
                   onClick={() => navigate('/doctor/appointments')}
+                  style={{ borderRadius: '2px', background: 'var(--swiss-blue)' }}
                 >
-                  Review All Appointments
+                  Review Appointment Ledger
                 </Button>
               </div>
             )}
           </div>
 
-          {/* 2. Recent Assessments (from authorized patients) */}
+          {/* 2. Triage Assessments — Decision Support */}
           <div style={cardStyle}>
-            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', borderBottom: '1px solid var(--color-border)', paddingBottom: '10px' }}>
+            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', borderBottom: '1px solid var(--swiss-gray-300)', paddingBottom: '10px' }}>
               <div>
-                <h2 style={{ fontSize: '1.05rem', fontWeight: 700, margin: 0, color: 'var(--color-text)' }}>
+                <h2 style={{ fontSize: '1.05rem', fontWeight: 800, margin: 0, color: 'var(--swiss-black)', letterSpacing: '-0.01em' }}>
                   Triage Assessments
                 </h2>
-                <p style={{ margin: '2px 0 0', fontSize: '0.8rem', color: 'var(--color-text-muted)' }}>Submitted by assigned patients</p>
+                <p style={{ margin: '2px 0 0', fontSize: '0.78rem', color: 'var(--swiss-gray-600)' }}>
+                  Clinical decision support from assigned patients
+                </p>
               </div>
               <button
+                type="button"
                 onClick={() => navigate('/doctor/assessments')}
                 aria-label="View all recent assessments"
-                style={{ background: 'none', border: 'none', color: 'var(--color-doctor-accent)', fontSize: '0.85rem', fontWeight: 700, cursor: 'pointer', display: 'flex', alignItems: 'center', gap: '4px' }}
+                style={{ 
+                  background: 'none', 
+                  border: 'none', 
+                  color: 'var(--swiss-blue)', 
+                  fontSize: '0.84rem', 
+                  fontWeight: 700, 
+                  cursor: 'pointer', 
+                  display: 'flex', 
+                  alignItems: 'center', 
+                  gap: '4px' 
+                }}
               >
                 View All <ArrowRight size={14} />
               </button>
@@ -361,9 +425,10 @@ export const DoctorDashboard = () => {
                       aria-label={assessment.patientId ? `View assessment for ${assessment.patientName || 'Assigned Patient'}` : undefined}
                       style={{
                         padding: '12px 14px',
-                        background: 'var(--color-surface-interactive)',
-                        borderRadius: '6px',
-                        border: '1px solid var(--color-border)',
+                        background: 'var(--swiss-off-white)',
+                        borderRadius: '2px',
+                        border: '1px solid var(--swiss-gray-300)',
+                        borderLeft: assessment.urgency === 'EMERGENCY' ? '4px solid var(--swiss-red)' : '1px solid var(--swiss-gray-300)',
                         display: 'flex',
                         flexDirection: 'column',
                         gap: '6px',
@@ -379,17 +444,17 @@ export const DoctorDashboard = () => {
                     >
                       <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
                         <div>
-                          <strong style={{ fontSize: '0.9rem', color: 'var(--color-text)' }}>
+                          <strong style={{ fontSize: '0.9rem', color: 'var(--swiss-black)' }}>
                             {assessment.patientName || 'Assigned Patient'}
                           </strong>
-                          <span style={{ fontSize: '0.75rem', color: 'var(--color-text-muted)', display: 'block' }}>
+                          <span style={{ fontSize: '0.75rem', color: 'var(--swiss-gray-600)', display: 'block' }}>
                             {new Date(assessment.createdAt).toLocaleDateString(undefined, { month: 'short', day: 'numeric', year: 'numeric' })}
                           </span>
                         </div>
                         <span
                           style={{
-                            padding: '3px 8px',
-                            borderRadius: '6px',
+                            padding: '2px 8px',
+                            borderRadius: '2px',
                             fontSize: '0.72rem',
                             fontWeight: 700,
                             letterSpacing: '0.04em',
@@ -402,11 +467,11 @@ export const DoctorDashboard = () => {
                           {assessment.urgency}
                         </span>
                       </div>
-                      <div style={{ fontSize: '0.82rem', color: 'var(--color-text-muted)' }}>
-                        <span style={{ fontWeight: 600, color: 'var(--color-text)' }}>Specialty:</span> {assessment.specialty}
+                      <div style={{ fontSize: '0.82rem', color: 'var(--swiss-gray-700)' }}>
+                        <span style={{ fontWeight: 700, color: 'var(--swiss-black)' }}>Specialty:</span> {assessment.specialty}
                       </div>
                       {assessment.guidance && (
-                        <p style={{ margin: 0, fontSize: '0.78rem', color: 'var(--color-text-muted)', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
+                        <p style={{ margin: 0, fontSize: '0.78rem', color: 'var(--swiss-gray-600)', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
                           {assessment.guidance}
                         </p>
                       )}
@@ -415,8 +480,8 @@ export const DoctorDashboard = () => {
                 })}
               </div>
             ) : (
-              <div style={{ padding: '24px 16px', textAlign: 'center', background: 'var(--color-surface-interactive)', borderRadius: '6px', border: '1px dashed var(--color-border)' }}>
-                <p style={{ fontSize: '0.88rem', color: 'var(--color-text-muted)', margin: 0, fontStyle: 'italic' }}>
+              <div style={{ padding: '24px 16px', textAlign: 'center', background: 'var(--swiss-off-white)', borderRadius: '2px', border: '1px dashed var(--swiss-gray-300)' }}>
+                <p style={{ fontSize: '0.88rem', color: 'var(--swiss-gray-600)', margin: 0, fontStyle: 'italic' }}>
                   No recent assessments submitted by assigned patients.
                 </p>
               </div>
@@ -424,22 +489,35 @@ export const DoctorDashboard = () => {
           </div>
         </div>
 
-        {/* Right Column: Accessible Patients + Recent Activity */}
+        {/* RIGHT COLUMN: ASSIGNED PATIENTS & CLINICAL TIMELINE */}
         <div style={{ display: 'flex', flexDirection: 'column', gap: '24px' }}>
 
-          {/* 3. Accessible Patients */}
+          {/* 3. Authorized Patient Registry */}
           <div style={cardStyle}>
-            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', borderBottom: '1px solid var(--color-border)', paddingBottom: '10px' }}>
+            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', borderBottom: '1px solid var(--swiss-gray-300)', paddingBottom: '10px' }}>
               <div>
-                <h2 style={{ fontSize: '1.05rem', fontWeight: 700, margin: 0, color: 'var(--color-text)' }}>
+                <h2 style={{ fontSize: '1.05rem', fontWeight: 800, margin: 0, color: 'var(--swiss-black)', letterSpacing: '-0.01em' }}>
                   Authorized Patient Registry
                 </h2>
-                <p style={{ margin: '2px 0 0', fontSize: '0.8rem', color: 'var(--color-text-muted)' }}>Appointment-authorized records</p>
+                <p style={{ margin: '2px 0 0', fontSize: '0.78rem', color: 'var(--swiss-gray-600)' }}>
+                  Appointment-authorized charts
+                </p>
               </div>
               <button
+                type="button"
                 onClick={() => navigate('/doctor/patients')}
                 aria-label="View all accessible patients"
-                style={{ background: 'none', border: 'none', color: 'var(--color-doctor-accent)', fontSize: '0.85rem', fontWeight: 700, cursor: 'pointer', display: 'flex', alignItems: 'center', gap: '4px' }}
+                style={{ 
+                  background: 'none', 
+                  border: 'none', 
+                  color: 'var(--swiss-blue)', 
+                  fontSize: '0.84rem', 
+                  fontWeight: 700, 
+                  cursor: 'pointer', 
+                  display: 'flex', 
+                  alignItems: 'center', 
+                  gap: '4px' 
+                }}
               >
                 View All <ArrowRight size={14} />
               </button>
@@ -447,7 +525,7 @@ export const DoctorDashboard = () => {
 
             {recentPatients.length > 0 ? (
               <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
-                {recentPatients.slice(0, 4).map((pt: any, idx: number) => {
+                {recentPatients.slice(0, 5).map((pt: any, idx: number) => {
                   const initials = (pt.name || 'P')
                     .split(' ')
                     .map((w: string) => w[0])
@@ -465,9 +543,9 @@ export const DoctorDashboard = () => {
                         alignItems: 'center',
                         justifyContent: 'space-between',
                         padding: '10px 12px',
-                        background: 'var(--color-surface-interactive)',
-                        borderRadius: '6px',
-                        border: '1px solid var(--color-border)',
+                        background: 'var(--swiss-off-white)',
+                        borderRadius: '2px',
+                        border: '1px solid var(--swiss-gray-300)',
                         cursor: 'pointer',
                         transition: 'border-color 0.15s ease',
                       }}
@@ -482,12 +560,12 @@ export const DoctorDashboard = () => {
                       <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
                         <div
                           style={{
-                            width: '34px',
-                            height: '34px',
-                            borderRadius: '6px',
-                            background: 'var(--color-surface-white)',
-                            border: '1px solid var(--color-border)',
-                            color: 'var(--color-text)',
+                            width: '32px',
+                            height: '32px',
+                            borderRadius: '2px',
+                            background: 'var(--swiss-white)',
+                            border: '1px solid var(--swiss-gray-300)',
+                            color: 'var(--swiss-blue)',
                             fontWeight: 700,
                             fontSize: '0.82rem',
                             display: 'grid',
@@ -498,30 +576,34 @@ export const DoctorDashboard = () => {
                           {initials}
                         </div>
                         <div>
-                          <strong style={{ fontSize: '0.88rem', color: 'var(--color-text)', display: 'block' }}>{pt.name}</strong>
-                          <span style={{ fontSize: '0.72rem', color: 'var(--color-text-muted)' }}>Patient ID: #{pt.id}</span>
+                          <strong style={{ fontSize: '0.88rem', color: 'var(--swiss-black)', display: 'block' }}>{pt.name}</strong>
+                          <span style={{ fontSize: '0.72rem', color: 'var(--swiss-gray-600)' }}>Record ID: #{pt.id}</span>
                         </div>
                       </div>
-                      <ArrowRight size={15} color="var(--color-text-muted)" />
+                      <ArrowRight size={15} color="var(--swiss-gray-500)" />
                     </div>
                   );
                 })}
               </div>
             ) : (
-              <div style={{ padding: '20px 16px', textAlign: 'center', background: 'var(--color-surface-interactive)', borderRadius: '6px', border: '1px dashed var(--color-border)' }}>
-                <p style={{ fontSize: '0.85rem', color: 'var(--color-text-muted)', margin: 0, fontStyle: 'italic' }}>No authorized patient records yet.</p>
+              <div style={{ padding: '20px 16px', textAlign: 'center', background: 'var(--swiss-off-white)', borderRadius: '2px', border: '1px dashed var(--swiss-gray-300)' }}>
+                <p style={{ fontSize: '0.85rem', color: 'var(--swiss-gray-600)', margin: 0, fontStyle: 'italic' }}>
+                  No authorized patient records yet.
+                </p>
               </div>
             )}
           </div>
 
-          {/* 4. Recent Activity */}
+          {/* 4. Clinical Activity Log */}
           <div style={cardStyle}>
-            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', borderBottom: '1px solid var(--color-border)', paddingBottom: '10px' }}>
+            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', borderBottom: '1px solid var(--swiss-gray-300)', paddingBottom: '10px' }}>
               <div>
-                <h2 style={{ fontSize: '1.05rem', fontWeight: 700, margin: 0, color: 'var(--color-text)' }}>
+                <h2 style={{ fontSize: '1.05rem', fontWeight: 800, margin: 0, color: 'var(--swiss-black)', letterSpacing: '-0.01em' }}>
                   Clinical Activity Log
                 </h2>
-                <p style={{ margin: '2px 0 0', fontSize: '0.8rem', color: 'var(--color-text-muted)' }}>Practice timeline</p>
+                <p style={{ margin: '2px 0 0', fontSize: '0.78rem', color: 'var(--swiss-gray-600)' }}>
+                  Practice timeline
+                </p>
               </div>
             </div>
 
@@ -532,18 +614,18 @@ export const DoctorDashboard = () => {
                   const isCompleted = apt.status === 'Completed';
                   const isCancelled = apt.status === 'Cancelled';
                   const dotColor = isCompleted
-                    ? 'var(--color-semantic-success)'
+                    ? 'var(--swiss-blue)'
                     : isCancelled
-                    ? 'var(--color-semantic-error)'
-                    : 'var(--color-text-muted)';
+                    ? 'var(--swiss-red)'
+                    : 'var(--swiss-gray-500)';
                   return (
-                    <div key={apt.id || idx} style={{ display: 'flex', alignItems: 'center', gap: '12px', padding: '6px 0', borderBottom: '1px solid var(--color-border)' }}>
+                    <div key={apt.id || idx} style={{ display: 'flex', alignItems: 'center', gap: '12px', padding: '6px 0', borderBottom: '1px solid var(--swiss-gray-200)' }}>
                       <div style={{ width: '8px', height: '8px', borderRadius: '2px', background: dotColor, flexShrink: 0 }} />
                       <div style={{ flex: 1, minWidth: 0 }}>
-                        <span style={{ fontSize: '0.84rem', color: 'var(--color-text)', display: 'block', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
+                        <span style={{ fontSize: '0.84rem', color: 'var(--swiss-black)', display: 'block', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
                           <strong style={{ fontWeight: 600 }}>{patientName}</strong> &bull; <span style={{ color: dotColor, fontWeight: 600 }}>{apt.status}</span>
                         </span>
-                        <span style={{ fontSize: '0.72rem', color: 'var(--color-text-muted)' }}>
+                        <span style={{ fontSize: '0.72rem', color: 'var(--swiss-gray-600)' }}>
                           {new Date(apt.scheduledAt).toLocaleDateString(undefined, { month: 'short', day: 'numeric', year: 'numeric' })}
                         </span>
                       </div>
@@ -552,8 +634,10 @@ export const DoctorDashboard = () => {
                 })}
               </div>
             ) : (
-              <div style={{ padding: '20px 16px', textAlign: 'center', background: 'var(--color-surface-interactive)', borderRadius: '4px' }}>
-                <p style={{ fontSize: '0.85rem', color: 'var(--color-text-muted)', margin: 0, fontStyle: 'italic' }}>No recent clinical activity.</p>
+              <div style={{ padding: '20px 16px', textAlign: 'center', background: 'var(--swiss-off-white)', borderRadius: '2px' }}>
+                <p style={{ fontSize: '0.85rem', color: 'var(--swiss-gray-600)', margin: 0, fontStyle: 'italic' }}>
+                  No recent clinical activity.
+                </p>
               </div>
             )}
           </div>

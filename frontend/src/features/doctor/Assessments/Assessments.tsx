@@ -35,8 +35,8 @@ export const Assessments = () => {
     <div className="dashboard-workspace">
       {/* Assessments workspace header banner */}
       <header className="mb-4 flex items-center gap-3" style={{ marginBottom: 'var(--spacing-5)' }}>
-        <div style={{ width: 48, height: 48, borderRadius: '8px', background: 'var(--color-primary-muted)', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
-          <Activity size={24} style={{ color: 'var(--color-primary)' }} />
+        <div style={{ width: 44, height: 44, borderRadius: '2px', background: 'var(--swiss-blue-soft)', border: '1px solid var(--swiss-blue)', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
+          <Activity size={22} style={{ color: 'var(--swiss-blue)' }} />
         </div>
         <div>
           <h1 style={{ margin: 0 }}>Patient Assessments</h1>
@@ -47,7 +47,7 @@ export const Assessments = () => {
       {/* Error state */}
       {patients.isError ? (
         <Card style={{ padding: 'var(--spacing-8)', textAlign: 'center' }}>
-          <p role="alert" style={{ color: 'var(--color-semantic-error)' }}>Unable to verify assigned patient access. Please try again.</p>
+          <p role="alert" style={{ color: 'var(--swiss-red)' }}>Unable to verify assigned patient access. Please try again.</p>
         </Card>
       ) : !patients.data?.length ? (
         /* Empty assessments state */
@@ -55,7 +55,7 @@ export const Assessments = () => {
           <Activity size={44} style={{ color: 'var(--color-text-secondary)', opacity: 0.5, margin: '0 auto var(--spacing-3)' }} />
           <h2 style={{ margin: '0 0 var(--spacing-2)', fontSize: '1.2rem', color: 'var(--color-text)' }}>No assigned patient assessments</h2>
           <p className="caption" style={{ margin: '0 auto', maxWidth: '440px' }}>Assessment context appears when an assigned patient has submitted an AI health assessment.</p>
-          <Button variant="primary" style={{ marginTop: 'var(--spacing-4)' }} onClick={() => navigate('/doctor/patients')}>
+          <Button variant="primary" style={{ marginTop: 'var(--spacing-4)', borderRadius: '2px', background: 'var(--swiss-blue)' }} onClick={() => navigate('/doctor/patients')}>
             View Patient Roster <ArrowRight size={16} />
           </Button>
         </Card>
@@ -63,11 +63,11 @@ export const Assessments = () => {
         /* Responsive list grid displaying each authorized patient's assessment card */
         <section className="responsive-list-grid" style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(320px, 1fr))', gap: 'var(--spacing-4)' }}>
           {patients.data.map((patient) => (
-            <Card key={patient.id} style={{ padding: 'var(--spacing-5)' }}>
+            <Card key={patient.id} style={{ padding: 'var(--spacing-5)', borderRadius: '2px' }}>
               <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: 'var(--spacing-4)' }}>
                 <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
-                  {/* Patient circular monogram */}
-                  <div style={{ width: 44, height: 44, borderRadius: '50%', background: 'var(--color-primary-muted)', display: 'flex', alignItems: 'center', justifyContent: 'center', color: 'var(--color-primary)', fontWeight: 700, flexShrink: 0 }}>
+                  {/* Patient monogram */}
+                  <div style={{ width: 40, height: 40, borderRadius: '2px', background: 'var(--swiss-blue-soft)', border: '1px solid var(--swiss-blue)', display: 'flex', alignItems: 'center', justifyContent: 'center', color: 'var(--swiss-blue)', fontWeight: 700, flexShrink: 0 }}>
                     {patient.name.charAt(0).toUpperCase()}
                   </div>
                   <div>
@@ -78,10 +78,10 @@ export const Assessments = () => {
                     </div>
                   </div>
                 </div>
-                <span style={{ display: 'inline-flex', alignItems: 'center', background: 'rgba(30, 107, 90, 0.1)', color: 'var(--color-doctor-primary)', border: '1px solid var(--color-border)', borderRadius: '6px', padding: '3px 8px', fontSize: '0.75rem', fontWeight: 600 }}>Active</span>
+                <span style={{ display: 'inline-flex', alignItems: 'center', background: 'var(--swiss-blue-soft)', color: 'var(--swiss-blue)', border: '1px solid var(--swiss-blue)', borderRadius: '2px', padding: '3px 8px', fontSize: '0.75rem', fontWeight: 700 }}>Active</span>
               </div>
               {/* Action button to open full patient assessment context */}
-              <Button variant="secondary" className="w-full" style={{ marginTop: 'var(--spacing-2)' }}
+              <Button variant="secondary" className="w-full" style={{ marginTop: 'var(--spacing-2)', borderRadius: '2px' }}
                 onClick={() => navigate(`/doctor/patients/${patient.id}`)}>
                 Review Assessment Context <ArrowRight size={14} />
               </Button>
