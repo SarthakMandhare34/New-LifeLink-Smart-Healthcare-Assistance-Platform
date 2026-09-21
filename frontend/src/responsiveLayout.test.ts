@@ -75,10 +75,10 @@ describe('multi-display responsive layout system', () => {
   });
 
   it('guarantees the official LifeLink logo is rendered on high-contrast mounted plates and visible on mobile auth cards', () => {
-    // Logo plate styling in global styles
+    // Logo plate styling in global styles with Swiss tokens
     expect(globalStyles).toContain('.lifelink-logo-crop');
-    expect(globalStyles).toContain('background: #FAF7F2;');
-    expect(globalStyles).toContain('border: 1px solid #E0D8CE;');
+    expect(globalStyles).toContain('background: var(--swiss-white);');
+    expect(globalStyles).toContain('border: 1px solid var(--swiss-gray-300);');
     expect(globalStyles).toContain('.auth-card-mobile-logo-wrap');
     expect(globalStyles).toContain('.auth-card-mobile-logo');
 

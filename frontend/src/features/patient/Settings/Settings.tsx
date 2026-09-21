@@ -46,39 +46,39 @@ export const Settings = () => {
           alignItems: 'center',
           gap: '20px',
           padding: '24px 28px',
-          background: 'var(--color-surface-white)',
-          border: '1px solid var(--color-border)',
-          borderLeft: '4px solid var(--color-primary)',
-          borderRadius: '12px',
-          boxShadow: 'var(--shadow-sm)',
+          background: 'var(--swiss-white)',
+          border: '1px solid var(--swiss-gray-300)',
+          borderLeft: '4px solid var(--swiss-red)',
+          borderRadius: '2px',
+          boxShadow: 'none',
         }}
       >
         <div
           style={{
-            width: '48px',
-            height: '48px',
-            borderRadius: '8px',
-            background: 'var(--color-primary-muted)',
-            border: '1px solid var(--color-border)',
+            width: '44px',
+            height: '44px',
+            borderRadius: '2px',
+            background: 'var(--swiss-red-soft)',
+            border: '1px solid var(--swiss-red)',
             display: 'grid',
             placeItems: 'center',
-            color: 'var(--color-primary)',
+            color: 'var(--swiss-red)',
             flexShrink: 0,
           }}
         >
           <SettingsIcon size={26} />
         </div>
         <div>
-          <h1 style={{ margin: 0, fontSize: '1.65rem', fontWeight: 700, color: 'var(--color-text)', letterSpacing: '-0.02em', fontFamily: 'Plus Jakarta Sans, sans-serif' }}>
+          <h1 style={{ margin: 0, fontSize: '1.65rem', fontWeight: 700, color: 'var(--swiss-black)', letterSpacing: '-0.02em', fontFamily: 'Inter, sans-serif' }}>
             Workspace Preferences
           </h1>
-          <p style={{ margin: '4px 0 0', color: 'var(--color-text-muted)', fontSize: '0.92rem' }}>
+          <p style={{ margin: '4px 0 0', color: 'var(--swiss-gray-600)', fontSize: '0.92rem' }}>
             Manage notification alerts, session preferences, and security options for your health portal.
           </p>
         </div>
       </section>
 
-      {/* Main Grid: Generous 2-column layout matching other primary pages */}
+      {/* Main Grid: 2-column layout */}
       <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(min(100%, 480px), 1fr))', gap: '24px' }}>
         
         {/* Notification Preferences Card */}
@@ -86,9 +86,10 @@ export const Settings = () => {
           variant="default"
           style={{
             padding: '28px',
-            background: 'var(--color-surface-white)',
-            border: '1px solid var(--color-border)',
-            borderRadius: '10px',
+            background: 'var(--swiss-white)',
+            border: '1px solid var(--swiss-gray-300)',
+            borderRadius: '2px',
+            boxShadow: 'none',
             display: 'flex',
             flexDirection: 'column',
             justifyContent: 'space-between',
@@ -96,11 +97,11 @@ export const Settings = () => {
           }}
         >
           <div>
-            <div style={{ display: 'flex', alignItems: 'center', gap: '12px', marginBottom: '24px', paddingBottom: '16px', borderBottom: '1px solid var(--color-border)' }}>
-              <div style={{ width: '38px', height: '38px', borderRadius: '8px', background: 'var(--color-primary-muted)', display: 'grid', placeItems: 'center', color: 'var(--color-primary)' }}>
-                <Bell size={20} />
+            <div style={{ display: 'flex', alignItems: 'center', gap: '12px', marginBottom: '24px', paddingBottom: '16px', borderBottom: '1px solid var(--swiss-gray-300)' }}>
+              <div style={{ width: '36px', height: '36px', borderRadius: '2px', background: 'var(--swiss-red-soft)', display: 'grid', placeItems: 'center', color: 'var(--swiss-red)' }}>
+                <Bell size={18} />
               </div>
-              <h2 style={{ margin: 0, fontSize: '1.25rem', fontWeight: 700, color: 'var(--color-text)', fontFamily: 'Plus Jakarta Sans, sans-serif', letterSpacing: '-0.02em' }}>
+              <h2 style={{ margin: 0, fontSize: '1.25rem', fontWeight: 700, color: 'var(--swiss-black)', fontFamily: 'Inter, sans-serif', letterSpacing: '-0.02em' }}>
                 Notification Preferences
               </h2>
             </div>
@@ -108,7 +109,7 @@ export const Settings = () => {
             <div style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
               
               {/* Appointment Reminder Toggle Option */}
-              <div style={{ padding: '18px 20px', background: 'var(--color-surface-interactive)', borderRadius: '8px', border: '1px solid var(--color-border)', display: 'flex', alignItems: 'flex-start', justifyContent: 'space-between', gap: '16px' }}>
+              <div style={{ padding: '16px 20px', background: 'var(--swiss-off-white)', borderRadius: '2px', border: '1px solid var(--swiss-gray-300)', display: 'flex', alignItems: 'flex-start', justifyContent: 'space-between', gap: '16px' }}>
                 <div style={{ flex: 1 }}>
                   <label htmlFor="pref-apt-reminders" style={{ margin: 0, fontWeight: 700, fontSize: '0.95rem', color: 'var(--color-text)', display: 'block', cursor: 'pointer' }}>
                     Appointment reminder preference
@@ -161,9 +162,10 @@ export const Settings = () => {
           variant="default"
           style={{
             padding: '28px',
-            background: 'var(--color-surface-white)',
-            border: '1px solid var(--color-border)',
-            borderRadius: '10px',
+            background: 'var(--swiss-white)',
+            border: '1px solid var(--swiss-gray-300)',
+            borderRadius: '2px',
+            boxShadow: 'none',
             display: 'flex',
             flexDirection: 'column',
             justifyContent: 'space-between',
@@ -171,11 +173,11 @@ export const Settings = () => {
           }}
         >
           <div>
-            <div style={{ display: 'flex', alignItems: 'center', gap: '12px', marginBottom: '24px', paddingBottom: '16px', borderBottom: '1px solid var(--color-border)' }}>
-              <div style={{ width: '38px', height: '38px', borderRadius: '8px', background: 'var(--color-primary-muted)', display: 'grid', placeItems: 'center', color: 'var(--color-primary)' }}>
-                <Shield size={20} />
+            <div style={{ display: 'flex', alignItems: 'center', gap: '12px', marginBottom: '24px', paddingBottom: '16px', borderBottom: '1px solid var(--swiss-gray-300)' }}>
+              <div style={{ width: '36px', height: '36px', borderRadius: '2px', background: 'var(--swiss-red-soft)', display: 'grid', placeItems: 'center', color: 'var(--swiss-red)' }}>
+                <Shield size={18} />
               </div>
-              <h2 style={{ margin: 0, fontSize: '1.25rem', fontWeight: 700, color: 'var(--color-text)', fontFamily: 'Plus Jakarta Sans, sans-serif', letterSpacing: '-0.02em' }}>
+              <h2 style={{ margin: 0, fontSize: '1.25rem', fontWeight: 700, color: 'var(--swiss-black)', fontFamily: 'Inter, sans-serif', letterSpacing: '-0.02em' }}>
                 Account Options
               </h2>
             </div>
@@ -183,35 +185,35 @@ export const Settings = () => {
             <div style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
               
               {/* Password Option */}
-              <div style={{ padding: '18px 20px', background: 'var(--color-surface-interactive)', borderRadius: '8px', border: '1px solid var(--color-border)', display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: '16px', flexWrap: 'wrap' }}>
+              <div style={{ padding: '16px 20px', background: 'var(--swiss-off-white)', borderRadius: '2px', border: '1px solid var(--swiss-gray-300)', display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: '16px', flexWrap: 'wrap' }}>
                 <div style={{ flex: 1, minWidth: '220px' }}>
-                  <p style={{ margin: 0, fontWeight: 700, fontSize: '0.95rem', color: 'var(--color-text)' }}>Patient password changes</p>
-                  <span className="caption" style={{ display: 'block', marginTop: '4px', color: 'var(--color-text-muted)', lineHeight: 1.5 }}>
+                  <p style={{ margin: 0, fontWeight: 700, fontSize: '0.95rem', color: 'var(--swiss-black)' }}>Patient password changes</p>
+                  <span className="caption" style={{ display: 'block', marginTop: '4px', color: 'var(--swiss-gray-600)', lineHeight: 1.5 }}>
                     Password changes are not available in this workspace.
                   </span>
                 </div>
-                <Button variant="secondary" size="sm" disabled style={{ opacity: 0.85, whiteSpace: 'nowrap', borderRadius: '8px' }}>
+                <Button variant="secondary" size="sm" disabled style={{ opacity: 0.85, whiteSpace: 'nowrap', borderRadius: '2px' }}>
                   Not available
                 </Button>
               </div>
 
               {/* Deletion Option */}
-              <div style={{ padding: '18px 20px', background: 'var(--color-surface-interactive)', borderRadius: '8px', border: '1px solid var(--color-border)', display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: '16px', flexWrap: 'wrap' }}>
+              <div style={{ padding: '16px 20px', background: 'var(--swiss-off-white)', borderRadius: '2px', border: '1px solid var(--swiss-gray-300)', display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: '16px', flexWrap: 'wrap' }}>
                 <div style={{ flex: 1, minWidth: '220px' }}>
-                  <p style={{ margin: 0, fontWeight: 700, fontSize: '0.95rem', color: 'var(--color-text-muted)' }}>Delete Account</p>
-                  <span className="caption" style={{ display: 'block', marginTop: '4px', color: 'var(--color-text-muted)', lineHeight: 1.5 }}>
+                  <p style={{ margin: 0, fontWeight: 700, fontSize: '0.95rem', color: 'var(--swiss-black)' }}>Delete Account</p>
+                  <span className="caption" style={{ display: 'block', marginTop: '4px', color: 'var(--swiss-gray-600)', lineHeight: 1.5 }}>
                     Deletion requests are not available in this workspace.
                   </span>
                 </div>
-                <Button variant="outline" size="sm" disabled style={{ borderColor: 'var(--color-border)', color: 'var(--color-text-muted)', opacity: 0.85, whiteSpace: 'nowrap', borderRadius: '8px' }}>
+                <Button variant="outline" size="sm" disabled style={{ borderColor: 'var(--swiss-gray-300)', color: 'var(--swiss-gray-600)', opacity: 0.85, whiteSpace: 'nowrap', borderRadius: '2px' }}>
                   Not available
                 </Button>
               </div>
 
               {/* Patient Ownership Badge Note */}
-              <div style={{ padding: '16px 20px', background: 'var(--color-primary-muted)', borderRadius: '8px', border: '1px solid var(--color-border)', display: 'flex', alignItems: 'center', gap: '12px' }}>
-                <UserCheck size={20} color="var(--color-primary)" style={{ flexShrink: 0 }} />
-                <span style={{ fontSize: '0.86rem', color: 'var(--color-text)', lineHeight: 1.5, fontWeight: 500 }}>
+              <div style={{ padding: '16px 20px', background: 'var(--swiss-red-soft)', borderRadius: '2px', border: '1px solid var(--swiss-red)', display: 'flex', alignItems: 'center', gap: '12px' }}>
+                <UserCheck size={20} color="var(--swiss-red)" style={{ flexShrink: 0 }} />
+                <span style={{ fontSize: '0.86rem', color: 'var(--swiss-black)', lineHeight: 1.5, fontWeight: 500 }}>
                   Logged in as <strong>{patient?.name || 'Authorized Patient'}</strong>. Your medical records remain patient-owned and protected.
                 </span>
               </div>

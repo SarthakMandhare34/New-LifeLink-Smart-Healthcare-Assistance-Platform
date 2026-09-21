@@ -13,10 +13,20 @@ import { describe, expect, it } from 'vitest';
 const globalStyles = readFileSync(new URL('./index.css', import.meta.url), 'utf8');
 
 describe('LifeLink background branding', () => {
-  it('uses the official lockup as a subtle, non-interactive blurred background layer', () => {
-    expect(globalStyles).toContain("background: url('/assets/branding/lifelink-logo-lockup.jpg')");
-    expect(globalStyles).toContain('pointer-events: none');
-    expect(globalStyles).toContain('filter: blur(30px)');
+  it('validates Swiss solid background architecture and absence of decorative blurred branding', () => {
+    // Decorative blurred background layer is purged and disabled
+    expect(globalStyles).toContain('body::before');
+    expect(globalStyles).toContain('display: none !important');
+    expect(globalStyles).not.toContain('filter: blur(30px)');
+    expect(globalStyles).not.toContain("background: url('/assets/branding/lifelink-logo-lockup.jpg')");
+    
+    // Swiss solid white and neutral surface tokens are active
+    expect(globalStyles).toContain('--swiss-white: #FFFFFF;');
+    expect(globalStyles).toContain('--color-surface-white: var(--swiss-white);');
     expect(globalStyles).toContain('#root { position: relative; z-index: 1; min-height: 100vh; }');
+
+    // Official LifeLink logo remains functional and crisp on high-contrast mounts
+    expect(globalStyles).toContain('.lifelink-logo-crop');
+    expect(globalStyles).toContain('.lifelink-logo');
   });
 });
