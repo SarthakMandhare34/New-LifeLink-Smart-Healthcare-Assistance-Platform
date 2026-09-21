@@ -80,13 +80,13 @@ export const DoctorProfile = () => {
               </div>
               <strong style={{ fontSize: '1.05rem' }}>{data.locality || 'Mumbai'}</strong>
             </div>
-            {/* Rail transit connectivity tag */}
+            {/* Healthcare zone tag */}
             <div style={{ padding: '16px', background: 'var(--color-surface-interactive)', borderRadius: '8px', border: '1px solid var(--color-border)' }}>
               <div className="flex items-center gap-2" style={{ marginBottom: '6px' }}>
                 <Building size={16} color="var(--color-primary)" />
-                <span className="caption" style={{ textTransform: 'uppercase', letterSpacing: '0.08em' }}>Rail Line</span>
+                <span className="caption" style={{ textTransform: 'uppercase', letterSpacing: '0.08em' }}>Healthcare Zone</span>
               </div>
-              <strong style={{ fontSize: '1.05rem' }}>{data.railLine ? `${data.railLine} Line` : 'Not set'}</strong>
+              <strong style={{ fontSize: '1.05rem' }}>{data.railLine ? `${data.railLine} Zone` : 'Mumbai MMR'}</strong>
             </div>
           </div>
         </Card>
