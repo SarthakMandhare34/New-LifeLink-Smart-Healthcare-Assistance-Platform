@@ -123,17 +123,16 @@ export const MedicineCabinet = () => {
   };
 
   return (
-    <div className="container" style={{ padding: 0 }}>
+    <div className="container medicine-cabinet-page">
       {/* Header section with icon, title, and action button */}
-      {/* Header section with icon, title, and action button */}
-      <header className="mb-4 flex flex-wrap justify-between items-start gap-3">
-        <div className="flex items-center gap-3">
-          <div style={{ width: 48, height: 48, borderRadius: '8px', background: 'var(--color-primary-muted)', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
+      <header style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: '16px', marginBottom: '28px' }}>
+        <div style={{ display: 'flex', alignItems: 'center', gap: '16px' }}>
+          <div style={{ width: 48, height: 48, borderRadius: '4px', background: 'var(--color-primary-muted)', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
             <Pill size={24} style={{ color: 'var(--color-primary)' }} />
           </div>
           <div>
-            <h1 style={{ margin: 0 }}>Smart Medicine Cabinet</h1>
-            <p className="caption" style={{ margin: '4px 0 0' }}>Manage active medications, schedules, and stock alerts.</p>
+            <h1 style={{ margin: 0, fontSize: '1.6rem', fontWeight: 700, letterSpacing: '-0.02em', color: 'var(--color-text)' }}>Smart Medicine Cabinet</h1>
+            <p className="caption" style={{ margin: '4px 0 0', color: 'var(--color-text-muted)' }}>Manage active medications, schedules, and stock alerts.</p>
           </div>
         </div>
         {!showForm && (
@@ -144,12 +143,12 @@ export const MedicineCabinet = () => {
       </header>
 
       {/* Network or validation error display banner */}
-      {mutationError && <div className="alert-panel mb-4"><span className="caption">{mutationError}</span></div>}
+      {mutationError && <div className="alert-panel" style={{ marginBottom: '20px' }}><span className="caption">{mutationError}</span></div>}
 
       {/* Inline medication entry / edit form */}
       {showForm && (
-        <Card className="mb-4" style={{ padding: 'var(--spacing-5)' }}>
-          <form onSubmit={handleSubmit} className="flex-col gap-3">
+        <Card style={{ marginBottom: '24px', padding: 'var(--spacing-5)' }}>
+          <form onSubmit={handleSubmit} style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
             <h3 style={{ margin: 0 }}>{editingId ? 'Edit Medication Record' : 'Add New Medication'}</h3>
             <div>
               <label htmlFor="medicine-name" style={{ display: 'block', marginBottom: '4px', fontWeight: 600, fontSize: 'var(--text-caption)' }}>Medicine Name</label>
@@ -165,9 +164,19 @@ export const MedicineCabinet = () => {
                 <Input id="medicine-schedule" type="text" value={formData.schedule || ''} onChange={e => setFormData({...formData, schedule: e.target.value})} placeholder="e.g. Morning, Daily" required />
               </div>
             </div>
-            <div>
-              <label htmlFor="medicine-frequency" style={{ display: 'block', marginBottom: '4px', fontWeight: 600, fontSize: 'var(--text-caption)' }}>Frequency</label>
-              <Input id="medicine-frequency" type="text" value={formData.frequency || ''} onChange={e => setFormData({...formData, frequency: e.target.value})} placeholder="e.g. Once daily" required />
+            <div className="flex flex-col sm:flex-row gap-3">
+              <div style={{ flex: 1 }}>
+                <label htmlFor="medicine-frequency" style={{ display: 'block', marginBottom: '4px', fontWeight: 600, fontSize: 'var(--text-caption)' }}>Frequency</label>
+                <Input id="medicine-frequency" type="text" value={formData.frequency || ''} onChange={e => setFormData({...formData, frequency: e.target.value})} placeholder="e.g. Once daily" required />
+              </div>
+              <div style={{ flex: 1 }}>
+                <label htmlFor="medicine-quantity" style={{ display: 'block', marginBottom: '4px', fontWeight: 600, fontSize: 'var(--text-caption)' }}>Quantity (units)</label>
+                <Input id="medicine-quantity" type="number" min={0} value={formData.quantity ?? ''} onChange={e => setFormData({...formData, quantity: e.target.value ? Number(e.target.value) : undefined})} placeholder="e.g. 30" />
+              </div>
+              <div style={{ flex: 1 }}>
+                <label htmlFor="medicine-expiry" style={{ display: 'block', marginBottom: '4px', fontWeight: 600, fontSize: 'var(--text-caption)' }}>Expiry Date</label>
+                <Input id="medicine-expiry" type="date" value={formData.expiry || ''} onChange={e => setFormData({...formData, expiry: e.target.value})} />
+              </div>
             </div>
             {/* Form action buttons */}
             <div className="flex gap-2 mt-2">
@@ -180,53 +189,38 @@ export const MedicineCabinet = () => {
         </Card>
       )}
 
-      {/* Responsive Grid layout for Medicine Cards */}
-      <div className="responsive-list-grid">
+      {/* Structured Medical Register View */}
+      <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
         {activeMedicines.map((med) => (
-            <Card 
-              key={med.id}                                                                      // Unique medication record ID
-              style={{ 
-                height: '100%', 
-                borderLeft: '3px solid var(--color-semantic-success)',                           // Visual indicator for active regimen
-                display: 'flex',
-                flexDirection: 'column',
-                justifyContent: 'space-between',
-                padding: 'var(--spacing-5)',
-                opacity: processingId === med.id ? 0.5 : 1
-              }}
-            >
-              <div>
-                <div className="flex justify-between items-start mb-2">
-                  <div className="flex items-center gap-2">
-                    <Pill style={{ color: 'var(--color-primary)' }} size={20} />
-                    <h3 style={{ margin: 0 }}>{med.name}</h3>
-                  </div>
-                  <Badge status="success">Active</Badge>
-                </div>
-
-                {/* Dosage and scheduling details badge group */}
-                <div className="flex flex-wrap gap-4 mt-3" style={{ background: 'var(--color-surface-interactive)', padding: 'var(--spacing-2) var(--spacing-3)', borderRadius: 'var(--border-radius-sm)', border: '1px solid var(--color-border)' }}>
-                  <div>
-                    <span className="caption">Dosage</span>
-                    <div style={{ fontWeight: 600, fontVariantNumeric: 'tabular-nums' }}>{med.dosage}</div>
-                  </div>
-                  <div>
-                    <span className="caption">Schedule</span>
-                    <div style={{ fontWeight: 600 }}>{med.schedule}</div>
-                  </div>
-                  <div>
-                    <span className="caption">Frequency</span>
-                    <div style={{ fontWeight: 600 }}>{med.frequency}</div>
-                  </div>
+          <div 
+            key={med.id}
+            className="solid-clinical-surface"
+            style={{ 
+              borderLeft: '4px solid var(--color-semantic-success)',
+              display: 'flex',
+              flexDirection: 'column',
+              gap: '12px',
+              padding: '16px 20px',
+              opacity: processingId === med.id ? 0.5 : 1,
+              borderRadius: 'var(--border-radius-md)',
+              border: '1px solid var(--color-border)',
+              background: 'var(--color-surface-white)',
+            }}
+          >
+            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', flexWrap: 'wrap', gap: '10px' }}>
+              <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
+                <Pill style={{ color: 'var(--color-primary)' }} size={20} />
+                <div>
+                  <h3 style={{ margin: 0, fontSize: '1.05rem', fontWeight: 700, color: 'var(--color-text)' }}>{med.name}</h3>
+                  <span className="caption" style={{ color: 'var(--color-text-muted)' }}>Registered Clinical Item</span>
                 </div>
               </div>
-
-              {/* Action buttons: Edit and Remove */}
-              <div className="flex gap-2 mt-4 pt-2" style={{ borderTop: '1px solid var(--color-border)', flexWrap: 'wrap' }}>
+              <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+                <Badge status="success">Active</Badge>
                 <Button
                   variant="secondary"
                   size="sm"
-                  onClick={() => handleOpenEdit(med)}                                           // Open edit drawer
+                  onClick={() => handleOpenEdit(med)}
                   disabled={processingId === med.id}
                   aria-label={`Edit ${med.name}`}
                 >
@@ -235,19 +229,58 @@ export const MedicineCabinet = () => {
                 <Button
                   variant="outline"
                   size="sm"
-                  onClick={() => requestRemove(med.id)}                                         // Request deletion confirmation
+                  onClick={() => requestRemove(med.id)}
                   disabled={processingId === med.id}
                   aria-label={`Remove ${med.name} from cabinet`}
                 >
                   <Trash2 size={14} /> {processingId === med.id ? 'Removing...' : 'Remove'}
                 </Button>
               </div>
-            </Card>
+            </div>
+
+            {/* Medical Register Metadata Row: Medicine, Dosage, Frequency, Schedule, Quantity, Expiry */}
+            <div 
+              style={{ 
+                display: 'grid', 
+                gridTemplateColumns: 'repeat(auto-fit, minmax(min(100%, 130px), 1fr))', 
+                gap: '12px', 
+                background: 'var(--color-surface-interactive)', 
+                padding: '10px 14px', 
+                borderRadius: 'var(--border-radius-sm)', 
+                border: '1px solid var(--color-border)' 
+              }}
+            >
+              <div>
+                <span className="caption" style={{ textTransform: 'uppercase', fontSize: '10px', fontWeight: 700, color: 'var(--color-text-muted)', letterSpacing: '0.05em' }}>Dosage</span>
+                <div style={{ fontWeight: 600, fontSize: '0.9rem', fontVariantNumeric: 'tabular-nums', color: 'var(--color-text)' }}>{med.dosage}</div>
+              </div>
+              <div>
+                <span className="caption" style={{ textTransform: 'uppercase', fontSize: '10px', fontWeight: 700, color: 'var(--color-text-muted)', letterSpacing: '0.05em' }}>Frequency</span>
+                <div style={{ fontWeight: 600, fontSize: '0.9rem', color: 'var(--color-text)' }}>{med.frequency}</div>
+              </div>
+              <div>
+                <span className="caption" style={{ textTransform: 'uppercase', fontSize: '10px', fontWeight: 700, color: 'var(--color-text-muted)', letterSpacing: '0.05em' }}>Schedule</span>
+                <div style={{ fontWeight: 600, fontSize: '0.9rem', color: 'var(--color-text)' }}>{med.schedule}</div>
+              </div>
+              <div>
+                <span className="caption" style={{ textTransform: 'uppercase', fontSize: '10px', fontWeight: 700, color: 'var(--color-text-muted)', letterSpacing: '0.05em' }}>Quantity</span>
+                <div style={{ fontWeight: 600, fontSize: '0.9rem', fontVariantNumeric: 'tabular-nums', color: 'var(--color-text)' }}>
+                  {med.quantity != null ? `${med.quantity} units` : '—'}
+                </div>
+              </div>
+              <div>
+                <span className="caption" style={{ textTransform: 'uppercase', fontSize: '10px', fontWeight: 700, color: 'var(--color-text-muted)', letterSpacing: '0.05em' }}>Expiry</span>
+                <div style={{ fontWeight: 600, fontSize: '0.9rem', fontVariantNumeric: 'tabular-nums', color: 'var(--color-text)' }}>
+                  {med.expiry || '—'}
+                </div>
+              </div>
+            </div>
+          </div>
         ))}
 
         {/* Empty state message when cabinet has 0 items */}
         {activeMedicines.length === 0 && (
-          <Card style={{ textAlign: 'center', padding: 'var(--spacing-8) var(--spacing-4)', gridColumn: '1 / -1' }}>
+          <Card style={{ textAlign: 'center', padding: 'var(--spacing-8) var(--spacing-4)' }}>
             <Pill size={36} style={{ color: 'var(--color-text-secondary)', opacity: 0.5, margin: '0 auto var(--spacing-3)' }} />
             <p style={{ margin: 0, fontWeight: 600, color: 'var(--color-text)' }}>No active medications in cabinet.</p>
             <p className="caption" style={{ margin: '4px 0 0', color: 'var(--color-text-secondary)' }}>Add your medications to track schedules, dosages, and reminders.</p>
