@@ -69,37 +69,39 @@ export const Emergency = () => {
   return (
     <div className="dashboard-workspace">
       {/* Emergency header banner */}
-      <header style={{ marginBottom: 'var(--spacing-5)' }}>
-        <div className="flex items-center gap-3">
-          <div style={{ width: 52, height: 52, borderRadius: '8px', background: 'rgba(187, 44, 44, 0.12)', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+      <header style={{ marginBottom: '28px' }}>
+        <div style={{ display: 'flex', alignItems: 'center', gap: '16px' }}>
+          <div style={{ width: 52, height: 52, borderRadius: '4px', background: 'rgba(187, 44, 44, 0.12)', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
             <ShieldAlert size={28} color="#B01E1E" />                                           {/* Emergency alert badge */}
           </div>
           <div>
-            <h1 style={{ margin: 0 }}>Emergency Assistance</h1>                                 {/* Page title */}
+            <h1 style={{ margin: 0, fontSize: '1.6rem', fontWeight: 700, letterSpacing: '-0.02em' }}>Emergency Assistance</h1>                                 {/* Page title */}
             <p className="caption" style={{ margin: '4px 0 0' }}>Choose an action yourself. LifeLink does not call emergency services, send messages, or share your location automatically.</p>
           </div>
         </div>
       </header>
 
       {/* Main emergency options container */}
-      <div className="flex-col gap-4">
+      <div style={{ display: 'flex', flexDirection: 'column', gap: '24px' }}>
         {/* Urgent National Hotline 112 Card */}
-        <Card variant="emergency" style={{ padding: 'var(--spacing-5)' }}>
-          <div className="flex-col gap-3">
-            <div className="flex items-center gap-2">
+        <Card variant="emergency" style={{ padding: 'var(--spacing-6)' }}>
+          <div style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
+            <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
               <Siren size={24} color="#B01E1E" />                                               {/* Siren emergency icon */}
               <h2 style={{ margin: 0, color: 'var(--color-primary)' }}>Call emergency response</h2>
             </div>
-            <p style={{ margin: 0 }}>For an immediate emergency in India, you can open your device dialer for the unified emergency number <strong>{AMBULANCE_EMERGENCY_NUMBER}</strong>. Your device will ask you to place the call.</p>
-            <Button variant="danger" onClick={() => setIsAmbulanceConfirmOpen(true)}>
-              <Phone size={18} /> Call {AMBULANCE_EMERGENCY_NUMBER}                             {/* Triggers confirmation modal before dialer */}
-            </Button>
+            <p style={{ margin: 0, lineHeight: 1.6 }}>For an immediate emergency in India, you can open your device dialer for the unified emergency number <strong>{AMBULANCE_EMERGENCY_NUMBER}</strong>. Your device will ask you to place the call.</p>
+            <div>
+              <Button variant="danger" onClick={() => setIsAmbulanceConfirmOpen(true)}>
+                <Phone size={18} /> Call {AMBULANCE_EMERGENCY_NUMBER}                             {/* Triggers confirmation modal before dialer */}
+              </Button>
+            </div>
           </div>
         </Card>
 
         {/* Health Passport Emergency Contacts Card */}
-        <Card variant="default" style={{ padding: 'var(--spacing-5)' }}>
-          <div className="flex items-center gap-2 mb-3">
+        <Card variant="default" style={{ padding: 'var(--spacing-6)' }}>
+          <div style={{ display: 'flex', alignItems: 'center', gap: '10px', marginBottom: '16px' }}>
             <UsersRound size={22} color="var(--color-primary)" />
             <div>
               <h2 style={{ margin: 0, fontSize: 'var(--text-h3)' }}>Emergency contacts</h2>
@@ -112,15 +114,17 @@ export const Emergency = () => {
           
           {/* Empty contacts fallback with direct link to Health Passport */}
           {!profileQuery.isLoading && contacts.length === 0 && (
-            <div className="flex-col gap-3">
+            <div style={{ display: 'flex', flexDirection: 'column', gap: '14px' }}>
               <p className="caption" style={{ margin: 0 }}>No emergency contacts are recorded in your Health Passport yet.</p>
-              <Button variant="outline" onClick={() => navigate('/patient/health-passport')}>Manage emergency contacts</Button>
+              <div>
+                <Button variant="outline" onClick={() => navigate('/patient/health-passport')}>Manage emergency contacts</Button>
+              </div>
             </div>
           )}
 
           {/* Render verified emergency contacts */}
           {!profileQuery.isLoading && contacts.length > 0 && (
-            <div className="flex-col gap-3">
+            <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
               {contacts.map((contact) => (
                 <div key={contact.id} style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', flexWrap: 'wrap', gap: 'var(--spacing-3)', padding: '12px', border: '1px solid var(--color-border)', borderRadius: 'var(--border-radius-md)' }}>
                   <div>
