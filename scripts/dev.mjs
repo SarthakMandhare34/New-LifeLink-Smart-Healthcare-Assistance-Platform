@@ -106,7 +106,7 @@ function waitForBackendPort(port, timeoutMs = 12000) {
         if (Date.now() - start >= timeoutMs) {
           resolve(false);
         } else {
-          setTimeout(tryConnect, 150);
+          setTimeout(tryConnect, 80);
         }
       });
     };
