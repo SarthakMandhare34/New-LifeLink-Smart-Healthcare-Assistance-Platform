@@ -18,7 +18,7 @@ import { LifeLinkLogo } from '../../components/brand/LifeLinkLogo';
 import { EntryThemeToggle } from '../../components/EntryThemeToggle';
 import { trpc } from '../../lib/trpc';
 import { formatUserFriendlyError } from '../../lib/errorFormatting';
-import { Activity, Lock, User as UserIcon, Mail, HeartPulse, ShieldCheck, Shield } from 'lucide-react';
+import { Lock, User as UserIcon, Mail, HeartPulse, ShieldCheck, Shield } from 'lucide-react';
 import { PATIENT_DASHBOARD_PATH } from '../patient/patientAuthRoutes';
 
 const GoogleIcon = () => (
@@ -87,7 +87,7 @@ export const PatientRegistration = () => {
   };
 
   return (
-    <main className="auth-page" aria-labelledby="patient-register-heading" style={{ fontFamily: 'Plus Jakarta Sans, sans-serif' }}>
+    <main className="auth-page" aria-labelledby="patient-register-heading">
       <header className="workspace-portal-header" aria-label="LifeLink portal header">
         <div className="workspace-portal-brand">
           <span className="workspace-portal-mark" aria-hidden="true">
@@ -106,10 +106,6 @@ export const PatientRegistration = () => {
       </header>
 
       <div className="patient-auth-layout auth-split-layout" style={{ flex: 1, display: 'flex', width: '100%', position: 'relative', zIndex: 1 }}>
-        {/* Ambient background clinical grid watermark */}
-        <div className="ambient-ecg-decoration" style={{ position: 'absolute', bottom: '2%', left: '4%', opacity: 0.08, color: 'var(--color-primary)', pointerEvents: 'none' }}>
-          <Activity size={340} strokeWidth={1} />
-        </div>
 
         {/* Branding Panel (Left Column): Clean Nordic Clinical Identity */}
         <div className="auth-branding-panel" style={{ flex: 1, display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems: 'center', padding: 'var(--spacing-6)', zIndex: 1 }}>
@@ -131,14 +127,14 @@ export const PatientRegistration = () => {
                   letterSpacing: '0.06em', 
                   textTransform: 'uppercase', 
                   padding: '4px 12px', 
-                  borderRadius: '6px',
+                  borderRadius: 'var(--border-radius-badge)',
                   border: '1px solid var(--color-border)'
                 }}
               >
                 Smart Healthcare & Wellness Platform
               </span>
 
-              <h2 style={{ fontSize: '1.5rem', fontWeight: 700, margin: '6px 0 0', color: 'var(--color-text)', letterSpacing: '-0.02em', fontFamily: 'Plus Jakarta Sans, sans-serif' }}>
+              <h2 style={{ fontSize: '1.5rem', fontWeight: 700, margin: '6px 0 0', color: 'var(--color-text)', letterSpacing: '-0.02em' }}>
                 Care. Connect. Cure.
               </h2>
               <p style={{ fontSize: '0.92rem', color: 'var(--color-text-muted)', margin: 0, lineHeight: 1.5, maxWidth: '380px' }}>
@@ -160,8 +156,8 @@ export const PatientRegistration = () => {
               padding: 'clamp(24px, 4vw, 36px)',
               background: 'var(--color-surface-white)',
               border: '1px solid var(--color-border)',
-              borderRadius: '10px',
-              boxShadow: 'var(--shadow-md)'
+              borderRadius: 'var(--border-radius-md)',
+              boxShadow: 'none'
             }}
           >
             {/* Form Card Header */}
@@ -170,7 +166,7 @@ export const PatientRegistration = () => {
                 <LifeLinkLogo className="lifelink-logo-auth auth-card-mobile-logo" />
               </div>
 
-              <h1 id="patient-register-heading" style={{ fontSize: '1.65rem', fontWeight: 700, marginBottom: '6px', color: 'var(--color-text)', letterSpacing: '-0.02em', fontFamily: 'Plus Jakarta Sans, sans-serif' }}>
+              <h1 id="patient-register-heading" style={{ fontSize: '1.65rem', fontWeight: 700, marginBottom: '6px', color: 'var(--color-text)', letterSpacing: '-0.02em' }}>
                 Create Patient Account
               </h1>
               <p style={{ color: 'var(--color-text-muted)', fontSize: '0.90rem', margin: 0 }}>

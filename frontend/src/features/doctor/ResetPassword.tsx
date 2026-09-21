@@ -17,7 +17,7 @@ import { Input } from "../../components/ui/Input";                              
 import { LifeLinkLogo } from "../../components/brand/LifeLinkLogo";                            // Official platform SVG brand logo
 import { EntryThemeToggle } from "../../components/EntryThemeToggle";                          // Light/dark theme toggle component
 import { trpc } from "../../lib/trpc";                                                          // Type-safe tRPC client bridge
-import { Activity, Key, Mail, Lock, ShieldCheck, Shield } from 'lucide-react';                  // Medical security and credential icons
+import { Key, Mail, Lock, ShieldCheck, Shield } from 'lucide-react';                  // Medical security and credential icons
 
 // =========================================================================================
 // DOCTOR PASSWORD RESET & CREDENTIAL RECOVERY WORKFLOW (DoctorResetPassword)
@@ -58,7 +58,7 @@ export const DoctorResetPassword = () => {
   };
 
   return (
-    <main className="auth-page doctor-auth-page" aria-labelledby="doctor-reset-heading" style={{ fontFamily: 'Plus Jakarta Sans, sans-serif' }}>
+    <main className="auth-page doctor-auth-page" aria-labelledby="doctor-reset-heading">
       {/* Top navigation portal header */}
       <header className="workspace-portal-header doctor-portal-header" aria-label="LifeLink portal header">
         <div className="workspace-portal-brand">
@@ -79,10 +79,6 @@ export const DoctorResetPassword = () => {
 
       {/* Split layout: Branding panel + Form card */}
       <div className="doctor-setup-layout auth-split-layout" style={{ flex: 1, display: 'flex', width: '100%', position: 'relative', zIndex: 1 }}>
-        {/* Ambient background clinical grid watermark */}
-        <div className="ambient-ecg-decoration" style={{ position: 'absolute', bottom: '2%', left: '4%', opacity: 0.08, pointerEvents: 'none', color: 'var(--color-doctor-primary)' }}>
-          <Activity size={340} strokeWidth={1} />
-        </div>
 
         {/* Branding Panel (Left Column): Clean Nordic Clinical Identity */}
         <div className="auth-branding-panel" style={{ flex: 1, display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems: 'center', padding: 'var(--spacing-6)', zIndex: 1 }}>
@@ -97,21 +93,21 @@ export const DoctorResetPassword = () => {
             <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '14px' }}>
               <span 
                 style={{ 
-                  background: 'rgba(30, 107, 90, 0.08)', 
+                  background: 'var(--swiss-blue-soft)', 
                   color: 'var(--color-doctor-primary)', 
                   fontSize: '0.74rem', 
                   fontWeight: 600, 
                   letterSpacing: '0.06em', 
                   textTransform: 'uppercase', 
                   padding: '5px 14px', 
-                  borderRadius: '6px',
-                  border: '1px solid var(--color-border)'
+                  borderRadius: 'var(--border-radius-badge)',
+                  border: '1px solid #BFDBFE'
                 }}
               >
                 Doctor Portal • Account Recovery
               </span>
 
-              <h2 style={{ fontSize: '1.6rem', fontWeight: 700, margin: '6px 0 0', color: 'var(--color-doctor-text)', letterSpacing: '-0.02em', fontFamily: 'Plus Jakarta Sans, sans-serif' }}>
+              <h2 style={{ fontSize: '1.6rem', fontWeight: 700, margin: '6px 0 0', color: 'var(--color-doctor-text)', letterSpacing: '-0.02em' }}>
                 Care. Connect. Cure.
               </h2>
               <p style={{ fontSize: '0.92rem', color: 'var(--color-text-muted)', margin: 0, lineHeight: 1.5, maxWidth: '380px' }}>
@@ -131,10 +127,10 @@ export const DoctorResetPassword = () => {
               maxHeight: '90vh', 
               overflowY: 'auto', 
               padding: 'clamp(24px, 4vw, 36px)', 
-              borderRadius: '10px', 
+              borderRadius: 'var(--border-radius-md)', 
               background: 'var(--color-surface-white)', 
               border: '1px solid var(--color-border)', 
-              boxShadow: 'var(--shadow-sm)' 
+              boxShadow: 'none' 
             }}
           >
             {/* Form Header */}
@@ -144,7 +140,7 @@ export const DoctorResetPassword = () => {
                 <LifeLinkLogo className="lifelink-logo-auth auth-card-mobile-logo" />
               </div>
 
-              <h1 id="doctor-reset-heading" style={{ fontSize: '1.5rem', fontWeight: 700, marginBottom: '6px', color: 'var(--color-doctor-text)', letterSpacing: '-0.02em', fontFamily: 'Plus Jakarta Sans, sans-serif' }}>
+              <h1 id="doctor-reset-heading" style={{ fontSize: '1.5rem', fontWeight: 700, marginBottom: '6px', color: 'var(--color-doctor-text)', letterSpacing: '-0.02em' }}>
                 Reset Doctor Password
               </h1>
               <p style={{ color: 'var(--color-text-muted)', fontSize: '0.88rem', margin: 0 }}>

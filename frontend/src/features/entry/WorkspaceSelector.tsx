@@ -15,7 +15,7 @@ import { useNavigate } from "react-router-dom";                                 
 import { EntryThemeToggle } from "../../components/EntryThemeToggle";                      // Theme toggle button for login screens
 import { LifeLinkLogo } from "../../components/brand/LifeLinkLogo";                        // LifeLink branded SVG logo component
 import { Button } from "../../components/ui/Button";                                       // Accessible button component
-import { Card } from "../../components/ui/Card";                                           // Glassmorphic container card component
+import { Card } from "../../components/ui/Card";                                           // Reusable Swiss card container component
 
 // Feature highlights displayed on the patient portal card
 const patientHighlights = [
@@ -79,7 +79,7 @@ export const WorkspaceSelector = () => {
         </header>
 
         <div className="workspace-entry-grid">
-          <Card variant="glass" className="workspace-choice-card patient-choice-card">
+          <Card variant="solid" className="workspace-choice-card patient-choice-card">
             <div className="workspace-choice-topline">
               <span className="workspace-choice-icon patient">
                 <HeartPulse size={22} />
@@ -123,7 +123,7 @@ export const WorkspaceSelector = () => {
             </button>
           </Card>
 
-          <Card variant="glass" className="workspace-choice-card doctor-choice-card">
+          <Card variant="solid" className="workspace-choice-card doctor-choice-card">
             <div className="workspace-choice-topline">
               <span className="workspace-choice-icon doctor">
                 <Stethoscope size={22} />
