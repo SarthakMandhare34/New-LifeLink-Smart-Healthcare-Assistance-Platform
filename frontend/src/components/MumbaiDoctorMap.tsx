@@ -153,7 +153,7 @@ export function MumbaiDoctorMap({
             <Popup>
               <strong>{doctor.name}</strong>                                                    {/* Doctor name */}
               <br />
-              {doctor.specialty} in {doctor.locality}                                           {/* Specialty & Locality */}
+              {doctor.specialty} • {doctor.locality}                                            {/* Specialty & Medical District Locality */}
             </Popup>
           </Marker>
         ))}
