@@ -56,16 +56,16 @@ type EmergencyContactItem = {
 
 // Helper returning dynamic CSS color styles based on clinical triage urgency level
 function urgencyBadgeStyle(urgency: string) {
-  if (urgency === 'EMERGENCY') {                                                                // Immediate high-priority emergency
-    return { bg: 'rgba(220, 38, 38, 0.12)', color: 'var(--color-semantic-emergency)', border: '1px solid rgba(220, 38, 38, 0.2)' };
+  if (urgency === 'EMERGENCY') {
+    return { bg: 'var(--swiss-red-soft)', color: 'var(--swiss-red)', border: '1px solid #FECACA' };
   }
-  if (urgency === 'MODERATE') {                                                                 // Moderate urgency requiring prompt care
-    return { bg: 'rgba(217, 119, 6, 0.12)', color: 'var(--color-semantic-warning)', border: '1px solid rgba(217, 119, 6, 0.2)' };
+  if (urgency === 'MODERATE') {
+    return { bg: '#FFFBEB', color: '#B45309', border: '1px solid #FDE68A' };
   }
-  if (urgency === 'ERROR') {                                                                    // Assessment parsing or routing error
-    return { bg: 'rgba(225, 29, 72, 0.12)', color: '#e11d48', border: '1px solid rgba(225, 29, 72, 0.2)' };
+  if (urgency === 'ERROR') {
+    return { bg: 'var(--swiss-red-soft)', color: 'var(--swiss-red)', border: '1px solid #FECACA' };
   }
-  return { bg: 'var(--color-primary-muted)', color: 'var(--color-primary)', border: '1px solid rgba(26, 127, 116, 0.25)' }; // Routine standard care
+  return { bg: 'var(--swiss-blue-soft)', color: 'var(--swiss-blue)', border: '1px solid #BFDBFE' };
 }
 
 // =========================================================================================
@@ -294,20 +294,20 @@ export const HealthPassport = () => {
 
   // Uniform glassmorphic card styling configuration
   const cardStyle = {
-    background: 'var(--color-surface-white)',
-    padding: '24px',
-    borderRadius: '10px',
-    border: '1px solid var(--color-border)',
-    boxShadow: 'var(--shadow-sm)',
+    padding: '20px 24px',
     display: 'flex',
     flexDirection: 'column' as const,
+    minHeight: '190px',
+    background: 'var(--color-surface-white)',
+    border: '1px solid var(--color-border)',
+    borderRadius: 'var(--border-radius-md)',
+    boxShadow: 'none',
   };
 
-  // Icon container badge styling configuration
   const iconCircleStyle = {
-    width: '40px',
-    height: '40px',
-    borderRadius: '8px',
+    width: '36px',
+    height: '36px',
+    borderRadius: 'var(--border-radius-sm)',
     background: 'var(--color-primary-muted)',
     display: 'grid',
     placeItems: 'center',
@@ -316,20 +316,23 @@ export const HealthPassport = () => {
   };
 
   return (
-    <div style={{ display: 'flex', flexDirection: 'column', gap: '28px', fontFamily: "'Plus Jakarta Sans', sans-serif" }}>
+    <div style={{ display: 'flex', flexDirection: 'column', gap: '28px' }}>
       
       {/* Header with Title and Edit Toggle */}
-      <header style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', flexWrap: 'wrap', gap: '16px' }}>
+      <header style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', flexWrap: 'wrap', gap: '16px', borderBottom: '2px solid var(--color-border)', paddingBottom: '20px' }}>
         <div style={{ display: 'flex', alignItems: 'center', gap: '16px' }}>
-          <div style={{ width: '48px', height: '48px', borderRadius: '8px', background: 'var(--color-primary-muted)', display: 'grid', placeItems: 'center', color: 'var(--color-primary)', flexShrink: 0 }}>
-            <FileHeart size={26} />
+          <div style={{ width: '44px', height: '44px', borderRadius: 'var(--border-radius-sm)', background: 'var(--color-primary-muted)', display: 'grid', placeItems: 'center', color: 'var(--color-primary)', flexShrink: 0 }}>
+            <FileHeart size={24} />
           </div>
           <div>
-            <h1 className="font-display" style={{ fontSize: '2rem', fontWeight: 700, margin: 0, color: 'var(--color-text)' }}>
+            <span style={{ fontSize: '0.72rem', fontWeight: 700, color: 'var(--color-primary)', textTransform: 'uppercase', letterSpacing: '0.06em', display: 'block' }}>
+              Official Medical Record
+            </span>
+            <h1 style={{ fontSize: '2rem', fontWeight: 700, margin: '2px 0 0', color: 'var(--color-text)', letterSpacing: '-0.02em' }}>
               Digital Health Passport
             </h1>
-            <p style={{ color: 'var(--color-text-muted)', fontSize: '0.92rem', margin: '3px 0 0' }}>
-              Your verified clinical baseline. Patient-controlled and securely stored.
+            <p style={{ color: 'var(--color-text-muted)', fontSize: '0.9rem', margin: '3px 0 0' }}>
+              Patient-controlled clinical baseline data and verified medical history.
             </p>
           </div>
         </div>
@@ -339,9 +342,9 @@ export const HealthPassport = () => {
           <Button
             variant="outline"
             onClick={handleEditClick}
-            style={{ display: 'flex', gap: '8px', alignItems: 'center', borderRadius: '8px', borderColor: 'var(--color-primary)', color: 'var(--color-primary)', fontWeight: 600 }}
+            style={{ display: 'flex', gap: '8px', alignItems: 'center', fontWeight: 600 }}
           >
-            <Edit2 size={16} /> Edit Passport
+            <Edit2 size={15} /> Edit Passport
           </Button>
         ) : (
           <div style={{ display: 'flex', gap: '8px', alignItems: 'center' }}>
@@ -349,9 +352,9 @@ export const HealthPassport = () => {
               variant="outline"
               onClick={handleCancelPassportEdit}
               disabled={isSaving}
-              style={{ display: 'flex', gap: '6px', alignItems: 'center', borderRadius: '8px' }}
+              style={{ display: 'flex', gap: '6px', alignItems: 'center' }}
             >
-              <X size={16} /> Cancel
+              <X size={15} /> Cancel
             </Button>
             <Button
               variant="primary"
@@ -362,7 +365,6 @@ export const HealthPassport = () => {
                 display: 'flex',
                 gap: '6px',
                 alignItems: 'center',
-                borderRadius: '8px',
                 background: !isPassportValid ? 'var(--color-surface-interactive)' : 'var(--color-primary)',
                 borderColor: !isPassportValid ? 'var(--color-border)' : 'var(--color-primary)',
                 color: !isPassportValid ? 'var(--color-text-muted)' : '#FFF',
@@ -371,11 +373,43 @@ export const HealthPassport = () => {
                 opacity: !isPassportValid ? 0.65 : 1,
               }}
             >
-              <Save size={16} /> {isSaving ? 'Saving…' : 'Save Changes'}
+              <Save size={15} /> {isSaving ? 'Saving…' : 'Save Changes'}
             </Button>
           </div>
         )}
       </header>
+
+      {/* SECTION: PATIENT INFORMATION */}
+      <section aria-label="Patient identity summary">
+        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '12px' }}>
+          <span style={{ fontSize: '0.72rem', fontWeight: 700, color: 'var(--color-text-muted)', textTransform: 'uppercase', letterSpacing: '0.06em' }}>
+            Patient Information
+          </span>
+          <Badge status="neutral">Verified Passport</Badge>
+        </div>
+        <div 
+          className="solid-clinical-surface"
+          style={{ 
+            padding: '16px 20px', 
+            borderRadius: 'var(--border-radius-md)', 
+            border: '1px solid var(--color-border)', 
+            background: 'var(--color-surface-white)',
+            display: 'grid',
+            gridTemplateColumns: 'repeat(auto-fit, minmax(min(100%, 200px), 1fr))',
+            gap: '16px',
+          }}
+        >
+          <div>
+            <span className="caption" style={{ textTransform: 'uppercase', fontSize: '10px', fontWeight: 700, color: 'var(--color-text-muted)', letterSpacing: '0.05em' }}>Full Name</span>
+            <div style={{ fontWeight: 700, fontSize: '1rem', color: 'var(--color-text)' }}>{patient.name || 'Verified Patient'}</div>
+          </div>
+          <div>
+            <span className="caption" style={{ textTransform: 'uppercase', fontSize: '10px', fontWeight: 700, color: 'var(--color-text-muted)', letterSpacing: '0.05em' }}>Registered Contact</span>
+            <div style={{ fontWeight: 600, fontSize: '0.95rem', color: 'var(--color-text)' }}>{patient.phone || patient.email || 'On record'}</div>
+          </div>
+
+        </div>
+      </section>
 
       {/* Error alert banner */}
       {passportError && (
@@ -586,12 +620,12 @@ export const HealthPassport = () => {
                     <span
                       key={condition}
                       style={{
-                        padding: '6px 12px',
-                        borderRadius: '6px',
-                        background: 'rgba(15, 118, 110, 0.14)',
-                        color: 'var(--color-accent)',
-                        border: '1px solid var(--color-border)',
-                        fontSize: '0.88rem',
+                        padding: '4px 10px',
+                        borderRadius: 'var(--border-radius-badge)',
+                        background: 'var(--swiss-blue-soft)',
+                        color: 'var(--swiss-blue)',
+                        border: '1px solid #BFDBFE',
+                        fontSize: '0.85rem',
                         fontWeight: 600,
                       }}
                     >
