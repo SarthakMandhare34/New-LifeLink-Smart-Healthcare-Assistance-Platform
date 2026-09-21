@@ -124,10 +124,10 @@ export const Profile = () => {
   };
 
   return (
-    <div className="container patient-profile-page" style={{ padding: 0 }}>
+    <div className="container patient-profile-page" style={{ maxWidth: '840px', margin: '0 auto' }}>
       {/* Profile Header */}
-      <header className="patient-profile-heading flex items-center gap-3 mb-4">
-        <div style={{ width: 48, height: 48, borderRadius: '8px', background: 'var(--color-primary-muted)', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
+      <header className="patient-profile-heading flex items-center gap-3" style={{ marginBottom: '24px' }}>
+        <div style={{ width: 48, height: 48, borderRadius: '4px', background: 'var(--color-primary-muted)', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
           <User size={24} style={{ color: 'var(--color-primary)' }} />
         </div>
         <div>
@@ -139,40 +139,63 @@ export const Profile = () => {
       {/* Main Profile Card */}
       <Card className="patient-profile-card" style={{ padding: 'var(--spacing-6)' }}>
         {/* Avatar and Identity banner */}
-        <div className="patient-profile-identity">
-          <label className="profile-photo-picker">
-            <input className="profile-photo-input" type="file" accept="image/jpeg,image/png,image/webp" onChange={handlePhotoChange} disabled={isPhotoSaving} aria-label="Upload profile photo" />
+        <div className="patient-profile-identity" style={{ display: 'flex', alignItems: 'center', gap: '20px', marginBottom: '28px', flexWrap: 'wrap' }}>
+          <label className="profile-photo-picker" title="Click to choose a new photo">
+            <input 
+              id="profile-photo-input"
+              className="profile-photo-input" 
+              type="file" 
+              accept="image/jpeg,image/png,image/webp" 
+              onChange={handlePhotoChange} 
+              disabled={isPhotoSaving} 
+              aria-label="Upload profile photo" 
+            />
             <span className="patient-profile-avatar">
               {profile.avatarUrl ? <img src={profile.avatarUrl} alt="" /> : <span>{profileInitial}</span>}
             </span>
-            <span className="profile-photo-edit" aria-hidden="true">{isPhotoSaving ? <Loader2 size={14} className="animate-spin" /> : <Camera size={14} />}</span>
+            <span className="profile-photo-edit" aria-hidden="true">
+              {isPhotoSaving ? <Loader2 size={14} className="animate-spin" /> : <Camera size={14} />}
+            </span>
           </label>
-          <div>
-            <h2 style={{ margin: 0, fontSize: 'var(--text-h2)' }}>{profile.name}</h2>
-            <div className="flex items-center gap-2 mt-1">
-              <Badge status="success"><CheckCircle2 size={12} /> Patient Account</Badge>
-              <span className="caption">Private profile</span>
+          <div style={{ flex: 1, minWidth: '200px' }}>
+            <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: '12px', flexWrap: 'wrap' }}>
+              <div>
+                <h2 style={{ margin: 0, fontSize: 'var(--text-h2)' }}>{profile.name}</h2>
+                <div className="flex items-center gap-2 mt-1">
+                  <Badge status="success"><CheckCircle2 size={12} /> Patient Account</Badge>
+                  <span className="caption">Private profile</span>
+                </div>
+              </div>
+              <Button 
+                type="button" 
+                variant="outline" 
+                size="sm" 
+                onClick={() => document.getElementById('profile-photo-input')?.click()} 
+                disabled={isPhotoSaving}
+              >
+                <Camera size={14} /> {isPhotoSaving ? 'Saving…' : 'Select Photo'}
+              </Button>
             </div>
-            <p className="profile-photo-help">{isPhotoSaving ? 'Saving your photo…' : 'Select the circle to add or change a photo. JPG, PNG, or WebP up to 2 MB.'}</p>
+            {isPhotoSaving && <p className="caption" style={{ margin: '6px 0 0', color: 'var(--color-primary)', fontWeight: 600 }}>Saving your profile photo…</p>}
           </div>
         </div>
 
         {/* Error Alerts */}
-        {photoError && <div className="alert-panel mb-3"><span style={{ fontSize: 'var(--text-caption)' }}>{photoError}</span></div>}
+        {photoError && <div className="alert-panel" style={{ marginBottom: '16px' }}><span style={{ fontSize: 'var(--text-caption)' }}>{photoError}</span></div>}
         {error && (
-          <div className="alert-panel mb-3">
+          <div className="alert-panel" style={{ marginBottom: '16px' }}>
             <span style={{ fontSize: 'var(--text-caption)' }}>{error}</span>
           </div>
         )}
 
         {/* Form fields */}
-        <form onSubmit={handleSave} className="flex-col gap-4">
-          <div className="flex flex-col sm:flex-row gap-3">
-             <div style={{ flex: 1 }}>
+        <form onSubmit={handleSave} style={{ display: 'flex', flexDirection: 'column', gap: '20px' }}>
+          <div style={{ display: 'flex', gap: '16px', flexWrap: 'wrap' }}>
+             <div style={{ flex: '1 1 240px' }}>
                <label htmlFor="profile-first-name" style={{ display: 'block', marginBottom: 'var(--spacing-1)', fontWeight: 600, fontSize: 'var(--text-caption)' }}>First Name</label>
                <Input id="profile-first-name" type="text" value={first} onChange={e => setFirst(e.target.value)} required />
              </div>
-             <div style={{ flex: 1 }}>
+             <div style={{ flex: '1 1 240px' }}>
                <label htmlFor="profile-last-name" style={{ display: 'block', marginBottom: 'var(--spacing-1)', fontWeight: 600, fontSize: 'var(--text-caption)' }}>Last Name</label>
                <Input id="profile-last-name" type="text" value={last} onChange={e => setLast(e.target.value)} required />
              </div>
@@ -188,7 +211,7 @@ export const Profile = () => {
             <Input id="profile-phone" type="tel" value={phone} onChange={e => setPhone(e.target.value)} />
           </div>
 
-          <div className="flex items-center gap-3 mt-2">
+          <div style={{ display: 'flex', alignItems: 'center', gap: '16px', marginTop: '8px' }}>
             <Button type="submit" variant="primary" disabled={isSaving}>
               {isSaving ? 'Saving Changes...' : 'Save Profile Changes'}
             </Button>
