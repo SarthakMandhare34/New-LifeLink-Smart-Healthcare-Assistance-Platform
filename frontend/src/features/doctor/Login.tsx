@@ -259,7 +259,7 @@ export const DoctorLogin = () => {
             </form>
 
             {/* Password recovery & Patient navigation */}
-            <div style={{ textAlign: 'center', marginTop: '22px', fontSize: '0.86rem', display: 'flex', flexDirection: 'column', gap: '8px' }}>
+            <div style={{ textAlign: 'center', marginTop: '20px', fontSize: '0.86rem', display: 'flex', flexDirection: 'column', gap: '8px' }}>
               <div style={{ display: 'flex', justifyContent: 'center', gap: '16px' }}>
                 <button
                   type="button"
@@ -277,6 +277,107 @@ export const DoctorLogin = () => {
                   style={{ background: 'none', border: 'none', color: 'var(--color-doctor-primary)', fontWeight: 700, cursor: 'pointer', padding: 0 }}
                 >
                   Patient sign in
+                </button>
+              </div>
+            </div>
+
+            {/* Quick Demo Clinician Credentials Helper */}
+            <div 
+              style={{ 
+                marginTop: '20px', 
+                padding: '14px', 
+                background: 'var(--swiss-blue-soft, rgba(14, 114, 121, 0.06))', 
+                border: '1px solid var(--color-doctor-border, #E2E8F0)', 
+                borderRadius: '4px',
+                fontSize: '0.82rem'
+              }}
+            >
+              <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '8px' }}>
+                <span style={{ fontWeight: 700, letterSpacing: '0.04em', textTransform: 'uppercase', fontSize: '0.72rem', color: 'var(--color-doctor-primary)' }}>
+                  Demo Clinician Credentials
+                </span>
+                <span style={{ fontSize: '0.70rem', color: 'var(--color-text-muted)' }}>1-Click Auto-Fill</span>
+              </div>
+              <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '6px' }}>
+                <button
+                  type="button"
+                  onClick={() => {
+                    setEmail('central-cardiology-csmt@lifelink.com');
+                    setPassword('cardio@lifelink');
+                  }}
+                  style={{
+                    padding: '6px 8px',
+                    textAlign: 'left',
+                    background: 'var(--color-surface-white, #ffffff)',
+                    border: '1px solid var(--color-border, #E2E8F0)',
+                    borderRadius: '4px',
+                    cursor: 'pointer',
+                    fontSize: '0.76rem',
+                    color: 'var(--color-doctor-text)'
+                  }}
+                >
+                  <strong style={{ display: 'block', color: 'var(--color-doctor-primary)' }}>Cardiology</strong>
+                  <span style={{ fontSize: '0.70rem', color: 'var(--color-text-muted)' }}>Dr. Rajesh Varma</span>
+                </button>
+                <button
+                  type="button"
+                  onClick={() => {
+                    setEmail('central-general-practice-csmt@lifelink.com');
+                    setPassword('general@lifelink');
+                  }}
+                  style={{
+                    padding: '6px 8px',
+                    textAlign: 'left',
+                    background: 'var(--color-surface-white, #ffffff)',
+                    border: '1px solid var(--color-border, #E2E8F0)',
+                    borderRadius: '4px',
+                    cursor: 'pointer',
+                    fontSize: '0.76rem',
+                    color: 'var(--color-doctor-text)'
+                  }}
+                >
+                  <strong style={{ display: 'block', color: 'var(--color-doctor-primary)' }}>General Practice</strong>
+                  <span style={{ fontSize: '0.70rem', color: 'var(--color-text-muted)' }}>Dr. Aarav Kulkarni</span>
+                </button>
+                <button
+                  type="button"
+                  onClick={() => {
+                    setEmail('central-dermatology-ghatkopar@lifelink.com');
+                    setPassword('derma@lifelink');
+                  }}
+                  style={{
+                    padding: '6px 8px',
+                    textAlign: 'left',
+                    background: 'var(--color-surface-white, #ffffff)',
+                    border: '1px solid var(--color-border, #E2E8F0)',
+                    borderRadius: '4px',
+                    cursor: 'pointer',
+                    fontSize: '0.76rem',
+                    color: 'var(--color-doctor-text)'
+                  }}
+                >
+                  <strong style={{ display: 'block', color: 'var(--color-doctor-primary)' }}>Dermatology</strong>
+                  <span style={{ fontSize: '0.70rem', color: 'var(--color-text-muted)' }}>Dr. Rahul Tambe</span>
+                </button>
+                <button
+                  type="button"
+                  onClick={() => {
+                    setEmail('western-orthopedics-dadar@lifelink.com');
+                    setPassword('ortho@lifelink');
+                  }}
+                  style={{
+                    padding: '6px 8px',
+                    textAlign: 'left',
+                    background: 'var(--color-surface-white, #ffffff)',
+                    border: '1px solid var(--color-border, #E2E8F0)',
+                    borderRadius: '4px',
+                    cursor: 'pointer',
+                    fontSize: '0.76rem',
+                    color: 'var(--color-doctor-text)'
+                  }}
+                >
+                  <strong style={{ display: 'block', color: 'var(--color-doctor-primary)' }}>Orthopedics</strong>
+                  <span style={{ fontSize: '0.70rem', color: 'var(--color-text-muted)' }}>Dr. Sunita Jagtap</span>
                 </button>
               </div>
             </div>
