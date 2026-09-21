@@ -15,8 +15,8 @@
 import React from 'react';
 import { useNavigate } from "react-router-dom";
 import { Users, Calendar, Clock, Activity, ArrowRight, Stethoscope, FileText, CheckCircle2 } from "lucide-react";
-import { Button } from "../../components/ui/Button";
-import { trpc } from "../../lib/trpc";
+import { Button } from "../../../components/ui/Button";
+import { trpc } from "../../../lib/trpc";
 
 // Swiss semantic triage badge styling
 function urgencyBadge(urgency: string) {
