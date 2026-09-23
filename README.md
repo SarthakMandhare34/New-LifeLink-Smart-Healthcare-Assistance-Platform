@@ -7,7 +7,7 @@
 [![Tailwind CSS](https://img.shields.io/badge/Tailwind-v4-38bdf8?style=for-the-badge&logo=tailwindcss&logoColor=white)](https://tailwindcss.com/)
 [![Google Gemini AI](https://img.shields.io/badge/Google%20Gemini-AI-4285F4?style=for-the-badge&logo=google&logoColor=white)](https://ai.google.dev/)
 [![MySQL](https://img.shields.io/badge/MySQL-8.0-4479A1?style=for-the-badge&logo=mysql&logoColor=white)](https://www.mysql.com/)
-[![Tests Passing](https://img.shields.io/badge/Vitest-50%20Tests%20Passed-success?style=for-the-badge&logo=vitest&logoColor=white)](#-automated-testing)
+[![Tests Passing](https://img.shields.io/badge/Vitest-225%20Tests%20Passed-success?style=for-the-badge&logo=vitest&logoColor=white)](#-automated-testing)
 
 **LifeLink** is a full-stack healthcare assistance platform built for **Mumbai, India**. It connects patients with **52 verified doctors** through an **AI-powered symptom triage engine** (Google Gemini), an **interactive Mumbai railway clinic map** (Leaflet + OpenStreetMap), and a **cryptographically secured digital prescription system** (SHA-256).
 
@@ -64,17 +64,17 @@ Paper prescriptions can be lost, damaged, or physically altered. Illegible handw
 | Layer | Technology | Purpose |
 |:---|:---|:---|
 | 🖥️ Frontend Framework | **React 19 + Vite 7** | Component-based UI with instant hot module reloading |
-| 🎨 Styling | **Tailwind CSS v4** | Utility-first styling with responsive design tokens |
+| 🎨 Styling & Design System | **Swiss Typographic Style + Tailwind CSS v4** | Clinical grid system, 1px architectural hairlines, high-contrast dark/light balance, mobile-first responsive matrix |
 | 📝 Language | **TypeScript 5.9** | End-to-end type safety across the full stack |
 | 🖧 Backend Runtime | **Node.js v22 + Express.js** | HTTP server and API request handling |
 | 🔗 API Layer | **tRPC v11** | Type-safe remote procedure calls (zero API contracts to maintain) |
-| 🗄️ Database | **MySQL 8.0 (Local)** | Relational data storage with full ACID compliance |
+| 🗄️ Database | **MySQL 8.0 (Local)** | Relational data storage with strict 52 verified doctor integrity and full ACID compliance |
 | 📊 ORM | **Drizzle ORM** | Type-safe SQL query building and schema management |
 | 🤖 AI Engine | **Google Gemini (Flash models)** | Clinical symptom analysis and urgency classification |
-| 🔐 Authentication | **JWT + HTTP-Only Cookies** | Secure dual-session management (patient + doctor) |
+| 🔐 Authentication | **JWT + Scrypt + HTTP-Only Cookies** | Secure dual-session isolation (patient + doctor) with individual clinician credential verification |
 | 🗺️ Maps | **Leaflet + OpenStreetMap** | Interactive clinic map locked to Mumbai Metropolitan Region |
 | ⚡ Real-Time | **Server-Sent Events (SSE)** | Live appointment and prescription push notifications |
-| 🧪 Testing | **Vitest** | 50 tests across 6 suites covering core business logic |
+| 🧪 Testing | **Vitest** | 225 tests across 33 suites covering full-stack clinical workflows, auth security, IDOR, SSE, and responsive matrices |
 | 🚀 Runtime | **Local Development** | Runs on `localhost` via Vite (frontend) + Express (backend) |
 
 ---
@@ -180,13 +180,16 @@ Doctors have a fully separate workspace with:
 
 ---
 
-### 🌙 Dark Mode
+### 🎨 Swiss Design Aesthetic & High-Contrast Dark/Light Balance
 
-> Toggled from `/patient/settings`
+> Toggled from `/patient/settings` and `/doctor/settings`
 
-- Uses deep slate and navy tones (not plain black) for a clinical, readable environment
-- All input fields maintain **WCAG 2.1 AA** high-contrast compliance
-- Glassmorphism styling (backdrop blur + edge lighting) on floating panels
+LifeLink implements the **Swiss International Typographic Style** (Josef Müller-Brockmann principles) engineered for rigorous clinical clarity:
+- 📐 **Engineered Geometry:** 1px architectural hairline borders (`#E2E8F0` light / `#242E3D` dark), 2px engineered radii, and zero distracting drop shadows on core surfaces.
+- ☀️ **Light Mode Canvas:** Crisp clinical slate-white canvas (`#F8FAFC`), deep editorial slate-black ink (`#0F172A`) for headings/body, and balanced slate (`#64748B`) for metadata, meeting WCAG AAA contrast guidelines.
+- 🌙 **Executive Obsidian Dark Mode:** Deep `#0C0E12` obsidian canvas, elevated `#141820` card surfaces, `#1B222E` elevated plates, vibrant `#FF4D57` Swiss Red, and glowing `#38BDF8` clinical cyan-blue.
+- 🏷️ **Dynamic Semantic Badges:** Restrained tinted backgrounds (`--swiss-red-soft`, `--swiss-blue-soft`, `--swiss-amber-bg`, `--swiss-green-bg`) with high-contrast text and 1px borders that adapt dynamically to active themes.
+- 📱 **Multi-Device Responsive Matrix:** Fluid layout adaptation across all standard phones (320px–480px, Galaxy S21, iPhone SE, iPhone 14), foldables, tablets, and 4K displays with safe area insets (`viewport-fit=cover`).
 
 ---
 
@@ -197,6 +200,7 @@ LifeLink handles personal medical data and is built with **defense-in-depth** fr
 | Security Layer | Implementation |
 |:---|:---|
 | 🔑 **Dual-Session Isolation** | Patient (`app_session_id`) and Doctor (`doctor_session_id`) sessions are completely independent. Compromising one provides zero access to the other |
+| 🩺 **Strict 52-Doctor Directory** | Database integrity is enforced to contain strictly the 52 official Mumbai doctors. Login requires individual clinician credentials with zero insecure demo auto-fill shortcuts |
 | 🔐 **Scrypt Password Hashing** | Memory-hard algorithm — makes brute-force attacks against a stolen database computationally impractical |
 | ⏱️ **Auto Doctor Logout** | Workstations auto-lock after **5 minutes** of inactivity — prevents unauthorized access if a doctor walks away |
 | 🚫 **OAuth Collision Prevention** | If a user registers with email+password, a Google OAuth login with the same email is blocked (prevents account takeover) |
@@ -459,7 +463,7 @@ All available commands defined in `package.json`:
 | `npm run dev` | 🚀 Starts Vite frontend (port 5173) + Express backend (port 4000) concurrently |
 | `npm run build` | 📦 Compiles React frontend to `dist/public/` and backend to `dist/index.js` |
 | `npm start` | ▶️ Starts the compiled production server locally |
-| `npm test` | 🧪 Runs all 50 Vitest tests across 6 suites |
+| `npm test` | 🧪 Runs all 225 Vitest tests across 33 suites |
 | `npm run check` | ✅ TypeScript type-check (`tsc --noEmit`) — reports errors without building |
 | `npm run format` | 🎨 Formats all source files using Prettier |
 | `npm run verify` | 🔍 Runs `check` → `test` → `build` in sequence (pre-push validation) |
@@ -616,16 +620,16 @@ All tables reference the central `users` table via foreign keys with `onDelete: 
 
 ## 🧪 Automated Testing
 
-LifeLink has **50 tests across 6 test suites** covering all critical business logic:
+LifeLink features a comprehensive test suite of **225 tests across 33 test suites** covering all critical clinical logic, security, and responsive layouts:
 
-| Test Suite | Tests | What It Validates |
+| Test Category | Suites | What It Validates |
 |:---|:---|:---|
-| `mockDoctorDirectory.test.ts` | 4 | ✅ 52 total doctors, 1 GP per station, ≥3 specialists per specialty field |
-| `SpecialistFinder.test.ts` | 5 | ✅ Patient-facing labels, filter logic, Mumbai corridor selection |
-| `appointmentLifecycle.test.ts` | 10 | ✅ Complete booking → confirm → complete → cancel flow |
-| `prescriptionLifecycle.test.ts` | 12 | ✅ SHA-256 integrity, tamper detection, prescription issuance |
-| `medicine.test.ts` | 7 | ✅ Medicine cabinet operations, pill count, schedule management |
-| `healthPassport.test.ts` | 12 | ✅ Blood group, allergies, chronic conditions CRUD |
+| 🩺 **Clinician Directory & Search** | `mockDoctorDirectory.test.ts`, `SpecialistFinder.test.ts`, `discoveryLocation.test.ts` | 52 verified doctors, station mapping, location filters, Mumbai corridor selection |
+| 🏥 **Clinical Lifecycle Workflows** | `appointmentLifecycle.test.ts`, `prescriptionLifecycle.test.ts`, `medicine.test.ts`, `healthPassport.test.ts`, `profilePhoto.test.ts` | Complete appointment booking & status transitions, SHA-256 digital signature tamper detection, medicine cabinet schedules, and health records |
+| 🔒 **Authentication & IDOR Security** | `security.idor.test.ts`, `nativePatientAuth.test.ts`, `doctorAuth.test.ts`, `auth.logout.test.ts`, `simultaneousAuth.test.ts` | Cross-tenant isolation, session cookie invalidation, dual-session separation, and password hashing |
+| ⚡ **Real-Time Streaming Matrix** | `patientRealtime.test.ts`, `security.realtime.test.ts` (32 tests) | SSE event delivery, connection recovery, error handling, listener isolation |
+| 🤖 **AI Safety & Privacy** | `assessmentService.test.ts` (54 tests), `assessment.validation.test.ts`, `geminiKey.test.ts` | 5-layer triage pipeline, biological consistency checks, pediatric overrides, zero patient content leak |
+| 📱 **Responsive UI & Design System** | `responsiveLayout.test.ts`, `typography.test.ts`, `backgroundBranding.test.ts`, `styles.motion.test.ts` | Multi-device breakpoint matrix (320px–4K), Swiss typography tokens, reduced-motion accessibility |
 
 ### Running Tests
 
