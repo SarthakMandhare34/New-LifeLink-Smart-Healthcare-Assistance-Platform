@@ -2,7 +2,7 @@
  * ============================================================================
  * SECURITY AND AUTHENTICATION CORE
  * ============================================================================
- * 
+ *
  * WHY THIS FILE IS SPECIAL:
  * This file manages how users securely log into the application.
  * Healthcare apps are prime targets for hackers. Instead of basic security,
@@ -13,14 +13,14 @@
 import { randomBytes, timingSafeEqual } from "node:crypto";                             // Cryptographic utilities for password generation and timing-safe comparisons
 import { TRPCError } from "@trpc/server";                                                  // Standard tRPC error throwing utility
 import { z } from "zod";                                                                   // Input schema validation library
-import { 
-  createSyntheticDoctorCredential, 
-  getSyntheticDoctorCredentialByEmail, 
-  getSyntheticDoctorCredentialByUserId, 
-  listSyntheticDoctorCredentialAccounts, 
-  refreshSyntheticDoctorCredentialByDoctorId, 
-  updateSyntheticDoctorPasswordByEmail, 
-  updateSyntheticDoctorPasswordByUserId 
+import {
+  createSyntheticDoctorCredential,
+  getSyntheticDoctorCredentialByEmail,
+  getSyntheticDoctorCredentialByUserId,
+  listSyntheticDoctorCredentialAccounts,
+  refreshSyntheticDoctorCredentialByDoctorId,
+  updateSyntheticDoctorPasswordByEmail,
+  updateSyntheticDoctorPasswordByUserId
 } from "../db";                                                                            // Database CRUD operations for synthetic clinician records
 import { getSessionCookieOptions } from "../_core/cookies";                                // Secure cookie attribute generator
 import { ENV } from "../_core/env";                                                        // Central environment configuration
@@ -45,8 +45,8 @@ const provisionInput = credentialInput.extend({
 
 const resetInput = credentialInput.extend({ provisioningCode: z.string().min(1).max(256) }); // Schema for administrative clinician password resets
 const changePasswordInput = z.object({                                                     // Schema for clinician self-service password changes
-  currentPassword: z.string().min(10).max(128), 
-  newPassword: z.string().min(10).max(128) 
+  currentPassword: z.string().min(10).max(128),
+  newPassword: z.string().min(10).max(128)
 });
 
 // Normalizes email addresses to lowercase without whitespace

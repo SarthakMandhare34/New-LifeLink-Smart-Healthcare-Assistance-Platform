@@ -2,7 +2,7 @@
  * ============================================================================
  * tRPC DOMAIN ROUTERS & BUSINESS LOGIC
  * ============================================================================
- * 
+ *
  * WHY THIS FILE IS SPECIAL:
  * This file contains the actual rules for what patients and doctors can do.
  * It uses tRPC, which creates an unbreakable bridge between the front-end and back-end.

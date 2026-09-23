@@ -2,7 +2,7 @@
  * ============================================================================
  * REUSABLE UI COMPONENTS (DESIGN SYSTEM)
  * ============================================================================
- * 
+ *
  * WHY THIS FILE IS SPECIAL:
  * Instead of rewriting the code for a button 50 times, we write it once here.
  * This ensures the entire application looks perfectly consistent (using Tailwind CSS)
@@ -26,11 +26,11 @@ interface PopupProps {
 // Utilizes HTML5 native `<dialog>` element with `showModal()` for accessible focus-trapping.
 // Supports backdrop dismissal, close micro-animations, and ARIA title relationships.
 // =========================================================================================
-export const Popup: React.FC<PopupProps> = ({ 
-  isOpen, 
-  onClose, 
-  title, 
-  children, 
+export const Popup: React.FC<PopupProps> = ({
+  isOpen,
+  onClose,
+  title,
+  children,
   maxWidth = '500px',
   className = '',
   closeOnBackdrop = true
@@ -79,7 +79,7 @@ export const Popup: React.FC<PopupProps> = ({
     const rect = dialog.getBoundingClientRect();
     const isInDialog = (rect.top <= e.clientY && e.clientY <= rect.top + rect.height &&
       rect.left <= e.clientX && e.clientX <= rect.left + rect.width);
-    
+
     if (!isInDialog) {
       handleClose();                                                                            // Click was outside dialog box
     }
@@ -98,9 +98,9 @@ export const Popup: React.FC<PopupProps> = ({
         {/* Modal Header */}
         <div className="flex justify-between items-center mb-4" style={{ paddingBottom: 'var(--spacing-3)', borderBottom: '1px solid var(--color-border)' }}>
           <h2 id={titleId} style={{ margin: 0, fontSize: 'var(--text-h2)' }}>{title}</h2>
-          <button 
-            onClick={handleClose} 
-            className="icon-btn" 
+          <button
+            onClick={handleClose}
+            className="icon-btn"
             aria-label="Close popup"
             style={{ margin: '-8px' }}
           >

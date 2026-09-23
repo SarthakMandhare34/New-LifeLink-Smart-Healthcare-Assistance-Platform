@@ -2,7 +2,7 @@
  * ============================================================================
  * FRONTEND REACT CORE
  * ============================================================================
- * 
+ *
  * WHY THIS FILE IS SPECIAL:
  * This is the root configuration of the React application.
  * It sets up the Routing (which URL goes to which page) and global Theme Contexts.
@@ -19,13 +19,13 @@ import { trpc } from "./lib/trpc";                                              
 
 // STEP 1: Initialize TanStack Query Client with intelligent caching and fast-fail policy
 const queryClient = new QueryClient({
-  defaultOptions: { 
-    queries: { 
+  defaultOptions: {
+    queries: {
       retry: false,                                                                        // Fail fast without continuous retries on network error
       refetchOnWindowFocus: false,                                                         // Prevent unwanted refetches when switching browser tabs
       staleTime: 60 * 1000,                                                                // Retain data freshness for 1 minute for instant tab switching
       gcTime: 5 * 60 * 1000,                                                               // Cache inactive query data for 5 minutes
-    } 
+    }
   },
 });
 

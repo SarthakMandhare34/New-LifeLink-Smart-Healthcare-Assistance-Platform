@@ -2,7 +2,7 @@
  * ============================================================================
  * SECURITY AND AUTHENTICATION CORE
  * ============================================================================
- * 
+ *
  * WHY THIS FILE IS SPECIAL:
  * This file manages how users securely log into the application.
  * Healthcare apps are prime targets for hackers. Instead of basic security,

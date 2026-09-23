@@ -2,7 +2,7 @@
  * ============================================================================
  * AUTOMATED INTEGRATION SUITE: CRYPTOGRAPHIC PRESCRIPTION WORKFLOW & INTEGRITY (backend/prescriptionLifecycle.test.ts)
  * ============================================================================
- * 
+ *
  * WHAT THIS SUITE VERIFIES:
  * Tests the medical prescription workflow and its tamper-evident cryptographic architecture:
  * 1. Cryptographic Tamper Seals (SHA-256): Verifies that every issued prescription generates

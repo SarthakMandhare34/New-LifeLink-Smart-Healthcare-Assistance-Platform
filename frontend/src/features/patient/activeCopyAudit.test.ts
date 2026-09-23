@@ -2,7 +2,7 @@
  * ============================================================================
  * PATIENT PORTAL UI
  * ============================================================================
- * 
+ *
  * WHY THIS FILE IS SPECIAL:
  * This manages the everyday user interfaces for patients (Dashboard, Health Passport, Medicines).
  * It uses modern React hooks to keep data perfectly synchronized and responsive.

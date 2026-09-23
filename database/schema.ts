@@ -2,13 +2,15 @@
  * ============================================================================
  * RELATIONAL DATABASE SCHEMA (DRIZZLE ORM)
  * ============================================================================
- * 
+ *
  * WHY THIS FILE IS SPECIAL:
  * This file is the absolute blueprint of how data is stored permanently.
  * We use a tool called Drizzle ORM. It prevents SQL Injection attacks (hackers typing malicious code).
  * It guarantees that if we expect a 'number' for an Age, nobody can accidentally save a 'string'.
  */
 import { foreignKey, int, mysqlEnum, mysqlTable, text, timestamp, unique, varchar } from "drizzle-orm/mysql-core";
+
+// Unified relational schema providing full type-safety across frontend and backend layers
 
 // --- Table 1: Core Users (Patient, Doctor, Admin) ---
 export const users = mysqlTable("users", {
@@ -251,4 +253,3 @@ export type PatientEvent = typeof patientEvents.$inferSelect;
 export type DoctorEvent = typeof doctorEvents.$inferSelect;
 export type BookingError = typeof bookingErrors.$inferSelect;
 export type InsertBookingError = typeof bookingErrors.$inferInsert;
-

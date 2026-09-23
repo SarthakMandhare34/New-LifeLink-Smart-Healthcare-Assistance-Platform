@@ -2,7 +2,7 @@
  * ============================================================================
  * AUTOMATED INTEGRATION SUITE: SMART MEDICINE CABINET (backend/medicine.test.ts)
  * ============================================================================
- * 
+ *
  * WHAT THIS SUITE VERIFIES:
  * Tests patient home medication management, schedules, and reminders:
  * 1. Inventory Management: Creation, modification, dosage adjustments, and removal of medicines.
@@ -44,7 +44,7 @@ beforeAll(async () => {
     loginMethod: "native-patient",
     role: "user",
   });
-  
+
   // Insert Patient 2 (adversary for IDOR tests)
   await upsertUser({
     openId: "test:patient-medicine-2",
@@ -80,7 +80,7 @@ describe("Medicine Cabinet Integration", () => {
   // Step 1: Patient adds new medication to their cabinet
   test("1. Patient creates medicine", async () => {
     const caller = createCaller({ id: patient1Id, openId: "test:patient-medicine-1", role: "user" });
-    
+
     const response = await caller.patientMedicine.create({
       name: "Amoxicillin",
       dosage: "500mg",
@@ -91,7 +91,7 @@ describe("Medicine Cabinet Integration", () => {
 
     expect(response.id).toBeGreaterThan(0);
     medicineId = response.id;
-    
+
     const inDb = await db.select().from(patientMedicines).where(eq(patientMedicines.id, medicineId));
     expect(inDb.length).toBe(1);
     expect(inDb[0].userId).toBe(patient1Id);
@@ -122,7 +122,7 @@ describe("Medicine Cabinet Integration", () => {
 
   test("4. Ownership: Patient cannot read/edit/delete another patient's medicine", async () => {
     const caller2 = createCaller({ id: patient2Id, openId: "test:patient-medicine-2", role: "user" });
-    
+
     const list = await caller2.patientMedicine.list();
     expect(list.find((m) => m.id === medicineId)).toBeUndefined();
 
@@ -134,7 +134,7 @@ describe("Medicine Cabinet Integration", () => {
     await expect(caller2.patientMedicine.remove({
       id: medicineId
     })).rejects.toThrow(/Medicine record not found/);
-    
+
     // Ensure it wasn't modified
     const inDb = await db.select().from(patientMedicines).where(eq(patientMedicines.id, medicineId));
     expect(inDb[0].name).toBe("Amoxicillin");
@@ -142,7 +142,7 @@ describe("Medicine Cabinet Integration", () => {
 
   test("5. Validation: Requires name, dosage, frequency, schedule", async () => {
     const caller = createCaller({ id: patient1Id, openId: "test:patient-medicine-1", role: "user" });
-    
+
     // @ts-expect-error Testing invalid input
     await expect(caller.patientMedicine.create({
       dosage: "10mg",

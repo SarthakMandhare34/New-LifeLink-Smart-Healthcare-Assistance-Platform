@@ -2,7 +2,7 @@
  * ============================================================================
  * RELATIONAL DATABASE SCHEMA (DRIZZLE ORM)
  * ============================================================================
- * 
+ *
  * WHY THIS FILE IS SPECIAL:
  * This file is the absolute blueprint of how data is stored permanently.
  * We use a tool called Drizzle ORM. It prevents SQL Injection attacks (hackers typing malicious code).
@@ -23,4 +23,3 @@ export default defineConfig({
     url: connectionString,
   },
 });
-

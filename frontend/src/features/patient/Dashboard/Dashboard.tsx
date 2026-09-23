@@ -2,7 +2,7 @@
  * ============================================================================
  * PATIENT CLINICAL DASHBOARD (frontend/src/features/patient/Dashboard.tsx)
  * ============================================================================
- * 
+ *
  * SWISS INTERNATIONAL TYPOGRAPHIC STYLE HEALTHCARE UI
  * Structured clinical information system:
  * 1. Patient identity & credentials header
@@ -14,7 +14,7 @@
  */
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
-import { 
+import {
   Calendar, Activity, Pill, FileText, TriangleAlert, ArrowRight, Clock,
   MapPin, ShieldCheck, CheckCircle2
 } from 'lucide-react';
@@ -26,23 +26,23 @@ import { useAuth } from '../../../_core/hooks/useAuth';
 // Swiss semantic triage badge styling
 function urgencyBadge(urgency: string) {
   if (urgency === 'EMERGENCY') {
-    return { 
-      bg: 'var(--swiss-red-soft)', 
-      color: 'var(--color-primary)', 
-      border: '1px solid var(--swiss-red-border)' 
+    return {
+      bg: 'var(--swiss-red-soft)',
+      color: 'var(--color-primary)',
+      border: '1px solid var(--swiss-red-border)'
     };
   }
   if (urgency === 'MODERATE') {
-    return { 
-      bg: 'var(--swiss-amber-bg)', 
-      color: 'var(--swiss-amber-text)', 
-      border: '1px solid var(--swiss-amber-border)' 
+    return {
+      bg: 'var(--swiss-amber-bg)',
+      color: 'var(--swiss-amber-text)',
+      border: '1px solid var(--swiss-amber-border)'
     };
   }
-  return { 
-    bg: 'var(--swiss-blue-soft)', 
-    color: 'var(--color-accent)', 
-    border: '1px solid var(--swiss-blue-border)' 
+  return {
+    bg: 'var(--swiss-blue-soft)',
+    color: 'var(--color-accent)',
+    border: '1px solid var(--swiss-blue-border)'
   };
 }
 
@@ -91,22 +91,22 @@ export const PatientDashboard = () => {
       <section className="dashboard-header-box" aria-label="Patient identity summary">
         <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', flexWrap: 'wrap', gap: '16px' }}>
           <div>
-            <span style={{ 
-              display: 'inline-block', 
-              fontSize: '0.72rem', 
-              fontWeight: 700, 
-              color: 'var(--swiss-red)', 
-              textTransform: 'uppercase', 
-              letterSpacing: '0.08em', 
-              marginBottom: '4px' 
+            <span style={{
+              display: 'inline-block',
+              fontSize: '0.72rem',
+              fontWeight: 700,
+              color: 'var(--swiss-red)',
+              textTransform: 'uppercase',
+              letterSpacing: '0.08em',
+              marginBottom: '4px'
             }}>
               Personal Health Profile &bull; LifeLink Connected Care
             </span>
-            <h1 style={{ 
-              fontSize: 'clamp(1.5rem, 2.5vw, 2rem)', 
-              fontWeight: 800, 
-              margin: '0 0 6px', 
-              color: 'var(--color-text)', 
+            <h1 style={{
+              fontSize: 'clamp(1.5rem, 2.5vw, 2rem)',
+              fontWeight: 800,
+              margin: '0 0 6px',
+              color: 'var(--color-text)',
               letterSpacing: '-0.02em',
               lineHeight: 1.2
             }}>
@@ -287,16 +287,16 @@ export const PatientDashboard = () => {
           {medicines.length > 0 ? (
             <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
               {medicines.slice(0, 3).map((med, idx) => (
-                <div 
-                  key={idx} 
-                  style={{ 
-                    display: 'flex', 
-                    alignItems: 'center', 
+                <div
+                  key={idx}
+                  style={{
+                    display: 'flex',
+                    alignItems: 'center',
                     justifyContent: 'space-between',
-                    padding: '10px 14px', 
-                    background: 'var(--color-surface-subtle)', 
-                    borderRadius: '2px', 
-                    border: '1px solid var(--color-border)' 
+                    padding: '10px 14px',
+                    background: 'var(--color-surface-subtle)',
+                    borderRadius: '2px',
+                    border: '1px solid var(--color-border)'
                   }}
                 >
                   <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
@@ -399,14 +399,14 @@ export const PatientDashboard = () => {
           className="dashboard-emergency-section"
         >
           <div className="dashboard-emergency-inner">
-            <div style={{ 
-              width: '42px', 
-              height: '42px', 
-              borderRadius: '2px', 
-              background: 'var(--swiss-red)', 
-              display: 'grid', 
-              placeItems: 'center', 
-              flexShrink: 0 
+            <div style={{
+              width: '42px',
+              height: '42px',
+              borderRadius: '2px',
+              background: 'var(--swiss-red)',
+              display: 'grid',
+              placeItems: 'center',
+              flexShrink: 0
             }}>
               <TriangleAlert size={22} color="#FFFFFF" />
             </div>
@@ -419,16 +419,16 @@ export const PatientDashboard = () => {
               </p>
             </div>
           </div>
-          
+
           <Button
             variant="danger"
             onClick={() => navigate('/patient/emergency')}
-            style={{ 
-              display: 'inline-flex', 
-              alignItems: 'center', 
-              gap: '8px', 
-              flexShrink: 0, 
-              fontWeight: 700, 
+            style={{
+              display: 'inline-flex',
+              alignItems: 'center',
+              gap: '8px',
+              flexShrink: 0,
+              fontWeight: 700,
               borderRadius: '2px',
               padding: '10px 20px',
               fontSize: '0.90rem'

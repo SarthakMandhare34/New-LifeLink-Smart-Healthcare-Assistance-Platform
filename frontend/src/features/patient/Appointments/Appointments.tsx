@@ -2,7 +2,7 @@
  * ============================================================================
  * PATIENT APPOINTMENTS MANAGEMENT (frontend/src/features/patient/Appointments/Appointments.tsx)
  * ============================================================================
- * 
+ *
  * WHY THIS FILE IS SPECIAL:
  * This component manages patient consultations with Mumbai railway transit clinic doctors.
  * It separates active/upcoming bookings from past consultation records, enables

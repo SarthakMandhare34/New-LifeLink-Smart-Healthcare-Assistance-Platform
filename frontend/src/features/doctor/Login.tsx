@@ -2,7 +2,7 @@
  * ============================================================================
  * CLINICIAN WORKSTATION AUTHENTICATION PORTAL (frontend/src/features/doctor/Login.tsx)
  * ============================================================================
- * 
+ *
  * WHY THIS FILE IS SPECIAL:
  * This is the dedicated credential verification gateway for medical clinicians.
  * It strictly issues independent `doctor_session_id` cookies to prevent token cross-contamination
@@ -40,7 +40,7 @@ export const DoctorLogin = () => {
   const [password, setPassword] = useState("");                                            // Clinician password state
   const [showPassword, setShowPassword] = useState(false);                                 // Password visibility toggle
   const [error, setError] = useState("");                                                  // Authentication error message
-  
+
   // tRPC mutation for doctor authentication and session cookie establishment
   const login = trpc.doctorAuth.login.useMutation({
     onSuccess: async (doctor) => {
@@ -82,23 +82,23 @@ export const DoctorLogin = () => {
         {/* Branding Panel (Left Column): Clean Nordic Clinical Identity */}
         <div className="auth-branding-panel" style={{ flex: 1, display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems: 'center', padding: 'var(--spacing-6)', zIndex: 1 }}>
           <div style={{ textAlign: 'center', maxWidth: '440px', display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
-            
+
             {/* Proportional Brand Treatment (Section 11) */}
             <div style={{ marginBottom: '24px', display: 'inline-flex', alignItems: 'center', justifyContent: 'center' }}>
               <LifeLinkLogo className="lifelink-logo-auth" style={{ width: '100%', maxWidth: '240px', height: 'auto', margin: 0, padding: 0, border: 'none', background: 'transparent', boxShadow: 'none' }} />
             </div>
-            
+
             {/* Institutional Clinician Subtitle & Motto */}
             <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '14px' }}>
-              <span 
-                style={{ 
-                  background: 'var(--swiss-blue-soft)', 
-                  color: 'var(--color-doctor-primary)', 
-                  fontSize: '0.74rem', 
-                  fontWeight: 600, 
-                  letterSpacing: '0.06em', 
-                  textTransform: 'uppercase', 
-                  padding: '5px 14px', 
+              <span
+                style={{
+                  background: 'var(--swiss-blue-soft)',
+                  color: 'var(--color-doctor-primary)',
+                  fontSize: '0.74rem',
+                  fontWeight: 600,
+                  letterSpacing: '0.06em',
+                  textTransform: 'uppercase',
+                  padding: '5px 14px',
                   borderRadius: 'var(--border-radius-badge)',
                   border: '1px solid #BFDBFE'
                 }}
@@ -118,13 +118,13 @@ export const DoctorLogin = () => {
 
         {/* Form Container (Right Column): Solid Clinical Card */}
         <div style={{ flex: 1.1, display: 'flex', justifyContent: 'center', alignItems: 'center', padding: 'clamp(24px, 4vw, 40px)', zIndex: 1 }}>
-          <Card 
-            className="card" 
-            style={{ 
-              width: '100%', 
-              maxWidth: '480px', 
-              maxHeight: '90vh', 
-              overflowY: 'auto', 
+          <Card
+            className="card"
+            style={{
+              width: '100%',
+              maxWidth: '480px',
+              maxHeight: '90vh',
+              overflowY: 'auto',
               padding: 'clamp(30px, 4.5vw, 44px)',
               background: 'var(--color-surface-white)',
               border: '1px solid var(--color-border)',
@@ -149,12 +149,12 @@ export const DoctorLogin = () => {
 
             {/* Error banner */}
             {error && (
-              <div 
-                className="alert-panel auth-message" 
-                role="alert" 
-                style={{ 
-                  marginBottom: '20px', 
-                  color: 'var(--color-semantic-emergency)', 
+              <div
+                className="alert-panel auth-message"
+                role="alert"
+                style={{
+                  marginBottom: '20px',
+                  color: 'var(--color-semantic-emergency)',
                   textAlign: 'center',
                   background: 'rgba(239, 68, 68, 0.12)',
                   border: '1px solid rgba(239, 68, 68, 0.25)',
@@ -184,11 +184,11 @@ export const DoctorLogin = () => {
                     onChange={(event) => setEmail(event.target.value)}
                     autoComplete="email"
                     required
-                    style={{ 
-                      width: '100%', 
-                      paddingLeft: '42px', 
-                      borderRadius: '2px', 
-                      minHeight: '48px', 
+                    style={{
+                      width: '100%',
+                      paddingLeft: '42px',
+                      borderRadius: '2px',
+                      minHeight: '48px',
                       fontSize: '0.90rem',
                       border: '1px solid var(--color-doctor-input-border, var(--color-doctor-border))',
                       background: 'var(--color-surface-white)',
@@ -214,12 +214,12 @@ export const DoctorLogin = () => {
                     onChange={(event) => setPassword(event.target.value)}
                     autoComplete="current-password"
                     required
-                    style={{ 
-                      width: '100%', 
-                      paddingLeft: '42px', 
-                      paddingRight: '42px', 
-                      borderRadius: '2px', 
-                      minHeight: '46px', 
+                    style={{
+                      width: '100%',
+                      paddingLeft: '42px',
+                      paddingRight: '42px',
+                      borderRadius: '2px',
+                      minHeight: '46px',
                       fontSize: '0.90rem',
                       border: '1px solid var(--color-doctor-input-border, var(--color-doctor-border))',
                       background: 'var(--color-surface-white)',

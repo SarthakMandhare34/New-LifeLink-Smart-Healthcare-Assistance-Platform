@@ -2,7 +2,7 @@
  * ============================================================================
  * ERROR FORMATTING UTILITY (frontend/src/lib/errorFormatting.ts)
  * ============================================================================
- * 
+ *
  * WHY THIS FILE IS SPECIAL:
  * Converts complex system errors, tRPC errors, and raw Zod validation JSON arrays
  * (e.g. `[{"code":"too_big","maximum":100...}]`) into human-readable, user-friendly

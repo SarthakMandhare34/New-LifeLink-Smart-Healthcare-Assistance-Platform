@@ -116,7 +116,7 @@
   --color-surface-glass: var(--swiss-white);           /* Solid Opaque Surface */
   --color-surface-subtle: #F1F5F9;                     /* Subtle Plate */
   --color-surface-interactive: #F1F5F9;                /* Clean Hover Tint */
-  
+
   /* Typography — Deep Clinical Charcoal / Slate Ink */
   --color-text: var(--swiss-black);                    /* #0F172A High-contrast Editorial Slate Ink */
   --color-text-muted: var(--swiss-gray-500);           /* #64748B Secondary Metadata (WCAG AAA) */
@@ -217,7 +217,7 @@
   --color-surface-glass: var(--swiss-dark-surface);     /* Solid Opaque Dark Surface */
   --color-surface-subtle: var(--swiss-dark-surface-elevated); /* Elevated Plate */
   --color-surface-interactive: #1E2633;                /* Refined Interactive Dark Hover */
-  
+
   /* Typography — Swiss Off-White */
   --color-text: var(--swiss-dark-text);                /* High-contrast Pure Light Text */
   --color-text-muted: var(--swiss-dark-text-muted);    /* Balanced Slate Secondary Text */

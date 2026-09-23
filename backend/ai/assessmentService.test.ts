@@ -2,7 +2,7 @@
  * ============================================================================
  * ARTIFICIAL INTELLIGENCE TRIAGE ENGINE
  * ============================================================================
- * 
+ *
  * WHY THIS FILE IS SPECIAL:
  * This is the brain of LifeLink. It connects to Google's Gemini AI supercomputers.
  * It is special because it doesn't just chat; it uses a strict 5-layer safety architecture:
@@ -325,6 +325,3 @@ describe("exhaustive multi-specialty clinical illness matrix", () => {
     expect(SYSTEM_DOCTOR_SPECIALTIES).toContain(expectedSpecialty);
   });
 });
-
-
-

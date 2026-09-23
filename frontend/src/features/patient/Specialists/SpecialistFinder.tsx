@@ -2,7 +2,7 @@
  * ============================================================================
  * TRANSIT CLINIC INTERACTIVE MAP (SpecialistFinder)
  * ============================================================================
- * 
+ *
  * WHY THIS FILE IS SPECIAL:
  * This file renders the live geographic map using Leaflet and CartoDB CDN tiles.
  * Connects directly to real-time specialist listings across Mumbai railway clinics.
@@ -89,7 +89,7 @@ export const SpecialistFinder = () => {
   const [searchParams, setSearchParams] = useSearchParams();                                    // URL search params reader and writer
   const initialSpecialty = searchParams.get('specialty') || ALL_FILTER;                          // Initialize specialty from URL query if present
   const [specialty, setSpecialty] = useState(initialSpecialty);                                  // Active specialty filter state
-  
+
   // Memoize filter object passed to tRPC query to avoid redundant network refetches
   const discoveryFilters = useMemo(() => ({
     city: 'Mumbai' as const,                                                                    // Locked to Mumbai clinical operational radius

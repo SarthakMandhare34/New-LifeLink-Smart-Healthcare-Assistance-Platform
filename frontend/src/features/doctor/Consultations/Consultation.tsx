@@ -2,7 +2,7 @@
  * ============================================================================
  * DOCTOR CONSULTATION WORKSPACE (frontend/src/features/doctor/Consultations/Consultation.tsx)
  * ============================================================================
- * 
+ *
  * WHY THIS FILE IS SPECIAL:
  * This component provides the clinical encounter interface for licensed physicians.
  * It filters active patient appointments needing clinical review, provides rapid

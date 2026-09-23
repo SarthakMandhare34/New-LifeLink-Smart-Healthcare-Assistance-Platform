@@ -2,10 +2,10 @@
  * ============================================================================
  * CLINICIAN SYNCHRONIZATION & AUDIT SCRIPT (scripts/sync-doctors.ts)
  * ============================================================================
- * 
+ *
  * HOW TO RUN:
  * Command: `npm run db:sync:doctors` or `npx tsx scripts/sync-doctors.ts`
- * 
+ *
  * WHAT THIS SCRIPT DOES:
  * 1. Audits existing database doctor credentials against `mockDoctorDirectory`.
  * 2. Identifies missing or drifted clinician accounts across Mumbai railway corridors.

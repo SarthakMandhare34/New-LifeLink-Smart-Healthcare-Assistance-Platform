@@ -2,7 +2,7 @@
  * ============================================================================
  * PATIENT PORTAL UI
  * ============================================================================
- * 
+ *
  * WHY THIS FILE IS SPECIAL:
  * This manages the everyday user interfaces for patients (Dashboard, Health Passport, Medicines).
  * It uses modern React hooks to keep data perfectly synchronized and responsive.
@@ -192,10 +192,10 @@ export const MedicineCabinet = () => {
       {/* Structured Medical Register View */}
       <div style={{ display: 'flex', flexDirection: 'column', gap: '20px' }}>
         {activeMedicines.map((med) => (
-          <div 
+          <div
             key={med.id}
             className="solid-clinical-surface"
-            style={{ 
+            style={{
               borderLeft: '4px solid var(--color-semantic-success)',
               display: 'flex',
               flexDirection: 'column',
@@ -239,15 +239,15 @@ export const MedicineCabinet = () => {
             </div>
 
             {/* Medical Register Metadata Row: Medicine, Dosage, Frequency, Schedule, Quantity, Expiry */}
-            <div 
-              style={{ 
-                display: 'grid', 
-                gridTemplateColumns: 'repeat(auto-fit, minmax(min(100%, 130px), 1fr))', 
-                gap: '12px', 
-                background: 'var(--color-surface-interactive)', 
-                padding: '10px 14px', 
-                borderRadius: 'var(--border-radius-sm)', 
-                border: '1px solid var(--color-border)' 
+            <div
+              style={{
+                display: 'grid',
+                gridTemplateColumns: 'repeat(auto-fit, minmax(min(100%, 130px), 1fr))',
+                gap: '12px',
+                background: 'var(--color-surface-interactive)',
+                padding: '10px 14px',
+                borderRadius: 'var(--border-radius-sm)',
+                border: '1px solid var(--color-border)'
               }}
             >
               <div>

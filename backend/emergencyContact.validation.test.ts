@@ -2,11 +2,11 @@
  * ============================================================================
  * AUTOMATED TEST SUITE: EMERGENCY CONTACT VALIDATION (backend/emergencyContact.validation.test.ts)
  * ============================================================================
- * 
+ *
  * WHAT THIS TEST VERIFIES:
  * During a medical crisis (e.g., severe accident or cardiac event), doctors and first
  * responders rely on the patient's Emergency Contacts in their Health Passport.
- * 
+ *
  * CRITICAL TEST OBJECTIVES:
  * 1. Valid Phone Formats: Ensures valid domestic and international phone numbers (e.g. +91 98765 43210)
  *    are accepted without friction.

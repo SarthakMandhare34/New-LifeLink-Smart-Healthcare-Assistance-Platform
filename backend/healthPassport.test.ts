@@ -2,7 +2,7 @@
  * ============================================================================
  * AUTOMATED INTEGRATION SUITE: DIGITAL HEALTH PASSPORT & EMERGENCY CONTACTS (backend/healthPassport.test.ts)
  * ============================================================================
- * 
+ *
  * WHAT THIS SUITE VERIFIES:
  * Tests the patient's Emergency Health Record (EHR) passport and emergency contacts:
  * 1. Health Passport Updates: Validates updating blood group, phone number, allergies, and chronic conditions.
@@ -128,7 +128,7 @@ describe("Digital Health Passport & Emergency Contacts", () => {
 
     test("5. Patient isolation / IDOR: Patient 2 cannot alter Patient 1 passport", async () => {
       const caller2 = createCaller({ id: patient2Id, openId: "test:patient-passport-2", role: "user" });
-      
+
       // Patient 2 updates their own profile
       await caller2.patientProfile.update({
         bloodGroup: "AB-",

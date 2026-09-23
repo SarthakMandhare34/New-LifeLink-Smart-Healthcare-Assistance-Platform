@@ -2,11 +2,11 @@
  * ============================================================================
  * LIFELINK BACKEND: DATABASE ACCESS LAYER (backend/db.ts)
  * ============================================================================
- * 
+ *
  * WHAT THIS FILE DOES:
  * This is the primary data access layer for the LifeLink Healthcare Assistance Platform.
  * It encapsulates all database queries using Drizzle ORM on top of MySQL (`mysql2`).
- * 
+ *
  * CORE RESPONSIBILITIES:
  * 1. Database Connection Management: Lazy-loads and pools the Drizzle ORM instance (`getDb`).
  * 2. User & Identity Management: Handles native login, OAuth accounts (Google), and synthetic clinicians.

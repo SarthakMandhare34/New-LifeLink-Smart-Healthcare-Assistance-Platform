@@ -2,7 +2,7 @@
  * ============================================================================
  * 112 NATIONAL SOS DIALER
  * ============================================================================
- * 
+ *
  * WHY THIS FILE IS SPECIAL:
  * This is the critical emergency override screen.
  * It uses native HTML5 deep-linking (`tel:112`) to bypass the browser and instantly
@@ -117,11 +117,11 @@ describe('Batch 11: Emergency Assistance', () => {
     fireEvent.click(callButtons[0]);
     // Verify popup opens
     expect(screen.getAllByText(/LifeLink will not place the call for you/i)[0]).toBeTruthy();
-    
+
     // Confirm action
     const openDialerButtons = screen.getAllByText(/Open dialer/i);
     fireEvent.click(openDialerButtons[0]);
-    
+
     expect(mockAssign).toHaveBeenCalledWith(`tel:${AMBULANCE_EMERGENCY_NUMBER}`);
   });
 
@@ -130,14 +130,14 @@ describe('Batch 11: Emergency Assistance', () => {
     renderEmergency();
     const reviewMessageButtons = screen.getAllByText(/Review SOS message/i);
     fireEvent.click(reviewMessageButtons[0]);
-    
+
     // Popup appears
     expect(screen.getAllByText(new RegExp(SMS_CONFIRMATION_TITLE))[0]).toBeTruthy();
     expect(mockAssign).not.toHaveBeenCalled(); // Still haven't confirmed
-    
+
     const openDraftButtons = screen.getAllByText(/Open SMS draft/i);
     fireEvent.click(openDraftButtons[0]);
-    
+
     expect(mockAssign).toHaveBeenCalledTimes(1);
     expect(mockAssign.mock.calls[0][0]).toContain('sms:');
   });
@@ -162,11 +162,11 @@ describe('Batch 11: Emergency Assistance', () => {
   it('TEST 11: No native browser dialogs in production code', () => {
     const alertMock = vi.spyOn(window, 'alert').mockImplementation(() => {});
     const confirmMock = vi.spyOn(window, 'confirm').mockImplementation(() => true);
-    
+
     renderEmergency();
     const callButtons = screen.getAllByRole('button', { name: new RegExp(`Call ${AMBULANCE_EMERGENCY_NUMBER}`) });
     fireEvent.click(callButtons[0]);
-    
+
     expect(alertMock).not.toHaveBeenCalled();
     expect(confirmMock).not.toHaveBeenCalled();
   });

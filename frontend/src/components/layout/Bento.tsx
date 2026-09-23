@@ -2,7 +2,7 @@
  * ============================================================================
  * REUSABLE UI COMPONENTS (DESIGN SYSTEM)
  * ============================================================================
- * 
+ *
  * WHY THIS FILE IS SPECIAL:
  * Instead of rewriting the code for a button 50 times, we write it once here.
  * This ensures the entire application looks perfectly consistent (using Tailwind CSS)
@@ -37,16 +37,16 @@ interface BentoItemProps {
 // BENTO ITEM CELL
 // Individual cell inside BentoGrid supporting responsive col/row spans and keyboard navigation.
 // =========================================================================================
-export const BentoItem: React.FC<BentoItemProps> = ({ 
-  children, 
-  colSpan = 1, 
-  rowSpan = 1, 
+export const BentoItem: React.FC<BentoItemProps> = ({
+  children,
+  colSpan = 1,
+  rowSpan = 1,
   className = '',
   onClick
 }) => {
   const colClass = `bento-col-span-${colSpan}`;                                                 // Column span class
   const rowClass = `bento-row-span-${rowSpan}`;                                                 // Row span class
-  
+
   // Accessible keyboard activation on Enter or Space
   const handleKeyDown = (e: React.KeyboardEvent<HTMLDivElement>) => {
     if (onClick && (e.key === 'Enter' || e.key === ' ')) {
@@ -56,8 +56,8 @@ export const BentoItem: React.FC<BentoItemProps> = ({
   };
 
   return (
-    <div 
-      className={`${colClass} ${rowClass} ${className}`} 
+    <div
+      className={`${colClass} ${rowClass} ${className}`}
       onClick={onClick}
       onKeyDown={onClick ? handleKeyDown : undefined}                                           // Keyboard handler
       tabIndex={onClick ? 0 : undefined}                                                        // Make focusable if clickable

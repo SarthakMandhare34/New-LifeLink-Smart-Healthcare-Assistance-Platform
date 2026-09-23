@@ -2,7 +2,7 @@
  * ============================================================================
  * tRPC DOMAIN ROUTERS & BUSINESS LOGIC (backend/routers/patient.ts)
  * ============================================================================
- * 
+ *
  * WHY THIS FILE IS SPECIAL:
  * This file contains the actual rules for what patients can do.
  * It uses tRPC, which creates an unbreakable bridge between the front-end and back-end.
@@ -231,7 +231,7 @@ export const patientAppointmentRouter = router({
       await recordBookingError(ctx.user.id, input.doctorId, input.scheduledAt, "Selected controlled specialist was not found.", "DOCTOR_NOT_FOUND");
       throw new TRPCError({ code: "NOT_FOUND", message: "Selected controlled specialist was not found." });
     }
-    
+
     // Real-time validation against current date and time
     if (input.scheduledAt.getTime() <= Date.now()) {
       const errorMsg = "Invalid date or time. Please select a future date and time for your appointment.";

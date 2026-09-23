@@ -2,12 +2,12 @@
  * ============================================================================
  * REAL-TIME EVENT STREAMING (SSE)
  * ============================================================================
- * 
+ *
  * WHY THIS FILE IS SPECIAL:
  * Traditional websites force you to refresh the page to see new data.
  * This file uses Server-Sent Events (SSE). Think of it like a walkie-talkie.
  * The server keeps a persistent, lightweight connection open to the patient's phone.
- * The absolute millisecond a doctor clicks 'Prescribe', the server pushes the 
+ * The absolute millisecond a doctor clicks 'Prescribe', the server pushes the
  * data directly to the patient's screen instantly. It saves battery and network data.
  */
 import { describe, it, expect, vi, beforeEach, afterEach } from "vitest";
@@ -139,9 +139,9 @@ describe("BATCH 14: REALTIME DEEP AUDIT - Security Matrix", () => {
       const req = new MockRequest();
       const res = new MockResponse();
       await routes["/api/patient-events"](req, res);
-      
+
       publishPatientEvent({ id: 101, userId: 1, type: "MEDICINE_UPDATED", entityId: "99", createdAt: new Date() });
-      
+
       const published = res.chunks.find((c) => c.includes("MEDICINE_UPDATED"));
       expect(published).toBeDefined();
       req.emit("close");
@@ -152,9 +152,9 @@ describe("BATCH 14: REALTIME DEEP AUDIT - Security Matrix", () => {
       const req = new MockRequest();
       const res = new MockResponse();
       await routes["/api/patient-events"](req, res);
-      
+
       publishPatientEvent({ id: 102, userId: 1, type: "PROFILE_UPDATED", entityId: "1", createdAt: new Date() });
-      
+
       const published = res.chunks.find((c) => c.includes("PROFILE_UPDATED"));
       expect(published).toBeUndefined();
       req.emit("close");
@@ -166,9 +166,9 @@ describe("BATCH 14: REALTIME DEEP AUDIT - Security Matrix", () => {
       req.query.userId = "2";
       const res = new MockResponse();
       await routes["/api/patient-events"](req, res);
-      
+
       publishPatientEvent({ id: 103, userId: 2, type: "MEDICINE_UPDATED", entityId: "1", createdAt: new Date() });
-      
+
       const published = res.chunks.find((c) => c.includes("MEDICINE_UPDATED"));
       expect(published).toBeUndefined();
       req.emit("close");
@@ -180,7 +180,7 @@ describe("BATCH 14: REALTIME DEEP AUDIT - Security Matrix", () => {
       req.headers["x-user-id"] = "2";
       const res = new MockResponse();
       await routes["/api/patient-events"](req, res);
-      
+
       publishPatientEvent({ id: 103, userId: 2, type: "MEDICINE_UPDATED", entityId: "1", createdAt: new Date() });
       const published = res.chunks.find((c) => c.includes("MEDICINE_UPDATED"));
       expect(published).toBeUndefined();
@@ -199,7 +199,7 @@ describe("BATCH 14: REALTIME DEEP AUDIT - Security Matrix", () => {
       await routes["/api/patient-events"](req2, res2);
 
       publishPatientEvent({ id: 110, userId: 1, type: "ASSESSMENT_COMPLETED", entityId: "5", createdAt: new Date() });
-      
+
       expect(res1.chunks.some((c) => c.includes("ASSESSMENT_COMPLETED"))).toBe(true);
       expect(res2.chunks.some((c) => c.includes("ASSESSMENT_COMPLETED"))).toBe(false);
 
@@ -214,9 +214,9 @@ describe("BATCH 14: REALTIME DEEP AUDIT - Security Matrix", () => {
       const req = new MockRequest();
       const res = new MockResponse();
       await routes["/api/doctor-events"](req, res);
-      
+
       publishDoctorEvent({ id: 201, doctorId: "mock-central-cardiology-csmt", patientUserId: 1, type: "APPOINTMENT_UPDATED", entityId: "10", createdAt: new Date() });
-      
+
       expect(res.chunks.some((c) => c.includes("APPOINTMENT_UPDATED"))).toBe(true);
       req.emit("close");
     });
@@ -226,9 +226,9 @@ describe("BATCH 14: REALTIME DEEP AUDIT - Security Matrix", () => {
       const req = new MockRequest();
       const res = new MockResponse();
       await routes["/api/doctor-events"](req, res);
-      
+
       publishDoctorEvent({ id: 202, doctorId: "mock-central-cardiology-csmt", patientUserId: 1, type: "APPOINTMENT_UPDATED", entityId: "10", createdAt: new Date() });
-      
+
       expect(res.chunks.some((c) => c.includes("APPOINTMENT_UPDATED"))).toBe(false);
       req.emit("close");
     });
@@ -239,7 +239,7 @@ describe("BATCH 14: REALTIME DEEP AUDIT - Security Matrix", () => {
       req.query.doctorId = "mock-western-general-practice-churchgate";
       const res = new MockResponse();
       await routes["/api/doctor-events"](req, res);
-      
+
       publishDoctorEvent({ id: 203, doctorId: "mock-western-general-practice-churchgate", patientUserId: 1, type: "APPOINTMENT_UPDATED", entityId: "10", createdAt: new Date() });
       expect(res.chunks.some((c) => c.includes("APPOINTMENT_UPDATED"))).toBe(false);
       req.emit("close");
@@ -251,7 +251,7 @@ describe("BATCH 14: REALTIME DEEP AUDIT - Security Matrix", () => {
       req.headers["x-doctor-id"] = "mock-western-general-practice-churchgate";
       const res = new MockResponse();
       await routes["/api/doctor-events"](req, res);
-      
+
       publishDoctorEvent({ id: 204, doctorId: "mock-western-general-practice-churchgate", patientUserId: 1, type: "APPOINTMENT_UPDATED", entityId: "10", createdAt: new Date() });
       expect(res.chunks.some((c) => c.includes("APPOINTMENT_UPDATED"))).toBe(false);
       req.emit("close");
@@ -269,7 +269,7 @@ describe("BATCH 14: REALTIME DEEP AUDIT - Security Matrix", () => {
       await routes["/api/doctor-events"](reqB, resB);
 
       publishDoctorEvent({ id: 210, doctorId: "mock-central-cardiology-csmt", patientUserId: 5, type: "PATIENT_RELATED_UPDATE", entityId: "5", createdAt: new Date() });
-      
+
       expect(resA.chunks.some((c) => c.includes("PATIENT_RELATED_UPDATE"))).toBe(true);
       expect(resB.chunks.some((c) => c.includes("PATIENT_RELATED_UPDATE"))).toBe(false);
 
@@ -284,16 +284,16 @@ describe("BATCH 14: REALTIME DEEP AUDIT - Security Matrix", () => {
       const req = new MockRequest();
       const res = new MockResponse();
       await routes["/api/doctor-events"](req, res);
-      
+
       publishDoctorEvent({ id: 301, doctorId: "mock-central-cardiology-csmt", patientUserId: 1, type: "APPOINTMENT_UPDATED", entityId: "10", createdAt: new Date() });
-      
+
       const chunk = res.chunks.find((c) => c.includes("APPOINTMENT_UPDATED"));
       expect(chunk).toBeDefined();
       expect(chunk).toContain(`"id":301`);
       expect(chunk).toContain(`"entityId":"10"`);
       req.emit("close");
     });
-    
+
     it("16. Other doctor does not receive it", async () => {
       vi.mocked(authSession.authenticateRequest).mockResolvedValueOnce({ role: "doctor", openId: "synthetic-doctor:mock-central-cardiology-csmt" } as any);
       const reqA = new MockRequest();
@@ -313,7 +313,7 @@ describe("BATCH 14: REALTIME DEEP AUDIT - Security Matrix", () => {
       reqA.emit("close");
       reqB.emit("close");
     });
-    
+
     it("17. Unrelated patient event is not delivered", async () => {
       vi.mocked(authSession.authenticateRequest).mockResolvedValue({ role: "doctor", openId: "synthetic-doctor:mock-central-cardiology-csmt" } as any);
       const req = new MockRequest();
@@ -353,16 +353,16 @@ describe("BATCH 14: REALTIME DEEP AUDIT - Security Matrix", () => {
       const req = new MockRequest();
       const res = new MockResponse();
       await routes["/api/patient-events"](req, res);
-      
+
       const d = new Date("2026-09-06T12:00:00Z");
       publishPatientEvent({ id: 999, userId: 1, type: "MEDICINE_UPDATED", entityId: "123", createdAt: d });
-      
+
       const chunk = res.chunks.find((c) => c.includes("MEDICINE_UPDATED"));
       expect(chunk).toContain(`"id":999`);
       expect(chunk).toContain(`"type":"MEDICINE_UPDATED"`);
       expect(chunk).toContain(`"entityId":"123"`);
       expect(chunk).toContain(`"createdAt":"2026-09-06T12:00:00.000Z"`);
-      
+
       const payloadStr = chunk!.split("data: ")[1].trim();
       const payload = JSON.parse(payloadStr);
       expect(Object.keys(payload)).toEqual(["id", "type", "entityId", "createdAt"]);
@@ -375,7 +375,7 @@ describe("BATCH 14: REALTIME DEEP AUDIT - Security Matrix", () => {
       const res = new MockResponse();
       await routes["/api/patient-events"](req, res);
       publishPatientEvent({ id: 999, userId: 1, type: "MEDICINE_UPDATED", entityId: "123", createdAt: new Date() });
-      
+
       const chunk = res.chunks.find((c) => c.includes("MEDICINE_UPDATED"))!;
       expect(chunk).not.toContain("userId");
       expect(chunk).not.toContain("patientUserId");
@@ -401,12 +401,12 @@ describe("BATCH 14: REALTIME DEEP AUDIT - Security Matrix", () => {
       const req = new MockRequest();
       const res = new MockResponse();
       await routes["/api/patient-events"](req, res);
-      
+
       publishPatientEvent({ id: 1, userId: 1, type: "PROFILE_UPDATED", entityId: null, createdAt: new Date() });
       expect(res.chunks.some((c) => c.includes("PROFILE_UPDATED"))).toBe(true);
-      
+
       req.emit("close");
-      
+
       const chunksLength = res.chunks.length;
       publishPatientEvent({ id: 2, userId: 1, type: "PROFILE_UPDATED", entityId: null, createdAt: new Date() });
       expect(res.chunks.length).toBe(chunksLength);
@@ -435,11 +435,11 @@ describe("BATCH 14: REALTIME DEEP AUDIT - Security Matrix", () => {
       await routes["/api/patient-events"](req2, res2);
 
       publishPatientEvent({ id: 4, userId: 1, type: "PROFILE_UPDATED", entityId: null, createdAt: new Date() });
-      
+
       expect(res1.chunks.some((c) => c.includes("PROFILE_UPDATED"))).toBe(false);
       const eventChunks = res2.chunks.filter((c) => c.includes("PROFILE_UPDATED"));
       expect(eventChunks.length).toBe(1);
-      
+
       req2.emit("close");
     });
 
@@ -470,11 +470,11 @@ describe("BATCH 14: REALTIME DEEP AUDIT - Security Matrix", () => {
       await routes["/api/patient-events"](req2, res2);
 
       res1.write = () => { throw new Error("Socket broken"); };
-      
+
       publishPatientEvent({ id: 5, userId: 1, type: "MEDICINE_UPDATED", entityId: null, createdAt: new Date() });
-      
+
       expect(res2.chunks.some((c) => c.includes("MEDICINE_UPDATED"))).toBe(true);
-      
+
       req1.emit("close");
       req2.emit("close");
     });
@@ -494,34 +494,34 @@ describe("BATCH 14: REALTIME DEEP AUDIT - Security Matrix", () => {
         { id: 11, userId: 1, type: "MEDICINE_UPDATED", entityId: "2", createdAt: new Date() },
       ]);
       vi.mocked(authSession.authenticateRequest).mockResolvedValue({ id: 1, role: "user" } as any);
-      
+
       const req = new MockRequest();
       req.headers["last-event-id"] = "9";
       const res = new MockResponse();
       await routes["/api/patient-events"](req, res);
-      
+
       expect(res.chunks.some((c) => c.includes("APPOINTMENT_UPDATED"))).toBe(true);
       expect(res.chunks.some((c) => c.includes("MEDICINE_UPDATED"))).toBe(true);
-      
+
       expect(db.getPatientEventsSince).toHaveBeenCalledWith(1, 9);
-      
+
       req.emit("close");
     });
-    
+
     it("29. Doctor SSE route supports replay with last-event-id", async () => {
       vi.mocked(db.getDoctorEventsSince).mockResolvedValueOnce([
         { id: 15, doctorId: "mock-central-cardiology-csmt", patientUserId: 2, type: "APPOINTMENT_UPDATED", entityId: "8", createdAt: new Date() },
       ]);
       vi.mocked(authSession.authenticateRequest).mockResolvedValue({ role: "doctor", openId: "synthetic-doctor:mock-central-cardiology-csmt" } as any);
-      
+
       const req = new MockRequest();
       req.headers["last-event-id"] = "14";
       const res = new MockResponse();
       await routes["/api/doctor-events"](req, res);
-      
+
       expect(res.chunks.some((c) => c.includes("APPOINTMENT_UPDATED"))).toBe(true);
       expect(db.getDoctorEventsSince).toHaveBeenCalledWith("mock-central-cardiology-csmt", 14);
-      
+
       req.emit("close");
     });
   });

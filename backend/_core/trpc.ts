@@ -2,7 +2,7 @@
  * ============================================================================
  * SYSTEM CORE & INFRASTRUCTURE
  * ============================================================================
- * 
+ *
  * WHY THIS FILE IS SPECIAL:
  * These are the foundational building blocks of the backend server.
  * It sets up the Express framework, cookie parsing, and environment variables.

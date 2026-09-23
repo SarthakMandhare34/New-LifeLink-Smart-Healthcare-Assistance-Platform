@@ -2,7 +2,7 @@
  * ============================================================================
  * SYSTEM CORE & INFRASTRUCTURE
  * ============================================================================
- * 
+ *
  * WHY THIS FILE IS SPECIAL:
  * These are the foundational building blocks of the backend server.
  * It sets up the Express framework, cookie parsing, and environment variables.
@@ -25,7 +25,6 @@ export const ENV = {
   get googleOAuthClientId() { return process.env.GOOGLE_OAUTH_CLIENT_ID ?? ""; },         // Google OAuth client ID for social login
   get googleOAuthClientSecret() { return process.env.GOOGLE_OAUTH_CLIENT_SECRET ?? ""; }, // Google OAuth secret key for token exchange
   get demoDoctorAccessCode() {                                                             // Access code for synthetic clinician testing portal
-    return process.env.LIFELINK_DEMO_DOCTOR_ACCESS_CODE || "lifelink-controlled-clinician-secret-key-2026"; 
+    return process.env.LIFELINK_DEMO_DOCTOR_ACCESS_CODE || "lifelink-controlled-clinician-secret-key-2026";
   },
 };
-

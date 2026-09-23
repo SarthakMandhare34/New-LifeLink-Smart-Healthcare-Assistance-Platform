@@ -2,7 +2,7 @@
  * ============================================================================
  * CLINICIAN CREDENTIAL RECOVERY & WORKSTATION ACCESS (frontend/src/features/doctor/ResetPassword.tsx)
  * ============================================================================
- * 
+ *
  * WHY THIS FILE IS SPECIAL:
  * This component provides administrative password management for clinical doctor accounts.
  * To protect healthcare records from unauthorized credential resets, it requires an
@@ -83,23 +83,23 @@ export const DoctorResetPassword = () => {
         {/* Branding Panel (Left Column): Clean Nordic Clinical Identity */}
         <div className="auth-branding-panel" style={{ flex: 1, display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems: 'center', padding: 'var(--spacing-6)', zIndex: 1 }}>
           <div style={{ textAlign: 'center', maxWidth: '440px', display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
-            
+
             {/* Proportional Brand Treatment */}
             <div style={{ marginBottom: '24px', display: 'inline-flex', alignItems: 'center', justifyContent: 'center' }}>
               <LifeLinkLogo className="lifelink-logo-auth" style={{ width: '100%', maxWidth: '240px', height: 'auto', margin: 0, padding: 0, border: 'none', background: 'transparent', boxShadow: 'none' }} />
             </div>
-            
+
             {/* Clinician Subtitle & Motto */}
             <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '14px' }}>
-              <span 
-                style={{ 
-                  background: 'var(--swiss-blue-soft)', 
-                  color: 'var(--color-doctor-primary)', 
-                  fontSize: '0.74rem', 
-                  fontWeight: 600, 
-                  letterSpacing: '0.06em', 
-                  textTransform: 'uppercase', 
-                  padding: '5px 14px', 
+              <span
+                style={{
+                  background: 'var(--swiss-blue-soft)',
+                  color: 'var(--color-doctor-primary)',
+                  fontSize: '0.74rem',
+                  fontWeight: 600,
+                  letterSpacing: '0.06em',
+                  textTransform: 'uppercase',
+                  padding: '5px 14px',
                   borderRadius: 'var(--border-radius-badge)',
                   border: '1px solid #BFDBFE'
                 }}
@@ -119,18 +119,18 @@ export const DoctorResetPassword = () => {
 
         {/* Form Container (Right Column): Solid Clinical Card */}
         <div style={{ flex: 1.1, display: 'flex', justifyContent: 'center', alignItems: 'center', padding: 'clamp(24px, 4vw, 40px)', zIndex: 1 }}>
-          <Card 
-            className="card" 
-            style={{ 
-              width: '100%', 
-              maxWidth: '480px', 
-              maxHeight: '90vh', 
-              overflowY: 'auto', 
-              padding: 'clamp(30px, 4.5vw, 44px)', 
-              borderRadius: '2px', 
-              background: 'var(--color-surface-white)', 
-              border: '1px solid var(--color-border)', 
-              boxShadow: 'none' 
+          <Card
+            className="card"
+            style={{
+              width: '100%',
+              maxWidth: '480px',
+              maxHeight: '90vh',
+              overflowY: 'auto',
+              padding: 'clamp(30px, 4.5vw, 44px)',
+              borderRadius: '2px',
+              background: 'var(--color-surface-white)',
+              border: '1px solid var(--color-border)',
+              boxShadow: 'none'
             }}
           >
             {/* Form Header */}
@@ -150,18 +150,18 @@ export const DoctorResetPassword = () => {
 
             {/* Status message */}
             {message && (
-              <div 
-                className="alert-panel auth-message" 
-                role="status" 
-                style={{ 
-                  marginBottom: '20px', 
-                  textAlign: 'center', 
-                  background: 'var(--color-surface-interactive)', 
-                  border: '1px solid var(--color-border)', 
-                  borderRadius: '2px', 
-                  padding: '12px 16px', 
-                  fontSize: '0.88rem', 
-                  color: 'var(--color-text)' 
+              <div
+                className="alert-panel auth-message"
+                role="status"
+                style={{
+                  marginBottom: '20px',
+                  textAlign: 'center',
+                  background: 'var(--color-surface-interactive)',
+                  border: '1px solid var(--color-border)',
+                  borderRadius: '2px',
+                  padding: '12px 16px',
+                  fontSize: '0.88rem',
+                  color: 'var(--color-text)'
                 }}
               >
                 {message}
@@ -236,19 +236,19 @@ export const DoctorResetPassword = () => {
                 type="submit"
                 variant="primary"
                 disabled={reset.isPending}
-                style={{ 
-                  width: '100%', 
-                  minHeight: '46px', 
-                  padding: '11px', 
-                  fontSize: '0.96rem', 
-                  fontWeight: 600, 
-                  borderRadius: '2px', 
-                  background: 'var(--color-doctor-primary)', 
-                  color: '#FFFFFF', 
-                  border: 'none', 
-                  marginTop: '8px', 
-                  cursor: 'pointer', 
-                  opacity: reset.isPending ? 0.7 : 1 
+                style={{
+                  width: '100%',
+                  minHeight: '46px',
+                  padding: '11px',
+                  fontSize: '0.96rem',
+                  fontWeight: 600,
+                  borderRadius: '2px',
+                  background: 'var(--color-doctor-primary)',
+                  color: '#FFFFFF',
+                  border: 'none',
+                  marginTop: '8px',
+                  cursor: 'pointer',
+                  opacity: reset.isPending ? 0.7 : 1
                 }}
               >
                 {reset.isPending ? "Resetting…" : "Reset Password"}

@@ -2,7 +2,7 @@
  * ============================================================================
  * TRANSIT CLINIC INTERACTIVE MAP
  * ============================================================================
- * 
+ *
  * WHY THIS FILE IS SPECIAL:
  * This file renders the live geographic map using Leaflet.
  * It is highly special because it accesses the patient's GPS coordinates securely.

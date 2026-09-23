@@ -2,7 +2,7 @@
  * ============================================================================
  * SYSTEM CORE & INFRASTRUCTURE
  * ============================================================================
- * 
+ *
  * WHY THIS FILE IS SPECIAL:
  * These are the foundational building blocks of the backend server.
  * It sets up the Express framework, cookie parsing, and environment variables.
@@ -58,15 +58,15 @@ async function startServer() {
   registerPatientRealtimeRoute(app);                             // Mounts /api/realtime/patient Server-Sent Events stream
   registerDoctorRealtimeRoute(app);                              // Mounts /api/realtime/doctor Server-Sent Events stream
   registerPatientProfilePhotoRoute(app);                         // Mounts /api/patient/profile/photo upload handler
-  
+
   // Serve uploaded profile pictures and files statically from the local /uploads directory
   app.use("/uploads", express.static(path.resolve(process.cwd(), 'uploads')));
 
   // Direct health check endpoint for cloud load balancers and Render health checks
-  app.get("/health", (_req, res) => {
+  app.get(["/health", "/api/health"], (_req, res) => {
     res.status(200).json({ status: "ok", timestamp: Date.now() });
   });
-  
+
   // --- Cluster: tRPC Middleware Mounting ---
   // Connects our type-safe tRPC API router to the /api/trpc endpoint
   app.use(

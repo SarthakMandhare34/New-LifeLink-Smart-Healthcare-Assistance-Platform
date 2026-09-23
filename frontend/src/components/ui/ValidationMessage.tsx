@@ -2,7 +2,7 @@
  * ============================================================================
  * INLINE VALIDATION MESSAGE COMPONENT (frontend/src/components/ui/ValidationMessage.tsx)
  * ============================================================================
- * 
+ *
  * WHY THIS FILE IS SPECIAL:
  * Provides standardized, user-friendly, accessible validation feedback for form
  * controls across the application. Replaces raw error codes, unformatted stack traces,

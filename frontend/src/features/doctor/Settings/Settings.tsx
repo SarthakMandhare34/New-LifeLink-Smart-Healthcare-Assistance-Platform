@@ -2,7 +2,7 @@
  * ============================================================================
  * CLINICIAN WORKSTATION PORTAL
  * ============================================================================
- * 
+ *
  * WHY THIS FILE IS SPECIAL:
  * This is the heavily restricted portal used by professional doctors.
  * It contains components for reviewing AI Triage reports, managing live consultation queues,
@@ -57,7 +57,7 @@ export const DoctorSettings = () => {
 
   return (
     <div style={{ display: 'flex', flexDirection: 'column', gap: '36px', width: '100%', maxWidth: '1400px', margin: '0 auto' }}>
-      
+
       {/* Workspace Header Banner */}
       <section
         style={{
@@ -99,7 +99,7 @@ export const DoctorSettings = () => {
 
       {/* Main Grid: Generous 2-column layout */}
       <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(min(100%, 480px), 1fr))', gap: '28px' }}>
-        
+
         {/* Change Password Card */}
         <Card
           variant="default"

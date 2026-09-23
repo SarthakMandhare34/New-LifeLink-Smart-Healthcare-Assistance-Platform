@@ -2,7 +2,7 @@
  * ============================================================================
  * REUSABLE UI COMPONENTS (DESIGN SYSTEM)
  * ============================================================================
- * 
+ *
  * WHY THIS FILE IS SPECIAL:
  * Instead of rewriting the code for a button 50 times, we write it once here.
  * This ensures the entire application looks perfectly consistent (using Tailwind CSS)
@@ -19,7 +19,7 @@ export const RouteLoader: React.FC = () => {
       aria-label="Loading workspace section"
     >
       {/* Solid Nordic Clinical surface card */}
-      <div 
+      <div
         className="flex flex-col items-center gap-3.5 p-6 border shadow-xs"
         style={{
           backgroundColor: 'var(--color-surface-white)',
@@ -28,8 +28,8 @@ export const RouteLoader: React.FC = () => {
         }}
       >
         {/* Circular spinning activity indicator */}
-        <div 
-          className="w-8 h-8 rounded-full border-2 animate-spin" 
+        <div
+          className="w-8 h-8 rounded-full border-2 animate-spin"
           style={{
             borderColor: 'var(--swiss-gray-300, #E2E8F0)',
             borderTopColor: 'var(--swiss-blue, #0057B8)',
@@ -37,7 +37,7 @@ export const RouteLoader: React.FC = () => {
           aria-hidden="true"
         />
         {/* User-friendly status message */}
-        <span 
+        <span
           className="text-xs font-medium tracking-wide"
           style={{ color: 'var(--color-text-muted)' }}
         >
@@ -47,4 +47,3 @@ export const RouteLoader: React.FC = () => {
     </div>
   );
 };
-

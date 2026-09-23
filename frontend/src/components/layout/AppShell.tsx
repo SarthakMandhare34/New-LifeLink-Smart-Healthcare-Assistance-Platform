@@ -2,7 +2,7 @@
  * ============================================================================
  * REUSABLE UI COMPONENTS (DESIGN SYSTEM)
  * ============================================================================
- * 
+ *
  * WHY THIS FILE IS SPECIAL:
  * Instead of rewriting the code for a button 50 times, we write it once here.
  * This ensures the entire application looks perfectly consistent (using Tailwind CSS)
@@ -197,23 +197,23 @@ export const AppShell = () => {
         aria-label="Patient navigation"
       >
         {/* Brand logo header: Institutional white mount with clear LifeLink lockup and EHR subtitle */}
-        <div 
-          className="app-sidebar-header" 
-          style={{ 
-            padding: '16px 18px', 
-            borderBottom: '1px solid var(--color-border)', 
-            display: 'flex', 
-            flexDirection: 'column', 
-            alignItems: 'center', 
-            gap: '8px', 
-            background: 'var(--color-surface-white)' 
+        <div
+          className="app-sidebar-header"
+          style={{
+            padding: '16px 18px',
+            borderBottom: '1px solid var(--color-border)',
+            display: 'flex',
+            flexDirection: 'column',
+            alignItems: 'center',
+            gap: '8px',
+            background: 'var(--color-surface-white)'
           }}
         >
-          <NavLink 
-            to="/patient/dashboard" 
-            onClick={closeMobileNavigation} 
-            className="app-sidebar-brand-link" 
-            aria-label={PATIENT_SIDEBAR_BRAND_LABEL} 
+          <NavLink
+            to="/patient/dashboard"
+            onClick={closeMobileNavigation}
+            className="app-sidebar-brand-link"
+            aria-label={PATIENT_SIDEBAR_BRAND_LABEL}
             style={{ display: 'inline-flex', alignItems: 'center', justifyContent: 'center' }}
           >
             {/* The official LifeLink logo is rendered on a crisp structured mount for maximum contrast and legibility */}
@@ -222,22 +222,22 @@ export const AppShell = () => {
         </div>
 
         {/* Navigation links: Structured Nordic Clinical list layout with 8px corners and active left-border indicator */}
-        <nav 
-          className="app-sidebar-nav" 
-          style={{ 
-            padding: '12px 10px', 
-            display: 'flex', 
-            flexDirection: 'column', 
-            gap: '3px', 
-            flex: 1, 
-            overflowY: 'auto' 
+        <nav
+          className="app-sidebar-nav"
+          style={{
+            padding: '12px 10px',
+            display: 'flex',
+            flexDirection: 'column',
+            gap: '3px',
+            flex: 1,
+            overflowY: 'auto'
           }}
         >
           {patientNavigation.map(({ to, label, icon: Icon }) => (
-            <NavLink 
-              key={to} 
-              to={to} 
-              onClick={closeMobileNavigation} 
+            <NavLink
+              key={to}
+              to={to}
+              onClick={closeMobileNavigation}
               className={({ isActive }) => `app-sidebar-nav-item ${isActive ? 'active' : ''}`}
               style={({ isActive }) => ({
                 display: 'flex',
@@ -314,10 +314,10 @@ export const AppShell = () => {
           {/* Header controls: Theme toggle, notifications, and structured patient profile badge */}
           <div className="app-header-controls">
             {/* Theme switcher */}
-            <button 
-              className="icon-btn" 
-              aria-label="Toggle theme" 
-              onClick={toggleTheme} 
+            <button
+              className="icon-btn"
+              aria-label="Toggle theme"
+              onClick={toggleTheme}
               title="Toggle theme"
               style={{ borderRadius: '2px', border: '1px solid var(--color-border)', width: '36px', height: '36px', display: 'grid', placeItems: 'center' }}
             >
@@ -326,21 +326,21 @@ export const AppShell = () => {
 
             {/* Notification alert center (designated panel for all notifications) */}
             <div ref={notificationRef} style={{ position: 'relative' }}>
-              <button 
-                className="icon-btn" 
-                aria-label="Notifications" 
+              <button
+                className="icon-btn"
+                aria-label="Notifications"
                 onClick={() => setIsNotificationOpen(!isNotificationOpen)}
                 title="Notifications"
-                style={{ 
-                  position: 'relative', 
-                  background: isNotificationOpen ? 'var(--color-surface-subtle)' : 'transparent', 
-                  width: '36px', 
-                  height: '36px', 
-                  borderRadius: '2px', 
-                  display: 'grid', 
-                  placeItems: 'center', 
-                  border: '1px solid var(--color-border)', 
-                  cursor: 'pointer' 
+                style={{
+                  position: 'relative',
+                  background: isNotificationOpen ? 'var(--color-surface-subtle)' : 'transparent',
+                  width: '36px',
+                  height: '36px',
+                  borderRadius: '2px',
+                  display: 'grid',
+                  placeItems: 'center',
+                  border: '1px solid var(--color-border)',
+                  cursor: 'pointer'
                 }}
               >
                 <Bell size={18} color={unreadCount > 0 ? 'var(--color-primary)' : 'var(--color-text-muted)'} />
@@ -500,31 +500,31 @@ export const AppShell = () => {
             </div>
 
             {/* User Profile Monogram Badge */}
-            <button 
-              type="button" 
-              onClick={() => navigate('/patient/profile')} 
-              style={{ 
-                display: 'flex', 
-                alignItems: 'center', 
-                gap: '8px', 
-                background: 'var(--color-surface-white)', 
-                border: '1px solid var(--color-border)', 
-                borderRadius: '2px', 
-                padding: '4px 8px 4px 4px', 
-                cursor: 'pointer' 
+            <button
+              type="button"
+              onClick={() => navigate('/patient/profile')}
+              style={{
+                display: 'flex',
+                alignItems: 'center',
+                gap: '8px',
+                background: 'var(--color-surface-white)',
+                border: '1px solid var(--color-border)',
+                borderRadius: '2px',
+                padding: '4px 8px 4px 4px',
+                cursor: 'pointer'
               }}
               aria-label="Open your profile"
             >
-              <div 
-                style={{ 
-                  width: '30px', 
-                  height: '30px', 
-                  borderRadius: '2px', 
-                  background: 'var(--swiss-red)', 
-                  color: '#FFFFFF', 
-                  fontWeight: 700, 
-                  fontSize: '0.80rem', 
-                  display: 'grid', 
+              <div
+                style={{
+                  width: '30px',
+                  height: '30px',
+                  borderRadius: '2px',
+                  background: 'var(--swiss-red)',
+                  color: '#FFFFFF',
+                  fontWeight: 700,
+                  fontSize: '0.80rem',
+                  display: 'grid',
                   placeItems: 'center',
                   overflow: 'hidden'
                 }}
@@ -546,8 +546,8 @@ export const AppShell = () => {
 
         {/* Dynamic nested page content rendered via React Router */}
         <div className="app-content">
-          {/* Nested Suspense Boundary: While child pages (e.g. Assessment, Medicines) are 
-              being loaded on-demand over the network, RouteLoader displays a loading indicator. 
+          {/* Nested Suspense Boundary: While child pages (e.g. Assessment, Medicines) are
+              being loaded on-demand over the network, RouteLoader displays a loading indicator.
               The outer sidebar and header stay fully stationary and responsive. */}
           <React.Suspense fallback={<RouteLoader />}>
             <Outlet />

@@ -2,7 +2,7 @@
  * ============================================================================
  * PATIENT DIGITAL HEALTH PASSPORT & EHR (frontend/src/features/patient/HealthPassport/HealthPassport.tsx)
  * ============================================================================
- * 
+ *
  * WHY THIS FILE IS SPECIAL:
  * This is the patient-owned electronic health record (EHR) passport.
  * It manages critical clinical baseline data (ABO/Rh blood group, drug & environmental
@@ -15,18 +15,18 @@ import { Badge } from '../../../components/ui/Badge';                           
 import { Button } from '../../../components/ui/Button';                                        // Interactive styled button component
 import { Input } from '../../../components/ui/Input';                                          // Styled text input field
 import { Popup } from '../../../components/ui/Popup';                                          // Accessible modal dialog popup
-import { 
-  FileHeart, 
-  ShieldAlert, 
-  Activity, 
-  Droplets, 
-  Users, 
-  Edit2, 
-  Save, 
-  X, 
-  Plus, 
-  Trash2, 
-  Clock, 
+import {
+  FileHeart,
+  ShieldAlert,
+  Activity,
+  Droplets,
+  Users,
+  Edit2,
+  Save,
+  X,
+  Plus,
+  Trash2,
+  Clock,
   AlertCircle,
   Phone,
   UserCheck
@@ -317,7 +317,7 @@ export const HealthPassport = () => {
 
   return (
     <div style={{ display: 'flex', flexDirection: 'column', gap: '36px' }}>
-      
+
       {/* Header with Title and Edit Toggle */}
       <header style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', flexWrap: 'wrap', gap: '16px', borderBottom: '2px solid var(--color-border)', paddingBottom: '24px' }}>
         <div style={{ display: 'flex', alignItems: 'center', gap: '16px' }}>
@@ -387,12 +387,12 @@ export const HealthPassport = () => {
           </span>
           <Badge status="neutral">Verified Passport</Badge>
         </div>
-        <div 
+        <div
           className="solid-clinical-surface"
-          style={{ 
-            padding: '22px 28px', 
-            borderRadius: 'var(--border-radius-md)', 
-            border: '1px solid var(--color-border)', 
+          style={{
+            padding: '22px 28px',
+            borderRadius: 'var(--border-radius-md)',
+            border: '1px solid var(--color-border)',
             background: 'var(--color-surface-white)',
             display: 'grid',
             gridTemplateColumns: 'repeat(auto-fit, minmax(min(100%, 200px), 1fr))',

@@ -2,10 +2,10 @@
  * ============================================================================
  * LIFELINK LOCAL DEV RUNNER (scripts/dev.mjs)
  * ============================================================================
- * 
+ *
  * HOW TO RUN LOCALLY IN TERMINAL:
  * Command: `npm run dev`
- * 
+ *
  * WHAT THIS SCRIPT DOES:
  * 1. Port Discovery:
  *    - Backend: Checks range 4000-4004 (preferred 4000).
@@ -15,8 +15,9 @@
  *    - Frontend Dev Server: Spawns `node node_modules/vite/bin/vite.js --port <FRONTEND_PORT>`.
  *      (Direct local execution eliminates npx cache lookup latency and Windows batch job prompts).
  *    - Note: Drizzle Studio is decoupled; run `npm run db:studio` separately when needed.
- * 3. Dynamic Port Passing:
+ * 3. Dynamic Port Passing & Connectivity:
  *    - Automatically passes the discovered backend port via PORT and VITE_API_PORT.
+ *    - Ensures reverse proxy seamlessly forwards /api and /uploads from frontend to backend.
  * 4. Safe Child Process Lifecycle:
  *    - Clean Ctrl+C shutdown targeting only spawned child processes without global taskkill.
  */
@@ -130,8 +131,8 @@ async function startProcesses() {
   console.log(`  [Frontend] Vite Client:     http://localhost:${FRONTEND_PORT}`);
   console.log("=======================================================\n");
 
-  const childEnv = { 
-    ...devEnv, 
+  const childEnv = {
+    ...devEnv,
     NODE_ENV: "development",
     PORT: String(API_PORT),                                      // Pass selected port to Express backend
     VITE_API_PORT: String(API_PORT),                             // Pass backend port to Vite proxy config

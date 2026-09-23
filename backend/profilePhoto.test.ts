@@ -2,10 +2,10 @@
  * ============================================================================
  * AUTOMATED TEST SUITE: AVATAR MAGIC-BYTES VALIDATION (backend/profilePhoto.test.ts)
  * ============================================================================
- * 
+ *
  * WHAT THIS TEST VERIFIES:
  * Prevents malicious executable uploads (e.g. .exe disguised as .png).
- * 
+ *
  * CRITICAL TEST OBJECTIVES:
  * 1. Valid Binary Signatures: Confirms legitimate PNG binary headers (`89 50 4E 47`) pass validation.
  * 2. Spoof Rejection: Rejects mismatched mime-types (e.g. JPEG header labeled as PNG).

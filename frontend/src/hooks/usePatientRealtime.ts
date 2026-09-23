@@ -2,9 +2,9 @@
  * ============================================================================
  * CUSTOM REACT HOOKS (usePatientRealtime)
  * ============================================================================
- * 
+ *
  * WHY THIS FILE IS SPECIAL:
- * These files contain isolated, reusable behavior. 
+ * These files contain isolated, reusable behavior.
  * For example, the auto-logout hook lives here. It constantly monitors mouse movement,
  * and if a doctor leaves their computer for 5 minutes, it logs them out to protect patient data.
  */

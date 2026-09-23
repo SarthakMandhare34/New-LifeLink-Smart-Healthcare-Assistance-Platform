@@ -2,7 +2,7 @@
  * ============================================================================
  * STANDARD REAL-TIME LOADING INDICATOR
  * ============================================================================
- * 
+ *
  * Clean, modern circular activity indicator for real-time data fetching
  * and map initialization. Uses a neutral clinical dual-tone spinning ring
  * without logos, red colors, or distracting pulse animations.
@@ -74,4 +74,3 @@ export function BrandLoadingIndicator({
 // Convenient alias for semantic clarity across consumers
 export const NormalLoadingIndicator = BrandLoadingIndicator;
 export const LoadingSpinner = BrandLoadingIndicator;
-

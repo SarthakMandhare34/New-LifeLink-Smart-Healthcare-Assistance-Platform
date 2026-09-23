@@ -2,7 +2,7 @@
  * ============================================================================
  * 112 NATIONAL SOS DIALER
  * ============================================================================
- * 
+ *
  * WHY THIS FILE IS SPECIAL:
  * This is the critical emergency override screen.
  * It uses native HTML5 deep-linking (`tel:112`) to bypass the browser and instantly
@@ -111,7 +111,7 @@ export const Emergency = () => {
 
           {/* Loading indicator */}
           {profileQuery.isLoading && <p className="caption" style={{ margin: 0 }}>Loading your recorded emergency contacts…</p>}
-          
+
           {/* Empty contacts fallback with direct link to Health Passport */}
           {!profileQuery.isLoading && contacts.length === 0 && (
             <div style={{ display: 'flex', flexDirection: 'column', gap: '16px', padding: '12px 0' }}>

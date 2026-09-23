@@ -2,9 +2,9 @@
  * ============================================================================
  * CUSTOM REACT HOOKS
  * ============================================================================
- * 
+ *
  * WHY THIS FILE IS SPECIAL:
- * These files contain isolated, reusable behavior. 
+ * These files contain isolated, reusable behavior.
  * For example, the auto-logout hook lives here. It constantly monitors mouse movement,
  * and if a doctor leaves their computer for 5 minutes, it logs them out to protect patient data.
  */
@@ -31,9 +31,9 @@ export function useDoctorRealtime(enabled: boolean) {
   useEffect(() => {
     // Guard against running in non-browser environments or when disabled
     if (!enabled || typeof window === "undefined" || !("EventSource" in window)) return;
-    
+
     const source = new EventSource("/api/doctor-events");                                       // Connect to SSE stream
-    
+
     // Event listener for push notifications
     const onDoctorEvent = (message: Event) => {
       try {
@@ -51,7 +51,7 @@ export function useDoctorRealtime(enabled: boolean) {
     };
 
     source.addEventListener("doctor-event", onDoctorEvent);                                     // Attach event listener
-    
+
     // Cleanup on component unmount or session end
     return () => {
       source.removeEventListener("doctor-event", onDoctorEvent);                                // Remove listener

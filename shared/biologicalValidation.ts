@@ -2,7 +2,7 @@
  * ============================================================================
  * SHARED ISOMORPHIC LOGIC
  * ============================================================================
- * 
+ *
  * WHY THIS FILE IS SPECIAL:
  * The code in this folder is executed by BOTH the front-end browser and the back-end server.
  * This ensures that when we calculate things (like the distance between clinics),
@@ -52,7 +52,7 @@ const MALE_EXCLUSIVE_PATTERNS = [
 export function checkBiologicalImpossibility(symptoms: string, gender: string): string | null {
   if (!symptoms || !gender) return null;                         // Skip validation if input is empty
   const text = symptoms.trim();                                  // Clean input whitespace
-  
+
   if (gender.toLowerCase() === 'male' || gender.toLowerCase() === 'man') {
     // Exemption: Male breast tissue enlargement (Gynecomastia) & male hormone issues are valid for males!
     if (/\b(?:gynecomast\w*|male\s+breast\w*|galactorrhea|andropause|hypogonadism|male\s+infertility|prostat\w*|testic\w*|scrot\w*|penis|penile|erectile\s+dysfunction)\b/i.test(text)) {

@@ -2,7 +2,7 @@
  * ============================================================================
  * AUTOMATED INTEGRATION SUITE: APPOINTMENT LIFECYCLE (backend/appointmentLifecycle.test.ts)
  * ============================================================================
- * 
+ *
  * WHAT THIS INTEGRATION SUITE VERIFIES:
  * Tests the complete end-to-end appointment journey between a patient and a clinician:
  * 1. Booking & Storage: Patient creates a booking request and verifies it persists in MySQL.
@@ -52,7 +52,7 @@ beforeAll(async () => {
     loginMethod: "native-patient",
     role: "user",
   });
-  
+
   // Insert Patient 2 (adversary for IDOR tests)
   await upsertUser({
     openId: "test:patient-lifecycle-2",
@@ -110,7 +110,7 @@ describe("Appointment Lifecycle Integration", () => {
   test("1. Patient creates appointment & 2. Appointment persists", async () => {
     // Create tRPC caller authenticated as Patient 1
     const caller = createCaller({ id: patient1Id, openId: "test:patient-lifecycle-1", role: "user" });
-    
+
     const futureDate = new Date(Date.now() + 86400000);                                         // 24 hours in the future
     const response = await caller.patientAppointment.request({                                  // Call booking mutation
       doctorId: TEST_DOCTOR_1.id,
@@ -121,7 +121,7 @@ describe("Appointment Lifecycle Integration", () => {
     expect(response.id).toBeGreaterThan(0);                                                    // Positive ID generated
     expect(response.status).toBe("Requested");                                                 // Initial lifecycle state is Requested
     appointmentId = response.id;
-    
+
     // Verify physical persistence in MySQL database table
     const inDb = await db.select().from(patientAppointments).where(eq(patientAppointments.id, appointmentId));
     expect(inDb.length).toBe(1);
@@ -193,7 +193,7 @@ describe("Appointment Lifecycle Integration", () => {
   // Step 9: State Machine Guard - Completed appointments cannot be reopened
   test("10. Invalid appointment status transition is rejected", async () => {
     const docCaller = createCaller({ id: -1, openId: `synthetic-doctor:${TEST_DOCTOR_1.id}`, role: "doctor" });
-    
+
     // Clinician marks consultation completed
     await docCaller.doctorWorkspace.appointments.updateStatus({ id: appointmentId, status: "Completed" });
 

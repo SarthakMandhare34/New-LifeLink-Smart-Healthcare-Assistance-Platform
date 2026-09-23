@@ -2,7 +2,7 @@
  * ============================================================================
  * CARE WORKSPACE SELECTOR & GATEWAY PORTAL (frontend/src/features/entry/WorkspaceSelector.tsx)
  * ============================================================================
- * 
+ *
  * WHY THIS FILE IS SPECIAL:
  * This is the initial landing gateway for the entire LifeLink healthcare platform.
  * It provides role-differentiated access between patient-owned health passports and

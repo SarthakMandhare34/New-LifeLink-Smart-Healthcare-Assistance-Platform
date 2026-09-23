@@ -2,10 +2,10 @@
  * ============================================================================
  * CLINICIAN SEEDING & WORKSTATION SETUP SCRIPT (scripts/seed-doctors.ts)
  * ============================================================================
- * 
+ *
  * HOW TO RUN:
  * Command: `npx tsx scripts/seed-doctors.ts`
- * 
+ *
  * WHAT THIS SCRIPT DOES:
  * 1. Connects to the local MySQL database using Drizzle ORM.
  * 2. Cleans out stale records to avoid duplicate or conflicting accounts.
@@ -58,7 +58,7 @@ async function resetAndSeedDatabase() {
   for (const doctor of mockDoctorDirectory) {
     const specialtySlug = doctor.specialty.toLowerCase().replace(/[^a-z]/g, "");            // Clean specialty string
     const stationSlug = doctor.station.toLowerCase().replace(/[^a-z]/g, "");                // Clean railway station string
-    
+
     // Clean, unique email and password per workstation
     const emailSlug = doctor.id.replace("mock-", "");
     const doctorEmail = `${emailSlug}@lifelink.com`;

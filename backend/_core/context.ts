@@ -2,7 +2,7 @@
  * ============================================================================
  * SYSTEM CORE & INFRASTRUCTURE
  * ============================================================================
- * 
+ *
  * WHY THIS FILE IS SPECIAL:
  * These are the foundational building blocks of the backend server.
  * It sets up the Express framework, cookie parsing, and environment variables.
@@ -27,7 +27,7 @@ export type TrpcContext = {
 /**
  * Creates the tRPC context for each incoming request.
  * Supports simultaneous clinician and patient sessions without session-cookie collision.
- * 
+ *
  * @param opts - Express context options containing req and res
  * @returns Promise resolving to TrpcContext
  */

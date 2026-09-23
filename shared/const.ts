@@ -2,12 +2,13 @@
  * ============================================================================
  * SHARED ISOMORPHIC LOGIC
  * ============================================================================
- * 
+ *
  * WHY THIS FILE IS SPECIAL:
  * The code in this folder is executed by BOTH the front-end browser and the back-end server.
  * This ensures that when we calculate things (like the distance between clinics),
  * both the server and the phone agree on the exact same mathematical rules.
  */
+// Shared contract definitions ensuring synchronized state across frontend and backend
 // --- Cluster: Session & Cookie Identifiers ---
 export const COOKIE_NAME = "app_session_id";                     // Name of the secure HTTP cookie storing patient login sessions
 export const DOCTOR_COOKIE_NAME = "doctor_session_id";           // Name of the secure HTTP cookie storing clinician workstation sessions
@@ -65,4 +66,3 @@ export const SYSTEM_DOCTOR_SPECIALTIES = [
 ] as const;
 
 export type SystemDoctorSpecialty = (typeof SYSTEM_DOCTOR_SPECIALTIES)[number]; // Strict TypeScript union type of the 12 specialties
-

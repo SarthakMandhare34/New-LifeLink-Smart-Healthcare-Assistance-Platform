@@ -2,7 +2,7 @@
  * ============================================================================
  * PATIENT PORTAL UI
  * ============================================================================
- * 
+ *
  * WHY THIS FILE IS SPECIAL:
  * This manages the everyday user interfaces for patients (Dashboard, Health Passport, Medicines).
  * It uses modern React hooks to keep data perfectly synchronized and responsive.
@@ -25,7 +25,7 @@ export const Profile = () => {
   const trpcUtils = trpc.useUtils();                                                            // Client cache invalidator
   const profileQuery = trpc.patientProfile.get.useQuery();                                      // Retrieves patient profile
   const updateMutation = trpc.patientProfile.update.useMutation();                             // Updates name & phone on server
-  
+
   // Local form & upload state
   const [isSaving, setIsSaving] = useState(false);                                              // Demographic save in-flight flag
   const [error, setError] = useState('');                                                       // Demographic error banner
@@ -141,14 +141,14 @@ export const Profile = () => {
         {/* Avatar and Identity banner */}
         <div className="patient-profile-identity" style={{ display: 'flex', alignItems: 'center', gap: '24px', marginBottom: '32px', flexWrap: 'wrap' }}>
           <label className="profile-photo-picker" title="Click to choose a new photo">
-            <input 
+            <input
               id="profile-photo-input"
-              className="profile-photo-input" 
-              type="file" 
-              accept="image/jpeg,image/png,image/webp" 
-              onChange={handlePhotoChange} 
-              disabled={isPhotoSaving} 
-              aria-label="Upload profile photo" 
+              className="profile-photo-input"
+              type="file"
+              accept="image/jpeg,image/png,image/webp"
+              onChange={handlePhotoChange}
+              disabled={isPhotoSaving}
+              aria-label="Upload profile photo"
             />
             <span className="patient-profile-avatar">
               {profile.avatarUrl ? <img src={profile.avatarUrl} alt="" /> : <span>{profileInitial}</span>}
@@ -166,11 +166,11 @@ export const Profile = () => {
                   <span className="caption">Private profile</span>
                 </div>
               </div>
-              <Button 
-                type="button" 
-                variant="outline" 
-                size="sm" 
-                onClick={() => document.getElementById('profile-photo-input')?.click()} 
+              <Button
+                type="button"
+                variant="outline"
+                size="sm"
+                onClick={() => document.getElementById('profile-photo-input')?.click()}
                 disabled={isPhotoSaving}
                 style={{ borderRadius: '2px' }}
               >

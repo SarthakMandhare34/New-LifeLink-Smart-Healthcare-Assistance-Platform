@@ -2,10 +2,10 @@
  * ============================================================================
  * DATABASE PURGE & RESET SCRIPT (scripts/clear-users.ts)
  * ============================================================================
- * 
+ *
  * HOW TO RUN:
  * Command: `npm run db:clear` or `npx tsx scripts/clear-users.ts`
- * 
+ *
  * WHAT THIS SCRIPT DOES:
  * 1. Safely connects to the active MySQL database instance.
  * 2. Dynamically queries all existing tables in the database.

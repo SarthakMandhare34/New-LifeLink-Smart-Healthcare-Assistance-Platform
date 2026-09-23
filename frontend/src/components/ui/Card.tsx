@@ -2,7 +2,7 @@
  * ============================================================================
  * REUSABLE UI COMPONENTS (DESIGN SYSTEM)
  * ============================================================================
- * 
+ *
  * WHY THIS FILE IS SPECIAL:
  * Instead of rewriting the code for a button 50 times, we write it once here.
  * This ensures the entire application looks perfectly consistent (using Tailwind CSS)
@@ -34,9 +34,9 @@ interface CardProps {
 // - 'emergency': Swiss Red alert styling for acute triage and SOS confirmations.
 // - 'document': Clean clinical sheet styling for medical reports and prescriptions.
 // =========================================================================================
-export const Card: React.FC<CardProps> = ({ 
-  children, 
-  className = '', 
+export const Card: React.FC<CardProps> = ({
+  children,
+  className = '',
   variant = 'default',
   interactive = false,
   selected = false,
@@ -63,9 +63,9 @@ export const Card: React.FC<CardProps> = ({
       if (onClick) onClick(e as any);
     }
   };
-  
+
   return (
-    <div 
+    <div
       className={`${baseClass} ${interactiveClass} ${selectedClass} ${className}`}
       style={style}
       onClick={onClick}

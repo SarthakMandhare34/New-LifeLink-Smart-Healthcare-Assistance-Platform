@@ -2,7 +2,7 @@
  * ============================================================================
  * CLINICIAN WORKSTATION PORTAL
  * ============================================================================
- * 
+ *
  * WHY THIS FILE IS SPECIAL:
  * This is the heavily restricted portal used by professional doctors.
  * It contains components for reviewing AI Triage reports, managing live consultation queues,
@@ -21,7 +21,7 @@ import { trpc } from "../../../lib/trpc";                                       
 // =========================================================================================
 export const DoctorProfile = () => {
   const profile = trpc.doctorWorkspace.profile.useQuery();                                      // Retrieves clinician profile from backend
-  
+
   // Loading skeleton state
   if (profile.isLoading) return <div className="dashboard-loading"><p className="caption">Loading doctor profile…</p></div>;
   // Error boundary state

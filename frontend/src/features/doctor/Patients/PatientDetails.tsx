@@ -2,7 +2,7 @@
  * ============================================================================
  * DOCTOR CLINICAL EHR INSPECTOR & RX SUITE (frontend/src/features/doctor/Patients/PatientDetails.tsx)
  * ============================================================================
- * 
+ *
  * WHY THIS FILE IS SPECIAL:
  * This is the comprehensive patient chart interface for authorized clinicians.
  * It enforces relationship-based access control (only allowing doctors to view patients

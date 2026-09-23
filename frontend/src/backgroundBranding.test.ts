@@ -2,7 +2,7 @@
  * ============================================================================
  * FRONTEND REACT CORE
  * ============================================================================
- * 
+ *
  * WHY THIS FILE IS SPECIAL:
  * This is the root configuration of the React application.
  * It sets up the Routing (which URL goes to which page) and global Theme Contexts.
@@ -19,7 +19,7 @@ describe('LifeLink background branding', () => {
     expect(globalStyles).toContain('display: none !important');
     expect(globalStyles).not.toContain('filter: blur(30px)');
     expect(globalStyles).not.toContain("background: url('/assets/branding/lifelink-logo-lockup.jpg')");
-    
+
     // Swiss solid white and neutral surface tokens are active
     expect(globalStyles).toContain('--swiss-white: #FFFFFF;');
     expect(globalStyles).toContain('--color-surface-white: var(--swiss-white);');

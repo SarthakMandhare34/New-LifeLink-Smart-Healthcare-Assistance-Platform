@@ -271,4 +271,3 @@ async function generateSql() {
 }
 
 generateSql().catch(console.error);
-

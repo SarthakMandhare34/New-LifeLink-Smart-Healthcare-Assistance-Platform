@@ -2,7 +2,7 @@
  * ============================================================================
  * DOCTOR RX MANAGEMENT & CRYPTOGRAPHIC SIGNING (frontend/src/features/doctor/Prescriptions/Prescriptions.tsx)
  * ============================================================================
- * 
+ *
  * WHY THIS FILE IS SPECIAL:
  * This component provides doctors with a comprehensive audit ledger of all prescriptions
  * issued under their clinician identity. It verifies that issued prescriptions contain valid
@@ -55,7 +55,7 @@ export const DoctorPrescriptions = () => {
 
   return (
     <div style={{ display: 'flex', flexDirection: 'column', gap: '36px', width: '100%' }}>
-      
+
       {/* Workspace Header */}
       <header style={{ display: 'flex', alignItems: 'center', gap: '18px' }}>
         <div style={{ width: '52px', height: '52px', borderRadius: '2px', background: 'var(--swiss-blue-soft)', border: '1px solid var(--swiss-blue)', display: 'grid', placeItems: 'center', color: 'var(--color-doctor-primary)', flexShrink: 0 }}>

@@ -2,7 +2,7 @@
  * ============================================================================
  * REUSABLE UI COMPONENTS (DESIGN SYSTEM)
  * ============================================================================
- * 
+ *
  * WHY THIS FILE IS SPECIAL:
  * Instead of rewriting the code for a button 50 times, we write it once here.
  * This ensures the entire application looks perfectly consistent (using Tailwind CSS)
@@ -50,10 +50,10 @@ export const DoctorAppShell = () => {
   const [isMobileOpen, setIsMobileOpen] = useState(false);                                      // Mobile drawer open state
   const [isNotificationOpen, setIsNotificationOpen] = useState(false);                          // Notification panel open state
   const notificationRef = React.useRef<HTMLDivElement>(null);                                   // Notification container DOM ref
-  
+
   // Query active clinician session
   const session = trpc.doctorAuth.me.useQuery(undefined, { retry: false, refetchOnWindowFocus: false });
-  
+
   // Appointments query for clinician notification feed
   const appointmentsQuery = trpc.doctorWorkspace.appointments.list.useQuery(undefined, {
     enabled: Boolean(session.data),
@@ -76,7 +76,7 @@ export const DoctorAppShell = () => {
     }
     return () => document.removeEventListener('mousedown', handleClickOutside);
   }, [isNotificationOpen]);
-  
+
   // Clinician logout mutation
   const logoutMutation = trpc.doctorAuth.logout.useMutation({
     onSuccess: async () => {
@@ -163,23 +163,23 @@ export const DoctorAppShell = () => {
         aria-label="Doctor navigation"
       >
         {/* Brand logo header: Institutional white mount with clear LifeLink lockup and Provider subtitle */}
-        <div 
-          className="app-sidebar-header" 
-          style={{ 
-            padding: '16px 18px', 
-            borderBottom: '1px solid var(--color-border)', 
-            display: 'flex', 
-            flexDirection: 'column', 
-            alignItems: 'center', 
-            gap: '8px', 
-            background: 'var(--color-surface-white)' 
+        <div
+          className="app-sidebar-header"
+          style={{
+            padding: '16px 18px',
+            borderBottom: '1px solid var(--color-border)',
+            display: 'flex',
+            flexDirection: 'column',
+            alignItems: 'center',
+            gap: '8px',
+            background: 'var(--color-surface-white)'
           }}
         >
-          <NavLink 
-            to="/doctor/dashboard" 
-            onClick={closeMobile} 
-            className="app-sidebar-brand-link" 
-            aria-label="LifeLink clinician home" 
+          <NavLink
+            to="/doctor/dashboard"
+            onClick={closeMobile}
+            className="app-sidebar-brand-link"
+            aria-label="LifeLink clinician home"
             style={{ display: 'inline-flex', alignItems: 'center', justifyContent: 'center' }}
           >
             {/* The official LifeLink logo is rendered on a crisp structured mount for maximum contrast and legibility */}
@@ -196,15 +196,15 @@ export const DoctorAppShell = () => {
         </div>
 
         {/* Doctor workspace navigation links: Swiss list layout with 2px corners and 3px blue active indicator */}
-        <nav 
-          className="app-sidebar-nav" 
-          style={{ 
-            padding: '12px 10px', 
-            display: 'flex', 
-            flexDirection: 'column', 
-            gap: '3px', 
-            flex: 1, 
-            overflowY: 'auto' 
+        <nav
+          className="app-sidebar-nav"
+          style={{
+            padding: '12px 10px',
+            display: 'flex',
+            flexDirection: 'column',
+            gap: '3px',
+            flex: 1,
+            overflowY: 'auto'
           }}
         >
           {navItems.map(({ path, label, icon: Icon }) => (
@@ -240,19 +240,19 @@ export const DoctorAppShell = () => {
             type="button"
             onClick={handleLogout}
             style={{
-              display: 'flex', 
-              alignItems: 'center', 
+              display: 'flex',
+              alignItems: 'center',
               gap: '12px',
-              width: '100%', 
-              padding: '9px 12px', 
-              borderRadius: '2px', 
-              border: 'none', 
-              background: 'transparent', 
-              color: 'var(--color-text)', 
-              fontSize: '0.88rem', 
-              fontWeight: 500, 
-              cursor: 'pointer', 
-              textAlign: 'left', 
+              width: '100%',
+              padding: '9px 12px',
+              borderRadius: '2px',
+              border: 'none',
+              background: 'transparent',
+              color: 'var(--color-text)',
+              fontSize: '0.88rem',
+              fontWeight: 500,
+              cursor: 'pointer',
+              textAlign: 'left',
               transition: 'background 0.15s, color 0.15s'
             }}
             title="Sign out of clinician workspace"
@@ -290,10 +290,10 @@ export const DoctorAppShell = () => {
           {/* Header controls: Theme toggle, notifications, and structured clinician badge */}
           <div className="app-header-controls">
             {/* Theme switcher */}
-            <button 
-              className="icon-btn" 
-              aria-label="Toggle theme" 
-              onClick={toggleTheme} 
+            <button
+              className="icon-btn"
+              aria-label="Toggle theme"
+              onClick={toggleTheme}
               title="Toggle theme"
               style={{ borderRadius: '2px', border: '1px solid var(--color-border)', width: '36px', height: '36px', display: 'grid', placeItems: 'center' }}
             >
@@ -308,16 +308,16 @@ export const DoctorAppShell = () => {
                 aria-haspopup="true"
                 aria-expanded={isNotificationOpen}
                 onClick={() => setIsNotificationOpen(!isNotificationOpen)}
-                style={{ 
-                  position: 'relative', 
-                  background: isNotificationOpen ? 'var(--color-surface-subtle)' : 'transparent', 
-                  width: '36px', 
-                  height: '36px', 
-                  borderRadius: '2px', 
-                  display: 'grid', 
-                  placeItems: 'center', 
-                  border: '1px solid var(--color-border)', 
-                  cursor: 'pointer' 
+                style={{
+                  position: 'relative',
+                  background: isNotificationOpen ? 'var(--color-surface-subtle)' : 'transparent',
+                  width: '36px',
+                  height: '36px',
+                  borderRadius: '2px',
+                  display: 'grid',
+                  placeItems: 'center',
+                  border: '1px solid var(--color-border)',
+                  cursor: 'pointer'
                 }}
               >
                 <Bell size={18} color={unreadCount > 0 ? "var(--color-doctor-primary)" : "var(--color-text-muted)"} />
@@ -471,29 +471,29 @@ export const DoctorAppShell = () => {
             <button
               type="button"
               onClick={() => navigate('/doctor/profile')}
-              style={{ 
-                display: 'flex', 
-                alignItems: 'center', 
-                gap: '8px', 
-                background: 'var(--color-surface-white)', 
-                border: '1px solid var(--color-border)', 
-                borderRadius: '2px', 
-                padding: '4px 8px 4px 4px', 
-                cursor: 'pointer' 
+              style={{
+                display: 'flex',
+                alignItems: 'center',
+                gap: '8px',
+                background: 'var(--color-surface-white)',
+                border: '1px solid var(--color-border)',
+                borderRadius: '2px',
+                padding: '4px 8px 4px 4px',
+                cursor: 'pointer'
               }}
               aria-label="Open your profile"
             >
-              <div 
-                style={{ 
-                  width: '30px', 
-                  height: '30px', 
-                  borderRadius: '2px', 
-                  background: 'var(--color-accent-muted)', 
+              <div
+                style={{
+                  width: '30px',
+                  height: '30px',
+                  borderRadius: '2px',
+                  background: 'var(--color-accent-muted)',
                   border: '1px solid var(--color-doctor-primary)',
-                  color: 'var(--color-doctor-primary)', 
-                  fontWeight: 700, 
-                  fontSize: '0.80rem', 
-                  display: 'grid', 
+                  color: 'var(--color-doctor-primary)',
+                  fontWeight: 700,
+                  fontSize: '0.80rem',
+                  display: 'grid',
                   placeItems: 'center',
                   overflow: 'hidden'
                 }}
@@ -511,8 +511,8 @@ export const DoctorAppShell = () => {
 
         {/* Dynamic nested doctor view content */}
         <div className="app-content">
-          {/* Nested Suspense Boundary: Displays RouteLoader while doctor feature pages 
-              (Consultations, Prescriptions, Queue) load dynamically in the background, 
+          {/* Nested Suspense Boundary: Displays RouteLoader while doctor feature pages
+              (Consultations, Prescriptions, Queue) load dynamically in the background,
               preventing visual jumps in the clinical header or navigation bar. */}
           <React.Suspense fallback={<RouteLoader />}>
             <Outlet />

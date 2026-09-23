@@ -2,7 +2,7 @@
  * ============================================================================
  * tRPC DOMAIN ROUTERS & BUSINESS LOGIC
  * ============================================================================
- * 
+ *
  * WHY THIS FILE IS SPECIAL:
  * This file contains the actual rules for what patients and doctors can do.
  * It uses tRPC, which creates an unbreakable bridge between the front-end and back-end.
@@ -11,16 +11,16 @@
  */
 import { TRPCError } from "@trpc/server";                                                  // Standard tRPC error throwing utility
 import { z } from "zod";                                                                   // Input schema validation library
-import { 
-  createDoctorAuthorizedPrescription, 
-  createPatientEvent, 
-  createDoctorEvent, 
-  getDoctorAuthorizedPatientDetail, 
-  getDoctorAuthorizedPrescriptionDetail, 
-  listDoctorAppointments, 
-  listDoctorAuthorizedAssessments, 
-  listDoctorPrescriptions, 
-  updateDoctorAppointmentStatus 
+import {
+  createDoctorAuthorizedPrescription,
+  createPatientEvent,
+  createDoctorEvent,
+  getDoctorAuthorizedPatientDetail,
+  getDoctorAuthorizedPrescriptionDetail,
+  listDoctorAppointments,
+  listDoctorAuthorizedAssessments,
+  listDoctorPrescriptions,
+  updateDoctorAppointmentStatus
 } from "../db";                                                                            // Database CRUD operations for doctor queries
 import { doctorProcedure, router } from "../_core/trpc";                                   // Doctor-authenticated procedure and router constructors
 import { doctorIdFromSyntheticOpenId, doctorDisplayName, getSyntheticDoctor } from "../syntheticDoctor"; // Clinician lookup and formatting helpers
@@ -147,18 +147,18 @@ export const doctorWorkspaceRouter = router({
         patientId: z.number().int().positive(),                                            // Target patient user ID
         clinicalNotes: z.string().trim().max(4000).optional(),                             // Optional clinician notes
         items: z.array(z.object({                                                          // Prescribed medication items
-          name: z.string().trim().min(1).max(200), 
-          dosage: z.string().trim().min(1).max(120), 
-          instructions: z.string().trim().min(1).max(2000) 
+          name: z.string().trim().min(1).max(200),
+          dosage: z.string().trim().min(1).max(120),
+          instructions: z.string().trim().min(1).max(2000)
         })).min(1).max(20),
       }))
       .mutation(async ({ ctx, input }) => {
         const doctor = currentDoctor(ctx.user.openId);                                     // Authenticate doctor
         const prescriptionId = await createDoctorAuthorizedPrescription({                  // Create prescription record in MySQL
-          doctorId: doctor.id, 
-          patientUserId: input.patientId, 
-          clinicalNotes: input.clinicalNotes || null, 
-          items: input.items 
+          doctorId: doctor.id,
+          patientUserId: input.patientId,
+          clinicalNotes: input.clinicalNotes || null,
+          items: input.items
         });
         if (!prescriptionId) throw new TRPCError({ code: "FORBIDDEN", message: "A confirmed appointment assigned to this doctor is required before a prescription can be created." });
         await createPatientEvent(input.patientId, "PRESCRIPTION_CREATED", String(prescriptionId)); // Send real-time SSE event to patient

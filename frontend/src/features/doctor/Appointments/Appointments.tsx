@@ -2,7 +2,7 @@
  * ============================================================================
  * CLINICIAN WORKSTATION PORTAL
  * ============================================================================
- * 
+ *
  * WHY THIS FILE IS SPECIAL:
  * This is the heavily restricted portal used by professional doctors.
  * It contains components for reviewing AI Triage reports, managing live consultation queues,
@@ -26,7 +26,7 @@ export const DoctorAppointments = () => {
   const utils = trpc.useUtils();                                                                // Client query cache invalidator
   const [feedbackMessage, setFeedbackMessage] = useState<string | null>(null);                  // User-facing status update banner
   const appointments = trpc.doctorWorkspace.appointments.list.useQuery();                       // Fetches doctor's assigned appointments
-  
+
   // Status update mutation (Accept / Complete / Cancel)
   const updateStatus = trpc.doctorWorkspace.appointments.updateStatus.useMutation({
     onSuccess: async (data, variables) => {

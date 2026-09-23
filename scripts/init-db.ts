@@ -2,10 +2,10 @@
  * ============================================================================
  * DATABASE INITIALIZATION HELPER (scripts/init-db.ts)
  * ============================================================================
- * 
+ *
  * HOW TO RUN:
  * Command: `npx tsx scripts/init-db.ts`
- * 
+ *
  * WHAT THIS SCRIPT DOES:
  * 1. Reads DATABASE_URL from .env and parses connection components (host, port, user, dbName).
  * 2. Connects to the raw MySQL server instance.
@@ -26,7 +26,7 @@ async function initDatabase() {
   }
 
   console.log("Checking MySQL connection and database presence...");
-  
+
   try {
     // --- Cluster: Parse Connection URL ---
     // Converts mysql:// URL format into individual host, port, user, password, and dbName components

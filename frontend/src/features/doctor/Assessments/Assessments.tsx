@@ -2,7 +2,7 @@
  * ============================================================================
  * CLINICIAN WORKSTATION PORTAL
  * ============================================================================
- * 
+ *
  * WHY THIS FILE IS SPECIAL:
  * This is the heavily restricted portal used by professional doctors.
  * It contains components for reviewing AI Triage reports, managing live consultation queues,

@@ -2,7 +2,7 @@
  * ============================================================================
  * FRONTEND REACT CORE
  * ============================================================================
- * 
+ *
  * WHY THIS FILE IS SPECIAL:
  * This is the root configuration of the React application.
  * It sets up the Routing (which URL goes to which page) and global Theme Contexts.
@@ -103,23 +103,23 @@ export const PatientLogin = () => {
         {/* Branding Panel (Left Column): Clean Nordic Clinical Identity */}
         <div className="auth-branding-panel" style={{ flex: 1, display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems: 'center', padding: 'var(--spacing-6)', zIndex: 1 }}>
           <div style={{ textAlign: 'center', maxWidth: '440px', display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
-            
+
             {/* Proportional Brand Treatment (Section 11) */}
             <div style={{ marginBottom: '20px', display: 'inline-flex', alignItems: 'center', justifyContent: 'center' }}>
               <LifeLinkLogo className="lifelink-logo-auth" style={{ width: '100%', maxWidth: '240px', height: 'auto', margin: 0, padding: 0, border: 'none', background: 'transparent', boxShadow: 'none' }} />
             </div>
-            
+
             {/* System Subtitle & Motto */}
             <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '14px' }}>
-              <span 
-                style={{ 
-                  background: 'var(--color-primary-muted)', 
-                  color: 'var(--color-primary)', 
-                  fontSize: '0.74rem', 
-                  fontWeight: 600, 
-                  letterSpacing: '0.06em', 
-                  textTransform: 'uppercase', 
-                  padding: '4px 12px', 
+              <span
+                style={{
+                  background: 'var(--color-primary-muted)',
+                  color: 'var(--color-primary)',
+                  fontSize: '0.74rem',
+                  fontWeight: 600,
+                  letterSpacing: '0.06em',
+                  textTransform: 'uppercase',
+                  padding: '4px 12px',
                   borderRadius: 'var(--border-radius-badge)',
                   border: '1px solid var(--color-border)'
                 }}
@@ -139,13 +139,13 @@ export const PatientLogin = () => {
 
         {/* Form Container (Right Column): Solid Clinical Surface */}
         <div style={{ flex: 1.1, display: 'flex', justifyContent: 'center', alignItems: 'center', padding: 'var(--spacing-5)', zIndex: 1 }}>
-          <Card 
-            className="card" 
-            style={{ 
-              width: '100%', 
-              maxWidth: '480px', 
-              maxHeight: '90vh', 
-              overflowY: 'auto', 
+          <Card
+            className="card"
+            style={{
+              width: '100%',
+              maxWidth: '480px',
+              maxHeight: '90vh',
+              overflowY: 'auto',
               padding: 'clamp(30px, 4.5vw, 44px)',
               background: 'var(--color-surface-white)',
               border: '1px solid var(--color-border)',
@@ -169,12 +169,12 @@ export const PatientLogin = () => {
 
             {/* Error banner */}
             {error && (
-              <div 
-                className="alert-panel auth-message" 
-                role="alert" 
-                style={{ 
-                  marginBottom: '24px', 
-                  color: 'var(--color-semantic-emergency)', 
+              <div
+                className="alert-panel auth-message"
+                role="alert"
+                style={{
+                  marginBottom: '24px',
+                  color: 'var(--color-semantic-emergency)',
                   textAlign: 'center',
                   background: 'rgba(220, 38, 38, 0.08)',
                   border: '1px solid rgba(220, 38, 38, 0.25)',
@@ -204,11 +204,11 @@ export const PatientLogin = () => {
                     onChange={(event) => setEmail(event.target.value)}
                     autoComplete="email"
                     required
-                    style={{ 
-                      width: '100%', 
-                      paddingLeft: '42px', 
-                      borderRadius: '2px', 
-                      minHeight: '44px', 
+                    style={{
+                      width: '100%',
+                      paddingLeft: '42px',
+                      borderRadius: '2px',
+                      minHeight: '44px',
                       fontSize: '0.90rem',
                       border: '1px solid var(--color-input-border, var(--color-border))',
                       background: 'var(--color-surface-white)',
@@ -233,12 +233,12 @@ export const PatientLogin = () => {
                     onChange={(event) => setPassword(event.target.value)}
                     autoComplete="current-password"
                     required
-                    style={{ 
-                      width: '100%', 
-                      paddingLeft: '42px', 
-                      paddingRight: '42px', 
-                      borderRadius: '2px', 
-                      minHeight: '44px', 
+                    style={{
+                      width: '100%',
+                      paddingLeft: '42px',
+                      paddingRight: '42px',
+                      borderRadius: '2px',
+                      minHeight: '44px',
                       fontSize: '0.90rem',
                       border: '1px solid var(--color-input-border, var(--color-border))',
                       background: 'var(--color-surface-white)',
@@ -262,15 +262,15 @@ export const PatientLogin = () => {
                 variant="primary"
                 className="btn-primary"
                 disabled={isLoading}
-                style={{ 
-                  width: '100%', 
-                  minHeight: '44px', 
-                  padding: '11px', 
-                  fontSize: '0.96rem', 
-                  fontWeight: 600, 
-                  borderRadius: '2px', 
-                  marginTop: '6px', 
-                  cursor: 'pointer', 
+                style={{
+                  width: '100%',
+                  minHeight: '44px',
+                  padding: '11px',
+                  fontSize: '0.96rem',
+                  fontWeight: 600,
+                  borderRadius: '2px',
+                  marginTop: '6px',
+                  cursor: 'pointer',
                   opacity: isLoading ? 0.7 : 1
                 }}
               >
@@ -292,16 +292,16 @@ export const PatientLogin = () => {
                   className="btn w-full"
                   onClick={handleGoogleClick}
                   title="Continue with Google"
-                  style={{ 
-                    borderRadius: '2px', 
-                    minHeight: '44px', 
-                    fontSize: '0.90rem', 
-                    width: '100%', 
-                    display: 'flex', 
-                    justifyContent: 'center', 
-                    alignItems: 'center', 
-                    gap: '10px', 
-                    cursor: 'pointer', 
+                  style={{
+                    borderRadius: '2px',
+                    minHeight: '44px',
+                    fontSize: '0.90rem',
+                    width: '100%',
+                    display: 'flex',
+                    justifyContent: 'center',
+                    alignItems: 'center',
+                    gap: '10px',
+                    cursor: 'pointer',
                     fontWeight: 600,
                     border: '1px solid var(--color-border)',
                     background: 'var(--color-surface-white)',

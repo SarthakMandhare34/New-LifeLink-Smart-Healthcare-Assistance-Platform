@@ -2,7 +2,7 @@
  * ============================================================================
  * DOCTOR CLINICAL WORKSTATION DASHBOARD (frontend/src/features/doctor/Dashboard.tsx)
  * ============================================================================
- * 
+ *
  * SWISS INTERNATIONAL TYPOGRAPHIC STYLE HEALTHCARE UI
  * Information-dense clinician workstation:
  * - Structured clinical metrics (4 operational stat blocks)
@@ -137,22 +137,22 @@ export const DoctorDashboard = () => {
       >
         <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', flexWrap: 'wrap', gap: '12px' }}>
           <div>
-            <span style={{ 
-              fontSize: '0.72rem', 
-              fontWeight: 700, 
-              color: 'var(--color-doctor-primary)', 
-              textTransform: 'uppercase', 
+            <span style={{
+              fontSize: '0.72rem',
+              fontWeight: 700,
+              color: 'var(--color-doctor-primary)',
+              textTransform: 'uppercase',
               letterSpacing: '0.08em',
               display: 'block',
               marginBottom: '2px'
             }}>
               Clinical Practice Workstation &bull; Licensed Provider Session
             </span>
-            <h1 style={{ 
-              fontSize: 'clamp(1.5rem, 2.5vw, 2rem)', 
-              fontWeight: 800, 
-              margin: '2px 0 6px', 
-              color: 'var(--color-text)', 
+            <h1 style={{
+              fontSize: 'clamp(1.5rem, 2.5vw, 2rem)',
+              fontWeight: 800,
+              margin: '2px 0 6px',
+              color: 'var(--color-text)',
               letterSpacing: '-0.02em',
               lineHeight: 1.2
             }}>
@@ -287,16 +287,16 @@ export const DoctorDashboard = () => {
                 type="button"
                 onClick={() => navigate('/doctor/appointments')}
                 aria-label="View all upcoming appointments"
-                style={{ 
-                  background: 'none', 
-                  border: 'none', 
-                  color: 'var(--color-doctor-primary)', 
-                  fontSize: '0.84rem', 
-                  fontWeight: 700, 
-                  cursor: 'pointer', 
-                  display: 'flex', 
-                  alignItems: 'center', 
-                  gap: '4px' 
+                style={{
+                  background: 'none',
+                  border: 'none',
+                  color: 'var(--color-doctor-primary)',
+                  fontSize: '0.84rem',
+                  fontWeight: 700,
+                  cursor: 'pointer',
+                  display: 'flex',
+                  alignItems: 'center',
+                  gap: '4px'
                 }}
               >
                 View All <ArrowRight size={14} />
@@ -320,9 +320,9 @@ export const DoctorDashboard = () => {
                       const badge = statusBadge(apt.status);
                       const patientName = apt.patient?.name || apt.patientName || 'Patient';
                       return (
-                        <tr 
+                        <tr
                           key={apt.id || idx}
-                          style={{ 
+                          style={{
                             borderBottom: '1px solid var(--color-border)',
                             transition: 'background 0.15s'
                           }}
@@ -397,16 +397,16 @@ export const DoctorDashboard = () => {
                 type="button"
                 onClick={() => navigate('/doctor/assessments')}
                 aria-label="View all recent assessments"
-                style={{ 
-                  background: 'none', 
-                  border: 'none', 
-                  color: 'var(--color-doctor-primary)', 
-                  fontSize: '0.84rem', 
-                  fontWeight: 700, 
-                  cursor: 'pointer', 
-                  display: 'flex', 
-                  alignItems: 'center', 
-                  gap: '4px' 
+                style={{
+                  background: 'none',
+                  border: 'none',
+                  color: 'var(--color-doctor-primary)',
+                  fontSize: '0.84rem',
+                  fontWeight: 700,
+                  cursor: 'pointer',
+                  display: 'flex',
+                  alignItems: 'center',
+                  gap: '4px'
                 }}
               >
                 View All <ArrowRight size={14} />
@@ -507,16 +507,16 @@ export const DoctorDashboard = () => {
                 type="button"
                 onClick={() => navigate('/doctor/patients')}
                 aria-label="View all accessible patients"
-                style={{ 
-                  background: 'none', 
-                  border: 'none', 
-                  color: 'var(--color-doctor-primary)', 
-                  fontSize: '0.84rem', 
-                  fontWeight: 700, 
-                  cursor: 'pointer', 
-                  display: 'flex', 
-                  alignItems: 'center', 
-                  gap: '4px' 
+                style={{
+                  background: 'none',
+                  border: 'none',
+                  color: 'var(--color-doctor-primary)',
+                  fontSize: '0.84rem',
+                  fontWeight: 700,
+                  cursor: 'pointer',
+                  display: 'flex',
+                  alignItems: 'center',
+                  gap: '4px'
                 }}
               >
                 View All <ArrowRight size={14} />

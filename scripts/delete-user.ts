@@ -2,10 +2,10 @@
  * ============================================================================
  * SPECIFIC USER & HISTORY DELETION SCRIPT (scripts/delete-user.ts)
  * ============================================================================
- * 
+ *
  * HOW TO RUN:
  * Command: `npx tsx scripts/delete-user.ts sarthakmandhare34@gmail.com`
- * 
+ *
  * WHAT THIS SCRIPT DOES:
  * 1. Safely finds the user in TiDB / MySQL by email address.
  * 2. Deletes all associated health records, prescriptions, appointments,
@@ -66,12 +66,12 @@ async function deleteUserByEmail() {
 
   if (userIds.size === 0 && matchedUsers.length === 0) {
     console.log(`ℹ️ No exact user found with email "${targetEmail}".`);
-    
+
     // Check for partial match on "sarthak"
     const partialUsers = allUsers.filter((u) => u.email && u.email.toLowerCase().includes("sarthak"));
     const partialCreds = allCreds.filter((c) => c.email && c.email.toLowerCase().includes("sarthak"));
     const partialOAuth = allOAuth.filter((o) => o.email && o.email.toLowerCase().includes("sarthak"));
-    
+
     if (partialUsers.length > 0 || partialCreds.length > 0 || partialOAuth.length > 0) {
       console.log(`\n🔎 Found partial matches for 'sarthak':`);
       partialUsers.forEach((u) => console.log(`   - users table: ID ${u.id}, email: "${u.email}"`));

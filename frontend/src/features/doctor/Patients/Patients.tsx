@@ -2,7 +2,7 @@
  * ============================================================================
  * DOCTOR AUTHORIZED PATIENT ROSTER (frontend/src/features/doctor/Patients/Patients.tsx)
  * ============================================================================
- * 
+ *
  * WHY THIS FILE IS SPECIAL:
  * This component displays the active clinical panel of patients assigned to the doctor.
  * In compliance with digital health privacy standards, it restricts directory visibility

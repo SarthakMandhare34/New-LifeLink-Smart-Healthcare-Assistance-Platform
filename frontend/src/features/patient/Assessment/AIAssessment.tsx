@@ -2,7 +2,7 @@
  * ============================================================================
  * AI SYMPTOM CHECKER UI
  * ============================================================================
- * 
+ *
  * WHY THIS FILE IS SPECIAL:
  * This React component provides the interface for patients to type their symptoms.
  * It manages complex loading states while waiting for Google's supercomputers to reply,
@@ -162,7 +162,7 @@ export const AIAssessment = () => {
       {/* Main Assessment Card */}
       <Card variant="default" style={cardStyle}>
         <form onSubmit={handleSubmit} style={{ display: 'flex', flexDirection: 'column', gap: '20px' }}>
-          
+
           {/* Validation Alert */}
           {apiError && (
             <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
@@ -199,12 +199,12 @@ export const AIAssessment = () => {
               <span style={{ fontSize: '0.92rem', fontWeight: 700, color: 'var(--color-text)' }}>
                 Describe your symptoms <span style={{ color: 'var(--color-semantic-emergency)' }}>*</span>
               </span>
-              <textarea 
+              <textarea
                 id="ai-assessment-symptoms"
-                value={symptoms} 
-                onChange={(event) => setSymptoms(event.target.value)} 
-                placeholder="Describe what you are feeling, when it started, and what makes it better or worse." 
-                required 
+                value={symptoms}
+                onChange={(event) => setSymptoms(event.target.value)}
+                placeholder="Describe what you are feeling, when it started, and what makes it better or worse."
+                required
                 rows={4}
                 style={{
                   width: '100%',
@@ -220,7 +220,7 @@ export const AIAssessment = () => {
               />
             </label>
           </div>
-          
+
           {/* SECTION: PATIENT INFORMATION */}
           <div style={{ borderTop: '1px solid var(--color-border)', paddingTop: '16px' }}>
             <span style={{ display: 'block', fontSize: '0.72rem', fontWeight: 700, color: 'var(--color-text-muted)', textTransform: 'uppercase', letterSpacing: '0.06em', marginBottom: '12px' }}>
@@ -231,12 +231,12 @@ export const AIAssessment = () => {
                 <span style={{ fontSize: '0.92rem', fontWeight: 700, color: 'var(--color-text)' }}>
                   Age (0 – 100) <span style={{ color: 'var(--color-semantic-emergency)' }}>*</span>
                 </span>
-                <Input 
+                <Input
                   id="ai-assessment-age"
                   type="number"
                   min={0}
                   max={100}
-                  value={age} 
+                  value={age}
                   onChange={(event) => {
                     const val = event.target.value;
                     if (val === '') {
@@ -249,23 +249,23 @@ export const AIAssessment = () => {
                       else if (num > 100) setAge('100');
                       else setAge(val);
                     }
-                  }} 
+                  }}
                   placeholder="e.g. 32"
-                  required 
+                  required
                   style={{ border: '1px solid var(--color-border)', background: 'var(--color-surface-white)', color: 'var(--color-text)', borderRadius: 'var(--border-radius-input)' }}
                 />
               </label>
-              
+
               <label htmlFor="ai-assessment-gender" style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
                 <span style={{ fontSize: '0.92rem', fontWeight: 700, color: 'var(--color-text)' }}>
                   Biological Gender <span style={{ color: 'var(--color-semantic-emergency)' }}>*</span>
                 </span>
-                <select 
+                <select
                   id="ai-assessment-gender"
                   aria-label="Biological Gender"
-                  value={gender} 
-                  onChange={(event) => setGender(event.target.value)} 
-                  required 
+                  value={gender}
+                  onChange={(event) => setGender(event.target.value)}
+                  required
                   style={{
                     height: '42px',
                     padding: '0 12px',
@@ -285,7 +285,7 @@ export const AIAssessment = () => {
               </label>
             </div>
           </div>
-          
+
           {/* SECTION: DURATION & MEDICAL CONDITIONS */}
           <div style={{ borderTop: '1px solid var(--color-border)', paddingTop: '16px' }}>
             <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(min(100%, 200px), 1fr))', gap: '16px' }}>
@@ -297,18 +297,18 @@ export const AIAssessment = () => {
                   <span style={{ fontSize: '0.92rem', fontWeight: 700, color: 'var(--color-text)' }}>
                     Symptom Duration <span style={{ color: 'var(--color-semantic-emergency)' }}>*</span>
                   </span>
-                  <Input 
+                  <Input
                     id="ai-assessment-duration"
-                    type="text" 
-                    value={duration} 
-                    onChange={(event) => setDuration(event.target.value)} 
-                    placeholder="e.g. 2 days, 1 week" 
-                    required 
-                    style={{ border: '1px solid var(--color-border)', background: 'var(--color-surface-white)', color: 'var(--color-text)', borderRadius: 'var(--border-radius-input)' }} 
+                    type="text"
+                    value={duration}
+                    onChange={(event) => setDuration(event.target.value)}
+                    placeholder="e.g. 2 days, 1 week"
+                    required
+                    style={{ border: '1px solid var(--color-border)', background: 'var(--color-surface-white)', color: 'var(--color-text)', borderRadius: 'var(--border-radius-input)' }}
                   />
                 </label>
               </div>
-              
+
               <div>
                 <span style={{ display: 'block', fontSize: '0.72rem', fontWeight: 700, color: 'var(--color-text-muted)', textTransform: 'uppercase', letterSpacing: '0.06em', marginBottom: '8px' }}>
                   Medical Conditions
@@ -317,26 +317,26 @@ export const AIAssessment = () => {
                   <span style={{ fontSize: '0.92rem', fontWeight: 700, color: 'var(--color-text)' }}>
                     Existing Conditions <span style={{ color: 'var(--color-text-muted)', fontWeight: 400 }}>(optional)</span>
                   </span>
-                  <Input 
+                  <Input
                     id="ai-assessment-conditions"
-                    type="text" 
-                    value={conditions} 
-                    onChange={(event) => setConditions(event.target.value)} 
-                    placeholder="e.g. Asthma, Hypertension" 
-                    style={{ border: '1px solid var(--color-border)', background: 'var(--color-surface-white)', color: 'var(--color-text)', borderRadius: 'var(--border-radius-input)' }} 
+                    type="text"
+                    value={conditions}
+                    onChange={(event) => setConditions(event.target.value)}
+                    placeholder="e.g. Asthma, Hypertension"
+                    style={{ border: '1px solid var(--color-border)', background: 'var(--color-surface-white)', color: 'var(--color-text)', borderRadius: 'var(--border-radius-input)' }}
                   />
                 </label>
               </div>
             </div>
           </div>
-          
+
           {/* SECTION: ASSESSMENT ACTION */}
           <div style={{ borderTop: '1px solid var(--color-border)', paddingTop: '16px' }}>
-            <Button 
-              type="submit" 
-              variant="primary" 
+            <Button
+              type="submit"
+              variant="primary"
               className="btn-primary w-full"
-              disabled={isProcessing} 
+              disabled={isProcessing}
               style={{
                 padding: '12px 20px',
                 fontSize: '0.95rem',
@@ -372,8 +372,8 @@ export const AIAssessment = () => {
             {savedAssessments.data.map((item: any) => {
               const badge = urgencyBadgeStyle(item.urgency);
               return (
-                <Card 
-                  key={item.id} 
+                <Card
+                  key={item.id}
                   style={{
                     background: 'var(--color-surface-white)',
                     padding: '20px',
@@ -448,15 +448,15 @@ export const AIAssessment = () => {
       </section>
 
       {/* Result Popup Modal */}
-      <Popup 
-        isOpen={isResultModalOpen && Boolean(activeModalItem)} 
-        onClose={handleCloseResult} 
-        title="AI Assessment Triage Result" 
+      <Popup
+        isOpen={isResultModalOpen && Boolean(activeModalItem)}
+        onClose={handleCloseResult}
+        title="AI Assessment Triage Result"
         maxWidth="600px"
       >
         {activeModalItem && (
           <div style={{ display: 'flex', flexDirection: 'column', gap: '20px' }}>
-            
+
             {/* Emergency Warning Banner if EMERGENCY */}
             {activeModalItem.urgency === 'EMERGENCY' && (
               <div
@@ -589,9 +589,9 @@ export const AIAssessment = () => {
             {/* Modal Actions */}
             {activeModalItem.urgency === 'EMERGENCY' ? (
               <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
-                <Button 
-                  variant="danger" 
-                  style={{ width: '100%', borderRadius: '8px', padding: '12px', fontWeight: 700 }} 
+                <Button
+                  variant="danger"
+                  style={{ width: '100%', borderRadius: '8px', padding: '12px', fontWeight: 700 }}
                   onClick={() => {
                     handleCloseResult();
                     navigate('/patient/emergency');
@@ -599,9 +599,9 @@ export const AIAssessment = () => {
                 >
                   Open Emergency Assistance Workflow
                 </Button>
-                <Button 
-                  variant="outline" 
-                  style={{ width: '100%', borderRadius: '8px', borderColor: 'var(--color-border)', color: 'var(--color-text)' }} 
+                <Button
+                  variant="outline"
+                  style={{ width: '100%', borderRadius: '8px', borderColor: 'var(--color-border)', color: 'var(--color-text)' }}
                   onClick={handleCloseResult}
                 >
                   I Understand & Close
@@ -609,17 +609,17 @@ export const AIAssessment = () => {
               </div>
             ) : (
               <div style={{ display: 'flex', gap: '12px', flexWrap: 'wrap' }}>
-                <Button 
-                  variant="outline" 
-                  style={{ flex: 1, borderRadius: '8px', borderColor: 'var(--color-border)', color: 'var(--color-text)' }} 
+                <Button
+                  variant="outline"
+                  style={{ flex: 1, borderRadius: '8px', borderColor: 'var(--color-border)', color: 'var(--color-text)' }}
                   onClick={handleCloseResult}
                 >
                   Close
                 </Button>
-                <Button 
-                  variant="primary" 
+                <Button
+                  variant="primary"
                   className="btn-primary"
-                  style={{ flex: 1, borderRadius: '8px', fontWeight: 700, display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '6px' }} 
+                  style={{ flex: 1, borderRadius: '8px', fontWeight: 700, display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '6px' }}
                   onClick={() => {
                     handleCloseResult();
                     findSpecialist();
@@ -637,4 +637,3 @@ export const AIAssessment = () => {
     </div>
   );
 };
-

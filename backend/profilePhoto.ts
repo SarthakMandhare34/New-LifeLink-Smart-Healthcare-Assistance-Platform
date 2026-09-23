@@ -2,11 +2,11 @@
  * ============================================================================
  * PATIENT PROFILE AVATAR BINARY UPLOAD PIPELINE (backend/profilePhoto.ts)
  * ============================================================================
- * 
+ *
  * WHAT THIS MODULE DOES:
  * Provides a high-performance binary HTTP POST endpoint (`/api/patient/profile-photo`)
  * for direct patient avatar photo uploads.
- * 
+ *
  * SECURITY & VALIDATION FEATURES:
  * 1. Magic Bytes Deep Inspection: Validates raw binary file signatures to prevent file spoofing.
  * 2. Strict File Size Caps: Limits upload payloads strictly to 2 MB to prevent DoS attacks.

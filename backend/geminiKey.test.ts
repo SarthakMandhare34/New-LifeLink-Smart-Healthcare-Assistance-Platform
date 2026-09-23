@@ -2,7 +2,7 @@
  * ============================================================================
  * AUTOMATED TEST SUITE: GEMINI CREDENTIAL & SCHEMA CONTRACT (backend/geminiKey.test.ts)
  * ============================================================================
- * 
+ *
  * WHAT THIS TEST VERIFIES:
  * Tests the live upstream Google Gemini API connection and verifies that:
  * 1. The configured `GEMINI_API_KEY` successfully authenticates against Google's Model Catalog.

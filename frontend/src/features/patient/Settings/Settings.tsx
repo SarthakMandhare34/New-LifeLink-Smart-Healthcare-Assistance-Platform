@@ -2,7 +2,7 @@
  * ============================================================================
  * PATIENT WORKSPACE PREFERENCES & SECURITY (frontend/src/features/patient/Settings/Settings.tsx)
  * ============================================================================
- * 
+ *
  * WHY THIS FILE IS SPECIAL:
  * This component manages patient-facing configuration for notifications and privacy.
  * It controls appointment reminder alerts, medication schedules, and outlines
@@ -38,7 +38,7 @@ export const Settings = () => {
 
   return (
     <div style={{ display: 'flex', flexDirection: 'column', gap: '36px', width: '100%', maxWidth: '1400px', margin: '0 auto' }}>
-      
+
       {/* Workspace Header Banner */}
       <section
         style={{
@@ -80,7 +80,7 @@ export const Settings = () => {
 
       {/* Main Grid: 2-column layout */}
       <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(min(100%, 480px), 1fr))', gap: '28px' }}>
-        
+
         {/* Notification Preferences Card */}
         <Card
           variant="default"
@@ -105,9 +105,9 @@ export const Settings = () => {
                 Notification Preferences
               </h2>
             </div>
-            
+
             <div style={{ display: 'flex', flexDirection: 'column', gap: '18px' }}>
-              
+
               {/* Appointment Reminder Toggle Option */}
               <div style={{ padding: '18px 22px', background: 'var(--color-surface-subtle)', borderRadius: '2px', border: '1px solid var(--color-border)', display: 'flex', alignItems: 'flex-start', justifyContent: 'space-between', gap: '18px' }}>
                 <div style={{ flex: 1 }}>
@@ -118,13 +118,13 @@ export const Settings = () => {
                     Reminder delivery is not active yet. This preference is saved only for the current workspace session.
                   </span>
                 </div>
-                <input 
+                <input
                   id="pref-apt-reminders"
-                  type="checkbox" 
+                  type="checkbox"
                   aria-label="Appointment reminder preference"
-                  checked={aptReminders} 
+                  checked={aptReminders}
                   onChange={(e) => setAptReminders(e.target.checked)}
-                  style={{ accentColor: 'var(--color-primary)', transform: 'scale(1.25)', cursor: 'pointer', marginTop: '4px' }} 
+                  style={{ accentColor: 'var(--color-primary)', transform: 'scale(1.25)', cursor: 'pointer', marginTop: '4px' }}
                 />
               </div>
 
@@ -138,13 +138,13 @@ export const Settings = () => {
                     Inventory alerts are not active yet. This preference is saved only for the current workspace session.
                   </span>
                 </div>
-                <input 
+                <input
                   id="pref-med-alerts"
-                  type="checkbox" 
+                  type="checkbox"
                   aria-label="Medicine inventory preference"
-                  checked={medAlerts} 
+                  checked={medAlerts}
                   onChange={(e) => setMedAlerts(e.target.checked)}
-                  style={{ accentColor: 'var(--color-primary)', transform: 'scale(1.25)', cursor: 'pointer', marginTop: '4px' }} 
+                  style={{ accentColor: 'var(--color-primary)', transform: 'scale(1.25)', cursor: 'pointer', marginTop: '4px' }}
                 />
               </div>
 
@@ -181,9 +181,9 @@ export const Settings = () => {
                 Account Options
               </h2>
             </div>
-            
+
             <div style={{ display: 'flex', flexDirection: 'column', gap: '18px' }}>
-              
+
               {/* Password Option */}
               <div style={{ padding: '18px 22px', background: 'var(--color-surface-subtle)', borderRadius: '2px', border: '1px solid var(--color-border)', display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: '18px', flexWrap: 'wrap' }}>
                 <div style={{ flex: 1, minWidth: '220px' }}>
