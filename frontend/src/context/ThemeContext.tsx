@@ -34,6 +34,8 @@ export const ThemeProvider = ({ children }: { children: ReactNode }) => {
   // Syncs theme attribute onto the root <html> document tag and updates localStorage
   useEffect(() => {
     document.documentElement.setAttribute('data-theme', theme);                            // Set data-theme="light" or "dark" on <html> element
+    document.documentElement.classList.toggle('dark', theme === 'dark');                   // Toggle .dark class for Tailwind and CSS class selectors
+    document.documentElement.classList.toggle('light', theme === 'light');                 // Toggle .light class for explicit light styling
     localStorage.setItem('lifelink_theme', theme);                                         // Save preference in localStorage
   }, [theme]);
 

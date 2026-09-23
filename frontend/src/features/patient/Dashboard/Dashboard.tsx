@@ -81,32 +81,14 @@ export const PatientDashboard = () => {
 
   const latestPrescription = prescriptions[0] ?? null;
 
-  // Swiss structured card style: rectangular, 1px border, no shadow
-  const cardStyle: React.CSSProperties = {
-    padding: '20px 24px',
-    display: 'flex',
-    flexDirection: 'column',
-    gap: '14px',
-    background: 'var(--swiss-white)',
-    border: '1px solid var(--swiss-gray-300)',
-    borderRadius: '2px',
-    boxShadow: 'none',
-  };
-
-  const headerBoxStyle: React.CSSProperties = {
-    padding: '24px 28px',
-    background: 'var(--swiss-white)',
-    border: '1px solid var(--swiss-gray-300)',
-    borderLeft: '4px solid var(--swiss-red)',
-    borderRadius: '2px',
-    boxShadow: 'none',
-  };
+  // Swiss structured card style handled by CSS class: .dashboard-card
+  // Header box style handled by CSS class: .dashboard-header-box
 
   return (
     <div style={{ display: 'flex', flexDirection: 'column', gap: '24px', width: '100%' }}>
 
       {/* 1. PATIENT IDENTITY / WELCOME HEADER */}
-      <section style={headerBoxStyle} aria-label="Patient identity summary">
+      <section className="dashboard-header-box" aria-label="Patient identity summary">
         <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', flexWrap: 'wrap', gap: '16px' }}>
           <div>
             <span style={{ 
@@ -124,13 +106,13 @@ export const PatientDashboard = () => {
               fontSize: 'clamp(1.5rem, 2.5vw, 2rem)', 
               fontWeight: 800, 
               margin: '0 0 6px', 
-              color: 'var(--swiss-black)', 
+              color: 'var(--color-text)', 
               letterSpacing: '-0.02em',
               lineHeight: 1.2
             }}>
               {patient.name || user?.name || 'Patient'}
             </h1>
-            <p style={{ color: 'var(--swiss-gray-600)', fontSize: '0.88rem', margin: 0 }}>
+            <p style={{ color: 'var(--color-text-muted)', fontSize: '0.88rem', margin: 0 }}>
               Official medical records, scheduled consultations, and health monitoring
             </p>
           </div>
@@ -162,10 +144,10 @@ export const PatientDashboard = () => {
                 alignItems: 'center',
                 gap: '6px',
                 padding: '6px 12px',
-                background: 'var(--swiss-gray-100)',
-                border: '1px solid var(--swiss-gray-300)',
+                background: 'var(--color-surface-subtle)',
+                border: '1px solid var(--color-border)',
                 borderRadius: '2px',
-                color: 'var(--swiss-gray-800)',
+                color: 'var(--color-text)',
                 fontSize: '0.82rem',
                 fontWeight: 600,
                 cursor: 'pointer',
@@ -185,25 +167,25 @@ export const PatientDashboard = () => {
         aria-label="Clinical visits and triage"
       >
         {/* Upcoming Appointment */}
-        <div style={cardStyle}>
-          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', borderBottom: '1px solid var(--swiss-gray-300)', paddingBottom: '10px' }}>
-            <h2 style={{ fontSize: '0.8rem', fontWeight: 700, color: 'var(--swiss-black)', margin: 0, textTransform: 'uppercase', letterSpacing: '0.06em' }}>
+        <div className="dashboard-card">
+          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', borderBottom: '1px solid var(--color-border)', paddingBottom: '10px' }}>
+            <h2 style={{ fontSize: '0.8rem', fontWeight: 700, color: 'var(--color-text)', margin: 0, textTransform: 'uppercase', letterSpacing: '0.06em' }}>
               Upcoming Consultation
             </h2>
-            <Calendar size={18} color="var(--swiss-blue)" />
+            <Calendar size={18} color="var(--color-accent)" />
           </div>
 
           {upcomingAppointment ? (
             <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
               <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-                <Clock size={15} color="var(--swiss-gray-600)" />
-                <span style={{ fontSize: '0.95rem', fontWeight: 700, color: 'var(--swiss-black)', fontVariantNumeric: 'tabular-nums' }}>
+                <Clock size={15} color="var(--color-text-muted)" />
+                <span style={{ fontSize: '0.95rem', fontWeight: 700, color: 'var(--color-text)', fontVariantNumeric: 'tabular-nums' }}>
                   {new Date(upcomingAppointment.scheduledAt).toLocaleDateString(undefined, { month: 'short', day: 'numeric', year: 'numeric' })}
                   {' '}•{' '}
                   {new Date(upcomingAppointment.scheduledAt).toLocaleTimeString(undefined, { hour: '2-digit', minute: '2-digit' })}
                 </span>
               </div>
-              <p style={{ fontSize: '0.86rem', color: 'var(--swiss-gray-700)', margin: 0 }}>
+              <p style={{ fontSize: '0.86rem', color: 'var(--color-text-muted)', margin: 0 }}>
                 {upcomingAppointment.reason || 'General Consultation'}
               </p>
               <div style={{ marginTop: '4px' }}>
@@ -224,7 +206,7 @@ export const PatientDashboard = () => {
               </div>
             </div>
           ) : (
-            <p style={{ fontSize: '0.88rem', color: 'var(--swiss-gray-600)', margin: 0, fontStyle: 'italic' }}>
+            <p style={{ fontSize: '0.88rem', color: 'var(--color-text-muted)', margin: 0, fontStyle: 'italic' }}>
               No upcoming consultations scheduled.
             </p>
           )}
@@ -240,17 +222,17 @@ export const PatientDashboard = () => {
         </div>
 
         {/* Recent AI Symptom Assessment */}
-        <div style={cardStyle}>
-          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', borderBottom: '1px solid var(--swiss-gray-300)', paddingBottom: '10px' }}>
-            <h2 style={{ fontSize: '0.8rem', fontWeight: 700, color: 'var(--swiss-black)', margin: 0, textTransform: 'uppercase', letterSpacing: '0.06em' }}>
+        <div className="dashboard-card">
+          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', borderBottom: '1px solid var(--color-border)', paddingBottom: '10px' }}>
+            <h2 style={{ fontSize: '0.8rem', fontWeight: 700, color: 'var(--color-text)', margin: 0, textTransform: 'uppercase', letterSpacing: '0.06em' }}>
               Recent AI Triage Assessment
             </h2>
-            <Activity size={18} color="var(--swiss-blue)" />
+            <Activity size={18} color="var(--color-accent)" />
           </div>
 
           {latestAssessment ? (
             <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
-              <p style={{ fontSize: '0.82rem', color: 'var(--swiss-gray-600)', margin: 0 }}>
+              <p style={{ fontSize: '0.82rem', color: 'var(--color-text-muted)', margin: 0 }}>
                 Recorded on {new Date(latestAssessment.createdAt).toLocaleDateString(undefined, { month: 'short', day: 'numeric', year: 'numeric' })}
               </p>
               <div>
@@ -267,12 +249,12 @@ export const PatientDashboard = () => {
                   {latestAssessment.urgency}
                 </span>
               </div>
-              <p style={{ fontSize: '0.92rem', fontWeight: 700, color: 'var(--swiss-black)', margin: 0 }}>
+              <p style={{ fontSize: '0.92rem', fontWeight: 700, color: 'var(--color-text)', margin: 0 }}>
                 Specialty: {latestAssessment.specialty}
               </p>
             </div>
           ) : (
-            <p style={{ fontSize: '0.88rem', color: 'var(--swiss-gray-600)', margin: 0, fontStyle: 'italic' }}>
+            <p style={{ fontSize: '0.88rem', color: 'var(--color-text-muted)', margin: 0, fontStyle: 'italic' }}>
               No symptom assessments recorded yet.
             </p>
           )}
@@ -294,12 +276,12 @@ export const PatientDashboard = () => {
         aria-label="Medication and prescriptions records"
       >
         {/* Medicines Overview */}
-        <div style={cardStyle}>
-          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', borderBottom: '1px solid var(--swiss-gray-300)', paddingBottom: '10px' }}>
-            <h2 style={{ fontSize: '0.8rem', fontWeight: 700, color: 'var(--swiss-black)', margin: 0, textTransform: 'uppercase', letterSpacing: '0.06em' }}>
+        <div className="dashboard-card">
+          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', borderBottom: '1px solid var(--color-border)', paddingBottom: '10px' }}>
+            <h2 style={{ fontSize: '0.8rem', fontWeight: 700, color: 'var(--color-text)', margin: 0, textTransform: 'uppercase', letterSpacing: '0.06em' }}>
               Active Medication Register
             </h2>
-            <Pill size={18} color="var(--swiss-blue)" />
+            <Pill size={18} color="var(--color-accent)" />
           </div>
 
           {medicines.length > 0 ? (
@@ -312,24 +294,24 @@ export const PatientDashboard = () => {
                     alignItems: 'center', 
                     justifyContent: 'space-between',
                     padding: '8px 12px', 
-                    background: 'var(--swiss-off-white)', 
+                    background: 'var(--color-surface-subtle)', 
                     borderRadius: '2px', 
-                    border: '1px solid var(--swiss-gray-300)' 
+                    border: '1px solid var(--color-border)' 
                   }}
                 >
                   <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
-                    <Pill size={15} style={{ color: 'var(--swiss-blue)', flexShrink: 0 }} />
+                    <Pill size={15} style={{ color: 'var(--color-accent)', flexShrink: 0 }} />
                     <div>
-                      <strong style={{ fontSize: '0.88rem', color: 'var(--swiss-black)', display: 'block', fontWeight: 700 }}>
+                      <strong style={{ fontSize: '0.88rem', color: 'var(--color-text)', display: 'block', fontWeight: 700 }}>
                         {med.name}
                       </strong>
-                      <span style={{ fontSize: '0.76rem', color: 'var(--swiss-gray-600)' }}>
+                      <span style={{ fontSize: '0.76rem', color: 'var(--color-text-muted)' }}>
                         {med.dosage} &bull; {med.frequency}
                       </span>
                     </div>
                   </div>
                   {med.schedule && (
-                    <span style={{ fontSize: '0.74rem', color: 'var(--swiss-gray-700)', fontVariantNumeric: 'tabular-nums' }}>
+                    <span style={{ fontSize: '0.74rem', color: 'var(--color-text-muted)', fontVariantNumeric: 'tabular-nums' }}>
                       {med.schedule}
                     </span>
                   )}
@@ -342,7 +324,7 @@ export const PatientDashboard = () => {
               )}
             </div>
           ) : (
-            <p style={{ fontSize: '0.88rem', color: 'var(--swiss-gray-600)', margin: 0, fontStyle: 'italic' }}>
+            <p style={{ fontSize: '0.88rem', color: 'var(--color-text-muted)', margin: 0, fontStyle: 'italic' }}>
               No medications recorded in cabinet.
             </p>
           )}
@@ -358,20 +340,20 @@ export const PatientDashboard = () => {
         </div>
 
         {/* Official Prescriptions */}
-        <div style={cardStyle}>
-          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', borderBottom: '1px solid var(--swiss-gray-300)', paddingBottom: '10px' }}>
-            <h2 style={{ fontSize: '0.8rem', fontWeight: 700, color: 'var(--swiss-black)', margin: 0, textTransform: 'uppercase', letterSpacing: '0.06em' }}>
+        <div className="dashboard-card">
+          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', borderBottom: '1px solid var(--color-border)', paddingBottom: '10px' }}>
+            <h2 style={{ fontSize: '0.8rem', fontWeight: 700, color: 'var(--color-text)', margin: 0, textTransform: 'uppercase', letterSpacing: '0.06em' }}>
               Official Digital Prescriptions
             </h2>
-            <FileText size={18} color="var(--swiss-blue)" />
+            <FileText size={18} color="var(--color-accent)" />
           </div>
 
           {latestPrescription ? (
             <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
-              <p style={{ fontSize: '0.82rem', color: 'var(--swiss-gray-600)', margin: 0 }}>
+              <p style={{ fontSize: '0.82rem', color: 'var(--color-text-muted)', margin: 0 }}>
                 Issued: {new Date(latestPrescription.issuedAt ?? latestPrescription.createdAt).toLocaleDateString(undefined, { month: 'short', day: 'numeric', year: 'numeric' })}
               </p>
-              <p style={{ fontSize: '0.90rem', fontWeight: 700, color: 'var(--swiss-black)', margin: 0 }}>
+              <p style={{ fontSize: '0.90rem', fontWeight: 700, color: 'var(--color-text)', margin: 0 }}>
                 {latestPrescription.clinicalNotes || `Prescription #${latestPrescription.id}`}
               </p>
               <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginTop: '2px' }}>
@@ -393,7 +375,7 @@ export const PatientDashboard = () => {
               </div>
             </div>
           ) : (
-            <p style={{ fontSize: '0.88rem', color: 'var(--swiss-gray-600)', margin: 0, fontStyle: 'italic' }}>
+            <p style={{ fontSize: '0.88rem', color: 'var(--color-text-muted)', margin: 0, fontStyle: 'italic' }}>
               No prescriptions issued yet.
             </p>
           )}
@@ -414,21 +396,9 @@ export const PatientDashboard = () => {
         <div
           role="region"
           aria-label="Emergency assistance"
-          style={{
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'space-between',
-            flexWrap: 'wrap',
-            gap: '16px',
-            padding: '20px 24px',
-            background: 'var(--swiss-red-soft)',
-            border: '1px solid var(--swiss-red)',
-            borderLeft: '5px solid var(--swiss-red)',
-            borderRadius: '2px',
-            boxShadow: 'none',
-          }}
+          className="dashboard-emergency-section"
         >
-          <div style={{ display: 'flex', alignItems: 'center', gap: '16px', minWidth: '260px', flex: '1 1 auto' }}>
+          <div className="dashboard-emergency-inner">
             <div style={{ 
               width: '42px', 
               height: '42px', 
@@ -444,7 +414,7 @@ export const PatientDashboard = () => {
               <h2 style={{ fontSize: '1.05rem', fontWeight: 800, color: 'var(--swiss-red)', margin: '0 0 2px', letterSpacing: '-0.01em' }}>
                 Emergency Medical Assistance
               </h2>
-              <p style={{ fontSize: '0.85rem', color: 'var(--swiss-black)', margin: 0 }}>
+              <p style={{ fontSize: '0.85rem', color: 'var(--color-text)', margin: 0 }}>
                 Immediate hotline dispatch &bull; 2-Step Emergency Protocol &bull; Verified Hotlines
               </p>
             </div>

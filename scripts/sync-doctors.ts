@@ -57,6 +57,22 @@ async function syncDoctors() {
 
   console.log(`Currently found ${existingRows.length} doctor account(s) in the database.\n`);
 
+  // Purge any non-doctor accounts to ensure database strictly contains only the 52 official doctors
+  const validDoctorOpenIds = mockDoctorDirectory.map((d) => `synthetic-doctor:${d.id}`);
+  const allCurrentUsers = await db.select().from(users);
+  const nonDoctorUsers = allCurrentUsers.filter((u) => !validDoctorOpenIds.includes(u.openId));
+
+  if (nonDoctorUsers.length > 0) {
+    console.log(`🧹 Purging ${nonDoctorUsers.length} non-doctor account(s) from database...`);
+    for (const u of nonDoctorUsers) {
+      await db.delete(users).where(eq(users.id, u.id));
+      console.log(`   ✓ Purged account: ${u.email || u.openId} (ID ${u.id})`);
+    }
+    console.log("");
+  } else {
+    console.log(`✨ Database integrity: Zero non-doctor accounts present. Only verified 52 doctors exist.\n`);
+  }
+
   // Report accumulator for audit summary display
   const report: Array<{
     "Doctor & Specialty": string;

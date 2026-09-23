@@ -157,7 +157,7 @@
 /* ═══════════════════════════════════════════════════════════════════════
    DARK MODE — Swiss Controlled Dark System (Decision 5 & Requirement 22)
    ═══════════════════════════════════════════════════════════════════════ */
-:root[data-theme="dark"] {
+:root[data-theme="dark"], :root.dark, html.dark {
   /* Swiss Dark Palette */
   --swiss-dark-bg: #111111;
   --swiss-dark-surface: #1A1A1A;
@@ -224,6 +224,14 @@
   --liquid-sheen: transparent;
   --liquid-shadow: none;
   --liquid-inset: none;
+}
+
+:root[data-theme="dark"] .lifelink-logo-crop,
+:root.dark .lifelink-logo-crop,
+:root[data-theme="dark"] .auth-card-mobile-logo,
+:root.dark .auth-card-mobile-logo {
+  background: var(--color-surface-white);
+  border-color: var(--color-border);
 }
 
 /* 2. Global Reset & Swiss Typography Normalization */
@@ -767,10 +775,17 @@ select:focus {
   z-index: 30;
 }
 
+.app-header-context {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  min-width: 0;
+}
+
 .app-header-controls {
   display: flex;
   align-items: center;
-  gap: var(--spacing-4);
+  gap: 12px;
 }
 
 .app-content, .doctor-content {
@@ -893,6 +908,60 @@ select:focus {
 .app-mobile-brand-symbol { width: 32px; height: 32px; flex: 0 0 auto; }
 .app-mobile-menu-button { display: none; align-items: center; justify-content: center; width: 44px; height: 44px; border: 0; background: transparent; cursor: pointer; color: var(--color-text); border-radius: var(--border-radius-btn); }
 .app-sidebar-backdrop { display: none; }
+
+/* ─── Dashboard Responsive Card Classes ──────────────────────────────────
+   These replace hardcoded inline padding values so CSS media queries
+   can override them cleanly at every breakpoint.
+──────────────────────────────────────────────────────────────────────── */
+.dashboard-card {
+  padding: 20px 24px;
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  background: var(--color-surface-white);
+  border: 1px solid var(--color-border);
+  border-radius: 2px;
+  box-shadow: none;
+}
+
+.dashboard-header-box {
+  padding: 24px 28px;
+  background: var(--color-surface-white);
+  border: 1px solid var(--color-border);
+  border-left: 4px solid var(--swiss-red);
+  border-radius: 2px;
+  box-shadow: none;
+}
+
+.dashboard-emergency-section {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 16px;
+  padding: 20px 24px;
+  background: var(--color-primary-muted);
+  border: 1px solid var(--swiss-red);
+  border-left: 5px solid var(--swiss-red);
+  border-radius: 2px;
+  box-shadow: none;
+}
+
+.dashboard-emergency-inner {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  flex: 1 1 auto;
+  min-width: 0;
+}
+
+/* Header avatar pill: hide name/role text to save horizontal space on mobile */
+.app-header-user-meta {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  line-height: 1.2;
+}
 
 /* 10. Workspace Selector & Portal Header — Institutional Swiss Gateway (Section 12) */
 .workspace-entry {
@@ -1797,10 +1866,10 @@ div[tabindex="0"]:focus-visible {
 /* <= 768px → Mobile Screen / Drawer */
 @media (max-width: 768px) {
   .app-layout, .doctor-layout { display: block; }
-  
+
   .app-sidebar {
-    width: min(276px, calc(100vw - 72px));
-    max-width: calc(100vw - 48px);
+    width: min(280px, calc(100vw - 56px));
+    max-width: calc(100vw - 32px);
     height: 100dvh;
     position: fixed;
     left: 0;
@@ -1816,7 +1885,7 @@ div[tabindex="0"]:focus-visible {
   .app-sidebar.is-open { transform: translateX(0); }
 
   .app-sidebar-header {
-    min-height: 76px;
+    min-height: 72px;
     padding: var(--spacing-3) var(--spacing-3) var(--spacing-2);
     align-items: flex-start;
     justify-content: flex-start;
@@ -1856,8 +1925,26 @@ div[tabindex="0"]:focus-visible {
   .app-mobile-menu-button { display: inline-flex; }
   .app-mobile-brand { display: inline-flex; }
   .app-sidebar-backdrop { display: block; position: fixed; inset: 0; z-index: 55; border: 0; background: rgba(28, 25, 23, 0.45); }
-  .app-header { height: 64px; padding: 0 var(--spacing-4); }
-  .app-content, .doctor-content { padding: var(--spacing-4); }
+
+  .app-header, .doctor-header {
+    height: 60px;
+    padding: 0 var(--spacing-3);
+    /* Safe area: avoid iPhone notch */
+    padding-left: max(var(--spacing-3), env(safe-area-inset-left));
+    padding-right: max(var(--spacing-3), env(safe-area-inset-right));
+  }
+
+  .app-content, .doctor-content {
+    padding: 16px 14px;
+    /* Safe area: avoid iPhone home bar */
+    padding-bottom: max(16px, env(safe-area-inset-bottom));
+  }
+
+  /* Dashboard card padding: tighter on mobile */
+  .dashboard-card { padding: 16px 16px; gap: 12px; }
+  .dashboard-header-box { padding: 16px 16px; }
+  .dashboard-emergency-section { padding: 16px 16px; gap: 12px; }
+
   .dashboard-primary-grid, .dashboard-lower-grid { grid-template-columns: 1fr; }
   .dashboard-lower-grid > :last-child { grid-column: auto; }
   .dashboard-health-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
@@ -1866,47 +1953,128 @@ div[tabindex="0"]:focus-visible {
   .auth-page { min-height: 100dvh; }
 }
 
-/* <= 480px → Phones */
+/* <= 480px → Standard Phones (iPhone SE, Pixel 6a, mid-range Android) */
 @media (max-width: 480px) {
-  .app-header { height: 60px; padding-inline: var(--spacing-2); }
-  .icon-btn { width: 40px; min-width: 40px; padding: 8px; }
+  .app-header, .doctor-header {
+    height: 56px;
+    padding-inline: 10px;
+    padding-left: max(10px, env(safe-area-inset-left));
+    padding-right: max(10px, env(safe-area-inset-right));
+  }
+
+  /* Icon buttons: slightly smaller to free horizontal space */
+  .icon-btn { width: 38px; height: 38px; min-width: 38px; padding: 8px; }
   .app-mobile-menu-button { width: 40px; min-width: 40px; }
+
+  /* Header avatar: hide name/role text — only show the initials circle */
+  .app-header-user-meta { display: none !important; }
+
+  /* Header avatar button: remove right padding since text is gone */
+  .app-header-controls > button:last-child { padding: 4px; gap: 0; }
+
+  /* Dashboard: reduce card padding further */
+  .dashboard-card { padding: 14px 12px; gap: 10px; }
+  .dashboard-header-box { padding: 14px 14px; }
+  .dashboard-emergency-section {
+    padding: 14px 12px;
+    gap: 10px;
+    flex-direction: column;
+    align-items: flex-start;
+  }
+  .dashboard-emergency-inner { min-width: 0; width: 100%; }
+
   .dashboard-health-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
   .auth-card { padding: 22px 18px; }
   dialog.popup { width: calc(100vw - 24px); }
   .workspace-entry-grid { grid-template-columns: 1fr; }
+
+  /* WorkspaceSelector: remove fixed min-height on portal cards so they don't overflow small screens */
+  .workspace-choice-card { min-height: auto; }
+
+  /* WorkspaceSelector: tighter entry padding */
+  .workspace-entry { padding: 1rem 1rem 2rem; }
+  .workspace-portal-header { padding: 0.5rem 1rem; flex-wrap: wrap; gap: 0.5rem; }
+
+  /* Hide assurance label on very small screens to prevent header overflow */
+  .workspace-portal-assurance { display: none; }
+
+  /* Content area: tighter horizontal padding */
+  .app-content, .doctor-content { padding: 12px 10px; }
 }
 
-/* <= 430px → Large Phones */
+/* <= 430px → Large Phones (iPhone 14 Pro Max, Samsung Galaxy S23+) */
 @media (max-width: 430px) {
   .auth-card { padding: 20px 16px; }
   .dashboard-health-grid { gap: 10px; }
   .auth-card-mobile-logo { max-width: min(260px, 90vw); }
+
+  /* Stack the header controls more tightly */
+  .app-header-controls { gap: 6px; }
+
+  /* Further reduce card gap */
+  .dashboard-card { gap: 8px; }
 }
 
-/* <= 390px → Modern Standard Phones */
+/* <= 390px → Modern Standard Phones (iPhone 14, Pixel 7, Galaxy S22) */
 @media (max-width: 390px) {
   .dashboard-health-grid { gap: 8px; }
   .auth-card { padding: 18px 14px; }
   .auth-card-mobile-logo { max-width: 240px; padding: 7px 14px; }
   .auth-card-mobile-logo .lifelink-logo { height: 36px; }
+
+  /* Card padding: even tighter */
+  .dashboard-card { padding: 12px 10px; }
+  .dashboard-header-box { padding: 12px 12px; }
+  .dashboard-emergency-section { padding: 12px 10px; }
+
+  /* Notification panel: keep within screen bounds on small phones */
+  .notification-panel,
+  [role="region"][aria-label*="Notification"] {
+    width: min(88vw, 320px) !important;
+    right: 0 !important;
+    left: auto !important;
+  }
 }
 
-/* <= 360px → Android Standard Phones */
+/* <= 360px → Android Standard Phones (Galaxy S21, Redmi, Moto) */
 @media (max-width: 360px) {
   .dashboard-health-grid { grid-template-columns: 1fr; }
-  .app-content, .doctor-content { padding: 12px 8px; }
+  .app-content, .doctor-content { padding: 10px 8px; }
   .auth-card { padding: 16px 12px; }
+
+  /* Switch emergency to full-column vertical layout */
+  .dashboard-emergency-section {
+    flex-direction: column;
+    align-items: flex-start;
+    padding: 10px 8px;
+  }
+  .dashboard-emergency-inner { flex-direction: column; align-items: flex-start; gap: 8px; }
+
+  /* App header icon tray: extra compact */
+  .app-header-controls { gap: 4px; }
+  .icon-btn { width: 36px; height: 36px; min-width: 36px; }
+
+  /* Dashboard card titles: smaller uppercase label */
+  .dashboard-card h2 { font-size: 0.72rem; }
 }
 
-/* <= 320px → Compact Phones */
+/* <= 320px → Compact Phones (older iPhones, budget Android) */
 @media (max-width: 320px) {
-  .app-header { padding-inline: 4px; }
-  .app-content, .doctor-content { padding: 8px 4px; }
+  .app-header, .doctor-header { padding-inline: 6px; height: 52px; }
+  .app-content, .doctor-content { padding: 8px 6px; }
   .auth-card { padding: 14px 8px; }
   .auth-card-mobile-logo { max-width: 200px; padding: 6px 10px; }
   .auth-card-mobile-logo .lifelink-logo { height: 28px; }
   .btn, .btn-primary, .btn-secondary { padding: 8px 10px; font-size: 0.82rem; }
+
+  /* Ultra-compact dashboard */
+  .dashboard-card { padding: 10px 8px; gap: 8px; }
+  .dashboard-header-box { padding: 10px 8px; }
+  .dashboard-emergency-section { padding: 10px 8px; }
+
+  /* Icon buttons: minimum safe touch target */
+  .icon-btn { width: 36px; height: 36px; min-width: 36px; }
+  .app-mobile-menu-button { width: 36px; height: 36px; min-width: 36px; }
 }
 
 /* 16. Motion System & Reduced-Motion Opt-In (Section 2) */

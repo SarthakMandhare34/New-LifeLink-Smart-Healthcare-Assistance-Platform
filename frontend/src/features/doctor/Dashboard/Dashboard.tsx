@@ -99,8 +99,8 @@ export const DoctorDashboard = () => {
     display: 'flex',
     flexDirection: 'column',
     gap: '16px',
-    background: 'var(--swiss-white)',
-    border: '1px solid var(--swiss-gray-300)',
+    background: 'var(--color-surface-white)',
+    border: '1px solid var(--color-border)',
     borderRadius: '2px',
     boxShadow: 'none',
   };
@@ -111,8 +111,8 @@ export const DoctorDashboard = () => {
     flexDirection: 'column',
     justifyContent: 'space-between',
     minHeight: '120px',
-    background: 'var(--swiss-white)',
-    border: '1px solid var(--swiss-gray-300)',
+    background: 'var(--color-surface-white)',
+    border: '1px solid var(--color-border)',
     borderRadius: '2px',
     boxShadow: 'none',
   };
@@ -127,9 +127,9 @@ export const DoctorDashboard = () => {
           flexDirection: 'column',
           gap: '6px',
           padding: '24px 28px',
-          background: 'var(--swiss-white)',
-          border: '1px solid var(--swiss-gray-300)',
-          borderLeft: '4px solid var(--swiss-blue)',
+          background: 'var(--color-surface-white)',
+          border: '1px solid var(--color-border)',
+          borderLeft: '4px solid var(--color-doctor-primary)',
           borderRadius: '2px',
           boxShadow: 'none',
         }}
@@ -140,7 +140,7 @@ export const DoctorDashboard = () => {
             <span style={{ 
               fontSize: '0.72rem', 
               fontWeight: 700, 
-              color: 'var(--swiss-blue)', 
+              color: 'var(--color-doctor-primary)', 
               textTransform: 'uppercase', 
               letterSpacing: '0.08em',
               display: 'block',
@@ -152,13 +152,13 @@ export const DoctorDashboard = () => {
               fontSize: 'clamp(1.5rem, 2.5vw, 2rem)', 
               fontWeight: 800, 
               margin: '2px 0 6px', 
-              color: 'var(--swiss-black)', 
+              color: 'var(--color-text)', 
               letterSpacing: '-0.02em',
               lineHeight: 1.2
             }}>
               Welcome, {displayName}
             </h1>
-            <p style={{ color: 'var(--swiss-gray-600)', fontSize: '0.88rem', margin: 0 }}>
+            <p style={{ color: 'var(--color-text-muted)', fontSize: '0.88rem', margin: 0 }}>
               Authorized consultation schedule, assigned patient charts, and clinical decision support
             </p>
           </div>
@@ -192,35 +192,35 @@ export const DoctorDashboard = () => {
         {/* 1. Upcoming Appointments */}
         <div style={statCardStyle}>
           <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start' }}>
-            <span style={{ fontSize: '0.74rem', fontWeight: 700, color: 'var(--swiss-gray-700)', textTransform: 'uppercase', letterSpacing: '0.06em' }}>
+            <span style={{ fontSize: '0.74rem', fontWeight: 700, color: 'var(--color-text-muted)', textTransform: 'uppercase', letterSpacing: '0.06em' }}>
               Upcoming Consultations
             </span>
-            <Calendar size={18} color="var(--swiss-blue)" />
+            <Calendar size={18} color="var(--color-doctor-primary)" />
           </div>
           <div>
-            <div style={{ fontSize: '2.1rem', fontWeight: 800, lineHeight: 1.1, color: 'var(--swiss-black)', marginBottom: '4px', fontVariantNumeric: 'tabular-nums' }}>
+            <div style={{ fontSize: '2.1rem', fontWeight: 800, lineHeight: 1.1, color: 'var(--color-text)', marginBottom: '4px', fontVariantNumeric: 'tabular-nums' }}>
               {upcomingCount}
             </div>
-            <span style={{ fontSize: '0.75rem', color: 'var(--swiss-gray-600)' }}>Scheduled future visits</span>
+            <span style={{ fontSize: '0.75rem', color: 'var(--color-text-muted)' }}>Scheduled future visits</span>
           </div>
         </div>
 
         {/* 2. Pending Requests */}
         <div style={{
           ...statCardStyle,
-          borderLeft: pendingCount > 0 ? '3px solid #D97706' : '1px solid var(--swiss-gray-300)'
+          borderLeft: pendingCount > 0 ? '3px solid #D97706' : '1px solid var(--color-border)'
         }}>
           <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start' }}>
-            <span style={{ fontSize: '0.74rem', fontWeight: 700, color: pendingCount > 0 ? '#B45309' : 'var(--swiss-gray-700)', textTransform: 'uppercase', letterSpacing: '0.06em' }}>
+            <span style={{ fontSize: '0.74rem', fontWeight: 700, color: pendingCount > 0 ? '#B45309' : 'var(--color-text-muted)', textTransform: 'uppercase', letterSpacing: '0.06em' }}>
               Pending Requests
             </span>
             <Clock size={18} color={pendingCount > 0 ? '#B45309' : 'var(--swiss-gray-500)'} />
           </div>
           <div>
-            <div style={{ fontSize: '2.1rem', fontWeight: 800, lineHeight: 1.1, color: 'var(--swiss-black)', marginBottom: '4px', fontVariantNumeric: 'tabular-nums' }}>
+            <div style={{ fontSize: '2.1rem', fontWeight: 800, lineHeight: 1.1, color: 'var(--color-text)', marginBottom: '4px', fontVariantNumeric: 'tabular-nums' }}>
               {pendingCount}
             </div>
-            <span style={{ fontSize: '0.75rem', color: pendingCount > 0 ? '#B45309' : 'var(--swiss-gray-600)', fontWeight: pendingCount > 0 ? 700 : 500 }}>
+            <span style={{ fontSize: '0.75rem', color: pendingCount > 0 ? '#B45309' : 'var(--color-text-muted)', fontWeight: pendingCount > 0 ? 700 : 500 }}>
               {pendingCount > 0 ? 'Requires clinical review' : 'All requests cleared'}
             </span>
           </div>
@@ -229,32 +229,32 @@ export const DoctorDashboard = () => {
         {/* 3. Authorized Patients */}
         <div style={statCardStyle}>
           <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start' }}>
-            <span style={{ fontSize: '0.74rem', fontWeight: 700, color: 'var(--swiss-gray-700)', textTransform: 'uppercase', letterSpacing: '0.06em' }}>
+            <span style={{ fontSize: '0.74rem', fontWeight: 700, color: 'var(--color-text-muted)', textTransform: 'uppercase', letterSpacing: '0.06em' }}>
               Assigned Patients
             </span>
-            <Users size={18} color="var(--swiss-blue)" />
+            <Users size={18} color="var(--color-doctor-primary)" />
           </div>
           <div>
-            <div style={{ fontSize: '2.1rem', fontWeight: 800, lineHeight: 1.1, color: 'var(--swiss-black)', marginBottom: '4px', fontVariantNumeric: 'tabular-nums' }}>
+            <div style={{ fontSize: '2.1rem', fontWeight: 800, lineHeight: 1.1, color: 'var(--color-text)', marginBottom: '4px', fontVariantNumeric: 'tabular-nums' }}>
               {patientCount}
             </div>
-            <span style={{ fontSize: '0.75rem', color: 'var(--swiss-gray-600)' }}>Authorized medical charts</span>
+            <span style={{ fontSize: '0.75rem', color: 'var(--color-text-muted)' }}>Authorized medical charts</span>
           </div>
         </div>
 
         {/* 4. Triage Assessments */}
         <div style={statCardStyle}>
           <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start' }}>
-            <span style={{ fontSize: '0.74rem', fontWeight: 700, color: 'var(--swiss-gray-700)', textTransform: 'uppercase', letterSpacing: '0.06em' }}>
+            <span style={{ fontSize: '0.74rem', fontWeight: 700, color: 'var(--color-text-muted)', textTransform: 'uppercase', letterSpacing: '0.06em' }}>
               Triage Assessments
             </span>
-            <Activity size={18} color="var(--swiss-blue)" />
+            <Activity size={18} color="var(--color-doctor-primary)" />
           </div>
           <div>
-            <div style={{ fontSize: '2.1rem', fontWeight: 800, lineHeight: 1.1, color: 'var(--swiss-black)', marginBottom: '4px', fontVariantNumeric: 'tabular-nums' }}>
+            <div style={{ fontSize: '2.1rem', fontWeight: 800, lineHeight: 1.1, color: 'var(--color-text)', marginBottom: '4px', fontVariantNumeric: 'tabular-nums' }}>
               {assessmentCount}
             </div>
-            <span style={{ fontSize: '0.75rem', color: 'var(--swiss-gray-600)' }}>Submitted clinical records</span>
+            <span style={{ fontSize: '0.75rem', color: 'var(--color-text-muted)' }}>Submitted clinical records</span>
           </div>
         </div>
       </section>
@@ -274,12 +274,12 @@ export const DoctorDashboard = () => {
 
           {/* 1. Upcoming Consultations — Structured Ledger */}
           <div style={cardStyle}>
-            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', borderBottom: '1px solid var(--swiss-gray-300)', paddingBottom: '10px' }}>
+            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', borderBottom: '1px solid var(--color-border)', paddingBottom: '10px' }}>
               <div>
-                <h2 style={{ fontSize: '1.05rem', fontWeight: 800, margin: 0, color: 'var(--swiss-black)', letterSpacing: '-0.01em' }}>
+                <h2 style={{ fontSize: '1.05rem', fontWeight: 800, margin: 0, color: 'var(--color-text)', letterSpacing: '-0.01em' }}>
                   Upcoming Consultations
                 </h2>
-                <p style={{ margin: '2px 0 0', fontSize: '0.78rem', color: 'var(--swiss-gray-600)' }}>
+                <p style={{ margin: '2px 0 0', fontSize: '0.78rem', color: 'var(--color-text-muted)' }}>
                   Chronological schedule ordered by visit time
                 </p>
               </div>
@@ -290,7 +290,7 @@ export const DoctorDashboard = () => {
                 style={{ 
                   background: 'none', 
                   border: 'none', 
-                  color: 'var(--swiss-blue)', 
+                  color: 'var(--color-doctor-primary)', 
                   fontSize: '0.84rem', 
                   fontWeight: 700, 
                   cursor: 'pointer', 
@@ -307,11 +307,11 @@ export const DoctorDashboard = () => {
               <div style={{ overflowX: 'auto' }}>
                 <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: '0.86rem' }}>
                   <thead>
-                    <tr style={{ borderBottom: '1px solid var(--swiss-gray-300)', textAlign: 'left' }}>
-                      <th style={{ padding: '8px 10px', fontSize: '0.72rem', fontWeight: 700, color: 'var(--swiss-gray-600)', textTransform: 'uppercase', letterSpacing: '0.06em' }}>Time</th>
-                      <th style={{ padding: '8px 10px', fontSize: '0.72rem', fontWeight: 700, color: 'var(--swiss-gray-600)', textTransform: 'uppercase', letterSpacing: '0.06em' }}>Patient</th>
-                      <th style={{ padding: '8px 10px', fontSize: '0.72rem', fontWeight: 700, color: 'var(--swiss-gray-600)', textTransform: 'uppercase', letterSpacing: '0.06em' }}>Reason</th>
-                      <th style={{ padding: '8px 10px', fontSize: '0.72rem', fontWeight: 700, color: 'var(--swiss-gray-600)', textTransform: 'uppercase', letterSpacing: '0.06em', textAlign: 'right' }}>Status</th>
+                    <tr style={{ borderBottom: '1px solid var(--color-border)', textAlign: 'left' }}>
+                      <th style={{ padding: '8px 10px', fontSize: '0.72rem', fontWeight: 700, color: 'var(--color-text-muted)', textTransform: 'uppercase', letterSpacing: '0.06em' }}>Time</th>
+                      <th style={{ padding: '8px 10px', fontSize: '0.72rem', fontWeight: 700, color: 'var(--color-text-muted)', textTransform: 'uppercase', letterSpacing: '0.06em' }}>Patient</th>
+                      <th style={{ padding: '8px 10px', fontSize: '0.72rem', fontWeight: 700, color: 'var(--color-text-muted)', textTransform: 'uppercase', letterSpacing: '0.06em' }}>Reason</th>
+                      <th style={{ padding: '8px 10px', fontSize: '0.72rem', fontWeight: 700, color: 'var(--color-text-muted)', textTransform: 'uppercase', letterSpacing: '0.06em', textAlign: 'right' }}>Status</th>
                     </tr>
                   </thead>
                   <tbody>
@@ -323,24 +323,24 @@ export const DoctorDashboard = () => {
                         <tr 
                           key={apt.id || idx}
                           style={{ 
-                            borderBottom: '1px solid var(--swiss-gray-200)',
+                            borderBottom: '1px solid var(--color-border)',
                             transition: 'background 0.15s'
                           }}
                         >
                           <td style={{ padding: '10px', whiteSpace: 'nowrap' }}>
-                            <strong style={{ display: 'block', fontSize: '0.84rem', color: 'var(--swiss-black)' }}>
+                            <strong style={{ display: 'block', fontSize: '0.84rem', color: 'var(--color-text)' }}>
                               {aptDate.toLocaleDateString(undefined, { month: 'short', day: 'numeric' })}
                             </strong>
-                            <span style={{ fontSize: '0.75rem', color: 'var(--swiss-gray-600)', fontVariantNumeric: 'tabular-nums' }}>
+                            <span style={{ fontSize: '0.75rem', color: 'var(--color-text-muted)', fontVariantNumeric: 'tabular-nums' }}>
                               {aptDate.toLocaleTimeString(undefined, { hour: '2-digit', minute: '2-digit' })}
                             </span>
                           </td>
                           <td style={{ padding: '10px' }}>
-                            <strong style={{ display: 'block', color: 'var(--swiss-black)', fontSize: '0.88rem' }}>
+                            <strong style={{ display: 'block', color: 'var(--color-text)', fontSize: '0.88rem' }}>
                               {patientName}
                             </strong>
                           </td>
-                          <td style={{ padding: '10px', color: 'var(--swiss-gray-700)', fontSize: '0.82rem' }}>
+                          <td style={{ padding: '10px', color: 'var(--color-text-muted)', fontSize: '0.82rem' }}>
                             {apt.reason || 'General Consultation'}
                           </td>
                           <td style={{ padding: '10px', textAlign: 'right' }}>
@@ -366,15 +366,15 @@ export const DoctorDashboard = () => {
                 </table>
               </div>
             ) : (
-              <div style={{ padding: '24px 16px', textAlign: 'center', background: 'var(--swiss-off-white)', borderRadius: '2px', border: '1px dashed var(--swiss-gray-300)' }}>
-                <p style={{ fontSize: '0.88rem', color: 'var(--swiss-gray-600)', margin: '0 0 12px', fontStyle: 'italic' }}>
+              <div style={{ padding: '24px 16px', textAlign: 'center', background: 'var(--color-surface-subtle)', borderRadius: '2px', border: '1px dashed var(--color-border)' }}>
+                <p style={{ fontSize: '0.88rem', color: 'var(--color-text-muted)', margin: '0 0 12px', fontStyle: 'italic' }}>
                   No upcoming consultations scheduled.
                 </p>
                 <Button
                   size="sm"
                   variant="primary"
                   onClick={() => navigate('/doctor/appointments')}
-                  style={{ borderRadius: '2px', background: 'var(--swiss-blue)' }}
+                  style={{ borderRadius: '2px', background: 'var(--color-doctor-primary)' }}
                 >
                   Review Appointment Ledger
                 </Button>
@@ -384,12 +384,12 @@ export const DoctorDashboard = () => {
 
           {/* 2. Triage Assessments — Decision Support */}
           <div style={cardStyle}>
-            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', borderBottom: '1px solid var(--swiss-gray-300)', paddingBottom: '10px' }}>
+            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', borderBottom: '1px solid var(--color-border)', paddingBottom: '10px' }}>
               <div>
-                <h2 style={{ fontSize: '1.05rem', fontWeight: 800, margin: 0, color: 'var(--swiss-black)', letterSpacing: '-0.01em' }}>
+                <h2 style={{ fontSize: '1.05rem', fontWeight: 800, margin: 0, color: 'var(--color-text)', letterSpacing: '-0.01em' }}>
                   Triage Assessments
                 </h2>
-                <p style={{ margin: '2px 0 0', fontSize: '0.78rem', color: 'var(--swiss-gray-600)' }}>
+                <p style={{ margin: '2px 0 0', fontSize: '0.78rem', color: 'var(--color-text-muted)' }}>
                   Clinical decision support from assigned patients
                 </p>
               </div>
@@ -400,7 +400,7 @@ export const DoctorDashboard = () => {
                 style={{ 
                   background: 'none', 
                   border: 'none', 
-                  color: 'var(--swiss-blue)', 
+                  color: 'var(--color-doctor-primary)', 
                   fontSize: '0.84rem', 
                   fontWeight: 700, 
                   cursor: 'pointer', 
@@ -425,10 +425,10 @@ export const DoctorDashboard = () => {
                       aria-label={assessment.patientId ? `View assessment for ${assessment.patientName || 'Assigned Patient'}` : undefined}
                       style={{
                         padding: '12px 14px',
-                        background: 'var(--swiss-off-white)',
+                        background: 'var(--color-surface-subtle)',
                         borderRadius: '2px',
-                        border: '1px solid var(--swiss-gray-300)',
-                        borderLeft: assessment.urgency === 'EMERGENCY' ? '4px solid var(--swiss-red)' : '1px solid var(--swiss-gray-300)',
+                        border: '1px solid var(--color-border)',
+                        borderLeft: assessment.urgency === 'EMERGENCY' ? '4px solid var(--color-semantic-emergency)' : '1px solid var(--color-border)',
                         display: 'flex',
                         flexDirection: 'column',
                         gap: '6px',
@@ -444,10 +444,10 @@ export const DoctorDashboard = () => {
                     >
                       <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
                         <div>
-                          <strong style={{ fontSize: '0.9rem', color: 'var(--swiss-black)' }}>
+                          <strong style={{ fontSize: '0.9rem', color: 'var(--color-text)' }}>
                             {assessment.patientName || 'Assigned Patient'}
                           </strong>
-                          <span style={{ fontSize: '0.75rem', color: 'var(--swiss-gray-600)', display: 'block' }}>
+                          <span style={{ fontSize: '0.75rem', color: 'var(--color-text-muted)', display: 'block' }}>
                             {new Date(assessment.createdAt).toLocaleDateString(undefined, { month: 'short', day: 'numeric', year: 'numeric' })}
                           </span>
                         </div>
@@ -467,11 +467,11 @@ export const DoctorDashboard = () => {
                           {assessment.urgency}
                         </span>
                       </div>
-                      <div style={{ fontSize: '0.82rem', color: 'var(--swiss-gray-700)' }}>
-                        <span style={{ fontWeight: 700, color: 'var(--swiss-black)' }}>Specialty:</span> {assessment.specialty}
+                      <div style={{ fontSize: '0.82rem', color: 'var(--color-text-muted)' }}>
+                        <span style={{ fontWeight: 700, color: 'var(--color-text)' }}>Specialty:</span> {assessment.specialty}
                       </div>
                       {assessment.guidance && (
-                        <p style={{ margin: 0, fontSize: '0.78rem', color: 'var(--swiss-gray-600)', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
+                        <p style={{ margin: 0, fontSize: '0.78rem', color: 'var(--color-text-muted)', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
                           {assessment.guidance}
                         </p>
                       )}
@@ -480,8 +480,8 @@ export const DoctorDashboard = () => {
                 })}
               </div>
             ) : (
-              <div style={{ padding: '24px 16px', textAlign: 'center', background: 'var(--swiss-off-white)', borderRadius: '2px', border: '1px dashed var(--swiss-gray-300)' }}>
-                <p style={{ fontSize: '0.88rem', color: 'var(--swiss-gray-600)', margin: 0, fontStyle: 'italic' }}>
+              <div style={{ padding: '24px 16px', textAlign: 'center', background: 'var(--color-surface-subtle)', borderRadius: '2px', border: '1px dashed var(--color-border)' }}>
+                <p style={{ fontSize: '0.88rem', color: 'var(--color-text-muted)', margin: 0, fontStyle: 'italic' }}>
                   No recent assessments submitted by assigned patients.
                 </p>
               </div>
@@ -494,12 +494,12 @@ export const DoctorDashboard = () => {
 
           {/* 3. Authorized Patient Registry */}
           <div style={cardStyle}>
-            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', borderBottom: '1px solid var(--swiss-gray-300)', paddingBottom: '10px' }}>
+            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', borderBottom: '1px solid var(--color-border)', paddingBottom: '10px' }}>
               <div>
-                <h2 style={{ fontSize: '1.05rem', fontWeight: 800, margin: 0, color: 'var(--swiss-black)', letterSpacing: '-0.01em' }}>
+                <h2 style={{ fontSize: '1.05rem', fontWeight: 800, margin: 0, color: 'var(--color-text)', letterSpacing: '-0.01em' }}>
                   Authorized Patient Registry
                 </h2>
-                <p style={{ margin: '2px 0 0', fontSize: '0.78rem', color: 'var(--swiss-gray-600)' }}>
+                <p style={{ margin: '2px 0 0', fontSize: '0.78rem', color: 'var(--color-text-muted)' }}>
                   Appointment-authorized charts
                 </p>
               </div>
@@ -510,7 +510,7 @@ export const DoctorDashboard = () => {
                 style={{ 
                   background: 'none', 
                   border: 'none', 
-                  color: 'var(--swiss-blue)', 
+                  color: 'var(--color-doctor-primary)', 
                   fontSize: '0.84rem', 
                   fontWeight: 700, 
                   cursor: 'pointer', 
@@ -543,9 +543,9 @@ export const DoctorDashboard = () => {
                         alignItems: 'center',
                         justifyContent: 'space-between',
                         padding: '10px 12px',
-                        background: 'var(--swiss-off-white)',
+                        background: 'var(--color-surface-subtle)',
                         borderRadius: '2px',
-                        border: '1px solid var(--swiss-gray-300)',
+                        border: '1px solid var(--color-border)',
                         cursor: 'pointer',
                         transition: 'border-color 0.15s ease',
                       }}
@@ -563,9 +563,9 @@ export const DoctorDashboard = () => {
                             width: '32px',
                             height: '32px',
                             borderRadius: '2px',
-                            background: 'var(--swiss-white)',
-                            border: '1px solid var(--swiss-gray-300)',
-                            color: 'var(--swiss-blue)',
+                            background: 'var(--color-surface-white)',
+                            border: '1px solid var(--color-border)',
+                            color: 'var(--color-doctor-primary)',
                             fontWeight: 700,
                             fontSize: '0.82rem',
                             display: 'grid',
@@ -576,18 +576,18 @@ export const DoctorDashboard = () => {
                           {initials}
                         </div>
                         <div>
-                          <strong style={{ fontSize: '0.88rem', color: 'var(--swiss-black)', display: 'block' }}>{pt.name}</strong>
-                          <span style={{ fontSize: '0.72rem', color: 'var(--swiss-gray-600)' }}>Record ID: #{pt.id}</span>
+                          <strong style={{ fontSize: '0.88rem', color: 'var(--color-text)', display: 'block' }}>{pt.name}</strong>
+                          <span style={{ fontSize: '0.72rem', color: 'var(--color-text-muted)' }}>Record ID: #{pt.id}</span>
                         </div>
                       </div>
-                      <ArrowRight size={15} color="var(--swiss-gray-500)" />
+                      <ArrowRight size={15} color="var(--color-text-muted)" />
                     </div>
                   );
                 })}
               </div>
             ) : (
-              <div style={{ padding: '20px 16px', textAlign: 'center', background: 'var(--swiss-off-white)', borderRadius: '2px', border: '1px dashed var(--swiss-gray-300)' }}>
-                <p style={{ fontSize: '0.85rem', color: 'var(--swiss-gray-600)', margin: 0, fontStyle: 'italic' }}>
+              <div style={{ padding: '20px 16px', textAlign: 'center', background: 'var(--color-surface-subtle)', borderRadius: '2px', border: '1px dashed var(--color-border)' }}>
+                <p style={{ fontSize: '0.85rem', color: 'var(--color-text-muted)', margin: 0, fontStyle: 'italic' }}>
                   No authorized patient records yet.
                 </p>
               </div>
@@ -596,12 +596,12 @@ export const DoctorDashboard = () => {
 
           {/* 4. Clinical Activity Log */}
           <div style={cardStyle}>
-            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', borderBottom: '1px solid var(--swiss-gray-300)', paddingBottom: '10px' }}>
+            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', borderBottom: '1px solid var(--color-border)', paddingBottom: '10px' }}>
               <div>
-                <h2 style={{ fontSize: '1.05rem', fontWeight: 800, margin: 0, color: 'var(--swiss-black)', letterSpacing: '-0.01em' }}>
+                <h2 style={{ fontSize: '1.05rem', fontWeight: 800, margin: 0, color: 'var(--color-text)', letterSpacing: '-0.01em' }}>
                   Clinical Activity Log
                 </h2>
-                <p style={{ margin: '2px 0 0', fontSize: '0.78rem', color: 'var(--swiss-gray-600)' }}>
+                <p style={{ margin: '2px 0 0', fontSize: '0.78rem', color: 'var(--color-text-muted)' }}>
                   Practice timeline
                 </p>
               </div>
@@ -614,18 +614,18 @@ export const DoctorDashboard = () => {
                   const isCompleted = apt.status === 'Completed';
                   const isCancelled = apt.status === 'Cancelled';
                   const dotColor = isCompleted
-                    ? 'var(--swiss-blue)'
+                    ? 'var(--color-doctor-primary)'
                     : isCancelled
-                    ? 'var(--swiss-red)'
-                    : 'var(--swiss-gray-500)';
+                    ? 'var(--color-semantic-emergency)'
+                    : 'var(--color-text-muted)';
                   return (
-                    <div key={apt.id || idx} style={{ display: 'flex', alignItems: 'center', gap: '12px', padding: '6px 0', borderBottom: '1px solid var(--swiss-gray-200)' }}>
+                    <div key={apt.id || idx} style={{ display: 'flex', alignItems: 'center', gap: '12px', padding: '6px 0', borderBottom: '1px solid var(--color-border)' }}>
                       <div style={{ width: '8px', height: '8px', borderRadius: '2px', background: dotColor, flexShrink: 0 }} />
                       <div style={{ flex: 1, minWidth: 0 }}>
-                        <span style={{ fontSize: '0.84rem', color: 'var(--swiss-black)', display: 'block', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
+                        <span style={{ fontSize: '0.84rem', color: 'var(--color-text)', display: 'block', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
                           <strong style={{ fontWeight: 600 }}>{patientName}</strong> &bull; <span style={{ color: dotColor, fontWeight: 600 }}>{apt.status}</span>
                         </span>
-                        <span style={{ fontSize: '0.72rem', color: 'var(--swiss-gray-600)' }}>
+                        <span style={{ fontSize: '0.72rem', color: 'var(--color-text-muted)' }}>
                           {new Date(apt.scheduledAt).toLocaleDateString(undefined, { month: 'short', day: 'numeric', year: 'numeric' })}
                         </span>
                       </div>
@@ -634,8 +634,8 @@ export const DoctorDashboard = () => {
                 })}
               </div>
             ) : (
-              <div style={{ padding: '20px 16px', textAlign: 'center', background: 'var(--swiss-off-white)', borderRadius: '2px' }}>
-                <p style={{ fontSize: '0.85rem', color: 'var(--swiss-gray-600)', margin: 0, fontStyle: 'italic' }}>
+              <div style={{ padding: '20px 16px', textAlign: 'center', background: 'var(--color-surface-subtle)', borderRadius: '2px' }}>
+                <p style={{ fontSize: '0.85rem', color: 'var(--color-text-muted)', margin: 0, fontStyle: 'italic' }}>
                   No recent clinical activity.
                 </p>
               </div>

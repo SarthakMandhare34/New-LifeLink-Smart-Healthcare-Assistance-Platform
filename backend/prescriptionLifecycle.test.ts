@@ -20,7 +20,7 @@ import { createHash } from "node:crypto";                                       
 import { getDb, upsertUser } from "./db";                                                       // Database access helpers
 import { appRouter } from "./routers";                                                          // Root tRPC router
 import { users, patientAppointments, patientPrescriptions, patientPrescriptionItems, patientEvents } from "../database/schema"; // Schema tables
-import { eq, and } from "drizzle-orm";                                                           // SQL filter operators
+import { eq, and, or } from "drizzle-orm";                                                           // SQL filter operators
 
 let db: NonNullable<Awaited<ReturnType<typeof getDb>>>;                                        // Database handle
 
@@ -69,18 +69,18 @@ beforeAll(async () => {
   // Create Test Clinician 1
   await upsertUser({
     openId: DOCTOR_1_OPENID,
-    name: "Dr. Central Cardiology",
-    email: "doctor1@example.com",
-    loginMethod: "synthetic-doctor",
+    name: "Dr. Rajesh V. Varma, MD, DM (Cardiology)",
+    email: `${DOCTOR_1_ID.replace("mock-", "")}@lifelink.com`,
+    loginMethod: "synthetic-clinician",
     role: "doctor",
   });
 
   // Create Test Clinician 2
   await upsertUser({
     openId: DOCTOR_2_OPENID,
-    name: "Dr. Western Dermatology",
-    email: "doctor2@example.com",
-    loginMethod: "synthetic-doctor",
+    name: "Dr. Devendra C. Sawant, MBBS, MD",
+    email: `${DOCTOR_2_ID.replace("mock-", "")}@lifelink.com`,
+    loginMethod: "synthetic-clinician",
     role: "doctor",
   });
 });
@@ -329,5 +329,11 @@ describe("Prescription Workflow & Integrity", () => {
     expect(events.length).toBeGreaterThan(0);
     const latest = events[events.length - 1];
     expect(latest.entityId).toBe(String(prescription1Id));
+  });
+
+  afterAll(async () => {
+    if (db) {
+      await db.delete(users).where(or(eq(users.openId, "test:patient-rx-1"), eq(users.openId, "test:patient-rx-2")));
+    }
   });
 });

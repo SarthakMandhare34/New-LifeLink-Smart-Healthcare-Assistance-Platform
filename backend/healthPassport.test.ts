@@ -16,7 +16,7 @@ config();
 import { getDb, upsertUser } from "./db";                                                       // Database helpers
 import { appRouter } from "./routers";                                                          // Root tRPC router
 import { users, patientProfiles, patientEmergencyContacts } from "../database/schema";          // Schema tables
-import { eq } from "drizzle-orm";                                                               // Drizzle SQL operators
+import { eq, or } from "drizzle-orm";                                                               // Drizzle SQL operators
 
 let db: NonNullable<Awaited<ReturnType<typeof getDb>>>;                                        // Database handle
 
@@ -260,5 +260,11 @@ describe("Digital Health Passport & Emergency Contacts", () => {
       const contact = passport?.emergencyContacts.find((c) => c.id === String(contact1Id));
       expect(contact).toBeUndefined();
     });
+  });
+
+  afterAll(async () => {
+    if (db) {
+      await db.delete(users).where(or(eq(users.openId, "test:patient-passport-1"), eq(users.openId, "test:patient-passport-2")));
+    }
   });
 });

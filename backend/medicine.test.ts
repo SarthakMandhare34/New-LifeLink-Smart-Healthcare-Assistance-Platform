@@ -15,7 +15,7 @@ config();
 import { getDb, upsertUser, createPatientMedicine, removeOwnedPatientMedicine, listPatientMedicines, updateOwnedPatientMedicine } from "./db"; // Data access methods
 import { appRouter } from "./routers";                                                          // Root tRPC router
 import { users, patientMedicines } from "../database/schema";                                   // Schema table definitions
-import { eq } from "drizzle-orm";                                                               // Drizzle SQL operators
+import { eq, or } from "drizzle-orm";                                                               // Drizzle SQL operators
 
 let db: NonNullable<Awaited<ReturnType<typeof getDb>>>;                                        // Database handle
 
@@ -173,5 +173,11 @@ describe("Medicine Cabinet Integration", () => {
 
     const inDb = await db.select().from(patientMedicines).where(eq(patientMedicines.id, medicineId));
     expect(inDb.length).toBe(0);
+  });
+
+  afterAll(async () => {
+    if (db) {
+      await db.delete(users).where(or(eq(users.openId, "test:patient-medicine-1"), eq(users.openId, "test:patient-medicine-2")));
+    }
   });
 });

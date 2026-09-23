@@ -326,51 +326,6 @@ export const PatientLogin = () => {
                 </button>
               </div>
             </div>
-
-            {/* Quick Demo Patient Credentials Box */}
-            <div 
-              style={{ 
-                marginTop: '18px', 
-                padding: '12px 14px', 
-                background: 'var(--color-surface-subtle, rgba(0, 0, 0, 0.03))', 
-                border: '1px solid var(--color-border)', 
-                borderRadius: '6px',
-                fontSize: '0.82rem'
-              }}
-            >
-              <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '8px' }}>
-                <span style={{ fontWeight: 700, letterSpacing: '0.04em', textTransform: 'uppercase', fontSize: '0.72rem', color: 'var(--color-primary)' }}>
-                  Demo Patient Account
-                </span>
-                <span style={{ fontSize: '0.70rem', color: 'var(--color-text-muted)' }}>1-Click Auto-Fill</span>
-              </div>
-              <button
-                type="button"
-                onClick={() => {
-                  setEmail('patient@lifelink.com');
-                  setPassword('patient@lifelink');
-                }}
-                style={{
-                  width: '100%',
-                  padding: '8px 12px',
-                  display: 'flex',
-                  justifyContent: 'space-between',
-                  alignItems: 'center',
-                  background: 'var(--color-surface-white)',
-                  border: '1px solid var(--color-border)',
-                  borderRadius: '4px',
-                  cursor: 'pointer',
-                  fontSize: '0.80rem',
-                  color: 'var(--color-text)'
-                }}
-              >
-                <div style={{ textAlign: 'left' }}>
-                  <strong style={{ display: 'block', color: 'var(--color-text)' }}>patient@lifelink.com</strong>
-                  <span style={{ fontSize: '0.72rem', color: 'var(--color-text-muted)' }}>Password: patient@lifelink</span>
-                </div>
-                <span style={{ fontSize: '0.75rem', fontWeight: 600, color: 'var(--color-primary)' }}>Auto-Fill →</span>
-              </button>
-            </div>
           </Card>
         </div>
       </div>

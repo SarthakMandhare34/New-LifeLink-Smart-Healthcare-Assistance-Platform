@@ -202,71 +202,16 @@ export const doctorAuthRouter = router({
       return { email, password };
     }),
 
-  // Clinician sign-in mutation: authenticates doctor credentials or auto-provisions on first sign-in
+  // Clinician sign-in mutation: authenticates doctor credentials
   login: publicProcedure.input(credentialInput).mutation(async ({ ctx, input }) => {
-    let record = await getSyntheticDoctorCredentialByEmail(normalizedEmail(input.email));  // Find doctor by normalized email
-    
-    // Auto-provision clinician account if signing in for the first time
+    const record = await getSyntheticDoctorCredentialByEmail(normalizedEmail(input.email));  // Find doctor by normalized email
     if (!record) {
-      const emailLower = normalizedEmail(input.email);                                     // Target email in lowercase
-      const localPart = emailLower.split("@")[0] || emailLower;                            // Extract prefix before @
-      const matchedDoctor = mockDoctorDirectory.find((doc) => {                            // Search directory for matching specialty or ID
-        const specLower = doc.specialty.toLowerCase().replace(/[^a-z]/g, "");
-        const stationLower = doc.station.toLowerCase().replace(/[^a-z]/g, "");
-        if (localPart.includes(doc.id)) return true;
-        if (localPart.includes(specLower) && localPart.includes(stationLower)) return true;
-        if (localPart.includes(stationLower)) return true;
-        return localPart.includes(specLower) || specLower.includes(localPart);
-      }) || mockDoctorDirectory[0];                                                        // Fall back to first doctor if no direct match
-
-      if (matchedDoctor) {
-        const passwordHash = await hashPatientPassword(input.password);                    // Hash submitted password
-        await createSyntheticDoctorCredential({                                            // Auto-provision credential in DB
-          doctor: matchedDoctor,
-          email: emailLower,
-          passwordHash,
-        });
-        record = await getSyntheticDoctorCredentialByEmail(emailLower);                    // Reload created doctor record
-      }
+      throw new TRPCError({ code: "UNAUTHORIZED", message: "Invalid email or Password" }); // Authentication failure
     }
 
-    let valid = record ? await verifyPatientPassword(input.password, record.credential.passwordHash) : false; // Verify password hash
-    if (!valid && record) {                                                                // Support demo convenience passwords (e.g. cardio@lifelink)
-      const doc = getSyntheticDoctor(record.credential.doctorId);
-      if (doc) {
-        const fullSlug = doc.specialty.toLowerCase().replace(/[^a-z]/g, "");
-        const stationSlug = doc.station.toLowerCase().replace(/[^a-z]/g, "");
-        const shortSlugs: Record<string, string> = {
-          cardiology: "cardio",
-          orthopedics: "ortho",
-          dermatology: "derma",
-          neurology: "neuro",
-          pediatrics: "pedia",
-          generalpractice: "general",
-          ophthalmology: "ophthal",
-          gastroenterology: "gastro",
-          psychiatry: "psych",
-          endocrinology: "endo",
-          pulmonology: "pulmo",
-          gynecology: "gynae",
-        };
-        const short = shortSlugs[fullSlug] || fullSlug;
-        if (
-          input.password === `${short}@lifelink` ||
-          input.password === `${fullSlug}@lifelink` ||
-          input.password === `${short}.${stationSlug}@lifelink` ||
-          input.password === `${fullSlug}.${stationSlug}@lifelink` ||
-          input.password === `${short}@lifelink.com` ||
-          input.password === `${fullSlug}@lifelink.com` ||
-          input.password === `${short}.${stationSlug}@lifelink.com` ||
-          input.password === `${fullSlug}.${stationSlug}@lifelink.com`
-        ) {
-          valid = true;                                                                    // Allow convenience demo password
-        }
-      }
-    }
-    const doctorId = record ? doctorIdFromSyntheticOpenId(record.user.openId) : null;      // Extract synthetic doctor ID
-    if (!record || !valid || record.user.role !== "doctor" || !doctorId || record.credential.doctorId !== doctorId) {
+    const valid = await verifyPatientPassword(input.password, record.credential.passwordHash); // Verify individual doctor password hash
+    const doctorId = doctorIdFromSyntheticOpenId(record.user.openId);      // Extract synthetic doctor ID
+    if (!valid || record.user.role !== "doctor" || !doctorId || record.credential.doctorId !== doctorId) {
       throw new TRPCError({ code: "UNAUTHORIZED", message: "Invalid email or Password" }); // Authentication failure
     }
     return establishDoctorSession(ctx, record.user.openId);                                // Set cookie and return doctor session

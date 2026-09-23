@@ -31,15 +31,15 @@ export const RouteLoader: React.FC = () => {
         <div 
           className="w-8 h-8 rounded-full border-2 animate-spin" 
           style={{
-            borderColor: 'var(--color-primary-muted)',
-            borderTopColor: 'var(--color-primary)',
+            borderColor: 'var(--swiss-gray-300, #E2E8F0)',
+            borderTopColor: 'var(--swiss-blue, #0057B8)',
           }}
           aria-hidden="true"
         />
         {/* User-friendly status message */}
         <span 
           className="text-xs font-medium tracking-wide"
-          style={{ color: 'var(--color-text-secondary)' }}
+          style={{ color: 'var(--swiss-gray-700, #475569)' }}
         >
           Loading workspace...
         </span>

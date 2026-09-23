@@ -333,7 +333,7 @@ export const AppShell = () => {
                 title="Notifications"
                 style={{ 
                   position: 'relative', 
-                  background: isNotificationOpen ? 'var(--swiss-gray-100)' : 'transparent', 
+                  background: isNotificationOpen ? 'var(--color-surface-subtle)' : 'transparent', 
                   width: '36px', 
                   height: '36px', 
                   borderRadius: '2px', 
@@ -343,7 +343,7 @@ export const AppShell = () => {
                   cursor: 'pointer' 
                 }}
               >
-                <Bell size={18} color={unreadCount > 0 ? 'var(--swiss-red)' : 'var(--swiss-gray-600)'} />
+                <Bell size={18} color={unreadCount > 0 ? 'var(--color-primary)' : 'var(--color-text-muted)'} />
                 {unreadCount > 0 && (
                   <span style={{
                     position: 'absolute',
@@ -360,7 +360,7 @@ export const AppShell = () => {
                     display: 'flex',
                     alignItems: 'center',
                     justifyContent: 'center',
-                    border: '1px solid var(--swiss-white)',
+                    border: '1px solid var(--color-surface-white)',
                     lineHeight: 1,
                   }}>
                     {unreadCount > 9 ? '9+' : unreadCount}
@@ -378,8 +378,8 @@ export const AppShell = () => {
                     top: 'calc(100% + 8px)',
                     right: 0,
                     width: 'min(90vw, 360px)',
-                    background: 'var(--swiss-white)',
-                    border: '1px solid var(--swiss-gray-300)',
+                    background: 'var(--color-surface-white)',
+                    border: '1px solid var(--color-border)',
                     borderRadius: '2px',
                     boxShadow: 'none',
                     zIndex: 1000,
@@ -391,15 +391,15 @@ export const AppShell = () => {
                 >
                   <div style={{
                     padding: '12px 16px',
-                    borderBottom: '1px solid var(--swiss-gray-300)',
+                    borderBottom: '1px solid var(--color-border)',
                     display: 'flex',
                     alignItems: 'center',
                     justifyContent: 'space-between',
-                    background: 'var(--swiss-off-white)',
+                    background: 'var(--color-surface-subtle)',
                   }}>
                     <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-                      <Bell size={16} color="var(--swiss-red)" />
-                      <strong style={{ fontSize: '0.92rem', color: 'var(--swiss-black)' }}>Notifications</strong>
+                      <Bell size={16} color="var(--color-primary)" />
+                      <strong style={{ fontSize: '0.92rem', color: 'var(--color-text)' }}>Notifications</strong>
                       {unreadCount > 0 && (
                         <span style={{
                           background: 'var(--swiss-red)',
@@ -450,23 +450,23 @@ export const AppShell = () => {
                             onClick={() => handleNotificationClick(item.link, item.id)}
                             style={{
                               padding: '12px 16px',
-                              borderBottom: '1px solid var(--swiss-gray-200)',
-                              background: isUnread ? 'var(--swiss-red-soft)' : 'transparent',
+                              borderBottom: '1px solid var(--color-border)',
+                              background: isUnread ? 'var(--color-primary-muted)' : 'transparent',
                               cursor: 'pointer',
                               display: 'flex',
                               gap: '10px',
                               alignItems: 'flex-start',
                               transition: 'background 0.15s ease',
                             }}
-                            onMouseEnter={(e) => e.currentTarget.style.background = 'var(--swiss-gray-100)'}
-                            onMouseLeave={(e) => e.currentTarget.style.background = isUnread ? 'var(--swiss-red-soft)' : 'transparent'}
+                            onMouseEnter={(e) => e.currentTarget.style.background = 'var(--color-surface-interactive)'}
+                            onMouseLeave={(e) => e.currentTarget.style.background = isUnread ? 'var(--color-primary-muted)' : 'transparent'}
                           >
                             <div style={{
                               width: '32px',
                               height: '32px',
                               borderRadius: '2px',
-                              background: item.category === 'PRESCRIPTION' ? 'var(--swiss-blue-soft)' : 'var(--swiss-gray-100)',
-                              color: item.category === 'PRESCRIPTION' ? 'var(--swiss-blue)' : 'var(--swiss-gray-800)',
+                              background: item.category === 'PRESCRIPTION' ? 'var(--color-accent-muted)' : 'var(--color-surface-subtle)',
+                              color: item.category === 'PRESCRIPTION' ? 'var(--color-accent)' : 'var(--color-text)',
                               display: 'grid',
                               placeItems: 'center',
                               flexShrink: 0,
@@ -476,17 +476,17 @@ export const AppShell = () => {
                             </div>
                             <div style={{ flex: 1, minWidth: 0 }}>
                               <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: '6px' }}>
-                                <strong style={{ fontSize: '0.84rem', color: 'var(--swiss-black)', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>
+                                <strong style={{ fontSize: '0.84rem', color: 'var(--color-text)', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>
                                   {item.title}
                                 </strong>
                                 {isUnread && (
                                   <span style={{ width: '6px', height: '6px', borderRadius: '50%', background: 'var(--swiss-red)', flexShrink: 0 }} />
                                 )}
                               </div>
-                              <p style={{ margin: '2px 0 0', fontSize: '0.78rem', color: 'var(--swiss-gray-600)', lineHeight: 1.35 }}>
+                              <p style={{ margin: '2px 0 0', fontSize: '0.78rem', color: 'var(--color-text-muted)', lineHeight: 1.35 }}>
                                 {item.description}
                               </p>
-                              <span style={{ display: 'block', marginTop: '4px', fontSize: '0.72rem', color: 'var(--swiss-gray-600)', opacity: 0.8 }}>
+                              <span style={{ display: 'block', marginTop: '4px', fontSize: '0.72rem', color: 'var(--color-text-muted)', opacity: 0.8 }}>
                                 {new Date(item.timestamp).toLocaleDateString(undefined, { month: 'short', day: 'numeric', hour: '2-digit', minute: '2-digit' })}
                               </span>
                             </div>
@@ -507,8 +507,8 @@ export const AppShell = () => {
                 display: 'flex', 
                 alignItems: 'center', 
                 gap: '8px', 
-                background: 'var(--swiss-white)', 
-                border: '1px solid var(--swiss-gray-300)', 
+                background: 'var(--color-surface-white)', 
+                border: '1px solid var(--color-border)', 
                 borderRadius: '2px', 
                 padding: '4px 8px 4px 4px', 
                 cursor: 'pointer' 
@@ -536,10 +536,10 @@ export const AppShell = () => {
                 )}
               </div>
               <div className="app-header-user-meta" style={{ display: 'flex', flexDirection: 'column', alignItems: 'flex-start', lineHeight: 1.2 }}>
-                <span style={{ fontSize: '0.82rem', fontWeight: 600, color: 'var(--swiss-black)' }}>{displayName}</span>
-                <span style={{ fontSize: '0.68rem', color: 'var(--swiss-gray-600)' }}>Patient Record</span>
+                <span style={{ fontSize: '0.82rem', fontWeight: 600, color: 'var(--color-text)' }}>{displayName}</span>
+                <span style={{ fontSize: '0.68rem', color: 'var(--color-text-muted)' }}>Patient Record</span>
               </div>
-              <ChevronDown size={14} color="var(--swiss-gray-600)" />
+              <ChevronDown size={14} color="var(--color-text-muted)" />
             </button>
           </div>
         </header>

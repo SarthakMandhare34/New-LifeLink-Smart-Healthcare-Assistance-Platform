@@ -65,9 +65,9 @@ export const DoctorSettings = () => {
           alignItems: 'center',
           gap: '20px',
           padding: '24px 28px',
-          background: 'var(--swiss-white)',
-          border: '1px solid var(--swiss-gray-300)',
-          borderLeft: '4px solid var(--swiss-blue)',
+          background: 'var(--color-surface-white)',
+          border: '1px solid var(--color-border)',
+          borderLeft: '4px solid var(--color-doctor-primary)',
           borderRadius: '2px',
           boxShadow: 'none',
         }}
@@ -77,21 +77,21 @@ export const DoctorSettings = () => {
             width: '44px',
             height: '44px',
             borderRadius: '2px',
-            background: 'var(--swiss-blue-soft)',
-            border: '1px solid var(--swiss-blue)',
+            background: 'var(--color-accent-muted)',
+            border: '1px solid var(--color-doctor-primary)',
             display: 'grid',
             placeItems: 'center',
-            color: 'var(--swiss-blue)',
+            color: 'var(--color-doctor-primary)',
             flexShrink: 0,
           }}
         >
           <Settings size={22} />
         </div>
         <div>
-          <h1 style={{ margin: 0, fontSize: '1.65rem', fontWeight: 700, color: 'var(--swiss-black)', letterSpacing: '-0.02em', fontFamily: 'Inter, sans-serif' }}>
+          <h1 style={{ margin: 0, fontSize: '1.65rem', fontWeight: 700, color: 'var(--color-text)', letterSpacing: '-0.02em', fontFamily: 'Inter, sans-serif' }}>
             Workspace Settings
           </h1>
-          <p style={{ margin: '4px 0 0', color: 'var(--swiss-gray-600)', fontSize: '0.92rem' }}>
+          <p style={{ margin: '4px 0 0', color: 'var(--color-text-muted)', fontSize: '0.92rem' }}>
             Security controls, credential status, and privacy boundary declarations for your doctor account.
           </p>
         </div>
@@ -105,8 +105,8 @@ export const DoctorSettings = () => {
           variant="default"
           style={{
             padding: '28px',
-            background: 'var(--swiss-white)',
-            border: '1px solid var(--swiss-gray-300)',
+            background: 'var(--color-surface-white)',
+            border: '1px solid var(--color-border)',
             borderRadius: '2px',
             boxShadow: 'none',
             display: 'flex',
@@ -116,11 +116,11 @@ export const DoctorSettings = () => {
           }}
         >
           <div>
-            <div style={{ display: 'flex', alignItems: 'center', gap: '12px', marginBottom: '24px', paddingBottom: '16px', borderBottom: '1px solid var(--swiss-gray-300)' }}>
-              <div style={{ width: '36px', height: '36px', borderRadius: '2px', background: 'var(--swiss-blue-soft)', display: 'grid', placeItems: 'center', color: 'var(--swiss-blue)' }}>
+            <div style={{ display: 'flex', alignItems: 'center', gap: '12px', marginBottom: '24px', paddingBottom: '16px', borderBottom: '1px solid var(--color-border)' }}>
+              <div style={{ width: '36px', height: '36px', borderRadius: '2px', background: 'var(--color-accent-muted)', display: 'grid', placeItems: 'center', color: 'var(--color-doctor-primary)' }}>
                 <Lock size={18} />
               </div>
-              <h2 style={{ margin: 0, fontSize: '1.25rem', fontWeight: 700, color: 'var(--swiss-black)', fontFamily: 'Inter, sans-serif', letterSpacing: '-0.02em' }}>
+              <h2 style={{ margin: 0, fontSize: '1.25rem', fontWeight: 700, color: 'var(--color-text)', fontFamily: 'Inter, sans-serif', letterSpacing: '-0.02em' }}>
                 Change Password
               </h2>
             </div>
@@ -209,8 +209,8 @@ export const DoctorSettings = () => {
           variant="default"
           style={{
             padding: '28px',
-            background: 'var(--swiss-white)',
-            border: '1px solid var(--swiss-gray-300)',
+            background: 'var(--color-surface-white)',
+            border: '1px solid var(--color-border)',
             borderRadius: '2px',
             boxShadow: 'none',
             display: 'flex',
@@ -220,29 +220,29 @@ export const DoctorSettings = () => {
           }}
         >
           <div>
-            <div style={{ display: 'flex', alignItems: 'center', gap: '12px', marginBottom: '24px', paddingBottom: '16px', borderBottom: '1px solid var(--swiss-gray-300)' }}>
-              <div style={{ width: '36px', height: '36px', borderRadius: '2px', background: 'var(--swiss-blue-soft)', display: 'grid', placeItems: 'center', color: 'var(--swiss-blue)' }}>
+            <div style={{ display: 'flex', alignItems: 'center', gap: '12px', marginBottom: '24px', paddingBottom: '16px', borderBottom: '1px solid var(--color-border)' }}>
+              <div style={{ width: '36px', height: '36px', borderRadius: '2px', background: 'var(--color-accent-muted)', display: 'grid', placeItems: 'center', color: 'var(--color-doctor-primary)' }}>
                 <ShieldCheck size={18} />
               </div>
-              <h2 style={{ margin: 0, fontSize: '1.25rem', fontWeight: 700, color: 'var(--swiss-black)', fontFamily: 'Inter, sans-serif', letterSpacing: '-0.02em' }}>
+              <h2 style={{ margin: 0, fontSize: '1.25rem', fontWeight: 700, color: 'var(--color-text)', fontFamily: 'Inter, sans-serif', letterSpacing: '-0.02em' }}>
                 Account Information & Privacy Boundary
               </h2>
             </div>
 
             <div style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
-              <div style={{ padding: '16px 20px', background: 'var(--swiss-off-white)', borderRadius: '2px', border: '1px solid var(--swiss-gray-300)' }}>
-                <p className="caption" style={{ margin: '0 0 4px', textTransform: 'uppercase', letterSpacing: '0.08em', color: 'var(--swiss-gray-600)', fontWeight: 700 }}>Account Type</p>
-                <strong style={{ fontSize: '1rem', color: 'var(--swiss-black)' }}>Controlled Directory Doctor</strong>
+              <div style={{ padding: '16px 20px', background: 'var(--color-surface-subtle)', borderRadius: '2px', border: '1px solid var(--color-border)' }}>
+                <p className="caption" style={{ margin: '0 0 4px', textTransform: 'uppercase', letterSpacing: '0.08em', color: 'var(--color-text-muted)', fontWeight: 700 }}>Account Type</p>
+                <strong style={{ fontSize: '1rem', color: 'var(--color-text)' }}>Controlled Directory Doctor</strong>
               </div>
 
-              <div style={{ padding: '16px 20px', background: 'var(--swiss-off-white)', borderRadius: '2px', border: '1px solid var(--swiss-gray-300)' }}>
-                <p className="caption" style={{ margin: '0 0 4px', textTransform: 'uppercase', letterSpacing: '0.08em', color: 'var(--swiss-gray-600)', fontWeight: 700 }}>Access Level</p>
-                <strong style={{ fontSize: '1rem', color: 'var(--swiss-black)' }}>Appointment-restricted patient context</strong>
+              <div style={{ padding: '16px 20px', background: 'var(--color-surface-subtle)', borderRadius: '2px', border: '1px solid var(--color-border)' }}>
+                <p className="caption" style={{ margin: '0 0 4px', textTransform: 'uppercase', letterSpacing: '0.08em', color: 'var(--color-text-muted)', fontWeight: 700 }}>Access Level</p>
+                <strong style={{ fontSize: '1rem', color: 'var(--color-text)' }}>Appointment-restricted patient context</strong>
               </div>
 
-              <div style={{ padding: '16px 20px', background: 'var(--swiss-blue-soft)', borderRadius: '2px', border: '1px solid var(--swiss-blue)', display: 'flex', alignItems: 'flex-start', gap: '12px' }}>
-                <UserCheck size={20} color="var(--swiss-blue)" style={{ flexShrink: 0, marginTop: '2px' }} />
-                <p style={{ margin: 0, fontSize: '0.88rem', color: 'var(--swiss-black)', lineHeight: 1.6 }}>
+              <div style={{ padding: '16px 20px', background: 'var(--color-accent-muted)', borderRadius: '2px', border: '1px solid var(--color-doctor-primary)', display: 'flex', alignItems: 'flex-start', gap: '12px' }}>
+                <UserCheck size={20} color="var(--color-doctor-primary)" style={{ flexShrink: 0, marginTop: '2px' }} />
+                <p style={{ margin: 0, fontSize: '0.88rem', color: 'var(--color-text)', lineHeight: 1.6 }}>
                   <strong>Note:</strong> This is a controlled LifeLink directory account. Records here are not verified doctor identities, credentials, or medical registrations.
                 </p>
               </div>

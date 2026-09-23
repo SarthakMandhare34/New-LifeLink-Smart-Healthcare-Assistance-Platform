@@ -15,6 +15,7 @@ import { describe, it, expect, beforeAll, afterAll } from "vitest";
 import { appRouter } from "../routers";
 import { createContext } from "../_core/context";
 import {
+  getDb,
   createNativePatient,
   findOrCreateSyntheticDoctorUser,
   createPatientMedicine,
@@ -24,6 +25,8 @@ import {
   createDoctorAuthorizedPrescription,
   updateDoctorAppointmentStatus,
 } from "../db";
+import { users } from "../../database/schema";
+import { eq, or } from "drizzle-orm";
 import { getMockDoctorById } from "../discovery/mockDoctorDirectory";
 
 // We will mock the context creation manually to test router directly
@@ -240,5 +243,12 @@ describe("BATCH 13: Authentication, Security, and IDOR Deep Audit", () => {
       const unauthCaller = createCaller(null);
       await expect(unauthCaller.doctorWorkspace.dashboard()).rejects.toThrow(/Please login|UNAUTHORIZED|synthetic doctor session is required/i);
     });
+  });
+
+  afterAll(async () => {
+    const db = await getDb();
+    if (db && patientA && patientB) {
+      await db.delete(users).where(or(eq(users.id, patientA.id), eq(users.id, patientB.id)));
+    }
   });
 });

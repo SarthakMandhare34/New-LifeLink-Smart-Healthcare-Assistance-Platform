@@ -18,7 +18,7 @@ config();
 import { getDb, upsertUser, createPatientAppointment, cancelOwnedPatientAppointment, updateDoctorAppointmentStatus } from "./db"; // Data access helpers
 import { appRouter } from "./routers";                                                          // Root tRPC API router
 import { users, patientAppointments } from "../database/schema";                                // Schema table definitions
-import { eq } from "drizzle-orm";                                                               // Drizzle SQL operators
+import { eq, or } from "drizzle-orm";                                                               // Drizzle SQL operators
 import { mockDoctorDirectory } from "./discovery/mockDoctorDirectory";                          // Doctor directory catalog
 
 // Select two test clinicians from different stations
@@ -66,7 +66,7 @@ beforeAll(async () => {
   await upsertUser({
     openId: `synthetic-doctor:${TEST_DOCTOR_1.id}`,
     name: TEST_DOCTOR_1.name,
-    email: null,
+    email: `${TEST_DOCTOR_1.id.replace("mock-", "")}@lifelink.com`,
     loginMethod: "synthetic-clinician",
     role: "doctor",
   });
@@ -75,7 +75,7 @@ beforeAll(async () => {
   await upsertUser({
     openId: `synthetic-doctor:${TEST_DOCTOR_2.id}`,
     name: TEST_DOCTOR_2.name,
-    email: null,
+    email: `${TEST_DOCTOR_2.id.replace("mock-", "")}@lifelink.com`,
     loginMethod: "synthetic-clinician",
     role: "doctor",
   });
@@ -212,5 +212,11 @@ describe("Appointment Lifecycle Integration", () => {
     const appt = patDashboard.appointments.find(a => a.id === appointmentId);
     expect(appt).toBeDefined();
     expect(appt?.status).toBe("Completed");
+  });
+
+  afterAll(async () => {
+    if (db) {
+      await db.delete(users).where(or(eq(users.openId, "test:patient-lifecycle-1"), eq(users.openId, "test:patient-lifecycle-2")));
+    }
   });
 });

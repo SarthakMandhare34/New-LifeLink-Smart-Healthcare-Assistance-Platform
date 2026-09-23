@@ -1,15 +1,13 @@
 /**
  * ============================================================================
- * BRANDED REAL-TIME LOADING INDICATOR
+ * STANDARD REAL-TIME LOADING INDICATOR
  * ============================================================================
  * 
- * WHY THIS FILE IS SPECIAL:
- * Displays LifeLink's official brand symbol with an animated beacon glow
- * exclusively during actual in-flight network requests or connection waits.
- * Zero artificial timeouts or mock delays: disappears the millisecond data is ready.
+ * Clean, modern circular activity indicator for real-time data fetching
+ * and map initialization. Uses a neutral clinical dual-tone spinning ring
+ * without logos, red colors, or distracting pulse animations.
  */
 import React from "react";
-import { LifeLinkLogo } from "./LifeLinkLogo";
 import { cn } from "@/lib/utils";
 
 export type BrandLoadingIndicatorProps = {
@@ -25,88 +23,55 @@ export function BrandLoadingIndicator({
   size = "md",
   fullScreen = false,
 }: BrandLoadingIndicatorProps) {
-  const sizePx = size === "sm" ? 36 : size === "lg" ? 64 : 48;
+  // Dimensions and stroke widths for standard spinner sizes
+  const spinnerConfig = {
+    sm: { size: 24, stroke: "2px" },
+    md: { size: 36, stroke: "3px" },
+    lg: { size: 48, stroke: "3.5px" },
+  }[size];
 
   return (
     <div
       role="status"
       aria-live="polite"
       className={cn(
-        "flex flex-col items-center justify-center gap-3 select-none",
+        "flex flex-col items-center justify-center gap-3.5 select-none",
         fullScreen
-          ? "fixed inset-0 z-50 bg-background/80 backdrop-blur-sm"
+          ? "fixed inset-0 z-50 bg-background/80 backdrop-blur-xs"
           : "w-full py-12",
         className
       )}
     >
-      <div className="relative flex items-center justify-center">
-        {/* Glowing pulse beacon */}
-        <div
-          className="absolute rounded-full animate-ping opacity-30"
-          style={{
-            width: sizePx + 16,
-            height: sizePx + 16,
-            backgroundColor: "var(--color-primary, #0D9488)",
-            animationDuration: "1.6s",
-          }}
-          aria-hidden="true"
-        />
-
-        {/* Outer orbital soft glow */}
-        <div
-          className="absolute rounded-full"
-          style={{
-            width: sizePx + 24,
-            height: sizePx + 24,
-            background:
-              "radial-gradient(circle, rgba(13, 148, 136, 0.18) 0%, rgba(13, 148, 136, 0) 70%)",
-          }}
-          aria-hidden="true"
-        />
-
-        {/* Official LifeLink Brand Symbol */}
-        <div
-          style={{
-            width: sizePx,
-            height: sizePx,
-            borderRadius: "2px",
-            overflow: "hidden",
-            display: "flex",
-            alignItems: "center",
-            justifyContent: "center",
-            background: "var(--color-surface-white, #FFFFFF)",
-            border: "1px solid var(--swiss-gray-300, #D9D9D9)",
-            boxShadow: "none",
-            zIndex: 1,
-          }}
-        >
-          <LifeLinkLogo
-            variant="symbol"
-            style={{
-              width: "100%",
-              height: "100%",
-              padding: 0,
-              border: "none",
-              background: "transparent",
-              boxShadow: "none",
-            }}
-          />
-        </div>
-      </div>
+      {/* Standard circular spinning activity ring (clean neutral dual-tone) */}
+      <div
+        className="rounded-full animate-spin border-solid"
+        style={{
+          width: spinnerConfig.size,
+          height: spinnerConfig.size,
+          borderWidth: spinnerConfig.stroke,
+          borderColor: "var(--swiss-gray-300, #E2E8F0)",
+          borderTopColor: "var(--swiss-blue, #0057B8)",
+        }}
+        aria-hidden="true"
+      />
 
       {message && (
-        <p
-          className="text-sm font-semibold tracking-wide text-muted-foreground animate-pulse"
+        <span
+          className="text-xs font-medium tracking-wide text-neutral-600 dark:text-neutral-400"
           style={{
             margin: 0,
-            color: "var(--color-text-muted, #71717A)",
-            fontFamily: "'Inter', sans-serif",
-            animationDuration: "2s",
+            color: "var(--swiss-gray-700, #475569)",
+            fontFamily: "var(--font-family-base, 'Inter', sans-serif)",
           }}
         >
           {message}
-        </p>
+        </span>
       )}
     </div>
   );
 }
+
+// Convenient alias for semantic clarity across consumers
+export const NormalLoadingIndicator = BrandLoadingIndicator;
+export const LoadingSpinner = BrandLoadingIndicator;
+
