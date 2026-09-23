@@ -221,7 +221,7 @@ export const DoctorAppShell = () => {
                 borderRadius: '2px',
                 fontSize: '0.88rem',
                 fontWeight: isActive ? 700 : 500,
-                color: isActive ? 'var(--swiss-blue)' : 'var(--swiss-gray-700)',
+                color: isActive ? 'var(--swiss-blue)' : 'var(--color-text)',
                 background: isActive ? 'var(--swiss-blue-soft)' : 'transparent',
                 borderLeft: isActive ? '3px solid var(--swiss-blue)' : '3px solid transparent',
                 textDecoration: 'none',
@@ -248,7 +248,7 @@ export const DoctorAppShell = () => {
               borderRadius: '2px', 
               border: 'none', 
               background: 'transparent', 
-              color: 'var(--swiss-gray-700)', 
+              color: 'var(--color-text)', 
               fontSize: '0.88rem', 
               fontWeight: 500, 
               cursor: 'pointer', 
@@ -384,7 +384,7 @@ export const DoctorAppShell = () => {
 
                   <div style={{ maxHeight: '340px', overflowY: 'auto' }}>
                     {appointments.length === 0 ? (
-                      <div style={{ padding: '24px 16px', textAlign: 'center', color: 'var(--swiss-gray-600)' }}>
+                      <div style={{ padding: '24px 16px', textAlign: 'center', color: 'var(--color-text-muted)' }}>
                         <Bell size={24} style={{ opacity: 0.3, margin: '0 auto 8px', display: 'block' }} />
                         <p style={{ margin: 0, fontSize: '0.85rem' }}>No appointment notifications yet.</p>
                       </div>
@@ -410,10 +410,10 @@ export const DoctorAppShell = () => {
                             width: '32px',
                             height: '32px',
                             borderRadius: '2px',
-                            background: appt.status === 'Requested' ? 'rgba(217, 119, 6, 0.12)' : 'var(--color-accent-muted)',
+                            background: appt.status === 'Requested' ? 'var(--swiss-amber-bg)' : 'var(--color-accent-muted)',
                             display: 'grid',
                             placeItems: 'center',
-                            color: appt.status === 'Requested' ? '#B45309' : 'var(--color-doctor-primary)',
+                            color: appt.status === 'Requested' ? 'var(--swiss-amber-text)' : 'var(--color-doctor-primary)',
                             flexShrink: 0,
                           }}>
                             <Calendar size={16} />

@@ -10,8 +10,8 @@
  * It strictly checks: "Does this prescription actually belong to the person requesting it?"
  */
 import { COOKIE_NAME } from "@shared/const";                                             // Patient session cookie constant name
-import { z } from "zod";                                                                   // Input validation schema builder
-import { createPatientAssessment, createPatientEvent, getPatientAssessments } from "./db"; // Database queries for symptom records and event dispatch
+import { createPatientAssessment, createPatientEvent, getPatientAssessments, getUserById } from "./db"; // Database queries for symptom records and event dispatch
+import { TRPCError } from "@trpc/server";                                                  // Typed error constructors
 import { analyzeAssessmentWithGemini, assessmentRequestInput } from "./ai/assessmentService"; // Gemini AI triage engine and schema
 import { getSessionCookieOptions } from "./_core/cookies";                                // Secure cookie attribute helper
 import { getProviderAvailability } from "./auth/providerAuth";                             // Google OAuth availability detector
@@ -58,23 +58,54 @@ export const appRouter = router({
   patientNotification: patientNotificationRouter,                                          // Centralized notification feed
   patientDiscovery: patientDiscoveryRouter,                                                // Mumbai specialist search and directory filtering
   assessment: router({
-    list: protectedProcedure.query(({ ctx }) => getPatientAssessments(ctx.user.id)),       // History of patient symptom assessments
+    list: protectedProcedure.query(async ({ ctx }) => {
+      const user = await getUserById(ctx.user.id);
+      if (!user) return [];
+      return getPatientAssessments(ctx.user.id);
+    }),
     analyze: protectedProcedure.input(assessmentRequestInput).mutation(async ({ ctx, input }) => { // Live AI symptom triage execution
+      // Safeguard: strictly validate that patient user still exists in database
+      const user = await getUserById(ctx.user.id);
+      if (!user) {
+        throw new TRPCError({
+          code: "UNAUTHORIZED",
+          message: "Patient account not found in database. Your session may have expired or been removed. Please log in again.",
+        });
+      }
+
       const result = await analyzeAssessmentWithGemini(input);                             // Evaluate symptoms through Gemini + safeguards
-      const id = await createPatientAssessment({                                           // Persist assessment result in MySQL
-        userId: ctx.user.id,
-        symptoms: input.symptoms,
-        age: input.age,
-        gender: input.gender,
-        conditions: input.conditions ?? null,
-        duration: input.duration,
-        urgency: result.urgency,
-        reason: result.reason,
-        specialty: result.specialty,
-        guidance: result.guidance,
-      });
-      await createPatientEvent(ctx.user.id, "ASSESSMENT_COMPLETED", String(id));           // Notify patient dashboard via SSE
-      return { id, createdAt: new Date(), ...input, ...result };                           // Return saved triage assessment
+
+      try {
+        const id = await createPatientAssessment({                                           // Persist assessment result in MySQL
+          userId: ctx.user.id,
+          symptoms: input.symptoms,
+          age: input.age,
+          gender: input.gender,
+          conditions: input.conditions ?? null,
+          duration: input.duration,
+          urgency: result.urgency,
+          reason: result.reason,
+          specialty: result.specialty,
+          guidance: result.guidance,
+        });
+        await createPatientEvent(ctx.user.id, "ASSESSMENT_COMPLETED", String(id));           // Notify patient dashboard via SSE
+        return { id, createdAt: new Date(), ...input, ...result };                           // Return saved triage assessment
+      } catch (error: any) {
+        if (
+          error?.message?.includes("PATIENT_USER_NOT_FOUND") ||
+          error?.code === "ER_NO_REFERENCED_ROW_2" ||
+          error?.message?.includes("foreign key")
+        ) {
+          throw new TRPCError({
+            code: "UNAUTHORIZED",
+            message: "Patient account not found in database. Please log in or register to record clinical assessments.",
+          });
+        }
+        throw new TRPCError({
+          code: "INTERNAL_SERVER_ERROR",
+          message: "Failed to securely save assessment to health record. Please try again.",
+        });
+      }
     }),
   }),
 });

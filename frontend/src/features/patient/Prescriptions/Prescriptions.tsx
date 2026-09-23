@@ -51,9 +51,9 @@ export const Prescriptions = () => {
     const prescribingDoctor = rx?.doctor ?? null;                                               // Specialist who authorized and signed the prescription
 
     return (
-      <div style={{ display: 'flex', flexDirection: 'column', gap: '24px' }}>
+      <div style={{ display: 'flex', flexDirection: 'column', gap: '36px' }}>
         {/* Navigation header with back button */}
-        <header style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
+        <header style={{ display: 'flex', alignItems: 'center', gap: '16px' }}>
           <Button
             variant="outline"
             size="sm"
@@ -62,7 +62,7 @@ export const Prescriptions = () => {
           >
             <ArrowLeft size={16} /> Back to Prescriptions
           </Button>
-          <h1 style={{ margin: 0, fontSize: '1.75rem', fontWeight: 700, color: 'var(--color-text)', letterSpacing: '-0.02em' }}>
+          <h1 style={{ margin: 0, fontSize: '1.85rem', fontWeight: 700, color: 'var(--color-text)', letterSpacing: '-0.02em' }}>
             Prescription Details
           </h1>
         </header>
@@ -74,7 +74,7 @@ export const Prescriptions = () => {
           </div>
         ) : detailQuery.isError || !rx ? (
           /* Error or unauthorized state */
-          <Card style={{ padding: '32px', textAlign: 'center', background: 'var(--color-surface-white)', border: '1px solid var(--color-border)', borderRadius: '10px' }}>
+          <Card style={{ padding: '36px', textAlign: 'center', background: 'var(--color-surface-white)', border: '1px solid var(--color-border)', borderRadius: '10px' }}>
             <p role="alert" style={{ color: 'var(--color-semantic-emergency)', margin: 0, fontWeight: 600 }}>
               Prescription record not found or access is not authorized.
             </p>
@@ -84,18 +84,18 @@ export const Prescriptions = () => {
           <Card
             variant="document"
             style={{
-              maxWidth: '800px',
+              maxWidth: '840px',
               margin: '0 auto',
               width: '100%',
               background: 'var(--color-surface-white)',
               border: '1px solid var(--color-border)',
               borderRadius: 'var(--border-radius-md)',
-              padding: 'clamp(20px, 4vw, 32px)',
+              padding: 'clamp(28px, 4.5vw, 44px)',
               boxShadow: 'none',
             }}
           >
             {/* Document Header Plate: Patient, Doctor, Date, Integrity Reference */}
-            <div style={{ borderBottom: '2px solid var(--color-border)', paddingBottom: '20px', marginBottom: '24px' }}>
+            <div style={{ borderBottom: '2px solid var(--color-border)', paddingBottom: '24px', marginBottom: '28px' }}>
               <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', flexWrap: 'wrap', gap: '16px', marginBottom: '16px' }}>
                 <div>
                   <span style={{ fontSize: '0.72rem', fontWeight: 700, color: 'var(--color-primary)', textTransform: 'uppercase', letterSpacing: '0.06em', display: 'block' }}>
@@ -260,17 +260,17 @@ export const Prescriptions = () => {
   // LIST VIEW: ALL PRESCRIBED RECORDS
   // =========================================================================================
   return (
-    <div style={{ display: 'flex', flexDirection: 'column', gap: '24px' }}>
+    <div style={{ display: 'flex', flexDirection: 'column', gap: '36px' }}>
       {/* Header banner */}
       <header style={{ display: 'flex', alignItems: 'center', gap: '16px' }}>
-        <div style={{ width: '44px', height: '44px', borderRadius: 'var(--border-radius-sm)', background: 'var(--color-primary-muted)', display: 'grid', placeItems: 'center', color: 'var(--color-primary)', flexShrink: 0 }}>
+        <div style={{ width: '48px', height: '48px', borderRadius: 'var(--border-radius-sm)', background: 'var(--color-primary-muted)', display: 'grid', placeItems: 'center', color: 'var(--color-primary)', flexShrink: 0 }}>
           <FileText size={24} />
         </div>
         <div>
-          <h1 style={{ margin: 0, fontSize: '2rem', fontWeight: 700, color: 'var(--color-text)', letterSpacing: '-0.02em' }}>
+          <h1 style={{ margin: 0, fontSize: '1.85rem', fontWeight: 700, color: 'var(--color-text)', letterSpacing: '-0.02em' }}>
             Prescriptions
           </h1>
-          <p style={{ color: 'var(--color-text-muted)', fontSize: '0.9rem', margin: '3px 0 0' }}>
+          <p style={{ color: 'var(--color-text-muted)', fontSize: '0.9rem', margin: '4px 0 0' }}>
             Verified medical prescriptions issued by your assigned LifeLink specialists.
           </p>
         </div>
@@ -278,7 +278,7 @@ export const Prescriptions = () => {
 
       {/* Empty state when patient has no prescriptions */}
       {prescriptions.length === 0 ? (
-        <Card style={{ textAlign: 'center', padding: '56px 24px', background: 'var(--color-surface-white)', border: '1px solid var(--color-border)', borderRadius: '10px' }}>
+        <Card style={{ textAlign: 'center', padding: '56px 24px', background: 'var(--color-surface-white)', border: '1px solid var(--color-border)', borderRadius: '2px' }}>
           <FileText size={44} color="var(--color-text-muted)" style={{ margin: '0 auto 12px', opacity: 0.7 }} />
           <p style={{ margin: 0, fontSize: '1rem', color: 'var(--color-text-muted)', fontStyle: 'italic' }}>
             No prescriptions issued yet.
@@ -286,7 +286,7 @@ export const Prescriptions = () => {
         </Card>
       ) : (
         /* Prescriptions responsive card grid */
-        <div className="responsive-list-grid">
+        <div className="responsive-list-grid" style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(min(100%, 340px), 1fr))', gap: '24px' }}>
           {prescriptions.map((prescription) => (
             <Card
               key={prescription.id}
@@ -297,24 +297,25 @@ export const Prescriptions = () => {
                 background: 'var(--color-surface-white)',
                 border: '1px solid var(--color-border)',
                 borderRadius: 'var(--border-radius-md)',
-                padding: '20px',
+                padding: 'clamp(24px, 3.2vw, 30px)',
                 display: 'flex',
                 flexDirection: 'column',
                 justifyContent: 'space-between',
+                gap: '18px',
                 boxShadow: 'none',
               }}
             >
               <div>
-                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', gap: '10px', marginBottom: '12px' }}>
+                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', gap: '10px', marginBottom: '14px' }}>
                   <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
-                    <div style={{ width: '36px', height: '36px', borderRadius: 'var(--border-radius-sm)', background: 'var(--color-primary-muted)', display: 'grid', placeItems: 'center', color: 'var(--color-primary)', flexShrink: 0 }}>
-                      <FileText size={18} />
+                    <div style={{ width: '40px', height: '40px', borderRadius: 'var(--border-radius-sm)', background: 'var(--color-primary-muted)', display: 'grid', placeItems: 'center', color: 'var(--color-primary)', flexShrink: 0 }}>
+                      <FileText size={20} />
                     </div>
                     <div>
                       <h3 style={{ margin: 0, fontSize: '1.05rem', fontWeight: 700, color: 'var(--color-text)', letterSpacing: '-0.02em' }}>
                         {prescription.doctor?.name || 'Assigned Specialist'}
                       </h3>
-                      <span style={{ fontSize: '0.82rem', color: 'var(--color-text-muted)', fontVariantNumeric: 'tabular-nums' }}>
+                      <span style={{ fontSize: '0.82rem', color: 'var(--color-text-muted)', fontVariantNumeric: 'tabular-nums', marginTop: '2px', display: 'block' }}>
                         {new Date(prescription.issuedAt).toLocaleDateString(undefined, { month: 'short', day: 'numeric', year: 'numeric' })}
                       </span>
                     </div>
@@ -326,17 +327,17 @@ export const Prescriptions = () => {
 
                 <div
                   style={{
-                    padding: '12px',
+                    padding: '14px 16px',
                     background: 'var(--color-background)',
-                    borderRadius: '8px',
+                    borderRadius: '2px',
                     border: '1px solid var(--color-border)',
-                    marginTop: '8px',
+                    marginTop: '10px',
                   }}
                 >
-                  <span style={{ fontSize: '0.78rem', color: 'var(--color-text-muted)', fontWeight: 700, textTransform: 'uppercase' }}>
+                  <span style={{ fontSize: '0.76rem', color: 'var(--color-text-muted)', fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.04em' }}>
                     Prescribed Items:
                   </span>
-                  <p style={{ margin: '4px 0 0', fontWeight: 600, fontSize: '0.9rem', color: 'var(--color-text)' }}>
+                  <p style={{ margin: '6px 0 0', fontWeight: 600, fontSize: '0.9rem', color: 'var(--color-text)', lineHeight: 1.45 }}>
                     {prescription.items && prescription.items.length
                       ? prescription.items.map((item) => `${item.name} (${item.dosage})`).join(', ') // Joined list of drug names
                       : 'No items recorded'}
@@ -345,7 +346,7 @@ export const Prescriptions = () => {
               </div>
 
               {/* View details action trigger */}
-              <div style={{ marginTop: '16px', display: 'flex', justifyContent: 'flex-end' }}>
+              <div style={{ marginTop: 'auto', paddingTop: '10px', display: 'flex', justifyContent: 'flex-end' }}>
                 <Button
                   variant="primary"                                                             // Primary button style
                   size="sm"                                                                    // Compact size
@@ -353,7 +354,7 @@ export const Prescriptions = () => {
                     event.stopPropagation();                                                    // Avoid bubbling to parent card
                     setSelectedRxId(prescription.id);                                           // Select this prescription for detail inspection
                   }}
-                  style={{ borderRadius: '8px' }}
+                  style={{ borderRadius: '2px' }}
                   aria-label={`View details for prescription from ${prescription.doctor?.name || 'specialist'} on ${new Date(prescription.issuedAt).toLocaleDateString()}`}
                 >
                   View Details

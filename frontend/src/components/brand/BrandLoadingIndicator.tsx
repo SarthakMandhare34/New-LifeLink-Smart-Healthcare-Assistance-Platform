@@ -57,10 +57,10 @@ export function BrandLoadingIndicator({
 
       {message && (
         <span
-          className="text-xs font-medium tracking-wide text-neutral-600 dark:text-neutral-400"
+          className="text-xs font-medium tracking-wide"
           style={{
             margin: 0,
-            color: "var(--swiss-gray-700, #475569)",
+            color: "var(--color-text-muted)",
             fontFamily: "var(--font-family-base, 'Inter', sans-serif)",
           }}
         >

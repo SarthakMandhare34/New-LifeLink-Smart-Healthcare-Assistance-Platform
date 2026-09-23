@@ -25,40 +25,68 @@ async function clearDatabase() {
     process.exit(1);
   }
 
-  console.log("Clearing all data from all tables while keeping structures intact...");
+  console.log("Clearing all patient activities and Google OAuth / native patient accounts...");
+  console.log("Preserving doctor workstation accounts and credentials intact...\n");
   await db.execute(sql.raw("SET FOREIGN_KEY_CHECKS = 0;"));
 
-  const tablesResult: any = await db.execute(sql.raw("SHOW TABLES;"));
-  const tableRows = tablesResult[0] || tablesResult;
+  const patientTables = [
+    "bookingerrors",
+    "doctorevents",
+    "patientappointments",
+    "patientassessments",
+    "patientcredentials",
+    "patientemergencycontacts",
+    "patientevents",
+    "patientmedicines",
+    "patientprescriptionitems",
+    "patientprescriptions",
+    "patientprofiles",
+    "patientprovideridentities",
+  ];
 
-  for (const row of tableRows) {
-    const tableName = Object.values(row)[0] as string;
+  for (const tableName of patientTables) {
     try {
       await db.execute(sql.raw(`TRUNCATE TABLE \`${tableName}\`;`));
       console.log(`  ✓ Truncated table: ${tableName}`);
-    } catch (err) {
-      console.warn(`  ⚠ Truncate failed on ${tableName}, trying DELETE:`, (err as any).message);
+    } catch (err: any) {
+      console.warn(`  ⚠ Truncate failed on ${tableName}, trying DELETE:`, err.message);
       await db.execute(sql.raw(`DELETE FROM \`${tableName}\`;`));
     }
   }
 
+  // Remove non-doctor users (e.g. Google OAuth and native patients)
+  await db.execute(sql.raw("DELETE FROM `users` WHERE `role` != 'doctor';"));
+  console.log("  ✓ Purged all non-doctor patient accounts from users table (including Google OAuth users)");
+
   await db.execute(sql.raw("SET FOREIGN_KEY_CHECKS = 1;"));
 
-  console.log("\nVerifying all table row counts...");
-  let totalRemaining = 0;
+  console.log("\n========================================================");
+  console.log("   CURRENT DATABASE TABLE ROW COUNTS (DOCTORS-ONLY BASE)");
+  console.log("========================================================");
+  const tablesResult: any = await db.execute(sql.raw("SHOW TABLES;"));
+  const tableRows = tablesResult[0] || tablesResult;
+
+  let patientRowsTotal = 0;
+  let doctorRowsTotal = 0;
+
   for (const row of tableRows) {
     const tableName = Object.values(row)[0] as string;
     const countRes: any = await db.execute(sql.raw(`SELECT COUNT(*) as cnt FROM \`${tableName}\`;`));
     const cnt = Number(countRes[0]?.[0]?.cnt ?? countRes[0]?.cnt ?? 0);
-    console.log(`  - ${tableName}: ${cnt} rows`);
-    totalRemaining += cnt;
+    console.log(`  - ${tableName.padEnd(30)}: ${cnt} rows`);
+
+    if (tableName === "syntheticdoctorcredentials" || (tableName === "users" && cnt > 0)) {
+      doctorRowsTotal += cnt;
+    } else {
+      patientRowsTotal += cnt;
+    }
   }
 
-  if (totalRemaining === 0) {
-    console.log("\n✅ All tables kept intact and 100% of data/users purged! Total rows across all tables: 0.");
-  } else {
-    console.warn(`\n⚠ Warning: ${totalRemaining} rows still remained.`);
-  }
+  console.log("========================================================");
+  console.log(`✅ Database reset complete!`);
+  console.log(`   - Patient Activity / Google Auth rows: ${patientRowsTotal}`);
+  console.log(`   - Doctor Workstation / Credential rows: ${doctorRowsTotal}`);
+  console.log("========================================================\n");
 
   process.exit(0);
 }

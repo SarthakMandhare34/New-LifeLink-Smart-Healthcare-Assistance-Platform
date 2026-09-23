@@ -36,15 +36,15 @@ type AssessmentResult = {
 
 function urgencyBadgeStyle(urgency: AssessmentResult['urgency']) {
   if (urgency === 'EMERGENCY') {
-    return { bg: 'var(--swiss-red-soft)', color: 'var(--swiss-red)', border: '1px solid #FECACA' };
+    return { bg: 'var(--swiss-red-soft)', color: 'var(--swiss-red)', border: '1px solid var(--swiss-red-border)' };
   }
   if (urgency === 'MODERATE') {
-    return { bg: '#FFFBEB', color: '#B45309', border: '1px solid #FDE68A' };
+    return { bg: 'var(--swiss-amber-bg)', color: 'var(--swiss-amber-text)', border: '1px solid var(--swiss-amber-border)' };
   }
   if (urgency === 'ERROR') {
-    return { bg: 'var(--swiss-red-soft)', color: 'var(--swiss-red)', border: '1px solid #FECACA' };
+    return { bg: 'var(--swiss-red-soft)', color: 'var(--swiss-red)', border: '1px solid var(--swiss-red-border)' };
   }
-  return { bg: 'var(--swiss-blue-soft)', color: 'var(--swiss-blue)', border: '1px solid #BFDBFE' };
+  return { bg: 'var(--swiss-blue-soft)', color: 'var(--swiss-blue)', border: '1px solid var(--swiss-blue-border)' };
 }
 
 // AI symptom evaluation and clinical decision-support triage page
@@ -165,7 +165,29 @@ export const AIAssessment = () => {
           
           {/* Validation Alert */}
           {apiError && (
-            <ValidationMessage message={apiError} type="error" />
+            <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
+              <ValidationMessage message={apiError} type="error" />
+              {apiError.includes('sign in or register') && (
+                <div style={{ display: 'flex', gap: '10px', marginTop: '4px' }}>
+                  <Button
+                    type="button"
+                    variant="outline"
+                    onClick={() => navigate('/login')}
+                    style={{ fontSize: '0.85rem', padding: '6px 14px' }}
+                  >
+                    Go to Patient Login
+                  </Button>
+                  <Button
+                    type="button"
+                    variant="secondary"
+                    onClick={() => navigate('/register')}
+                    style={{ fontSize: '0.85rem', padding: '6px 14px' }}
+                  >
+                    Register New Account
+                  </Button>
+                </div>
+              )}
+            </div>
           )}
 
           {/* SECTION: SYMPTOMS */}
@@ -441,7 +463,7 @@ export const AIAssessment = () => {
                 style={{
                   padding: '16px',
                   background: 'var(--swiss-red-soft)',
-                  border: '1px solid #FECACA',
+                  border: '1px solid var(--swiss-red-border)',
                   borderLeft: '4px solid var(--swiss-red)',
                   borderRadius: 'var(--border-radius-md)',
                   display: 'flex',

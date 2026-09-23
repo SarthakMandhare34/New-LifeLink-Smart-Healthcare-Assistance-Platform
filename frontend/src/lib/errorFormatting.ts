@@ -69,6 +69,18 @@ export function formatUserFriendlyError(error: unknown, fallbackMessage = 'An un
     return 'Unable to reach the server. Please check your network connection and try again.';
   }
 
+  if (
+    rawMessage.includes('patientAssessments') ||
+    rawMessage.includes('foreign key') ||
+    rawMessage.includes('Failed query') ||
+    rawMessage.includes('ER_NO_REFERENCED_ROW') ||
+    rawMessage.includes('PATIENT_USER_NOT_FOUND') ||
+    rawMessage.includes('Patient account not found') ||
+    rawMessage.includes('User account not found')
+  ) {
+    return 'Your session is invalid or your user account is no longer registered. Please sign in or register to record your health assessment.';
+  }
+
   if (rawMessage.includes('UNAUTHORIZED') || rawMessage.includes('Unauthorized')) {
     return 'Your session has expired or is unauthorized. Please sign in again.';
   }

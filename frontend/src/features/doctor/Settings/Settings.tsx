@@ -56,15 +56,15 @@ export const DoctorSettings = () => {
   };
 
   return (
-    <div style={{ display: 'flex', flexDirection: 'column', gap: '24px', width: '100%', maxWidth: '1400px', margin: '0 auto' }}>
+    <div style={{ display: 'flex', flexDirection: 'column', gap: '36px', width: '100%', maxWidth: '1400px', margin: '0 auto' }}>
       
       {/* Workspace Header Banner */}
       <section
         style={{
           display: 'flex',
           alignItems: 'center',
-          gap: '20px',
-          padding: '24px 28px',
+          gap: '24px',
+          padding: '28px 32px',
           background: 'var(--color-surface-white)',
           border: '1px solid var(--color-border)',
           borderLeft: '4px solid var(--color-doctor-primary)',
@@ -74,8 +74,8 @@ export const DoctorSettings = () => {
       >
         <div
           style={{
-            width: '44px',
-            height: '44px',
+            width: '48px',
+            height: '48px',
             borderRadius: '2px',
             background: 'var(--color-accent-muted)',
             border: '1px solid var(--color-doctor-primary)',
@@ -85,26 +85,26 @@ export const DoctorSettings = () => {
             flexShrink: 0,
           }}
         >
-          <Settings size={22} />
+          <Settings size={24} />
         </div>
         <div>
           <h1 style={{ margin: 0, fontSize: '1.65rem', fontWeight: 700, color: 'var(--color-text)', letterSpacing: '-0.02em', fontFamily: 'Inter, sans-serif' }}>
             Workspace Settings
           </h1>
-          <p style={{ margin: '4px 0 0', color: 'var(--color-text-muted)', fontSize: '0.92rem' }}>
+          <p style={{ margin: '6px 0 0', color: 'var(--color-text-muted)', fontSize: '0.92rem' }}>
             Security controls, credential status, and privacy boundary declarations for your doctor account.
           </p>
         </div>
       </section>
 
       {/* Main Grid: Generous 2-column layout */}
-      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(min(100%, 480px), 1fr))', gap: '24px' }}>
+      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(min(100%, 480px), 1fr))', gap: '28px' }}>
         
         {/* Change Password Card */}
         <Card
           variant="default"
           style={{
-            padding: '28px',
+            padding: 'clamp(28px, 3.5vw, 36px)',
             background: 'var(--color-surface-white)',
             border: '1px solid var(--color-border)',
             borderRadius: '2px',
@@ -112,20 +112,20 @@ export const DoctorSettings = () => {
             display: 'flex',
             flexDirection: 'column',
             justifyContent: 'space-between',
-            gap: '24px',
+            gap: '28px',
           }}
         >
           <div>
-            <div style={{ display: 'flex', alignItems: 'center', gap: '12px', marginBottom: '24px', paddingBottom: '16px', borderBottom: '1px solid var(--color-border)' }}>
-              <div style={{ width: '36px', height: '36px', borderRadius: '2px', background: 'var(--color-accent-muted)', display: 'grid', placeItems: 'center', color: 'var(--color-doctor-primary)' }}>
-                <Lock size={18} />
+            <div style={{ display: 'flex', alignItems: 'center', gap: '14px', marginBottom: '28px', paddingBottom: '18px', borderBottom: '1px solid var(--color-border)' }}>
+              <div style={{ width: '40px', height: '40px', borderRadius: '2px', background: 'var(--color-accent-muted)', display: 'grid', placeItems: 'center', color: 'var(--color-doctor-primary)' }}>
+                <Lock size={20} />
               </div>
               <h2 style={{ margin: 0, fontSize: '1.25rem', fontWeight: 700, color: 'var(--color-text)', fontFamily: 'Inter, sans-serif', letterSpacing: '-0.02em' }}>
                 Change Password
               </h2>
             </div>
 
-            <p className="caption" style={{ marginBottom: '20px', color: 'var(--color-text-muted)', lineHeight: 1.5 }}>
+            <p className="caption" style={{ marginBottom: '24px', color: 'var(--color-text-muted)', lineHeight: 1.5 }}>
               Update this doctor account's password. The owner-controlled reset path is available from Doctor sign in if your current password is unavailable.
             </p>
 
@@ -136,9 +136,9 @@ export const DoctorSettings = () => {
                   display: 'flex',
                   alignItems: 'center',
                   gap: '10px',
-                  padding: '14px 16px',
-                  borderRadius: '8px',
-                  marginBottom: '20px',
+                  padding: '16px 18px',
+                  borderRadius: '2px',
+                  marginBottom: '24px',
                   background: isSuccess ? 'rgba(13, 148, 136, 0.12)' : 'rgba(220, 38, 38, 0.12)',
                   color: isSuccess ? 'var(--color-semantic-success)' : 'var(--color-semantic-emergency)',
                   border: `1px solid ${isSuccess ? 'rgba(13, 148, 136, 0.25)' : 'rgba(220, 38, 38, 0.25)'}`,
@@ -150,8 +150,8 @@ export const DoctorSettings = () => {
             )}
 
             {/* Password update form */}
-            <form onSubmit={submit} style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
-              <label style={{ display: 'flex', flexDirection: 'column', gap: '6px' }}>
+            <form onSubmit={submit} style={{ display: 'flex', flexDirection: 'column', gap: '20px' }}>
+              <label style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
                 <span style={{ fontWeight: 600, fontSize: '0.88rem', color: 'var(--color-text)' }}>Current password</span>
                 <Input
                   type="password"
@@ -162,7 +162,7 @@ export const DoctorSettings = () => {
                   required
                   placeholder="Enter your current password"
                   style={{
-                    borderRadius: '8px',
+                    borderRadius: '2px',
                     minHeight: '44px',
                     border: '1px solid var(--color-border)',
                     background: 'var(--color-surface-interactive)',
@@ -171,7 +171,7 @@ export const DoctorSettings = () => {
                 />
               </label>
 
-              <label style={{ display: 'flex', flexDirection: 'column', gap: '6px' }}>
+              <label style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
                 <span style={{ fontWeight: 600, fontSize: '0.88rem', color: 'var(--color-text)' }}>New password</span>
                 <Input
                   type="password"
@@ -182,7 +182,7 @@ export const DoctorSettings = () => {
                   required
                   placeholder="At least 10 characters"
                   style={{
-                    borderRadius: '8px',
+                    borderRadius: '2px',
                     minHeight: '44px',
                     border: '1px solid var(--color-border)',
                     background: 'var(--color-surface-interactive)',
@@ -196,7 +196,7 @@ export const DoctorSettings = () => {
                 variant="primary"
                 className="doctor-btn-primary"
                 disabled={changePassword.isPending}
-                style={{ marginTop: '8px', minHeight: '44px', fontWeight: 700, borderRadius: '8px' }}
+                style={{ marginTop: '10px', minHeight: '44px', fontWeight: 700, borderRadius: '2px' }}
               >
                 {changePassword.isPending ? "Changing…" : "Change password"}
               </Button>
@@ -208,7 +208,7 @@ export const DoctorSettings = () => {
         <Card
           variant="default"
           style={{
-            padding: '28px',
+            padding: 'clamp(28px, 3.5vw, 36px)',
             background: 'var(--color-surface-white)',
             border: '1px solid var(--color-border)',
             borderRadius: '2px',
@@ -216,32 +216,32 @@ export const DoctorSettings = () => {
             display: 'flex',
             flexDirection: 'column',
             justifyContent: 'space-between',
-            gap: '24px',
+            gap: '28px',
           }}
         >
           <div>
-            <div style={{ display: 'flex', alignItems: 'center', gap: '12px', marginBottom: '24px', paddingBottom: '16px', borderBottom: '1px solid var(--color-border)' }}>
-              <div style={{ width: '36px', height: '36px', borderRadius: '2px', background: 'var(--color-accent-muted)', display: 'grid', placeItems: 'center', color: 'var(--color-doctor-primary)' }}>
-                <ShieldCheck size={18} />
+            <div style={{ display: 'flex', alignItems: 'center', gap: '14px', marginBottom: '28px', paddingBottom: '18px', borderBottom: '1px solid var(--color-border)' }}>
+              <div style={{ width: '40px', height: '40px', borderRadius: '2px', background: 'var(--color-accent-muted)', display: 'grid', placeItems: 'center', color: 'var(--color-doctor-primary)' }}>
+                <ShieldCheck size={20} />
               </div>
               <h2 style={{ margin: 0, fontSize: '1.25rem', fontWeight: 700, color: 'var(--color-text)', fontFamily: 'Inter, sans-serif', letterSpacing: '-0.02em' }}>
                 Account Information & Privacy Boundary
               </h2>
             </div>
 
-            <div style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
-              <div style={{ padding: '16px 20px', background: 'var(--color-surface-subtle)', borderRadius: '2px', border: '1px solid var(--color-border)' }}>
-                <p className="caption" style={{ margin: '0 0 4px', textTransform: 'uppercase', letterSpacing: '0.08em', color: 'var(--color-text-muted)', fontWeight: 700 }}>Account Type</p>
+            <div style={{ display: 'flex', flexDirection: 'column', gap: '18px' }}>
+              <div style={{ padding: '18px 22px', background: 'var(--color-surface-subtle)', borderRadius: '2px', border: '1px solid var(--color-border)' }}>
+                <p className="caption" style={{ margin: '0 0 6px', textTransform: 'uppercase', letterSpacing: '0.08em', color: 'var(--color-text-muted)', fontWeight: 700 }}>Account Type</p>
                 <strong style={{ fontSize: '1rem', color: 'var(--color-text)' }}>Controlled Directory Doctor</strong>
               </div>
 
-              <div style={{ padding: '16px 20px', background: 'var(--color-surface-subtle)', borderRadius: '2px', border: '1px solid var(--color-border)' }}>
-                <p className="caption" style={{ margin: '0 0 4px', textTransform: 'uppercase', letterSpacing: '0.08em', color: 'var(--color-text-muted)', fontWeight: 700 }}>Access Level</p>
+              <div style={{ padding: '18px 22px', background: 'var(--color-surface-subtle)', borderRadius: '2px', border: '1px solid var(--color-border)' }}>
+                <p className="caption" style={{ margin: '0 0 6px', textTransform: 'uppercase', letterSpacing: '0.08em', color: 'var(--color-text-muted)', fontWeight: 700 }}>Access Level</p>
                 <strong style={{ fontSize: '1rem', color: 'var(--color-text)' }}>Appointment-restricted patient context</strong>
               </div>
 
-              <div style={{ padding: '16px 20px', background: 'var(--color-accent-muted)', borderRadius: '2px', border: '1px solid var(--color-doctor-primary)', display: 'flex', alignItems: 'flex-start', gap: '12px' }}>
-                <UserCheck size={20} color="var(--color-doctor-primary)" style={{ flexShrink: 0, marginTop: '2px' }} />
+              <div style={{ padding: '18px 22px', background: 'var(--color-accent-muted)', borderRadius: '2px', border: '1px solid var(--color-doctor-primary)', display: 'flex', alignItems: 'flex-start', gap: '14px' }}>
+                <UserCheck size={22} color="var(--color-doctor-primary)" style={{ flexShrink: 0, marginTop: '2px' }} />
                 <p style={{ margin: 0, fontSize: '0.88rem', color: 'var(--color-text)', lineHeight: 1.6 }}>
                   <strong>Note:</strong> This is a controlled LifeLink directory account. Records here are not verified doctor identities, credentials, or medical registrations.
                 </p>

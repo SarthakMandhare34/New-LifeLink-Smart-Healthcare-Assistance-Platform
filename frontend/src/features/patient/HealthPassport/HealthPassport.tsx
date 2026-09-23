@@ -57,15 +57,15 @@ type EmergencyContactItem = {
 // Helper returning dynamic CSS color styles based on clinical triage urgency level
 function urgencyBadgeStyle(urgency: string) {
   if (urgency === 'EMERGENCY') {
-    return { bg: 'var(--swiss-red-soft)', color: 'var(--swiss-red)', border: '1px solid #FECACA' };
+    return { bg: 'var(--swiss-red-soft)', color: 'var(--swiss-red)', border: '1px solid var(--swiss-red-border)' };
   }
   if (urgency === 'MODERATE') {
-    return { bg: '#FFFBEB', color: '#B45309', border: '1px solid #FDE68A' };
+    return { bg: 'var(--swiss-amber-bg)', color: 'var(--swiss-amber-text)', border: '1px solid var(--swiss-amber-border)' };
   }
   if (urgency === 'ERROR') {
-    return { bg: 'var(--swiss-red-soft)', color: 'var(--swiss-red)', border: '1px solid #FECACA' };
+    return { bg: 'var(--swiss-red-soft)', color: 'var(--swiss-red)', border: '1px solid var(--swiss-red-border)' };
   }
-  return { bg: 'var(--swiss-blue-soft)', color: 'var(--swiss-blue)', border: '1px solid #BFDBFE' };
+  return { bg: 'var(--swiss-blue-soft)', color: 'var(--swiss-blue)', border: '1px solid var(--swiss-blue-border)' };
 }
 
 // =========================================================================================
@@ -294,10 +294,10 @@ export const HealthPassport = () => {
 
   // Uniform glassmorphic card styling configuration
   const cardStyle = {
-    padding: '20px 24px',
+    padding: 'clamp(24px, 3.2vw, 32px)',
     display: 'flex',
     flexDirection: 'column' as const,
-    minHeight: '190px',
+    minHeight: '210px',
     background: 'var(--color-surface-white)',
     border: '1px solid var(--color-border)',
     borderRadius: 'var(--border-radius-md)',
@@ -316,10 +316,10 @@ export const HealthPassport = () => {
   };
 
   return (
-    <div style={{ display: 'flex', flexDirection: 'column', gap: '28px' }}>
+    <div style={{ display: 'flex', flexDirection: 'column', gap: '36px' }}>
       
       {/* Header with Title and Edit Toggle */}
-      <header style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', flexWrap: 'wrap', gap: '16px', borderBottom: '2px solid var(--color-border)', paddingBottom: '20px' }}>
+      <header style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', flexWrap: 'wrap', gap: '16px', borderBottom: '2px solid var(--color-border)', paddingBottom: '24px' }}>
         <div style={{ display: 'flex', alignItems: 'center', gap: '16px' }}>
           <div style={{ width: '44px', height: '44px', borderRadius: 'var(--border-radius-sm)', background: 'var(--color-primary-muted)', display: 'grid', placeItems: 'center', color: 'var(--color-primary)', flexShrink: 0 }}>
             <FileHeart size={24} />
@@ -390,22 +390,22 @@ export const HealthPassport = () => {
         <div 
           className="solid-clinical-surface"
           style={{ 
-            padding: '16px 20px', 
+            padding: '22px 28px', 
             borderRadius: 'var(--border-radius-md)', 
             border: '1px solid var(--color-border)', 
             background: 'var(--color-surface-white)',
             display: 'grid',
             gridTemplateColumns: 'repeat(auto-fit, minmax(min(100%, 200px), 1fr))',
-            gap: '16px',
+            gap: '24px',
           }}
         >
           <div>
             <span className="caption" style={{ textTransform: 'uppercase', fontSize: '10px', fontWeight: 700, color: 'var(--color-text-muted)', letterSpacing: '0.05em' }}>Full Name</span>
-            <div style={{ fontWeight: 700, fontSize: '1rem', color: 'var(--color-text)' }}>{patient.name || 'Verified Patient'}</div>
+            <div style={{ fontWeight: 700, fontSize: '1rem', color: 'var(--color-text)', marginTop: '2px' }}>{patient.name || 'Verified Patient'}</div>
           </div>
           <div>
             <span className="caption" style={{ textTransform: 'uppercase', fontSize: '10px', fontWeight: 700, color: 'var(--color-text-muted)', letterSpacing: '0.05em' }}>Registered Contact</span>
-            <div style={{ fontWeight: 600, fontSize: '0.95rem', color: 'var(--color-text)' }}>{patient.phone || patient.email || 'On record'}</div>
+            <div style={{ fontWeight: 600, fontSize: '0.95rem', color: 'var(--color-text)', marginTop: '2px' }}>{patient.phone || patient.email || 'On record'}</div>
           </div>
 
         </div>
@@ -419,10 +419,10 @@ export const HealthPassport = () => {
             display: 'flex',
             alignItems: 'center',
             gap: '12px',
-            padding: '12px 16px',
+            padding: '14px 18px',
             background: 'rgba(220, 38, 38, 0.08)',
             border: '1px solid rgba(220, 38, 38, 0.25)',
-            borderRadius: '10px',
+            borderRadius: '4px',
             color: 'var(--color-semantic-emergency)',
             fontSize: '0.9rem',
           }}
@@ -436,12 +436,12 @@ export const HealthPassport = () => {
           TOP ROW: Blood Group, Allergies, Existing Conditions Cards
           ===================================================================================== */}
       <section
-        style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(min(100%, 280px), 1fr))', gap: '20px' }}
+        style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(min(100%, 280px), 1fr))', gap: '24px' }}
         aria-label="Core clinical information"
       >
         {/* Blood Group Card */}
         <Card style={cardStyle}>
-          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '16px' }}>
+          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '20px' }}>
             <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
               <div style={iconCircleStyle}><Droplets size={20} /></div>                         {/* Blood droplet icon */}
               <h2 style={{ margin: 0, fontSize: '1.1rem', fontWeight: 700, color: 'var(--color-text)' }}>
@@ -510,7 +510,7 @@ export const HealthPassport = () => {
 
         {/* Allergies Card */}
         <Card style={cardStyle}>
-          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '16px' }}>
+          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '20px' }}>
             <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
               <div style={iconCircleStyle}><ShieldAlert size={20} /></div>                      {/* Warning shield icon */}
               <h2 style={{ margin: 0, fontSize: '1.1rem', fontWeight: 700, color: 'var(--color-text)' }}>
@@ -577,7 +577,7 @@ export const HealthPassport = () => {
 
         {/* Existing Conditions Card */}
         <Card style={cardStyle}>
-          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '16px' }}>
+          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '20px' }}>
             <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
               <div style={iconCircleStyle}><Activity size={20} /></div>                         {/* Activity/pulse icon */}
               <h2 style={{ margin: 0, fontSize: '1.1rem', fontWeight: 700, color: 'var(--color-text)' }}>
@@ -624,7 +624,7 @@ export const HealthPassport = () => {
                         borderRadius: 'var(--border-radius-badge)',
                         background: 'var(--swiss-blue-soft)',
                         color: 'var(--swiss-blue)',
-                        border: '1px solid #BFDBFE',
+                        border: '1px solid var(--swiss-blue-border)',
                         fontSize: '0.85rem',
                         fontWeight: 600,
                       }}
@@ -646,9 +646,9 @@ export const HealthPassport = () => {
       {/* =====================================================================================
           EMERGENCY CONTACTS SECTION
           ===================================================================================== */}
-      <section style={{ display: 'flex', flexDirection: 'column', gap: '16px' }} aria-labelledby="emergency-contacts-title">
+      <section style={{ display: 'flex', flexDirection: 'column', gap: '20px' }} aria-labelledby="emergency-contacts-title">
         <Card style={cardStyle}>
-          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: '12px', marginBottom: '16px' }}>
+          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: '16px', marginBottom: '22px' }}>
             <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
               <div style={iconCircleStyle}><Users size={20} /></div>                            {/* Users icon */}
               <div>
@@ -743,15 +743,15 @@ export const HealthPassport = () => {
       {/* =====================================================================================
           PREVIOUS HEALTH ASSESSMENTS / HISTORY
           ===================================================================================== */}
-      <section style={{ display: 'flex', flexDirection: 'column', gap: '16px' }} aria-labelledby="assessment-history-title">
+      <section style={{ display: 'flex', flexDirection: 'column', gap: '20px' }} aria-labelledby="assessment-history-title">
         <Card style={cardStyle}>
-          <div style={{ display: 'flex', alignItems: 'center', gap: '10px', marginBottom: '16px' }}>
+          <div style={{ display: 'flex', alignItems: 'center', gap: '10px', marginBottom: '22px' }}>
             <div style={iconCircleStyle}><Clock size={20} /></div>                              {/* Clock / history icon */}
             <div>
               <h2 id="assessment-history-title" style={{ margin: 0, fontSize: '1.25rem', fontWeight: 700, color: 'var(--color-text)' }}>
                 Health History & Previous Assessments
               </h2>
-              <p style={{ margin: '2px 0 0', color: 'var(--color-text-muted)', fontSize: '0.85rem' }}>
+              <p style={{ margin: '4px 0 0', color: 'var(--color-text-muted)', fontSize: '0.85rem' }}>
                 Persisted clinical triage records linked to your health passport.
               </p>
             </div>
@@ -761,20 +761,20 @@ export const HealthPassport = () => {
           {assessmentsQuery.isLoading ? (
             <p style={{ color: 'var(--color-text-muted)', fontSize: '0.9rem', fontStyle: 'italic' }}>Loading health history…</p>
           ) : validAssessments.length > 0 ? (
-            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(min(100%, 260px), 1fr))', gap: '14px' }}>
+            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(min(100%, 260px), 1fr))', gap: '18px' }}>
               {validAssessments.map((item: any) => {
                 const badge = urgencyBadgeStyle(item.urgency);                                  // Calculate styling based on urgency tier
                 return (
                   <div
                     key={item.id}
                     style={{
-                      padding: '16px',
-                      borderRadius: '10px',
+                      padding: '18px 20px',
+                      borderRadius: '4px',
                       background: 'var(--color-background)',
                       border: '1px solid var(--color-border)',
                       display: 'flex',
                       flexDirection: 'column',
-                      gap: '8px',
+                      gap: '10px',
                     }}
                   >
                     <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>

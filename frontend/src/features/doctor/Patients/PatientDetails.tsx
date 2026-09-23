@@ -102,51 +102,51 @@ export const PatientView = () => {
   };
 
   return (
-    <div style={{ display: "flex", flexDirection: "column", gap: "var(--spacing-4)" }}>
+    <div style={{ display: "flex", flexDirection: "column", gap: "36px", width: "100%" }}>
       {/* Header */}
       <header>
-        <h1>Patient Record</h1>
-        <p className="caption">{patient.name} · Appointment-authorized summary</p>
+        <h1 style={{ margin: 0 }}>Patient Record</h1>
+        <p className="caption" style={{ margin: "6px 0 0" }}>{patient.name} · Appointment-authorized summary</p>
       </header>
 
       {/* Health Passport summary */}
-      <Card>
-        <h2>Health Passport summary</h2>
-        <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(min(100%, 170px), 1fr))", gap: "var(--spacing-3)", marginTop: "var(--spacing-3)" }}>
-          <div>
-            <p className="caption">Blood group</p>
-            <strong>{patient.bloodGroup}</strong>                                               {/* Patient blood group */}
+      <Card style={{ padding: "clamp(26px, 3.5vw, 32px)", borderRadius: "2px" }}>
+        <h2 style={{ margin: "0 0 20px" }}>Health Passport summary</h2>
+        <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(min(100%, 180px), 1fr))", gap: "20px" }}>
+          <div style={{ padding: "16px 20px", background: "var(--color-surface-subtle)", borderRadius: "2px", border: "1px solid var(--color-border)" }}>
+            <p className="caption" style={{ margin: "0 0 6px" }}>Blood group</p>
+            <strong style={{ fontSize: "1.1rem" }}>{patient.bloodGroup}</strong>                                               {/* Patient blood group */}
           </div>
-          <div>
-            <p className="caption">Allergies</p>
+          <div style={{ padding: "16px 20px", background: "var(--color-surface-subtle)", borderRadius: "2px", border: "1px solid var(--color-border)" }}>
+            <p className="caption" style={{ margin: "0 0 6px" }}>Allergies</p>
             <strong>{listOrNotRecorded(patient.allergies)}</strong>                             {/* Allergies */}
           </div>
-          <div>
-            <p className="caption">Conditions</p>
+          <div style={{ padding: "16px 20px", background: "var(--color-surface-subtle)", borderRadius: "2px", border: "1px solid var(--color-border)" }}>
+            <p className="caption" style={{ margin: "0 0 6px" }}>Conditions</p>
             <strong>{listOrNotRecorded(patient.conditions)}</strong>                            {/* Chronic conditions */}
           </div>
         </div>
-        <p className="caption" style={{ marginTop: "var(--spacing-4)" }}>Email, phone, emergency contacts, and unrelated patient records are intentionally not exposed to this doctor workspace.</p>
+        <p className="caption" style={{ marginTop: "20px" }}>Email, phone, emergency contacts, and unrelated patient records are intentionally not exposed to this doctor workspace.</p>
       </Card>
 
       {/* Booking Context */}
-      <Card>
-        <h2 style={{ display: "flex", alignItems: "center", gap: "var(--spacing-2)" }}>
-          <CalendarCheck size={20} /> Booking context
+      <Card style={{ padding: "clamp(26px, 3.5vw, 32px)", borderRadius: "2px" }}>
+        <h2 style={{ display: "flex", alignItems: "center", gap: "10px", margin: "0 0 20px" }}>
+          <CalendarCheck size={22} color="var(--color-doctor-primary)" /> Booking context
         </h2>
-        <div style={{ display: "grid", gap: "var(--spacing-2)", marginTop: "var(--spacing-3)" }}>
+        <div style={{ display: "grid", gap: "16px" }}>
           {appointments.map((appointment) => (
-            <div key={appointment.id} style={{ display: "flex", justifyContent: "space-between", alignItems: "center", flexWrap: "wrap", gap: "var(--spacing-2)", padding: "var(--spacing-2)", border: "1px solid var(--color-border)", borderRadius: "var(--border-radius-sm)" }}>
+            <div key={appointment.id} style={{ display: "flex", justifyContent: "space-between", alignItems: "center", flexWrap: "wrap", gap: "16px", padding: "18px 22px", border: "1px solid var(--color-border)", borderRadius: "2px", background: "var(--color-surface-subtle)" }}>
               <div>
-                <strong>{new Date(appointment.scheduledAt).toLocaleString()} · {appointment.status}</strong>
-                <p className="caption" style={{ margin: "4px 0 0" }}>Reason: {appointment.reason || "No booking reason was recorded."}</p>
+                <strong style={{ fontSize: "1rem" }}>{new Date(appointment.scheduledAt).toLocaleString()} · {appointment.status}</strong>
+                <p className="caption" style={{ margin: "6px 0 0" }}>Reason: {appointment.reason || "No booking reason was recorded."}</p>
               </div>
               {appointment.status === "Requested" || appointment.status === "Pending" ? (
-                <Button size="sm" variant="primary" disabled={updateStatus.isPending} aria-label={`Accept appointment on ${new Date(appointment.scheduledAt).toLocaleDateString()}`} onClick={() => updateStatus.mutate({ id: appointment.id, status: "Confirmed" })}>
+                <Button size="sm" variant="primary" disabled={updateStatus.isPending} aria-label={`Accept appointment on ${new Date(appointment.scheduledAt).toLocaleDateString()}`} onClick={() => updateStatus.mutate({ id: appointment.id, status: "Confirmed" })} style={{ borderRadius: "2px" }}>
                   Accept Appointment
                 </Button>
               ) : appointment.status === "Confirmed" ? (
-                <Button size="sm" variant="secondary" disabled={updateStatus.isPending} aria-label={`Mark appointment on ${new Date(appointment.scheduledAt).toLocaleDateString()} completed`} onClick={() => updateStatus.mutate({ id: appointment.id, status: "Completed" })}>
+                <Button size="sm" variant="secondary" disabled={updateStatus.isPending} aria-label={`Mark appointment on ${new Date(appointment.scheduledAt).toLocaleDateString()} completed`} onClick={() => updateStatus.mutate({ id: appointment.id, status: "Completed" })} style={{ borderRadius: "2px" }}>
                   ✓ Mark Completed
                 </Button>
               ) : null}
@@ -156,81 +156,81 @@ export const PatientView = () => {
       </Card>
 
       {/* Submitted Assessment Summaries */}
-      <Card>
-        <h2 style={{ display: "flex", alignItems: "center", gap: "var(--spacing-2)" }}>
-          <Activity size={20} /> Submitted assessment summaries
+      <Card style={{ padding: "clamp(26px, 3.5vw, 32px)", borderRadius: "2px" }}>
+        <h2 style={{ display: "flex", alignItems: "center", gap: "10px", margin: "0 0 20px" }}>
+          <Activity size={22} color="var(--color-doctor-primary)" /> Submitted assessment summaries
         </h2>
         {assessments.length ? (
-          <div style={{ display: "grid", gap: "var(--spacing-3)", marginTop: "var(--spacing-3)" }}>
+          <div style={{ display: "grid", gap: "16px" }}>
             {assessments.map((assessment) => (
-              <div key={assessment.id} style={{ padding: "var(--spacing-3)", border: "1px solid var(--color-border)", borderRadius: "var(--border-radius-sm)" }}>
-                <strong>{assessment.specialty} · {assessment.urgency}</strong>
-                <p style={{ margin: "var(--spacing-2) 0 0" }}><b>Symptoms:</b> {assessment.symptoms}</p>
-                <p className="caption" style={{ margin: "4px 0 0" }}>Duration: {assessment.duration} · Patient context: {assessment.reason}</p>
-                <p className="caption" style={{ margin: "4px 0 0" }}>Automated guidance: {assessment.guidance}</p>
+              <div key={assessment.id} style={{ padding: "18px 22px", border: "1px solid var(--color-border)", borderRadius: "2px", background: "var(--color-surface-subtle)" }}>
+                <strong style={{ fontSize: "1rem" }}>{assessment.specialty} · {assessment.urgency}</strong>
+                <p style={{ margin: "10px 0 0" }}><b>Symptoms:</b> {assessment.symptoms}</p>
+                <p className="caption" style={{ margin: "6px 0 0" }}>Duration: {assessment.duration} · Patient context: {assessment.reason}</p>
+                <p className="caption" style={{ margin: "6px 0 0" }}>Automated guidance: {assessment.guidance}</p>
               </div>
             ))}
           </div>
         ) : (
-          <p className="caption">No patient-submitted assessments are available for this assigned record.</p>
+          <p className="caption" style={{ margin: 0 }}>No patient-submitted assessments are available for this assigned record.</p>
         )}
       </Card>
 
       {/* Patient Medicines */}
-      <Card>
-        <h2 style={{ display: "flex", alignItems: "center", gap: "var(--spacing-2)" }}>
-          <Pill size={20} /> Medicines
+      <Card style={{ padding: "clamp(26px, 3.5vw, 32px)", borderRadius: "2px" }}>
+        <h2 style={{ display: "flex", alignItems: "center", gap: "10px", margin: "0 0 20px" }}>
+          <Pill size={22} color="var(--color-doctor-primary)" /> Medicines
         </h2>
         {medicines.length ? (
-          <div style={{ display: "grid", gap: "var(--spacing-2)", marginTop: "var(--spacing-3)" }}>
+          <div style={{ display: "grid", gap: "16px" }}>
             {medicines.map((medicine) => (
-              <div key={medicine.id} style={{ padding: "var(--spacing-2)", border: "1px solid var(--color-border)", borderRadius: "var(--border-radius-sm)" }}>
-                <strong>{medicine.name}</strong>
-                <p className="caption" style={{ margin: "4px 0 0" }}>{medicine.dosage} · {medicine.frequency} · {medicine.schedule}</p>
+              <div key={medicine.id} style={{ padding: "16px 20px", border: "1px solid var(--color-border)", borderRadius: "2px", background: "var(--color-surface-subtle)" }}>
+                <strong style={{ fontSize: "1rem" }}>{medicine.name}</strong>
+                <p className="caption" style={{ margin: "6px 0 0" }}>{medicine.dosage} · {medicine.frequency} · {medicine.schedule}</p>
               </div>
             ))}
           </div>
         ) : (
-          <p className="caption">No medicines have been recorded by this patient.</p>
+          <p className="caption" style={{ margin: 0 }}>No medicines have been recorded by this patient.</p>
         )}
       </Card>
 
       {/* Create Prescription Suite */}
-      <Card>
-        <h2 style={{ display: "flex", alignItems: "center", gap: "var(--spacing-2)" }}>
-          <FileText size={20} /> Create prescription
+      <Card style={{ padding: "clamp(26px, 3.5vw, 32px)", borderRadius: "2px" }}>
+        <h2 style={{ display: "flex", alignItems: "center", gap: "10px", margin: "0 0 20px" }}>
+          <FileText size={22} color="var(--color-doctor-primary)" /> Create prescription
         </h2>
         {hasActiveOrCompleted ? (
-          <form onSubmit={submitPrescription} style={{ display: "grid", gap: "var(--spacing-3)", marginTop: "var(--spacing-3)" }}>
-            <label className="auth-field">
-              <span>Clinical notes (optional)</span>
-              <textarea value={clinicalNotes} onChange={(event) => setClinicalNotes(event.target.value)} maxLength={4000} rows={3} style={{ width: "100%", resize: "vertical" }} />
+          <form onSubmit={submitPrescription} style={{ display: "grid", gap: "20px" }}>
+            <label className="auth-field" style={{ display: "flex", flexDirection: "column", gap: "8px" }}>
+              <span style={{ fontWeight: 600, fontSize: "0.88rem" }}>Clinical notes (optional)</span>
+              <textarea value={clinicalNotes} onChange={(event) => setClinicalNotes(event.target.value)} maxLength={4000} rows={3} style={{ width: "100%", resize: "vertical", padding: "12px 14px", borderRadius: "2px", border: "1px solid var(--color-border)" }} />
             </label>
             {items.map((item, index) => (
-              <div key={index} style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(min(100%, 140px), 1fr)) auto", gap: "var(--spacing-2)", alignItems: "center", padding: "var(--spacing-2)", border: "1px solid var(--color-border)", borderRadius: "var(--border-radius-sm)" }}>
+              <div key={index} style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(min(100%, 140px), 1fr)) auto", gap: "14px", alignItems: "center", padding: "16px 18px", border: "1px solid var(--color-border)", borderRadius: "2px", background: "var(--color-surface-subtle)" }}>
                 <Input placeholder="Medicine name" aria-label={`Medicine name ${index + 1}`} value={item.name} onChange={(event) => updateItem(index, "name", event.target.value)} required />
                 <Input placeholder="Dosage" aria-label={`Dosage ${index + 1}`} value={item.dosage} onChange={(event) => updateItem(index, "dosage", event.target.value)} required />
                 <Input placeholder="Instructions" aria-label={`Instructions ${index + 1}`} value={item.instructions} onChange={(event) => updateItem(index, "instructions", event.target.value)} required />
                 {items.length > 1 ? (
-                  <Button type="button" variant="outline" size="sm" onClick={() => removeItem(index)} aria-label={`Remove item ${index + 1}`} style={{ borderColor: "rgba(197, 48, 48, 0.3)", color: "var(--color-semantic-error)", height: "38px", padding: "0 8px" }}>
+                  <Button type="button" variant="outline" size="sm" onClick={() => removeItem(index)} aria-label={`Remove item ${index + 1}`} style={{ borderColor: "rgba(197, 48, 48, 0.3)", color: "var(--color-semantic-error)", height: "38px", padding: "0 8px", borderRadius: "2px" }}>
                     <Trash2 size={14} />
                   </Button>
                 ) : null}
               </div>
             ))}
-            <div style={{ display: "flex", gap: "var(--spacing-2)", flexWrap: "wrap" }}>
-              <Button type="button" variant="secondary" onClick={() => setItems((current) => [...current, { name: "", dosage: "", instructions: "" }])}>
+            <div style={{ display: "flex", gap: "16px", flexWrap: "wrap", marginTop: "8px" }}>
+              <Button type="button" variant="secondary" onClick={() => setItems((current) => [...current, { name: "", dosage: "", instructions: "" }])} style={{ borderRadius: "2px" }}>
                 Add medicine
               </Button>
-              <Button type="submit" variant="primary" disabled={createPrescription.isPending}>
+              <Button type="submit" variant="primary" disabled={createPrescription.isPending} style={{ borderRadius: "2px" }}>
                 {createPrescription.isPending ? "Creating…" : "Create prescription"}
               </Button>
             </div>
             {prescriptionMessage ? <p role="status" className="caption">{prescriptionMessage}</p> : null}
-            <p className="caption">This creates an unsigned clinician-workspace prescription for the assigned patient. It is not a real signed medical order.</p>
+            <p className="caption" style={{ margin: 0 }}>This creates an unsigned clinician-workspace prescription for the assigned patient. It is not a real signed medical order.</p>
           </form>
         ) : (
-          <p className="caption">Accept the assigned appointment before creating a prescription for this patient.</p>
+          <p className="caption" style={{ margin: 0 }}>Accept the assigned appointment before creating a prescription for this patient.</p>
         )}
       </Card>
     </div>

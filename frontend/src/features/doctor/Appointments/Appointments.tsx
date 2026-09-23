@@ -71,23 +71,23 @@ export const DoctorAppointments = () => {
       case "Cancelled":
         return <span style={{ display: "inline-flex", alignItems: "center", gap: 4, background: "var(--swiss-red-soft)", color: "var(--swiss-red)", border: "1px solid var(--swiss-red)", padding: "3px 8px", borderRadius: "2px", fontSize: "0.78rem", fontWeight: 700 }}><XCircle size={13} /> Cancelled</span>;
       default:
-        return <span style={{ display: "inline-flex", alignItems: "center", gap: 4, background: "rgba(217, 119, 6, 0.1)", color: "#B45309", border: "1px solid #D97706", padding: "3px 8px", borderRadius: "2px", fontSize: "0.78rem", fontWeight: 700 }}><Clock size={13} /> {status}</span>;
+        return <span style={{ display: "inline-flex", alignItems: "center", gap: 4, background: "var(--swiss-amber-bg)", color: "var(--swiss-amber-text)", border: "1px solid var(--swiss-amber-border)", padding: "3px 8px", borderRadius: "2px", fontSize: "0.78rem", fontWeight: 700 }}><Clock size={13} /> {status}</span>;
     }
   };
 
   return (
-    <div style={{ display: "flex", flexDirection: "column", gap: "var(--spacing-4)" }}>
+    <div style={{ display: "flex", flexDirection: "column", gap: "36px", width: "100%" }}>
       {/* Page Header */}
       <header>
-        <h1>Appointments</h1>
-        <p className="caption">
+        <h1 style={{ margin: 0 }}>Appointments</h1>
+        <p className="caption" style={{ margin: "6px 0 0" }}>
           Manage patient appointment requests, confirm consultations, and mark finished consultations as Completed.
         </p>
       </header>
 
       {/* Dismissible feedback notification message */}
       {feedbackMessage && (
-        <div style={{ background: "var(--color-surface-interactive)", border: "1px solid var(--color-border)", color: "var(--color-text)", padding: "var(--spacing-3)", borderRadius: "var(--border-radius-sm)", display: "flex", justifyContent: "space-between", alignItems: "center" }}>
+        <div style={{ background: "var(--color-surface-interactive)", border: "1px solid var(--color-border)", color: "var(--color-text)", padding: "16px 20px", borderRadius: "2px", display: "flex", justifyContent: "space-between", alignItems: "center" }}>
           <span><strong>Status updated:</strong> {feedbackMessage}</span>
           <button type="button" aria-label="Dismiss status notification" onClick={() => setFeedbackMessage(null)} style={{ background: "none", border: "none", cursor: "pointer", color: "var(--color-text)", fontWeight: "bold", fontSize: "1.2rem", padding: "4px 8px" }}>×</button>
         </div>
@@ -95,14 +95,14 @@ export const DoctorAppointments = () => {
 
       {/* Empty appointment list fallback */}
       {!appointments.data?.length ? (
-        <Card style={{ textAlign: "center", padding: "var(--spacing-8) var(--spacing-4)" }}>
-          <Clock size={36} style={{ color: "var(--color-text-secondary)", opacity: 0.5, margin: "0 auto var(--spacing-3)" }} />
-          <p style={{ margin: 0, fontWeight: 600, color: "var(--color-text)" }}>No assigned appointments yet.</p>
-          <p className="caption" style={{ margin: "4px 0 0", color: "var(--color-text-secondary)" }}>When patients book consultations with you, they will appear here for review.</p>
+        <Card style={{ textAlign: "center", padding: "var(--spacing-10) var(--spacing-6)", borderRadius: "2px" }}>
+          <Clock size={40} style={{ color: "var(--color-text-muted)", opacity: 0.5, margin: "0 auto var(--spacing-3)" }} />
+          <p style={{ margin: 0, fontWeight: 600, color: "var(--color-text)", fontSize: "1.1rem" }}>No assigned appointments yet.</p>
+          <p className="caption" style={{ margin: "6px 0 0", color: "var(--color-text-muted)" }}>When patients book consultations with you, they will appear here for review.</p>
         </Card>
       ) : (
         /* Appointment item cards list */
-        <div style={{ display: "flex", flexDirection: "column", gap: "var(--spacing-3)" }}>
+        <div style={{ display: "flex", flexDirection: "column", gap: "20px" }}>
           {appointments.data.map((appointment) => {
             const isPending = appointment.status === "Requested" || appointment.status === "Pending"; // True if awaiting doctor decision
             const isConfirmed = appointment.status === "Confirmed";                                 // True if visit is active and confirmed
@@ -114,30 +114,32 @@ export const DoctorAppointments = () => {
                 style={{
                   display: "flex",
                   justifyContent: "space-between",
-                  gap: "var(--spacing-3)",
+                  gap: "20px",
                   alignItems: "center",
                   flexWrap: "wrap",
+                  padding: "24px 28px",
+                  borderRadius: "2px",
                   borderLeft: getBorderColor(appointment.status),                              // Lifecycle color strip
                 }}
               >
                 {/* Appointment & Patient Info */}
                 <div style={{ flex: "1 1 min(100%, 360px)" }}>
-                  <div style={{ display: "flex", alignItems: "center", gap: "var(--spacing-2)", marginBottom: "4px" }}>
+                  <div style={{ display: "flex", alignItems: "center", gap: "10px", marginBottom: "6px" }}>
                     <h3 style={{ margin: 0 }}>{appointment.patient.name}</h3>                   {/* Patient legal name */}
                     {getStatusBadge(appointment.status)}                                        {/* Status badge */}
                   </div>
-                  <p className="caption" style={{ margin: "var(--spacing-1) 0" }}>
+                  <p className="caption" style={{ margin: "4px 0" }}>
                     Scheduled: <span style={{ fontVariantNumeric: "tabular-nums" }}>{new Date(appointment.scheduledAt).toLocaleString()}</span>
                   </p>
-                  <p style={{ margin: "var(--spacing-2) 0" }}>
+                  <p style={{ margin: "8px 0 0", fontSize: "0.92rem" }}>
                     <strong>Booking reason:</strong> {appointment.reason}                       {/* Patient's reported symptom / reason */}
                   </p>
                 </div>
 
                 {/* Doctor Action Controls */}
-                <div style={{ display: "flex", gap: "var(--spacing-2)", flexWrap: "wrap" }}>
+                <div style={{ display: "flex", gap: "12px", flexWrap: "wrap" }}>
                   {/* View patient health record */}
-                  <Button variant="secondary" onClick={() => navigate(`/doctor/patients/${appointment.patient.id}`)}>
+                  <Button variant="secondary" onClick={() => navigate(`/doctor/patients/${appointment.patient.id}`)} style={{ borderRadius: "2px" }}>
                     Review patient
                   </Button>
 

@@ -39,7 +39,7 @@ export const RouteLoader: React.FC = () => {
         {/* User-friendly status message */}
         <span 
           className="text-xs font-medium tracking-wide"
-          style={{ color: 'var(--swiss-gray-700, #475569)' }}
+          style={{ color: 'var(--color-text-muted)' }}
         >
           Loading workspace...
         </span>

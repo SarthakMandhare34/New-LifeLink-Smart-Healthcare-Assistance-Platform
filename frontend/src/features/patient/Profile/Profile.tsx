@@ -124,22 +124,22 @@ export const Profile = () => {
   };
 
   return (
-    <div className="container patient-profile-page" style={{ maxWidth: '840px', margin: '0 auto' }}>
+    <div className="container patient-profile-page" style={{ maxWidth: '840px', margin: '0 auto', display: 'flex', flexDirection: 'column', gap: '36px' }}>
       {/* Profile Header */}
-      <header className="patient-profile-heading flex items-center gap-3" style={{ marginBottom: '24px' }}>
-        <div style={{ width: 48, height: 48, borderRadius: '4px', background: 'var(--color-primary-muted)', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
-          <User size={24} style={{ color: 'var(--color-primary)' }} />
+      <header className="patient-profile-heading flex items-center gap-3">
+        <div style={{ width: 52, height: 52, borderRadius: '2px', background: 'var(--color-primary-muted)', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
+          <User size={26} style={{ color: 'var(--color-primary)' }} />
         </div>
         <div>
           <h1 style={{ margin: 0 }}>Patient Profile</h1>
-          <p className="caption" style={{ margin: '4px 0 0' }}>Manage identity information and contact preferences.</p>
+          <p className="caption" style={{ margin: '6px 0 0' }}>Manage identity information and contact preferences.</p>
         </div>
       </header>
 
       {/* Main Profile Card */}
-      <Card className="patient-profile-card" style={{ padding: 'var(--spacing-6)' }}>
+      <Card className="patient-profile-card" style={{ padding: 'clamp(28px, 4vw, 38px)', borderRadius: '2px' }}>
         {/* Avatar and Identity banner */}
-        <div className="patient-profile-identity" style={{ display: 'flex', alignItems: 'center', gap: '20px', marginBottom: '28px', flexWrap: 'wrap' }}>
+        <div className="patient-profile-identity" style={{ display: 'flex', alignItems: 'center', gap: '24px', marginBottom: '32px', flexWrap: 'wrap' }}>
           <label className="profile-photo-picker" title="Click to choose a new photo">
             <input 
               id="profile-photo-input"
@@ -158,10 +158,10 @@ export const Profile = () => {
             </span>
           </label>
           <div style={{ flex: 1, minWidth: '200px' }}>
-            <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: '12px', flexWrap: 'wrap' }}>
+            <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: '16px', flexWrap: 'wrap' }}>
               <div>
                 <h2 style={{ margin: 0, fontSize: 'var(--text-h2)' }}>{profile.name}</h2>
-                <div className="flex items-center gap-2 mt-1">
+                <div className="flex items-center gap-2 mt-2">
                   <Badge status="success"><CheckCircle2 size={12} /> Patient Account</Badge>
                   <span className="caption">Private profile</span>
                 </div>
@@ -172,47 +172,48 @@ export const Profile = () => {
                 size="sm" 
                 onClick={() => document.getElementById('profile-photo-input')?.click()} 
                 disabled={isPhotoSaving}
+                style={{ borderRadius: '2px' }}
               >
                 <Camera size={14} /> {isPhotoSaving ? 'Saving…' : 'Select Photo'}
               </Button>
             </div>
-            {isPhotoSaving && <p className="caption" style={{ margin: '6px 0 0', color: 'var(--color-primary)', fontWeight: 600 }}>Saving your profile photo…</p>}
+            {isPhotoSaving && <p className="caption" style={{ margin: '8px 0 0', color: 'var(--color-primary)', fontWeight: 600 }}>Saving your profile photo…</p>}
           </div>
         </div>
 
         {/* Error Alerts */}
-        {photoError && <div className="alert-panel" style={{ marginBottom: '16px' }}><span style={{ fontSize: 'var(--text-caption)' }}>{photoError}</span></div>}
+        {photoError && <div className="alert-panel" style={{ marginBottom: '20px' }}><span style={{ fontSize: 'var(--text-caption)' }}>{photoError}</span></div>}
         {error && (
-          <div className="alert-panel" style={{ marginBottom: '16px' }}>
+          <div className="alert-panel" style={{ marginBottom: '20px' }}>
             <span style={{ fontSize: 'var(--text-caption)' }}>{error}</span>
           </div>
         )}
 
         {/* Form fields */}
-        <form onSubmit={handleSave} style={{ display: 'flex', flexDirection: 'column', gap: '20px' }}>
-          <div style={{ display: 'flex', gap: '16px', flexWrap: 'wrap' }}>
+        <form onSubmit={handleSave} style={{ display: 'flex', flexDirection: 'column', gap: '24px' }}>
+          <div style={{ display: 'flex', gap: '20px', flexWrap: 'wrap' }}>
              <div style={{ flex: '1 1 240px' }}>
-               <label htmlFor="profile-first-name" style={{ display: 'block', marginBottom: 'var(--spacing-1)', fontWeight: 600, fontSize: 'var(--text-caption)' }}>First Name</label>
+               <label htmlFor="profile-first-name" style={{ display: 'block', marginBottom: '8px', fontWeight: 600, fontSize: 'var(--text-caption)' }}>First Name</label>
                <Input id="profile-first-name" type="text" value={first} onChange={e => setFirst(e.target.value)} required />
              </div>
              <div style={{ flex: '1 1 240px' }}>
-               <label htmlFor="profile-last-name" style={{ display: 'block', marginBottom: 'var(--spacing-1)', fontWeight: 600, fontSize: 'var(--text-caption)' }}>Last Name</label>
+               <label htmlFor="profile-last-name" style={{ display: 'block', marginBottom: '8px', fontWeight: 600, fontSize: 'var(--text-caption)' }}>Last Name</label>
                <Input id="profile-last-name" type="text" value={last} onChange={e => setLast(e.target.value)} required />
              </div>
           </div>
 
           <div>
-            <label htmlFor="profile-email" style={{ display: 'block', marginBottom: 'var(--spacing-1)', fontWeight: 600, fontSize: 'var(--text-caption)' }}>Registered Email Address</label>
-            <Input id="profile-email" type="email" value={profile.email} readOnly style={{ background: 'var(--color-surface-interactive)', color: 'var(--color-text-secondary)', cursor: 'not-allowed' }} />
+            <label htmlFor="profile-email" style={{ display: 'block', marginBottom: '8px', fontWeight: 600, fontSize: 'var(--text-caption)' }}>Registered Email Address</label>
+            <Input id="profile-email" type="email" value={profile.email} readOnly style={{ background: 'var(--color-surface-interactive)', color: 'var(--color-text-muted)', cursor: 'not-allowed' }} />
           </div>
 
           <div>
-            <label htmlFor="profile-phone" style={{ display: 'block', marginBottom: 'var(--spacing-1)', fontWeight: 600, fontSize: 'var(--text-caption)' }}>Primary Contact Phone</label>
+            <label htmlFor="profile-phone" style={{ display: 'block', marginBottom: '8px', fontWeight: 600, fontSize: 'var(--text-caption)' }}>Primary Contact Phone</label>
             <Input id="profile-phone" type="tel" value={phone} onChange={e => setPhone(e.target.value)} />
           </div>
 
-          <div style={{ display: 'flex', alignItems: 'center', gap: '16px', marginTop: '8px' }}>
-            <Button type="submit" variant="primary" disabled={isSaving}>
+          <div style={{ display: 'flex', alignItems: 'center', gap: '20px', marginTop: '12px' }}>
+            <Button type="submit" variant="primary" disabled={isSaving} style={{ borderRadius: '2px' }}>
               {isSaving ? 'Saving Changes...' : 'Save Profile Changes'}
             </Button>
             {success && <span style={{ color: 'var(--color-semantic-success)', fontWeight: 600, fontSize: 'var(--text-caption)' }}>Profile updated successfully!</span>}

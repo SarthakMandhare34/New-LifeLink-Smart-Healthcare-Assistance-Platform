@@ -135,6 +135,18 @@ export async function getUserByOpenId(openId: string) {
   return result.length > 0 ? result[0] : undefined;
 }
 
+// Finds a user account by their unique database numeric primary key ID
+export async function getUserById(id: number) {
+  const db = await getDb();
+  if (!db) {
+    console.warn("[Database] Cannot get user: database not available");
+    return undefined;
+  }
+
+  const result = await db.select().from(users).where(eq(users.id, id)).limit(1);
+  return result.length > 0 ? result[0] : undefined;
+}
+
 export type ExternalAuthProvider = "google";
 
 export class ProviderAccountConflictError extends Error {
@@ -211,8 +223,21 @@ export async function createPatientAssessment(assessment: InsertPatientAssessmen
   const db = await getDb();
   if (!db) throw new Error("Database is not available");
 
-  const result = await db.insert(patientAssessments).values(assessment);
-  return Number(result[0].insertId);
+  // Safeguard: verify patient user exists in users table before attempting insert
+  const existingUser = await getUserById(assessment.userId);
+  if (!existingUser) {
+    throw new Error(`PATIENT_USER_NOT_FOUND: User ID ${assessment.userId} does not exist in database.`);
+  }
+
+  try {
+    const result = await db.insert(patientAssessments).values(assessment);
+    return Number(result[0].insertId);
+  } catch (error: any) {
+    if (error?.code === "ER_NO_REFERENCED_ROW_2" || error?.message?.includes("foreign key")) {
+      throw new Error(`PATIENT_USER_NOT_FOUND: User ID ${assessment.userId} does not exist in database.`);
+    }
+    throw error;
+  }
 }
 
 export async function getPatientAssessments(userId: number) {

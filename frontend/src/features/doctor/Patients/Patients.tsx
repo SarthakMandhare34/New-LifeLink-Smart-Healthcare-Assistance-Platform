@@ -38,11 +38,11 @@ export const Patients = () => {
   if (patients.isError) return <p role="alert">Unable to load authorized patients. Please try again.</p>;
 
   return (
-    <div className="dashboard-workspace">
+    <div className="dashboard-workspace" style={{ display: 'flex', flexDirection: 'column', gap: '36px' }}>
       {/* Roster header banner */}
-      <header className="mb-4 flex items-center gap-3" style={{ marginBottom: 'var(--spacing-5)' }}>
-        <div style={{ width: 44, height: 44, borderRadius: '2px', background: 'var(--swiss-blue-soft)', border: '1px solid var(--swiss-blue)', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
-          <Users size={22} style={{ color: 'var(--swiss-blue)' }} />
+      <header className="flex items-center gap-3" style={{ marginBottom: 0 }}>
+        <div style={{ width: 48, height: 48, borderRadius: '2px', background: 'var(--swiss-blue-soft)', border: '1px solid var(--swiss-blue)', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
+          <Users size={24} style={{ color: 'var(--swiss-blue)' }} />
         </div>
         <div>
           <h1 style={{ margin: 0 }}>Patient Roster</h1>
@@ -57,8 +57,8 @@ export const Patients = () => {
 
       {/* Empty roster state */}
       {!patients.data?.length ? (
-        <Card style={{ padding: 'var(--spacing-10) var(--spacing-6)', textAlign: 'center' }}>
-          <UserCheck size={44} style={{ color: 'var(--color-text-secondary)', opacity: 0.5, margin: '0 auto var(--spacing-3)' }} />
+        <Card style={{ padding: 'var(--spacing-10) var(--spacing-6)', textAlign: 'center', borderRadius: '2px' }}>
+          <UserCheck size={44} style={{ color: 'var(--color-text-muted)', opacity: 0.5, margin: '0 auto var(--spacing-3)' }} />
           <h2 style={{ margin: '0 0 var(--spacing-2)', fontSize: '1.2rem', color: 'var(--color-text)' }}>No authorized patients yet</h2>
           <p className="caption" style={{ margin: '0 auto', maxWidth: '440px' }}>Patients appear here once an appointment is assigned and confirmed to your account.</p>
           <Button variant="primary" style={{ marginTop: 'var(--spacing-4)', borderRadius: '2px', background: 'var(--swiss-blue)' }} onClick={() => navigate('/doctor/appointments')}>
@@ -67,23 +67,23 @@ export const Patients = () => {
         </Card>
       ) : (
         /* Patient cards grid */
-        <section className="responsive-list-grid" style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(320px, 1fr))', gap: 'var(--spacing-4)' }}>
+        <section className="responsive-list-grid" style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(320px, 1fr))', gap: '24px' }}>
           {patients.data.map((patient) => (
-            <Card key={patient.id} style={{ padding: 'var(--spacing-5)', cursor: 'pointer', borderRadius: '2px' }}
+            <Card key={patient.id} style={{ padding: '24px 28px', cursor: 'pointer', borderRadius: '2px' }}
               onClick={() => navigate(`/doctor/patients/${patient.id}`)}>
-              <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', flexWrap: 'wrap', gap: '12px' }}>
-                <div style={{ display: 'flex', alignItems: 'center', gap: '14px' }}>
+              <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', flexWrap: 'wrap', gap: '16px' }}>
+                <div style={{ display: 'flex', alignItems: 'center', gap: '16px' }}>
                   {/* Patient initial square avatar */}
-                  <div style={{ width: 40, height: 40, borderRadius: '2px', background: 'var(--swiss-blue-soft)', border: '1px solid var(--swiss-blue)', display: 'flex', alignItems: 'center', justifyContent: 'center', color: 'var(--swiss-blue)', fontSize: '1.1rem', fontWeight: 700, flexShrink: 0 }}>
+                  <div style={{ width: 44, height: 44, borderRadius: '2px', background: 'var(--swiss-blue-soft)', border: '1px solid var(--swiss-blue)', display: 'flex', alignItems: 'center', justifyContent: 'center', color: 'var(--swiss-blue)', fontSize: '1.1rem', fontWeight: 700, flexShrink: 0 }}>
                     {patient.name.charAt(0).toUpperCase()}
                   </div>
                   <div>
-                    <strong style={{ fontSize: '1rem', display: 'block', color: 'var(--color-text)' }}>{patient.name}</strong>
-                    <p className="caption" style={{ margin: '2px 0 0', fontSize: '0.75rem' }}>Appointment-authorized access</p>
+                    <strong style={{ fontSize: '1.02rem', display: 'block', color: 'var(--color-text)' }}>{patient.name}</strong>
+                    <p className="caption" style={{ margin: '3px 0 0', fontSize: '0.78rem' }}>Appointment-authorized access</p>
                   </div>
                 </div>
                 {/* Direct action button */}
-                <Button variant="secondary" size="sm" style={{ flexShrink: 0 }}
+                <Button variant="secondary" size="sm" style={{ flexShrink: 0, borderRadius: '2px' }}
                   onClick={(e) => { e.stopPropagation(); navigate(`/doctor/patients/${patient.id}`); }}>
                   View record <ArrowRight size={14} />
                 </Button>

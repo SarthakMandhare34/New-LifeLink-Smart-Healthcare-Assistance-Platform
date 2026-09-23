@@ -123,15 +123,15 @@ export const MedicineCabinet = () => {
   };
 
   return (
-    <div className="container medicine-cabinet-page">
+    <div className="container medicine-cabinet-page" style={{ display: 'flex', flexDirection: 'column', gap: '36px', width: '100%', padding: 0 }}>
       {/* Header section with icon, title, and action button */}
-      <header style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: '16px', marginBottom: '28px' }}>
+      <header style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: '16px' }}>
         <div style={{ display: 'flex', alignItems: 'center', gap: '16px' }}>
           <div style={{ width: 48, height: 48, borderRadius: '4px', background: 'var(--color-primary-muted)', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
             <Pill size={24} style={{ color: 'var(--color-primary)' }} />
           </div>
           <div>
-            <h1 style={{ margin: 0, fontSize: '1.6rem', fontWeight: 700, letterSpacing: '-0.02em', color: 'var(--color-text)' }}>Smart Medicine Cabinet</h1>
+            <h1 style={{ margin: 0, fontSize: '1.85rem', fontWeight: 700, letterSpacing: '-0.02em', color: 'var(--color-text)' }}>Smart Medicine Cabinet</h1>
             <p className="caption" style={{ margin: '4px 0 0', color: 'var(--color-text-muted)' }}>Manage active medications, schedules, and stock alerts.</p>
           </div>
         </div>
@@ -143,43 +143,43 @@ export const MedicineCabinet = () => {
       </header>
 
       {/* Network or validation error display banner */}
-      {mutationError && <div className="alert-panel" style={{ marginBottom: '20px' }}><span className="caption">{mutationError}</span></div>}
+      {mutationError && <div className="alert-panel" style={{ marginBottom: '12px' }}><span className="caption">{mutationError}</span></div>}
 
       {/* Inline medication entry / edit form */}
       {showForm && (
-        <Card style={{ marginBottom: '24px', padding: 'var(--spacing-5)' }}>
-          <form onSubmit={handleSubmit} style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
-            <h3 style={{ margin: 0 }}>{editingId ? 'Edit Medication Record' : 'Add New Medication'}</h3>
+        <Card style={{ padding: 'clamp(24px, 3.2vw, 32px)' }}>
+          <form onSubmit={handleSubmit} style={{ display: 'flex', flexDirection: 'column', gap: '20px' }}>
+            <h3 style={{ margin: 0, fontSize: '1.2rem', fontWeight: 700, color: 'var(--color-text)' }}>{editingId ? 'Edit Medication Record' : 'Add New Medication'}</h3>
             <div>
-              <label htmlFor="medicine-name" style={{ display: 'block', marginBottom: '4px', fontWeight: 600, fontSize: 'var(--text-caption)' }}>Medicine Name</label>
+              <label htmlFor="medicine-name" style={{ display: 'block', marginBottom: '6px', fontWeight: 600, fontSize: 'var(--text-caption)' }}>Medicine Name</label>
               <Input id="medicine-name" type="text" value={formData.name || ''} onChange={e => setFormData({...formData, name: e.target.value})} required placeholder="E.g., Lisinopril, Amoxicillin..." />
             </div>
-            <div className="flex flex-col sm:flex-row gap-3">
+            <div className="flex flex-col sm:flex-row gap-4">
               <div style={{ flex: 1 }}>
-                <label htmlFor="medicine-dosage" style={{ display: 'block', marginBottom: '4px', fontWeight: 600, fontSize: 'var(--text-caption)' }}>Dosage</label>
+                <label htmlFor="medicine-dosage" style={{ display: 'block', marginBottom: '6px', fontWeight: 600, fontSize: 'var(--text-caption)' }}>Dosage</label>
                 <Input id="medicine-dosage" type="text" value={formData.dosage || ''} onChange={e => setFormData({...formData, dosage: e.target.value})} placeholder="e.g. 10mg" required />
               </div>
               <div style={{ flex: 1 }}>
-                <label htmlFor="medicine-schedule" style={{ display: 'block', marginBottom: '4px', fontWeight: 600, fontSize: 'var(--text-caption)' }}>Schedule</label>
+                <label htmlFor="medicine-schedule" style={{ display: 'block', marginBottom: '6px', fontWeight: 600, fontSize: 'var(--text-caption)' }}>Schedule</label>
                 <Input id="medicine-schedule" type="text" value={formData.schedule || ''} onChange={e => setFormData({...formData, schedule: e.target.value})} placeholder="e.g. Morning, Daily" required />
               </div>
             </div>
-            <div className="flex flex-col sm:flex-row gap-3">
+            <div className="flex flex-col sm:flex-row gap-4">
               <div style={{ flex: 1 }}>
-                <label htmlFor="medicine-frequency" style={{ display: 'block', marginBottom: '4px', fontWeight: 600, fontSize: 'var(--text-caption)' }}>Frequency</label>
+                <label htmlFor="medicine-frequency" style={{ display: 'block', marginBottom: '6px', fontWeight: 600, fontSize: 'var(--text-caption)' }}>Frequency</label>
                 <Input id="medicine-frequency" type="text" value={formData.frequency || ''} onChange={e => setFormData({...formData, frequency: e.target.value})} placeholder="e.g. Once daily" required />
               </div>
               <div style={{ flex: 1 }}>
-                <label htmlFor="medicine-quantity" style={{ display: 'block', marginBottom: '4px', fontWeight: 600, fontSize: 'var(--text-caption)' }}>Quantity (units)</label>
+                <label htmlFor="medicine-quantity" style={{ display: 'block', marginBottom: '6px', fontWeight: 600, fontSize: 'var(--text-caption)' }}>Quantity (units)</label>
                 <Input id="medicine-quantity" type="number" min={0} value={formData.quantity ?? ''} onChange={e => setFormData({...formData, quantity: e.target.value ? Number(e.target.value) : undefined})} placeholder="e.g. 30" />
               </div>
               <div style={{ flex: 1 }}>
-                <label htmlFor="medicine-expiry" style={{ display: 'block', marginBottom: '4px', fontWeight: 600, fontSize: 'var(--text-caption)' }}>Expiry Date</label>
+                <label htmlFor="medicine-expiry" style={{ display: 'block', marginBottom: '6px', fontWeight: 600, fontSize: 'var(--text-caption)' }}>Expiry Date</label>
                 <Input id="medicine-expiry" type="date" value={formData.expiry || ''} onChange={e => setFormData({...formData, expiry: e.target.value})} />
               </div>
             </div>
             {/* Form action buttons */}
-            <div className="flex gap-2 mt-2">
+            <div className="flex gap-3 mt-2">
               <Button type="button" variant="outline" onClick={() => setShowForm(false)} disabled={isProcessing}>Cancel</Button>
               <Button type="submit" variant="primary" disabled={isProcessing}>
                 {isProcessing ? 'Processing...' : 'Save Medication'}
@@ -190,7 +190,7 @@ export const MedicineCabinet = () => {
       )}
 
       {/* Structured Medical Register View */}
-      <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
+      <div style={{ display: 'flex', flexDirection: 'column', gap: '20px' }}>
         {activeMedicines.map((med) => (
           <div 
             key={med.id}
@@ -199,23 +199,23 @@ export const MedicineCabinet = () => {
               borderLeft: '4px solid var(--color-semantic-success)',
               display: 'flex',
               flexDirection: 'column',
-              gap: '12px',
-              padding: '16px 20px',
+              gap: '18px',
+              padding: '22px 28px',
               opacity: processingId === med.id ? 0.5 : 1,
               borderRadius: 'var(--border-radius-md)',
               border: '1px solid var(--color-border)',
               background: 'var(--color-surface-white)',
             }}
           >
-            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', flexWrap: 'wrap', gap: '10px' }}>
-              <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
-                <Pill style={{ color: 'var(--color-primary)' }} size={20} />
+            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', flexWrap: 'wrap', gap: '12px' }}>
+              <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
+                <Pill style={{ color: 'var(--color-primary)' }} size={22} />
                 <div>
-                  <h3 style={{ margin: 0, fontSize: '1.05rem', fontWeight: 700, color: 'var(--color-text)' }}>{med.name}</h3>
-                  <span className="caption" style={{ color: 'var(--color-text-muted)' }}>Registered Clinical Item</span>
+                  <h3 style={{ margin: 0, fontSize: '1.15rem', fontWeight: 700, color: 'var(--color-text)' }}>{med.name}</h3>
+                  <span className="caption" style={{ color: 'var(--color-text-muted)', marginTop: '2px', display: 'block' }}>Registered Clinical Item</span>
                 </div>
               </div>
-              <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+              <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
                 <Badge status="success">Active</Badge>
                 <Button
                   variant="secondary"
@@ -281,9 +281,9 @@ export const MedicineCabinet = () => {
         {/* Empty state message when cabinet has 0 items */}
         {activeMedicines.length === 0 && (
           <Card style={{ textAlign: 'center', padding: 'var(--spacing-8) var(--spacing-4)' }}>
-            <Pill size={36} style={{ color: 'var(--color-text-secondary)', opacity: 0.5, margin: '0 auto var(--spacing-3)' }} />
+            <Pill size={36} style={{ color: 'var(--color-text-muted)', opacity: 0.5, margin: '0 auto var(--spacing-3)' }} />
             <p style={{ margin: 0, fontWeight: 600, color: 'var(--color-text)' }}>No active medications in cabinet.</p>
-            <p className="caption" style={{ margin: '4px 0 0', color: 'var(--color-text-secondary)' }}>Add your medications to track schedules, dosages, and reminders.</p>
+            <p className="caption" style={{ margin: '4px 0 0', color: 'var(--color-text-muted)' }}>Add your medications to track schedules, dosages, and reminders.</p>
           </Card>
         )}
       </div>

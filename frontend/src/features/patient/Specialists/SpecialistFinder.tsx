@@ -284,16 +284,16 @@ export const SpecialistFinder = () => {
   const facets = facetsQuery.data;
 
   return (
-    <div className="container" style={{ padding: 0 }}>
+    <div className="container" style={{ padding: 0, display: 'flex', flexDirection: 'column', gap: '32px' }}>
       {/* Page header */}
-      <header className="mb-4 flex items-center justify-between">
+      <header className="flex items-center justify-between" style={{ marginBottom: 0 }}>
         <div className="flex items-center gap-3">
-          <div style={{ width: 40, height: 40, borderRadius: 'var(--border-radius-sm)', background: 'var(--color-primary-muted)', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-            <UserCheck size={22} color="var(--color-primary)" />
+          <div style={{ width: 44, height: 44, borderRadius: '2px', background: 'var(--color-primary-muted)', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+            <UserCheck size={24} color="var(--color-primary)" />
           </div>
           <div>
             <h1 style={{ margin: 0, fontWeight: 700, letterSpacing: '-0.02em', color: 'var(--color-text)', fontSize: '2rem' }}>Specialist Finder</h1>
-            <p className="caption" style={{ color: 'var(--color-text-muted)', margin: '2px 0 0' }}>Browse available Mumbai specialists by clinical specialty, view clinics on the live map, and request appointments in real time.</p>
+            <p className="caption" style={{ color: 'var(--color-text-muted)', margin: '4px 0 0' }}>Browse available Mumbai specialists by clinical specialty, view clinics on the live map, and request appointments in real time.</p>
           </div>
         </div>
 
@@ -306,7 +306,7 @@ export const SpecialistFinder = () => {
       </header>
 
       {/* Filter and appointment parameters card */}
-      <Card variant="default" className="discovery-refinement-card mb-4">
+      <Card variant="default" className="discovery-refinement-card">
         <div className="discovery-refinement-content">
           {/* Specialty dropdown filter */}
           <div className="discovery-filter-grid" style={{ gridTemplateColumns: '1fr' }}>
@@ -385,8 +385,8 @@ export const SpecialistFinder = () => {
                 {/* Morning & Afternoon Session: 10:00 to 15:00 */}
                 <div style={{ marginBottom: '12px' }}>
                   <div style={{ display: 'flex', alignItems: 'center', gap: '6px', marginBottom: '8px' }}>
-                    <Sun size={14} color="#D97706" />
-                    <span style={{ fontSize: '0.76rem', fontWeight: 700, color: '#B45309', textTransform: 'uppercase', letterSpacing: '0.04em' }}>
+                    <Sun size={14} color="var(--swiss-amber-text)" />
+                    <span style={{ fontSize: '0.76rem', fontWeight: 700, color: 'var(--swiss-amber-text)', textTransform: 'uppercase', letterSpacing: '0.04em' }}>
                       Morning & Afternoon Session (10:00 AM – 3:00 PM)
                     </span>
                   </div>
@@ -417,7 +417,7 @@ export const SpecialistFinder = () => {
                             background: isSelected
                               ? 'var(--color-primary)'
                               : isUnavailable
-                              ? 'rgba(0, 0, 0, 0.04)'
+                              ? 'var(--color-surface-subtle)'
                               : 'var(--color-surface-white)',
                             color: isSelected
                               ? '#FFFFFF'
@@ -442,8 +442,8 @@ export const SpecialistFinder = () => {
                 {/* Evening Session: 19:00 to 22:00 */}
                 <div>
                   <div style={{ display: 'flex', alignItems: 'center', gap: '6px', marginBottom: '8px' }}>
-                    <Moon size={14} color="#6366F1" />
-                    <span style={{ fontSize: '0.76rem', fontWeight: 700, color: '#4F46E5', textTransform: 'uppercase', letterSpacing: '0.04em' }}>
+                    <Moon size={14} color="var(--color-accent)" />
+                    <span style={{ fontSize: '0.76rem', fontWeight: 700, color: 'var(--color-accent)', textTransform: 'uppercase', letterSpacing: '0.04em' }}>
                       Evening Session (7:00 PM – 10:00 PM)
                     </span>
                   </div>
@@ -474,7 +474,7 @@ export const SpecialistFinder = () => {
                             background: isSelected
                               ? 'var(--color-primary)'
                               : isUnavailable
-                              ? 'rgba(0, 0, 0, 0.04)'
+                              ? 'var(--color-surface-subtle)'
                               : 'var(--color-surface-white)',
                             color: isSelected
                               ? '#FFFFFF'
@@ -561,7 +561,7 @@ export const SpecialistFinder = () => {
             {displayedDoctors.map((doctor) => {
               const isSelected = selectedDocId === doctor.id;
               return (
-                  <Card key={doctor.id} variant="default" interactive selected={isSelected} className="h-full flex-col justify-between" onClick={() => selectDoctor(doctor.id)}>
+                  <Card key={doctor.id} variant="default" interactive selected={isSelected} className="h-full flex-col justify-between" style={{ padding: '24px 26px', borderRadius: '2px' }} onClick={() => selectDoctor(doctor.id)}>
                     <div>
                       <div className="flex justify-between items-start mb-2">
                         <div>

@@ -84,7 +84,7 @@ export const DoctorLogin = () => {
           <div style={{ textAlign: 'center', maxWidth: '440px', display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
             
             {/* Proportional Brand Treatment (Section 11) */}
-            <div style={{ marginBottom: '20px', display: 'inline-flex', alignItems: 'center', justifyContent: 'center' }}>
+            <div style={{ marginBottom: '24px', display: 'inline-flex', alignItems: 'center', justifyContent: 'center' }}>
               <LifeLinkLogo className="lifelink-logo-auth" style={{ width: '100%', maxWidth: '240px', height: 'auto', margin: 0, padding: 0, border: 'none', background: 'transparent', boxShadow: 'none' }} />
             </div>
             
@@ -117,29 +117,29 @@ export const DoctorLogin = () => {
         </div>
 
         {/* Form Container (Right Column): Solid Clinical Card */}
-        <div style={{ flex: 1.1, display: 'flex', justifyContent: 'center', alignItems: 'center', padding: 'var(--spacing-4)', zIndex: 1 }}>
+        <div style={{ flex: 1.1, display: 'flex', justifyContent: 'center', alignItems: 'center', padding: 'clamp(24px, 4vw, 40px)', zIndex: 1 }}>
           <Card 
             className="card" 
             style={{ 
               width: '100%', 
-              maxWidth: '460px', 
+              maxWidth: '480px', 
               maxHeight: '90vh', 
               overflowY: 'auto', 
-              padding: 'clamp(24px, 4vw, 36px)',
+              padding: 'clamp(30px, 4.5vw, 44px)',
               background: 'var(--color-surface-white)',
               border: '1px solid var(--color-border)',
-              borderRadius: 'var(--border-radius-md)',
+              borderRadius: '2px',
               boxShadow: 'none'
             }}
           >
             {/* Form Card Header */}
-            <header className="auth-card-header" style={{ textAlign: 'center', marginBottom: '24px' }}>
+            <header className="auth-card-header" style={{ textAlign: 'center', marginBottom: '28px' }}>
               {/* Responsive Mobile Logo Showcase: Guarantees full brand visibility on mobile devices where left branding column is hidden */}
               <div className="auth-card-mobile-logo-wrap">
                 <LifeLinkLogo className="lifelink-logo-auth auth-card-mobile-logo" />
               </div>
 
-              <h1 id="doctor-login-heading" className="font-display" style={{ fontSize: '1.65rem', fontWeight: 700, marginBottom: '6px', color: 'var(--color-doctor-text)', letterSpacing: '-0.02em' }}>
+              <h1 id="doctor-login-heading" className="font-display" style={{ fontSize: '1.65rem', fontWeight: 700, marginBottom: '8px', color: 'var(--color-doctor-text)', letterSpacing: '-0.02em' }}>
                 Doctor Sign In
               </h1>
               <p style={{ color: 'var(--color-text-muted)', fontSize: '0.90rem', margin: 0 }}>
@@ -158,8 +158,8 @@ export const DoctorLogin = () => {
                   textAlign: 'center',
                   background: 'rgba(239, 68, 68, 0.12)',
                   border: '1px solid rgba(239, 68, 68, 0.25)',
-                  borderRadius: '4px',
-                  padding: '10px 14px',
+                  borderRadius: '2px',
+                  padding: '12px 16px',
                   fontSize: '0.88rem'
                 }}
               >
@@ -168,7 +168,7 @@ export const DoctorLogin = () => {
             )}
 
             {/* Doctor Login form */}
-            <form onSubmit={handleLogin} className="auth-form" style={{ display: 'grid', gap: '16px' }}>
+            <form onSubmit={handleLogin} className="auth-form" style={{ display: 'grid', gap: '20px' }}>
               {/* Doctor Work Email Field */}
               <div style={{ display: 'flex', flexDirection: 'column', gap: '6px' }}>
                 <label htmlFor="doctor-email" style={{ fontWeight: 600, fontSize: '0.86rem', color: 'var(--color-doctor-text)' }}>
@@ -187,8 +187,8 @@ export const DoctorLogin = () => {
                     style={{ 
                       width: '100%', 
                       paddingLeft: '42px', 
-                      borderRadius: '4px', 
-                      minHeight: '44px', 
+                      borderRadius: '2px', 
+                      minHeight: '48px', 
                       fontSize: '0.90rem',
                       border: '1px solid var(--color-doctor-input-border, var(--color-doctor-border))',
                       background: 'var(--color-surface-white)',
@@ -218,8 +218,8 @@ export const DoctorLogin = () => {
                       width: '100%', 
                       paddingLeft: '42px', 
                       paddingRight: '42px', 
-                      borderRadius: '4px', 
-                      minHeight: '44px', 
+                      borderRadius: '2px', 
+                      minHeight: '46px', 
                       fontSize: '0.90rem',
                       border: '1px solid var(--color-doctor-input-border, var(--color-doctor-border))',
                       background: 'var(--color-surface-white)',
@@ -248,9 +248,9 @@ export const DoctorLogin = () => {
                   border: '1px solid var(--color-doctor-accent)',
                   color: '#FFFFFF',
                   fontWeight: 700,
-                  borderRadius: '4px',
+                  borderRadius: '2px',
                   cursor: 'pointer',
-                  marginTop: '4px',
+                  marginTop: '8px',
                   boxShadow: '0 4px 12px rgba(12, 95, 102, 0.3)'
                 }}
               >
@@ -259,7 +259,7 @@ export const DoctorLogin = () => {
             </form>
 
             {/* Password recovery & Patient navigation */}
-            <div style={{ textAlign: 'center', marginTop: '20px', fontSize: '0.86rem', display: 'flex', flexDirection: 'column', gap: '8px' }}>
+            <div style={{ textAlign: 'center', marginTop: '24px', fontSize: '0.86rem', display: 'flex', flexDirection: 'column', gap: '10px' }}>
               <div style={{ display: 'flex', justifyContent: 'center', gap: '16px' }}>
                 <button
                   type="button"

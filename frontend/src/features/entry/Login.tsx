@@ -138,23 +138,23 @@ export const PatientLogin = () => {
         </div>
 
         {/* Form Container (Right Column): Solid Clinical Surface */}
-        <div style={{ flex: 1.1, display: 'flex', justifyContent: 'center', alignItems: 'center', padding: 'var(--spacing-4)', zIndex: 1 }}>
+        <div style={{ flex: 1.1, display: 'flex', justifyContent: 'center', alignItems: 'center', padding: 'var(--spacing-5)', zIndex: 1 }}>
           <Card 
             className="card" 
             style={{ 
               width: '100%', 
-              maxWidth: '460px', 
+              maxWidth: '480px', 
               maxHeight: '90vh', 
               overflowY: 'auto', 
-              padding: 'clamp(24px, 4vw, 36px)',
+              padding: 'clamp(30px, 4.5vw, 44px)',
               background: 'var(--color-surface-white)',
               border: '1px solid var(--color-border)',
-              borderRadius: 'var(--border-radius-md)',
+              borderRadius: '2px',
               boxShadow: 'none'
             }}
           >
             {/* Form Card Header */}
-            <header className="auth-card-header" style={{ textAlign: 'center', marginBottom: '24px' }}>
+            <header className="auth-card-header" style={{ textAlign: 'center', marginBottom: '28px' }}>
               <div className="auth-card-mobile-logo-wrap">
                 <LifeLinkLogo className="lifelink-logo-auth auth-card-mobile-logo" />
               </div>
@@ -173,13 +173,13 @@ export const PatientLogin = () => {
                 className="alert-panel auth-message" 
                 role="alert" 
                 style={{ 
-                  marginBottom: '20px', 
+                  marginBottom: '24px', 
                   color: 'var(--color-semantic-emergency)', 
                   textAlign: 'center',
                   background: 'rgba(220, 38, 38, 0.08)',
                   border: '1px solid rgba(220, 38, 38, 0.25)',
-                  borderRadius: '4px',
-                  padding: '10px 14px',
+                  borderRadius: '2px',
+                  padding: '12px 14px',
                   fontSize: '0.88rem'
                 }}
               >
@@ -188,9 +188,9 @@ export const PatientLogin = () => {
             )}
 
             {/* Login form */}
-            <form onSubmit={handleLogin} className="auth-form" style={{ display: 'grid', gap: '16px' }}>
+            <form onSubmit={handleLogin} className="auth-form" style={{ display: 'grid', gap: '20px' }}>
               {/* Email Input Field */}
-              <div style={{ display: 'flex', flexDirection: 'column', gap: '6px' }}>
+              <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
                 <label htmlFor="patient-email" style={{ fontWeight: 600, fontSize: '0.86rem', color: 'var(--color-text)' }}>
                   Email
                 </label>
@@ -207,7 +207,7 @@ export const PatientLogin = () => {
                     style={{ 
                       width: '100%', 
                       paddingLeft: '42px', 
-                      borderRadius: '8px', 
+                      borderRadius: '2px', 
                       minHeight: '44px', 
                       fontSize: '0.90rem',
                       border: '1px solid var(--color-input-border, var(--color-border))',
@@ -219,7 +219,7 @@ export const PatientLogin = () => {
               </div>
 
               {/* Password Input Field */}
-              <div style={{ display: 'flex', flexDirection: 'column', gap: '6px' }}>
+              <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
                 <label htmlFor="patient-password" style={{ fontWeight: 600, fontSize: '0.86rem', color: 'var(--color-text)' }}>
                   Password
                 </label>
@@ -237,7 +237,7 @@ export const PatientLogin = () => {
                       width: '100%', 
                       paddingLeft: '42px', 
                       paddingRight: '42px', 
-                      borderRadius: '8px', 
+                      borderRadius: '2px', 
                       minHeight: '44px', 
                       fontSize: '0.90rem',
                       border: '1px solid var(--color-input-border, var(--color-border))',
@@ -268,8 +268,8 @@ export const PatientLogin = () => {
                   padding: '11px', 
                   fontSize: '0.96rem', 
                   fontWeight: 600, 
-                  borderRadius: '8px', 
-                  marginTop: '4px', 
+                  borderRadius: '2px', 
+                  marginTop: '6px', 
                   cursor: 'pointer', 
                   opacity: isLoading ? 0.7 : 1
                 }}
@@ -279,13 +279,13 @@ export const PatientLogin = () => {
             </form>
 
             {/* Alternative authentication provider divider */}
-            <div className="social-auth" style={{ marginTop: '20px' }}>
+            <div className="social-auth" style={{ marginTop: '24px' }}>
               <div className="social-auth-divider" style={{ display: 'flex', alignItems: 'center', gap: '12px', color: 'var(--color-text-muted)', fontSize: '0.80rem' }}>
                 <div style={{ flex: 1, height: '1px', background: 'var(--color-border)' }} />
                 <span>OR CONTINUE WITH</span>
                 <div style={{ flex: 1, height: '1px', background: 'var(--color-border)' }} />
               </div>
-              <div className="social-auth-actions" style={{ marginTop: '12px' }}>
+              <div className="social-auth-actions" style={{ marginTop: '16px' }}>
                 <Button
                   type="button"
                   variant="outline"
@@ -293,7 +293,7 @@ export const PatientLogin = () => {
                   onClick={handleGoogleClick}
                   title="Continue with Google"
                   style={{ 
-                    borderRadius: '8px', 
+                    borderRadius: '2px', 
                     minHeight: '44px', 
                     fontSize: '0.90rem', 
                     width: '100%', 

@@ -53,14 +53,14 @@
 .discovery-workspace {
   display: flex;
   flex-direction: column;
-  gap: var(--spacing-5);
+  gap: 36px;
 }
 
 /* Full-width doctor card multi-column grid below the map */
 .discovery-full-grid {
   display: grid;
   grid-template-columns: repeat(3, minmax(0, 1fr));
-  gap: var(--spacing-4);
+  gap: 24px;
 }
 
 @media (min-width: 1400px) {
@@ -169,8 +169,9 @@
 .discovery-refinement-card {
   position: relative;
   overflow: hidden;
-  padding: clamp(18px, 2.7vw, 30px) !important;
+  padding: clamp(24px, 3.2vw, 34px) !important;
   border-color: var(--color-border) !important;
+  border-radius: 2px !important;
   background: var(--color-surface-white) !important;
   box-shadow: none !important;
 }
@@ -178,7 +179,7 @@
 .discovery-refinement-content {
   position: relative;
   display: grid;
-  gap: var(--spacing-4);
+  gap: 24px;
 }
 
 .discovery-refinement-content > * { min-width: 0; }
@@ -186,14 +187,14 @@
 .discovery-request-grid {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(min(100%, 300px), 1fr));
-  gap: 16px;
+  gap: 24px;
 }
 
 .discovery-request-field {
   min-width: 0;
-  padding: 14px;
+  padding: 20px 22px;
   border: 1px solid var(--color-border);
-  border-radius: var(--border-radius-md);
+  border-radius: 2px;
   background: var(--color-surface-interactive);
 }
 
@@ -309,5 +310,21 @@
   border-color: var(--color-border);
   background: var(--color-surface-interactive);
   color: var(--color-text);
+}
+
+:root[data-theme="dark"] .leaflet-popup-content-wrapper,
+:root[data-theme="dark"] .leaflet-popup-tip {
+  background: var(--swiss-dark-surface) !important;
+  color: var(--color-text) !important;
+  border: 1px solid var(--swiss-dark-border) !important;
+  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.6) !important;
+}
+
+:root[data-theme="dark"] .leaflet-popup-content {
+  color: var(--color-text) !important;
+}
+
+:root[data-theme="dark"] .leaflet-container {
+  background: var(--swiss-dark-bg) !important;
 }
 

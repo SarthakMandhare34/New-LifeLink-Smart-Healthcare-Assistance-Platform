@@ -247,7 +247,7 @@ export const AppShell = () => {
                 borderRadius: '2px',
                 fontSize: '0.88rem',
                 fontWeight: isActive ? 700 : 500,
-                color: isActive ? 'var(--swiss-red)' : 'var(--swiss-gray-700)',
+                color: isActive ? 'var(--swiss-red)' : 'var(--color-text)',
                 background: isActive ? 'var(--swiss-red-soft)' : 'transparent',
                 borderLeft: isActive ? '3px solid var(--swiss-red)' : '3px solid transparent',
                 textDecoration: 'none',
@@ -273,7 +273,7 @@ export const AppShell = () => {
               borderRadius: '2px',
               border: 'none',
               background: 'transparent',
-              color: 'var(--swiss-gray-700)',
+              color: 'var(--color-text)',
               fontSize: '0.88rem',
               fontWeight: 500,
               cursor: 'pointer',
@@ -434,7 +434,7 @@ export const AppShell = () => {
 
                   <div style={{ maxHeight: '360px', overflowY: 'auto' }}>
                     {notifications.length === 0 ? (
-                      <div style={{ padding: '24px 16px', textAlign: 'center', color: 'var(--swiss-gray-600)' }}>
+                      <div style={{ padding: '24px 16px', textAlign: 'center', color: 'var(--color-text-muted)' }}>
                         <Bell size={24} style={{ opacity: 0.3, margin: '0 auto 8px', display: 'block' }} />
                         <p style={{ margin: 0, fontSize: '0.85rem' }}>No notifications yet.</p>
                         <span className="caption" style={{ display: 'block', marginTop: '4px', fontSize: '0.78rem' }}>
