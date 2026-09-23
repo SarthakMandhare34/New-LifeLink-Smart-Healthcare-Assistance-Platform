@@ -28,21 +28,21 @@ function urgencyBadge(urgency: string) {
   if (urgency === 'EMERGENCY') {
     return { 
       bg: 'var(--swiss-red-soft)', 
-      color: 'var(--swiss-red)', 
-      border: '1px solid var(--swiss-red)' 
+      color: 'var(--color-primary)', 
+      border: '1px solid var(--swiss-red-border)' 
     };
   }
   if (urgency === 'MODERATE') {
     return { 
-      bg: 'rgba(217, 119, 6, 0.1)', 
-      color: '#B45309', 
-      border: '1px solid #D97706' 
+      bg: 'var(--swiss-amber-bg)', 
+      color: 'var(--swiss-amber-text)', 
+      border: '1px solid var(--swiss-amber-border)' 
     };
   }
   return { 
     bg: 'var(--swiss-blue-soft)', 
-    color: 'var(--swiss-blue)', 
-    border: '1px solid var(--swiss-blue)' 
+    color: 'var(--color-accent)', 
+    border: '1px solid var(--swiss-blue-border)' 
   };
 }
 
@@ -125,9 +125,9 @@ export const PatientDashboard = () => {
                 gap: '6px',
                 padding: '6px 12px',
                 background: 'var(--swiss-red-soft)',
-                border: '1px solid var(--swiss-red)',
+                border: '1px solid var(--swiss-red-border)',
                 borderRadius: '2px',
-                color: 'var(--swiss-red)',
+                color: 'var(--color-primary)',
                 fontSize: '0.82rem',
                 fontWeight: 700,
                 letterSpacing: '0.04em'
@@ -197,9 +197,9 @@ export const PatientDashboard = () => {
                   fontWeight: 700,
                   textTransform: 'uppercase',
                   letterSpacing: '0.04em',
-                  background: upcomingAppointment.status === 'Confirmed' ? 'var(--swiss-blue-soft)' : 'var(--swiss-gray-100)',
-                  color: upcomingAppointment.status === 'Confirmed' ? 'var(--swiss-blue)' : 'var(--swiss-gray-800)',
-                  border: '1px solid currentColor'
+                  background: upcomingAppointment.status === 'Confirmed' ? 'var(--swiss-blue-soft)' : 'var(--color-surface-subtle)',
+                  color: upcomingAppointment.status === 'Confirmed' ? 'var(--color-accent)' : 'var(--color-text)',
+                  border: upcomingAppointment.status === 'Confirmed' ? '1px solid var(--swiss-blue-border)' : '1px solid var(--color-border)'
                 }}>
                   {upcomingAppointment.status}
                 </span>
@@ -318,7 +318,7 @@ export const PatientDashboard = () => {
                 </div>
               ))}
               {medicines.length > 3 && (
-                <p style={{ fontSize: '0.78rem', color: 'var(--swiss-blue)', margin: '2px 0 0', fontWeight: 600 }}>
+                <p style={{ fontSize: '0.78rem', color: 'var(--color-accent)', margin: '2px 0 0', fontWeight: 600 }}>
                   +{medicines.length - 3} more on register
                 </p>
               )}
@@ -364,13 +364,13 @@ export const PatientDashboard = () => {
                   fontWeight: 700,
                   textTransform: 'uppercase',
                   background: 'var(--swiss-blue-soft)',
-                  color: 'var(--swiss-blue)',
-                  border: '1px solid var(--swiss-blue)'
+                  color: 'var(--color-accent)',
+                  border: '1px solid var(--swiss-blue-border)'
                 }}>
                   {latestPrescription.status}
                 </span>
-                <span style={{ display: 'inline-flex', alignItems: 'center', gap: '4px', fontSize: '0.75rem', color: 'var(--swiss-gray-600)' }}>
-                  <CheckCircle2 size={13} color="var(--swiss-blue)" /> SHA-256 Verified
+                <span style={{ display: 'inline-flex', alignItems: 'center', gap: '4px', fontSize: '0.75rem', color: 'var(--color-text-muted)' }}>
+                  <CheckCircle2 size={13} color="var(--color-accent)" /> SHA-256 Verified
                 </span>
               </div>
             </div>

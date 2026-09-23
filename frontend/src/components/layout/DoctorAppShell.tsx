@@ -348,7 +348,7 @@ export const DoctorAppShell = () => {
                     background: 'var(--color-surface-white)',
                     border: '1px solid var(--color-border)',
                     borderRadius: '2px',
-                    boxShadow: 'none',
+                    boxShadow: 'var(--shadow-lg)',
                     zIndex: 1000,
                     overflow: 'hidden',
                     display: 'flex',

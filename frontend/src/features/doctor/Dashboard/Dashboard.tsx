@@ -21,26 +21,26 @@ import { trpc } from "../../../lib/trpc";
 // Swiss semantic triage badge styling
 function urgencyBadge(urgency: string) {
   if (urgency === 'EMERGENCY') {
-    return { bg: 'var(--swiss-red-soft)', color: 'var(--swiss-red)', border: '1px solid var(--swiss-red)' };
+    return { bg: 'var(--swiss-red-soft)', color: 'var(--color-primary)', border: '1px solid var(--swiss-red-border)' };
   }
   if (urgency === 'MODERATE') {
-    return { bg: 'rgba(217, 119, 6, 0.1)', color: '#B45309', border: '1px solid #D97706' };
+    return { bg: 'var(--swiss-amber-bg)', color: 'var(--swiss-amber-text)', border: '1px solid var(--swiss-amber-border)' };
   }
-  return { bg: 'var(--swiss-blue-soft)', color: 'var(--swiss-blue)', border: '1px solid var(--swiss-blue)' };
+  return { bg: 'var(--swiss-blue-soft)', color: 'var(--color-doctor-primary)', border: '1px solid var(--swiss-blue-border)' };
 }
 
 // Swiss semantic appointment status styling
 function statusBadge(status: string) {
   if (status === 'Confirmed' || status === 'Completed') {
-    return { bg: 'var(--swiss-blue-soft)', color: 'var(--swiss-blue)', border: '1px solid var(--swiss-blue)' };
+    return { bg: 'var(--swiss-blue-soft)', color: 'var(--color-doctor-primary)', border: '1px solid var(--swiss-blue-border)' };
   }
   if (status === 'Cancelled') {
-    return { bg: 'var(--swiss-red-soft)', color: 'var(--swiss-red)', border: '1px solid var(--swiss-red)' };
+    return { bg: 'var(--swiss-red-soft)', color: 'var(--color-primary)', border: '1px solid var(--swiss-red-border)' };
   }
   if (status === 'Requested' || status === 'Pending') {
-    return { bg: 'rgba(217, 119, 6, 0.1)', color: '#B45309', border: '1px solid #D97706' };
+    return { bg: 'var(--swiss-amber-bg)', color: 'var(--swiss-amber-text)', border: '1px solid var(--swiss-amber-border)' };
   }
-  return { bg: 'var(--swiss-gray-100)', color: 'var(--swiss-gray-800)', border: '1px solid var(--swiss-gray-300)' };
+  return { bg: 'var(--color-surface-subtle)', color: 'var(--color-text)', border: '1px solid var(--color-border)' };
 }
 
 export const DoctorDashboard = () => {

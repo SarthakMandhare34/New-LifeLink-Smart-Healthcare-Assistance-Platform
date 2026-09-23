@@ -17,19 +17,29 @@
   /* Swiss Core Color System */
   --swiss-red: #E30613;
   --swiss-red-dark: #B8000B;
-  --swiss-red-soft: #FDECEC;
+  --swiss-red-soft: #FEF2F2;
+  --swiss-red-border: #FEE2E2;
 
   --swiss-blue: #0057B8;
   --swiss-blue-dark: #003B7A;
-  --swiss-blue-soft: #EAF2FB;
+  --swiss-blue-soft: #EFF6FF;
+  --swiss-blue-border: #DBEAFE;
+
+  --swiss-amber-bg: #FFFBEB;
+  --swiss-amber-border: #FDE68A;
+  --swiss-amber-text: #B45309;
+
+  --swiss-green-bg: #ECFDF5;
+  --swiss-green-border: #A7F3D0;
+  --swiss-green-text: #059669;
 
   --swiss-white: #FFFFFF;
-  --swiss-off-white: #F7F7F5;
-  --swiss-gray-100: #EDEDED;
+  --swiss-off-white: #F8FAFC;
+  --swiss-gray-100: #F1F5F9;
   --swiss-gray-300: #D9D9D9;
-  --swiss-gray-500: #8A8A8A;
-  --swiss-gray-700: #333333;
-  --swiss-black: #111111;
+  --swiss-gray-500: #64748B;
+  --swiss-gray-700: #1E293B;
+  --swiss-black: #0F172A;
 
   /* Strict Swiss Spacing System */
   --spacing-0: 4px;
@@ -97,29 +107,29 @@
    LIGHT MODE — Swiss Dominant White & Crisp Gray Grid System
    ═══════════════════════════════════════════════════════════════════════ */
 :root[data-theme="light"], :root {
-  /* Swiss Neutral Canvas & Surfaces (70-80% White dominant) */
-  --color-background: var(--swiss-off-white);          /* #F7F7F5 Structural Off-White Canvas */
+  /* Swiss Neutral Canvas & Surfaces (Crisp Architectural Light Grid) */
+  --color-background: var(--swiss-off-white);          /* #F8FAFC Crisp Clinical Slate Canvas */
   --color-surface-white: var(--swiss-white);           /* #FFFFFF Solid Pure White Primary Surface */
   --color-surface-glass: var(--swiss-white);           /* Solid Opaque Surface */
-  --color-surface-subtle: var(--swiss-gray-100);       /* #EDEDED Subtle Plate */
-  --color-surface-interactive: #F2F4F8;                /* Very soft crisp hover tint */
+  --color-surface-subtle: #F1F5F9;                     /* Subtle Plate */
+  --color-surface-interactive: #F1F5F9;                /* Clean Hover Tint */
   
-  /* Typography — Deep Clinical Charcoal / Ink */
-  --color-text: var(--swiss-black);                    /* #111111 High-contrast Ink */
-  --color-text-muted: var(--swiss-gray-500);           /* #8A8A8A Secondary Metadata */
+  /* Typography — Deep Clinical Charcoal / Slate Ink */
+  --color-text: var(--swiss-black);                    /* #0F172A High-contrast Editorial Slate Ink */
+  --color-text-muted: var(--swiss-gray-500);           /* #64748B Secondary Metadata (WCAG AAA) */
   --color-text-dark: var(--swiss-black);
 
   /* Hairline Borders & Inputs (Structural Lines over Shadows) */
-  --color-border: var(--swiss-gray-300);               /* #D9D9D9 1px Structural Border */
-  --color-border-strong: var(--swiss-black);           /* #111111 Strong Architectural Rule */
-  --color-input-border: var(--swiss-gray-300);         /* Accessible 1px Form Boundary */
-  --color-glass-border: var(--swiss-gray-300);
+  --color-border: #E2E8F0;                             /* #E2E8F0 1px Structural Slate Hairline Border */
+  --color-border-strong: var(--swiss-black);           /* #0F172A Strong Architectural Rule */
+  --color-input-border: #CBD5E1;                       /* Accessible Form Boundary */
+  --color-glass-border: #E2E8F0;
 
   /* Primary Brand & High-Priority Actions — Swiss Red (#E30613) */
   --color-primary: var(--swiss-red);                   /* Swiss Red: High Priority Action */
   --color-primary-hover: var(--swiss-red-dark);        /* #B8000B Dark Red Hover */
   --color-primary-active: #990008;
-  --color-primary-muted: var(--swiss-red-soft);        /* #FDECEC Red Soft Tint */
+  --color-primary-muted: var(--swiss-red-soft);        /* #FEF2F2 Red Soft Tint */
   --color-secondary: var(--swiss-white);
   --color-accent: var(--swiss-blue);
   --color-accent-hover: var(--swiss-blue-dark);
@@ -132,22 +142,22 @@
   --color-doctor-accent-hover: var(--swiss-blue-dark);
   --color-doctor-bg: var(--swiss-off-white);
   --color-doctor-surface: var(--swiss-white);
-  --color-doctor-border: var(--swiss-gray-300);
-  --color-doctor-input-border: var(--swiss-gray-300);
+  --color-doctor-border: #E2E8F0;
+  --color-doctor-input-border: #CBD5E1;
   --color-doctor-text: var(--swiss-black);
 
   /* Shadows — Default NO SHADOW. Structural borders replace shadows. */
   --shadow-sm: none;
   --shadow-md: none;
-  --shadow-lg: 0 4px 16px rgba(17, 17, 17, 0.08);     /* Restrained floating modal shadow only */
+  --shadow-lg: 0 10px 25px -5px rgba(15, 23, 42, 0.08), 0 8px 10px -6px rgba(15, 23, 42, 0.04);     /* Floating dropdown / modal elevation */
 
   /* Legacy liquid tokens mapped to clean Swiss solid values */
-  --liquid-edge: var(--swiss-gray-300);
-  --liquid-edge-muted: var(--swiss-gray-300);
+  --liquid-edge: #E2E8F0;
+  --liquid-edge-muted: #E2E8F0;
   --liquid-panel: var(--swiss-white);
   --liquid-panel-strong: var(--swiss-white);
   --liquid-panel-end: var(--swiss-white);
-  --liquid-edge-strong: var(--swiss-gray-300);
+  --liquid-edge-strong: #CBD5E1;
   --liquid-highlight: transparent;
   --liquid-sheen: transparent;
   --liquid-shadow: none;
@@ -158,44 +168,56 @@
    DARK MODE — Swiss Controlled Dark System (Decision 5 & Requirement 22)
    ═══════════════════════════════════════════════════════════════════════ */
 :root[data-theme="dark"], :root.dark, html.dark {
-  /* Swiss Dark Palette */
-  --swiss-dark-bg: #111111;
-  --swiss-dark-surface: #1A1A1A;
-  --swiss-dark-surface-elevated: #222222;
-  --swiss-dark-border: #3A3A3A;
-  --swiss-dark-text: #F5F5F5;
-  --swiss-dark-text-muted: #B8B8B8;
-  --swiss-dark-red: #FF3B45;
-  --swiss-dark-blue: #4D8DFF;
-  --swiss-dark-blue-hover: #6EA3FF;
+  /* Swiss Dark Palette — Precision Obsidian Slate Grid */
+  --swiss-dark-bg: #0C0E12;
+  --swiss-dark-surface: #141820;
+  --swiss-dark-surface-elevated: #1B222E;
+  --swiss-dark-border: #242E3D;
+  --swiss-dark-text: #F8FAFC;
+  --swiss-dark-text-muted: #94A3B8;
+  --swiss-dark-red: #FF4D57;
+  --swiss-dark-blue: #38BDF8;
+  --swiss-dark-blue-hover: #60A5FA;
+
+  /* Dark Semantic Soft & Badge Tokens */
+  --swiss-red-soft: rgba(239, 68, 68, 0.15);
+  --swiss-red-border: rgba(239, 68, 68, 0.35);
+  --swiss-blue-soft: rgba(56, 189, 248, 0.15);
+  --swiss-blue-border: rgba(56, 189, 248, 0.35);
+  --swiss-amber-bg: rgba(245, 158, 11, 0.14);
+  --swiss-amber-border: rgba(245, 158, 11, 0.35);
+  --swiss-amber-text: #FBBF24;
+  --swiss-green-bg: rgba(16, 185, 129, 0.14);
+  --swiss-green-border: rgba(16, 185, 129, 0.35);
+  --swiss-green-text: #34D399;
 
   /* Surfaces & Canvas */
-  --color-background: var(--swiss-dark-bg);            /* #111111 Deep Neutral Canvas */
-  --color-surface-white: var(--swiss-dark-surface);     /* #1A1A1A Dark Surface */
+  --color-background: var(--swiss-dark-bg);            /* Deep Obsidian Slate Canvas */
+  --color-surface-white: var(--swiss-dark-surface);     /* Elevated Obsidian Surface */
   --color-surface-glass: var(--swiss-dark-surface);     /* Solid Opaque Dark Surface */
-  --color-surface-subtle: var(--swiss-dark-surface-elevated); /* #222222 Elevated Plate */
-  --color-surface-interactive: #242424;                /* Interactive Dark Hover */
+  --color-surface-subtle: var(--swiss-dark-surface-elevated); /* Elevated Plate */
+  --color-surface-interactive: #1E2633;                /* Refined Interactive Dark Hover */
   
   /* Typography — Swiss Off-White */
-  --color-text: var(--swiss-dark-text);                /* #F5F5F5 Primary Text */
-  --color-text-muted: var(--swiss-dark-text-muted);    /* #B8B8B8 Secondary Text */
+  --color-text: var(--swiss-dark-text);                /* High-contrast Pure Light Text */
+  --color-text-muted: var(--swiss-dark-text-muted);    /* Balanced Slate Secondary Text */
   --color-text-dark: var(--swiss-dark-text);
 
   /* Structural Borders */
-  --color-border: var(--swiss-dark-border);            /* #3A3A3A Structural Dark Border */
-  --color-border-strong: #555555;
-  --color-input-border: var(--swiss-dark-border);      /* #3A3A3A Input Outline */
+  --color-border: var(--swiss-dark-border);            /* Precise Architectural Dark Border */
+  --color-border-strong: #38455A;
+  --color-input-border: #2B374A;                       /* Input Outline with High Contrast */
   --color-glass-border: var(--swiss-dark-border);
 
   /* Primary Accent — Swiss Red in Dark Mode */
-  --color-primary: var(--swiss-red);
-  --color-primary-hover: var(--swiss-dark-red);
-  --color-primary-active: #B8000B;
-  --color-primary-muted: rgba(227, 6, 19, 0.16);
+  --color-primary: var(--swiss-dark-red);
+  --color-primary-hover: #FF6670;
+  --color-primary-active: #E30613;
+  --color-primary-muted: var(--swiss-red-soft);
   --color-secondary: var(--swiss-dark-surface);
   --color-accent: var(--swiss-dark-blue);
   --color-accent-hover: var(--swiss-dark-blue-hover);
-  --color-accent-muted: rgba(77, 141, 255, 0.16);
+  --color-accent-muted: var(--swiss-blue-soft);
 
   /* Doctor Portal — Swiss Blue in Dark Mode */
   --color-doctor-primary: var(--swiss-dark-blue);
@@ -205,13 +227,13 @@
   --color-doctor-bg: var(--swiss-dark-bg);
   --color-doctor-surface: var(--swiss-dark-surface);
   --color-doctor-border: var(--swiss-dark-border);
-  --color-doctor-input-border: var(--swiss-dark-border);
+  --color-doctor-input-border: #2B374A;
   --color-doctor-text: var(--swiss-dark-text);
 
-  /* Dark Shadows — Default NO SHADOW */
+  /* Dark Shadows */
   --shadow-sm: none;
   --shadow-md: none;
-  --shadow-lg: 0 4px 20px rgba(0, 0, 0, 0.45);
+  --shadow-lg: 0 12px 28px -5px rgba(0, 0, 0, 0.65), 0 8px 12px -6px rgba(0, 0, 0, 0.5);
 
   /* Legacy liquid tokens mapped to dark Swiss values */
   --liquid-edge: var(--swiss-dark-border);
@@ -486,55 +508,55 @@ p {
 }
 
 .badge-success {
-  background-color: #ECFDF5 !important;
-  color: #059669 !important;
-  border: 1px solid #A7F3D0 !important;
+  background-color: var(--swiss-green-bg) !important;
+  color: var(--swiss-green-text) !important;
+  border: 1px solid var(--swiss-green-border) !important;
 }
 
 .badge-warning, .badge-amber {
-  background-color: #FFFBEB !important;
-  color: #B45309 !important;
-  border: 1px solid #FDE68A !important;
+  background-color: var(--swiss-amber-bg) !important;
+  color: var(--swiss-amber-text) !important;
+  border: 1px solid var(--swiss-amber-border) !important;
 }
 
 .badge-danger {
   background-color: var(--swiss-red-soft) !important;
-  color: var(--swiss-red) !important;
-  border: 1px solid #FECACA !important;
+  color: var(--color-primary) !important;
+  border: 1px solid var(--swiss-red-border) !important;
 }
 
 .badge-neutral, .badge-teal, .badge-info, .badge-blue {
   background-color: var(--swiss-blue-soft) !important;
-  color: var(--swiss-blue) !important;
-  border: 1px solid #BFDBFE !important;
+  color: var(--color-accent) !important;
+  border: 1px solid var(--swiss-blue-border) !important;
 }
 
 :root[data-theme="dark"] .badge-success {
-  background-color: rgba(5, 150, 105, 0.18) !important;
-  color: #34D399 !important;
-  border-color: rgba(5, 150, 105, 0.35) !important;
+  background-color: var(--swiss-green-bg) !important;
+  color: var(--swiss-green-text) !important;
+  border-color: var(--swiss-green-border) !important;
 }
 
 :root[data-theme="dark"] .badge-warning,
 :root[data-theme="dark"] .badge-amber {
-  background-color: rgba(217, 119, 6, 0.18) !important;
-  color: #FBBF24 !important;
-  border-color: rgba(217, 119, 6, 0.35) !important;
+  background-color: var(--swiss-amber-bg) !important;
+  color: var(--swiss-amber-text) !important;
+  border-color: var(--swiss-amber-border) !important;
 }
 
 :root[data-theme="dark"] .badge-danger {
-  background-color: rgba(227, 6, 19, 0.18) !important;
-  color: #FF6B72 !important;
-  border-color: rgba(227, 6, 19, 0.35) !important;
+  background-color: var(--swiss-red-soft) !important;
+  color: var(--color-primary) !important;
+  border-color: var(--swiss-red-border) !important;
 }
 
 :root[data-theme="dark"] .badge-neutral,
 :root[data-theme="dark"] .badge-teal,
 :root[data-theme="dark"] .badge-info,
 :root[data-theme="dark"] .badge-blue {
-  background-color: rgba(77, 141, 255, 0.18) !important;
-  color: #82B1FF !important;
-  border-color: rgba(77, 141, 255, 0.35) !important;
+  background-color: var(--swiss-blue-soft) !important;
+  color: var(--color-accent) !important;
+  border-color: var(--swiss-blue-border) !important;
 }
 
 /* 6. Form Controls (Inputs, Selects, Textareas) — Swiss Form Design (Section 22) */
@@ -595,7 +617,7 @@ select:focus {
 .emergency-panel {
   background-color: var(--swiss-red-soft);
   color: var(--color-text);
-  border: 1px solid #FECACA;
+  border: 1px solid var(--swiss-red-border);
   border-left: 4px solid var(--swiss-red);
   padding: var(--spacing-5);
   border-radius: var(--border-radius-md);
@@ -606,9 +628,9 @@ select:focus {
 }
 
 :root[data-theme="dark"] .emergency-panel {
-  background-color: rgba(227, 6, 19, 0.12);
-  border-color: rgba(227, 6, 19, 0.35);
-  border-left-color: var(--swiss-red);
+  background-color: var(--swiss-red-soft);
+  border-color: var(--swiss-red-border);
+  border-left-color: var(--swiss-dark-red);
 }
 
 .emergency-panel h3, .emergency-panel h2 {
@@ -616,9 +638,14 @@ select:focus {
   margin-bottom: var(--spacing-1);
 }
 
+:root[data-theme="dark"] .emergency-panel h3,
+:root[data-theme="dark"] .emergency-panel h2 {
+  color: var(--swiss-dark-red);
+}
+
 .alert-panel {
-  background-color: #FFFBEB;
-  border: 1px solid #FDE68A;
+  background-color: var(--swiss-amber-bg);
+  border: 1px solid var(--swiss-amber-border);
   border-left: 4px solid var(--color-semantic-warning);
   color: var(--color-text);
   padding: var(--spacing-3) var(--spacing-4);
@@ -627,8 +654,8 @@ select:focus {
 }
 
 :root[data-theme="dark"] .alert-panel {
-  background-color: rgba(217, 119, 6, 0.12);
-  border-color: rgba(217, 119, 6, 0.3);
+  background-color: var(--swiss-amber-bg);
+  border-color: var(--swiss-amber-border);
 }
 
 /* Assessment Urgency States */
@@ -922,6 +949,7 @@ select:focus {
   border: 1px solid var(--color-border);
   border-radius: 2px;
   box-shadow: none;
+  transition: border-color var(--transition-fast);
 }
 
 .dashboard-header-box {
@@ -931,6 +959,11 @@ select:focus {
   border-left: 4px solid var(--swiss-red);
   border-radius: 2px;
   box-shadow: none;
+  transition: border-color var(--transition-fast);
+}
+
+:root[data-theme="dark"] .dashboard-header-box {
+  border-left-color: var(--swiss-dark-red);
 }
 
 .dashboard-emergency-section {
@@ -941,10 +974,14 @@ select:focus {
   gap: 16px;
   padding: 20px 24px;
   background: var(--color-primary-muted);
-  border: 1px solid var(--swiss-red);
+  border: 1px solid var(--swiss-red-border);
   border-left: 5px solid var(--swiss-red);
   border-radius: 2px;
   box-shadow: none;
+}
+
+:root[data-theme="dark"] .dashboard-emergency-section {
+  border-left-color: var(--swiss-dark-red);
 }
 
 .dashboard-emergency-inner {
@@ -1422,9 +1459,9 @@ select:focus {
   width: 38px;
   height: 38px;
   border-radius: var(--border-radius-sm);
-  color: var(--swiss-blue);
+  color: var(--color-accent);
   background: var(--swiss-blue-soft);
-  border: 1px solid #BFDBFE;
+  border: 1px solid var(--swiss-blue-border);
 }
 
 .dashboard-assessment-summary,
@@ -1460,15 +1497,16 @@ select:focus {
   border-radius: var(--border-radius-md);
   background: var(--color-surface-white);
   box-shadow: none !important;
-  transition: border-color var(--transition-fast);
+  transition: border-color var(--transition-fast), background-color var(--transition-fast);
 }
 
 .dashboard-stat-card:hover {
-  border-color: var(--swiss-blue);
+  border-color: var(--color-accent);
+  background-color: var(--color-surface-interactive);
 }
 
 .dashboard-stat-card svg {
-  color: var(--swiss-blue);
+  color: var(--color-accent);
 }
 
 .dashboard-stat-card span {
@@ -1501,11 +1539,12 @@ select:focus {
   text-align: left;
   cursor: pointer;
   font: inherit;
-  transition: border-color var(--transition-fast);
+  transition: border-color var(--transition-fast), background-color var(--transition-fast);
 }
 
 .dashboard-care-row:hover {
-  border-color: var(--swiss-blue);
+  border-color: var(--color-accent);
+  background-color: var(--color-surface-interactive);
 }
 
 .dashboard-quick-action {
@@ -1526,15 +1565,16 @@ select:focus {
   font-weight: 600;
   text-align: left;
   cursor: pointer;
-  transition: border-color var(--transition-fast);
+  transition: border-color var(--transition-fast), background-color var(--transition-fast);
 }
 
 .dashboard-quick-action:hover {
-  border-color: var(--swiss-red);
+  border-color: var(--color-primary);
+  background-color: var(--color-surface-interactive);
 }
 
 .dashboard-quick-action svg {
-  color: var(--swiss-red);
+  color: var(--color-primary);
 }
 
 /* Patient profile square avatar & photo upload */
@@ -1868,7 +1908,7 @@ div[tabindex="0"]:focus-visible {
   .app-layout, .doctor-layout { display: block; }
 
   .app-sidebar {
-    width: min(280px, calc(100vw - 56px));
+    width: min(276px, calc(100vw - 72px));
     max-width: calc(100vw - 32px);
     height: 100dvh;
     position: fixed;
