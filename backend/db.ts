@@ -42,6 +42,12 @@ import { ENV } from './_core/env';
 import { randomUUID, createHash } from "node:crypto";
 import { publishDoctorEvent, publishPatientEvent, type DoctorEventType, type PatientEventType } from "./realtime/eventBus";
 import { storageGet } from "./storage";
+import {
+  CLINIC_APPOINTMENT_SLOTS,
+  getIndiaDayBounds,
+  type ClinicSlotStatus,
+  type DoctorSlotAvailability,
+} from "../shared/const";
 
 /** Singleton instance of Drizzle ORM */
 let _db: ReturnType<typeof drizzle> | null = null;                // Cached MySQL database client instance
@@ -741,11 +747,145 @@ export async function listPatientAppointments(userId: number) {
   return db.select().from(patientAppointments).where(eq(patientAppointments.userId, userId)).orderBy(desc(patientAppointments.scheduledAt));
 }
 
-export async function createPatientAppointment(userId: number, doctorId: string, scheduledAt: Date, reason: string) {
+export async function createPatientAppointment(
+  userId: number,
+  doctorId: string,
+  scheduledAt: Date,
+  reason: string
+): Promise<number> {
   const db = await getDb();
   if (!db) throw new Error("Database is not available");
-  const result = await db.insert(patientAppointments).values({ userId, doctorId, scheduledAt, reason, status: "Requested" });
-  return Number(result[0].insertId);
+
+  await ensureAppointmentConstraints();
+
+  const isConflictError = (err: any) => {
+    const errStr = `${err?.message || ""} ${err?.cause?.message || ""} ${err?.code || ""} ${err?.cause?.code || ""} ${err?.errno || ""}`;
+    return (
+      err?.code === "SLOT_CONFLICT" ||
+      err?.code === "ER_DUP_ENTRY" ||
+      err?.errno === 1062 ||
+      err?.code === "ER_LOCK_DEADLOCK" ||
+      err?.errno === 1213 ||
+      err?.code === "ER_LOCK_WAIT_TIMEOUT" ||
+      err?.errno === 1205 ||
+      err?.cause?.code === "ER_DUP_ENTRY" ||
+      err?.cause?.errno === 1062 ||
+      err?.cause?.code === "ER_LOCK_DEADLOCK" ||
+      err?.cause?.errno === 1213 ||
+      errStr.includes("Duplicate entry") ||
+      errStr.includes("ER_DUP_ENTRY") ||
+      errStr.includes("Deadlock") ||
+      errStr.includes("ER_LOCK_DEADLOCK") ||
+      errStr.includes("Lock wait timeout") ||
+      errStr.includes("patientAppointments_active_slot_unique") ||
+      errStr.includes("SLOT_CONFLICT")
+    );
+  };
+
+  try {
+    return await db.transaction(async (tx) => {
+      // 1. Transactional check with row-level locking strictly scoped to this doctor and time window
+      const windowStart = new Date(scheduledAt.getTime() - 29 * 60 * 1000);
+      const windowEnd = new Date(scheduledAt.getTime() + 29 * 60 * 1000);
+
+      const [existing] = (await tx.execute(
+        sql`SELECT id FROM \`patientAppointments\` 
+            WHERE \`doctorId\` = ${doctorId} 
+              AND \`status\` IN ('Requested', 'Pending', 'Confirmed', 'Completed') 
+              AND \`scheduledAt\` >= ${windowStart} 
+              AND \`scheduledAt\` <= ${windowEnd} 
+            LIMIT 1 FOR UPDATE`
+      )) as unknown as [Array<{ id: number }>];
+
+      if (existing && existing.length > 0) {
+        const conflictErr = new Error("This appointment time slot is no longer available. Please select another time slot.");
+        (conflictErr as any).code = "SLOT_CONFLICT";
+        throw conflictErr;
+      }
+
+      try {
+        const result = await tx.insert(patientAppointments).values({
+          userId,
+          doctorId,
+          scheduledAt,
+          reason,
+          status: "Requested",
+        });
+        return Number(result[0].insertId);
+      } catch (insertErr: any) {
+        if (isConflictError(insertErr)) {
+          const conflictErr = new Error("This appointment time slot is no longer available. Please select another time slot.");
+          (conflictErr as any).code = "SLOT_CONFLICT";
+          throw conflictErr;
+        }
+        throw insertErr;
+      }
+    });
+  } catch (txErr: any) {
+    if (isConflictError(txErr)) {
+      const conflictErr = new Error("This appointment time slot is no longer available. Please select another time slot.");
+      (conflictErr as any).code = "SLOT_CONFLICT";
+      throw conflictErr;
+    }
+    throw txErr;
+  }
+}
+
+let hasEnsuredAppointmentConstraints = false;
+
+export async function ensureAppointmentConstraints(): Promise<void> {
+  if (hasEnsuredAppointmentConstraints) return;
+  const db = await getDb();
+  if (!db) return;
+  try {
+    const [cols] = await db.execute(sql.raw("SHOW COLUMNS FROM `patientAppointments` LIKE 'activeSlotKey'"));
+    if (Array.isArray(cols) && cols.length === 0) {
+      await db.execute(sql.raw(`
+        ALTER TABLE \`patientAppointments\`
+        ADD COLUMN \`activeSlotKey\` VARCHAR(160) GENERATED ALWAYS AS (
+          CASE 
+            WHEN \`status\` IN ('Requested', 'Pending', 'Confirmed', 'Completed') 
+            THEN CONCAT(\`doctorId\`, ':', DATE_FORMAT(\`scheduledAt\`, '%Y-%m-%d %H:%i:%s')) 
+            ELSE NULL 
+          END
+        ) VIRTUAL
+      `));
+    } else {
+      try {
+        await db.execute(sql.raw(`
+          ALTER TABLE \`patientAppointments\`
+          MODIFY COLUMN \`activeSlotKey\` VARCHAR(160) GENERATED ALWAYS AS (
+            CASE 
+              WHEN \`status\` IN ('Requested', 'Pending', 'Confirmed', 'Completed') 
+              THEN CONCAT(\`doctorId\`, ':', DATE_FORMAT(\`scheduledAt\`, '%Y-%m-%d %H:%i:%s')) 
+              ELSE NULL 
+            END
+          ) VIRTUAL
+        `));
+      } catch (_) {
+        // Safe fallback if column is already identical or database engine prevents in-place modify
+      }
+    }
+
+    const [indexes] = await db.execute(sql.raw("SHOW INDEX FROM `patientAppointments` WHERE Key_name = 'patientAppointments_active_slot_unique'"));
+    if (Array.isArray(indexes) && indexes.length === 0) {
+      await db.execute(sql.raw(`
+        ALTER TABLE \`patientAppointments\`
+        ADD UNIQUE INDEX \`patientAppointments_active_slot_unique\` (\`activeSlotKey\`)
+      `));
+    }
+
+    const [compIndexes] = await db.execute(sql.raw("SHOW INDEX FROM `patientAppointments` WHERE Key_name = 'patientAppointments_doc_sched_idx'"));
+    if (Array.isArray(compIndexes) && compIndexes.length === 0) {
+      await db.execute(sql.raw(`
+        ALTER TABLE \`patientAppointments\`
+        ADD INDEX \`patientAppointments_doc_sched_idx\` (\`doctorId\`, \`scheduledAt\`, \`status\`)
+      `));
+    }
+    hasEnsuredAppointmentConstraints = true;
+  } catch (err) {
+    console.warn("[Database] Could not verify appointment constraints:", err);
+  }
 }
 
 let hasCreatedBookingErrorsTable = false;
@@ -811,7 +951,7 @@ export async function checkDoctorSlotConflict(doctorId: string, scheduledAt: Dat
     .where(
       and(
         eq(patientAppointments.doctorId, doctorId),
-        inArray(patientAppointments.status, ["Requested", "Pending", "Confirmed"]),
+        inArray(patientAppointments.status, ["Requested", "Pending", "Confirmed", "Completed"]),
         gte(patientAppointments.scheduledAt, windowStart),
         lte(patientAppointments.scheduledAt, windowEnd)
       )
@@ -825,8 +965,7 @@ export async function getDoctorBookedSlots(doctorId: string, dateStr: string): P
   const db = await getDb();
   if (!db) return [];
 
-  const startOfDay = new Date(`${dateStr}T00:00:00.000Z`);
-  const endOfDay = new Date(`${dateStr}T23:59:59.999Z`);
+  const { startOfDay, endOfDay } = getIndiaDayBounds(dateStr);
 
   const slots = await db
     .select({ scheduledAt: patientAppointments.scheduledAt })
@@ -834,7 +973,7 @@ export async function getDoctorBookedSlots(doctorId: string, dateStr: string): P
     .where(
       and(
         eq(patientAppointments.doctorId, doctorId),
-        inArray(patientAppointments.status, ["Requested", "Pending", "Confirmed"]),
+        inArray(patientAppointments.status, ["Requested", "Pending", "Confirmed", "Completed"]),
         gte(patientAppointments.scheduledAt, startOfDay),
         lte(patientAppointments.scheduledAt, endOfDay)
       )
@@ -843,11 +982,72 @@ export async function getDoctorBookedSlots(doctorId: string, dateStr: string): P
   return slots.map((s) => s.scheduledAt.toISOString());
 }
 
+export async function getDoctorSlotAvailability(
+  doctorId: string,
+  dateStr: string,
+  referenceTime: Date = new Date()
+): Promise<{
+  doctorId: string;
+  date: string;
+  bookedSlots: string[];
+  slots: DoctorSlotAvailability[];
+}> {
+  const db = await getDb();
+  if (!db) {
+    return {
+      doctorId,
+      date: dateStr,
+      bookedSlots: [],
+      slots: CLINIC_APPOINTMENT_SLOTS.map((s) => ({
+        ...s,
+        status: "UNAVAILABLE" as const,
+        isAvailable: false,
+      })),
+    };
+  }
+
+  // Occupied appointments strictly for this doctor and date
+  const bookedIsoStrings = await getDoctorBookedSlots(doctorId, dateStr);
+  const bookedTimestamps = bookedIsoStrings.map((iso) => new Date(iso).getTime());
+
+  // Generate availability status for each structured 30-minute slot
+  const slots: DoctorSlotAvailability[] = CLINIC_APPOINTMENT_SLOTS.map((slotDef) => {
+    const slotDate = new Date(`${dateStr}T${slotDef.startTime}:00`);
+    const slotTimeMs = slotDate.getTime();
+
+    // Slot in the past
+    const isPast = !isNaN(slotTimeMs) && slotTimeMs <= referenceTime.getTime();
+
+    // Slot occupied by this specific doctor
+    const isBooked = bookedTimestamps.some((bookedMs) => Math.abs(bookedMs - slotTimeMs) < 29 * 60 * 1000);
+
+    let status: ClinicSlotStatus = "AVAILABLE";
+    if (isPast) {
+      status = "PAST";
+    } else if (isBooked) {
+      status = "BOOKED";
+    }
+
+    return {
+      ...slotDef,
+      status,
+      isAvailable: status === "AVAILABLE",
+    };
+  });
+
+  return {
+    doctorId,
+    date: dateStr,
+    bookedSlots: bookedIsoStrings,
+    slots,
+  };
+}
+
 export async function cancelOwnedPatientAppointment(userId: number, appointmentId: number) {
   const db = await getDb();
   if (!db) throw new Error("Database is not available");
   const appointment = await db
-    .select({ doctorId: patientAppointments.doctorId })
+    .select({ doctorId: patientAppointments.doctorId, scheduledAt: patientAppointments.scheduledAt })
     .from(patientAppointments)
     .where(and(eq(patientAppointments.id, appointmentId), eq(patientAppointments.userId, userId)))
     .limit(1);
@@ -857,7 +1057,7 @@ export async function cancelOwnedPatientAppointment(userId: number, appointmentI
     .update(patientAppointments)
     .set({ status: "Cancelled" })
     .where(and(eq(patientAppointments.id, appointmentId), eq(patientAppointments.userId, userId)));
-  return { doctorId: appointment[0].doctorId };
+  return { doctorId: appointment[0].doctorId, scheduledAt: appointment[0].scheduledAt };
 }
 
 export async function listDoctorAppointments(doctorId: string) {

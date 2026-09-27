@@ -21,9 +21,9 @@ import { users, patientAppointments } from "../database/schema";                
 import { eq, or } from "drizzle-orm";                                                               // Drizzle SQL operators
 import { mockDoctorDirectory } from "./discovery/mockDoctorDirectory";                          // Doctor directory catalog
 
-// Select two test clinicians from different stations
-const TEST_DOCTOR_1 = mockDoctorDirectory[0];                                                  // Clinician 1 (e.g. Cardiology CSMT)
-const TEST_DOCTOR_2 = mockDoctorDirectory[1];                                                  // Clinician 2 (e.g. Western General Practice)
+// Select two test clinicians from different stations (isolated from doctorAvailability test suite)
+const TEST_DOCTOR_1 = mockDoctorDirectory[10];                                                 // Clinician 1
+const TEST_DOCTOR_2 = mockDoctorDirectory[11];                                                 // Clinician 2
 
 let db: NonNullable<Awaited<ReturnType<typeof getDb>>>;                                        // Database handle
 
@@ -218,5 +218,348 @@ describe("Appointment Lifecycle Integration", () => {
     if (db) {
       await db.delete(users).where(or(eq(users.openId, "test:patient-lifecycle-1"), eq(users.openId, "test:patient-lifecycle-2")));
     }
+  });
+});
+
+describe("Doctor-Specific Appointment Slot Availability & Double-Booking Protection", () => {
+  const TEST_DATE_X = "2026-11-20";
+  const TEST_DATE_Y = "2026-11-21";
+
+  const DOC_A = mockDoctorDirectory[0]; // e.g. mock-central-cardiology-csmt
+  const DOC_B = mockDoctorDirectory[1]; // e.g. mock-western-general-churchgate
+  const DOC_C = mockDoctorDirectory[2]; // e.g. mock-harbour-pediatrics-vashi
+
+  let patientAvail1Id: number;
+  let patientAvail2Id: number;
+  let doctorAAppointmentId: number;
+  let raceRejectionReason: any;
+
+  beforeAll(async () => {
+    await upsertUser({
+      openId: "test:patient-availability-1",
+      name: "Availability Patient 1",
+      email: "avail1@test.com",
+      loginMethod: "native-patient",
+      role: "user",
+    });
+
+    await upsertUser({
+      openId: "test:patient-availability-2",
+      name: "Availability Patient 2",
+      email: "avail2@test.com",
+      loginMethod: "native-patient",
+      role: "user",
+    });
+
+    const u1 = await db.select().from(users).where(eq(users.openId, "test:patient-availability-1"));
+    patientAvail1Id = u1[0].id;
+    const u2 = await db.select().from(users).where(eq(users.openId, "test:patient-availability-2"));
+    patientAvail2Id = u2[0].id;
+
+    await db.delete(patientAppointments).where(or(
+      eq(patientAppointments.userId, patientAvail1Id),
+      eq(patientAppointments.userId, patientAvail2Id)
+    ));
+  });
+
+  afterAll(async () => {
+    if (db) {
+      await db.delete(patientAppointments).where(or(
+        eq(patientAppointments.userId, patientAvail1Id),
+        eq(patientAppointments.userId, patientAvail2Id)
+      ));
+      await db.delete(users).where(or(
+        eq(users.openId, "test:patient-availability-1"),
+        eq(users.openId, "test:patient-availability-2")
+      ));
+    }
+  });
+
+  test("TEST 1: Doctor A + Date X + 10:00 AM is booked -> Doctor A 10:00 AM becomes unavailable", async () => {
+    const caller1 = createCaller({ id: patientAvail1Id, openId: "test:patient-availability-1", role: "user" });
+
+    const initialAvail = await caller1.patientAppointment.getDoctorAvailability({
+      doctorId: DOC_A.id,
+      date: TEST_DATE_X,
+    });
+    const initialSlot = initialAvail.slots.find((s) => s.id === "10:00");
+    expect(initialSlot?.status).toBe("AVAILABLE");
+    expect(initialSlot?.isAvailable).toBe(true);
+
+    const scheduledAt = new Date(`${TEST_DATE_X}T10:00:00`);
+    const booking = await caller1.patientAppointment.request({
+      doctorId: DOC_A.id,
+      scheduledAt,
+      reason: "Cardiology consultation",
+    });
+    expect(booking.id).toBeGreaterThan(0);
+    doctorAAppointmentId = booking.id;
+
+    const postAvail = await caller1.patientAppointment.getDoctorAvailability({
+      doctorId: DOC_A.id,
+      date: TEST_DATE_X,
+    });
+    const bookedSlot = postAvail.slots.find((s) => s.id === "10:00");
+    expect(bookedSlot?.status).toBe("BOOKED");
+    expect(bookedSlot?.isAvailable).toBe(false);
+  });
+
+  test("TEST 2: Doctor B + Date X + 10:00 AM -> 10:00 AM is still available", async () => {
+    const caller1 = createCaller({ id: patientAvail1Id, openId: "test:patient-availability-1", role: "user" });
+
+    const availB = await caller1.patientAppointment.getDoctorAvailability({
+      doctorId: DOC_B.id,
+      date: TEST_DATE_X,
+    });
+    const slotB = availB.slots.find((s) => s.id === "10:00");
+    expect(slotB?.status).toBe("AVAILABLE");
+    expect(slotB?.isAvailable).toBe(true);
+  });
+
+  test("TEST 3: Doctor C + Date X + 10:00 AM -> 10:00 AM is still available", async () => {
+    const caller1 = createCaller({ id: patientAvail1Id, openId: "test:patient-availability-1", role: "user" });
+
+    const availC = await caller1.patientAppointment.getDoctorAvailability({
+      doctorId: DOC_C.id,
+      date: TEST_DATE_X,
+    });
+    const slotC = availC.slots.find((s) => s.id === "10:00");
+    expect(slotC?.status).toBe("AVAILABLE");
+    expect(slotC?.isAvailable).toBe(true);
+  });
+
+  test("TEST 4: Doctor A + Date X + 10:00 AM is booked -> Refresh availability -> still unavailable for Doctor A", async () => {
+    const caller2 = createCaller({ id: patientAvail2Id, openId: "test:patient-availability-2", role: "user" });
+
+    const refreshed = await caller2.patientAppointment.getDoctorAvailability({
+      doctorId: DOC_A.id,
+      date: TEST_DATE_X,
+    });
+    const slot = refreshed.slots.find((s) => s.id === "10:00");
+    expect(slot?.status).toBe("BOOKED");
+    expect(slot?.isAvailable).toBe(false);
+  });
+
+  test("TEST 5: Switch from Doctor A to Doctor B -> Doctor B's availability is independently calculated", async () => {
+    const caller1 = createCaller({ id: patientAvail1Id, openId: "test:patient-availability-1", role: "user" });
+
+    const resA = await caller1.patientAppointment.getDoctorAvailability({ doctorId: DOC_A.id, date: TEST_DATE_X });
+    expect(resA.slots.find((s) => s.id === "10:00")?.status).toBe("BOOKED");
+
+    const resB = await caller1.patientAppointment.getDoctorAvailability({ doctorId: DOC_B.id, date: TEST_DATE_X });
+    expect(resB.slots.find((s) => s.id === "10:00")?.status).toBe("AVAILABLE");
+  });
+
+  test("TEST 6: Two patients attempt to book Doctor A + Date X + 11:00 AM concurrently -> only one succeeds", async () => {
+    const caller1 = createCaller({ id: patientAvail1Id, openId: "test:patient-availability-1", role: "user" });
+    const caller2 = createCaller({ id: patientAvail2Id, openId: "test:patient-availability-2", role: "user" });
+
+    const raceTime = new Date(`${TEST_DATE_X}T11:00:00`);
+
+    const [result1, result2] = await Promise.allSettled([
+      caller1.patientAppointment.request({ doctorId: DOC_A.id, scheduledAt: raceTime, reason: "Race Patient 1" }),
+      caller2.patientAppointment.request({ doctorId: DOC_A.id, scheduledAt: raceTime, reason: "Race Patient 2" }),
+    ]);
+
+    const successes = [result1, result2].filter((r) => r.status === "fulfilled");
+    const rejections = [result1, result2].filter((r) => r.status === "rejected");
+
+    expect(successes).toHaveLength(1);
+    expect(rejections).toHaveLength(1);
+
+    raceRejectionReason = (rejections[0] as PromiseRejectedResult).reason;
+  });
+
+  test("TEST 7: Second booking receives a clean slot-conflict error", async () => {
+    expect(raceRejectionReason).toBeDefined();
+    expect(raceRejectionReason.code).toBe("CONFLICT");
+    expect(raceRejectionReason.message).toMatch(/no longer available|already booked/i);
+  });
+
+  test("TEST 8: Cancel Doctor A's appointment -> slot becomes available again", async () => {
+    const caller1 = createCaller({ id: patientAvail1Id, openId: "test:patient-availability-1", role: "user" });
+
+    const cancelResult = await caller1.patientAppointment.cancel({ id: doctorAAppointmentId });
+    expect(cancelResult.success).toBe(true);
+
+    const refreshed = await caller1.patientAppointment.getDoctorAvailability({
+      doctorId: DOC_A.id,
+      date: TEST_DATE_X,
+    });
+    const slot = refreshed.slots.find((s) => s.id === "10:00");
+    expect(slot?.status).toBe("AVAILABLE");
+    expect(slot?.isAvailable).toBe(true);
+  });
+
+  test("TEST 9: Doctor A's completed appointment -> historical record remains but does not block future dates", async () => {
+    const caller1 = createCaller({ id: patientAvail1Id, openId: "test:patient-availability-1", role: "user" });
+
+    const booking = await caller1.patientAppointment.request({
+      doctorId: DOC_A.id,
+      scheduledAt: new Date(`${TEST_DATE_X}T10:00:00`),
+      reason: "Checkup to complete",
+    });
+
+    await db.update(patientAppointments)
+      .set({ status: "Completed" })
+      .where(eq(patientAppointments.id, booking.id));
+
+    const inDb = await db.select().from(patientAppointments).where(eq(patientAppointments.id, booking.id));
+    expect(inDb).toHaveLength(1);
+    expect(inDb[0].status).toBe("Completed");
+
+    const availDateX = await caller1.patientAppointment.getDoctorAvailability({
+      doctorId: DOC_A.id,
+      date: TEST_DATE_X,
+    });
+    const slotDateX = availDateX.slots.find((s) => s.id === "10:00");
+    expect(slotDateX?.status).toBe("BOOKED");
+    expect(slotDateX?.isAvailable).toBe(false);
+
+    const availFuture = await caller1.patientAppointment.getDoctorAvailability({
+      doctorId: DOC_A.id,
+      date: TEST_DATE_Y,
+    });
+    const slotFuture = availFuture.slots.find((s) => s.id === "10:00");
+    expect(slotFuture?.status).toBe("AVAILABLE");
+    expect(slotFuture?.isAvailable).toBe(true);
+  });
+
+  test("TEST 10: Past appointment time -> slot cannot be booked", async () => {
+    const caller1 = createCaller({ id: patientAvail1Id, openId: "test:patient-availability-1", role: "user" });
+
+    const pastDate = new Date("2020-01-01T10:00:00");
+    await expect(
+      caller1.patientAppointment.request({
+        doctorId: DOC_A.id,
+        scheduledAt: pastDate,
+        reason: "Past appointment attempt",
+      })
+    ).rejects.toThrow(/Invalid date or time|future date/i);
+  });
+
+  test("TEST 11: Doctor A's booking does not affect Doctor B", async () => {
+    const caller1 = createCaller({ id: patientAvail1Id, openId: "test:patient-availability-1", role: "user" });
+
+    await caller1.patientAppointment.request({
+      doctorId: DOC_A.id,
+      scheduledAt: new Date(`${TEST_DATE_X}T12:00:00`),
+      reason: "Doctor A visit",
+    });
+
+    const availB = await caller1.patientAppointment.getDoctorAvailability({
+      doctorId: DOC_B.id,
+      date: TEST_DATE_X,
+    });
+    const slotB = availB.slots.find((s) => s.id === "12:00");
+    expect(slotB?.status).toBe("AVAILABLE");
+    expect(slotB?.isAvailable).toBe(true);
+  });
+
+  test("TEST 12: Doctor B's booking does not affect Doctor A", async () => {
+    const caller2 = createCaller({ id: patientAvail2Id, openId: "test:patient-availability-2", role: "user" });
+
+    await caller2.patientAppointment.request({
+      doctorId: DOC_B.id,
+      scheduledAt: new Date(`${TEST_DATE_X}T13:00:00`),
+      reason: "Doctor B visit",
+    });
+
+    const caller1 = createCaller({ id: patientAvail1Id, openId: "test:patient-availability-1", role: "user" });
+    const availA = await caller1.patientAppointment.getDoctorAvailability({
+      doctorId: DOC_A.id,
+      date: TEST_DATE_X,
+    });
+    const slotA = availA.slots.find((s) => s.id === "13:00");
+    expect(slotA?.status).toBe("AVAILABLE");
+    expect(slotA?.isAvailable).toBe(true);
+  });
+
+  test("TEST 13: All 52 doctors can independently calculate the same time slot on the same date", async () => {
+    const caller1 = createCaller({ id: patientAvail1Id, openId: "test:patient-availability-1", role: "user" });
+
+    expect(mockDoctorDirectory.length).toBe(52);
+
+    const slotPromises = mockDoctorDirectory.map((doc) =>
+      caller1.patientAppointment.getDoctorAvailability({
+        doctorId: doc.id,
+        date: TEST_DATE_Y,
+      })
+    );
+
+    const allResults = await Promise.all(slotPromises);
+    expect(allResults).toHaveLength(52);
+
+    for (const res of allResults) {
+      expect(res.slots).toHaveLength(16);
+      const slot10 = res.slots.find((s) => s.id === "10:00");
+      expect(slot10).toBeDefined();
+      expect(slot10?.status).toBe("AVAILABLE");
+    }
+  });
+
+  test("TEST 14: Different dates with the same doctor do not conflict", async () => {
+    const caller1 = createCaller({ id: patientAvail1Id, openId: "test:patient-availability-1", role: "user" });
+
+    const bookingX = await caller1.patientAppointment.request({
+      doctorId: DOC_C.id,
+      scheduledAt: new Date(`${TEST_DATE_X}T14:00:00`),
+      reason: "Date X consultation",
+    });
+    expect(bookingX.id).toBeGreaterThan(0);
+
+    const bookingY = await caller1.patientAppointment.request({
+      doctorId: DOC_C.id,
+      scheduledAt: new Date(`${TEST_DATE_Y}T14:00:00`),
+      reason: "Date Y consultation",
+    });
+    expect(bookingY.id).toBeGreaterThan(0);
+
+    const inDb = await db.select().from(patientAppointments).where(or(
+      eq(patientAppointments.id, bookingX.id),
+      eq(patientAppointments.id, bookingY.id)
+    ));
+    expect(inDb).toHaveLength(2);
+  });
+
+  test("TEST 15: Different doctors with the same date/time do not conflict", async () => {
+    const caller1 = createCaller({ id: patientAvail1Id, openId: "test:patient-availability-1", role: "user" });
+    const caller2 = createCaller({ id: patientAvail2Id, openId: "test:patient-availability-2", role: "user" });
+
+    const sameTime = new Date(`${TEST_DATE_Y}T19:00:00`);
+
+    const apptDocA = await caller1.patientAppointment.request({
+      doctorId: DOC_A.id,
+      scheduledAt: sameTime,
+      reason: "Doctor A evening consultation",
+    });
+
+    const apptDocB = await caller2.patientAppointment.request({
+      doctorId: DOC_B.id,
+      scheduledAt: sameTime,
+      reason: "Doctor B evening consultation",
+    });
+
+    expect(apptDocA.id).toBeGreaterThan(0);
+    expect(apptDocB.id).toBeGreaterThan(0);
+
+    const activeRows = await db.select().from(patientAppointments).where(or(
+      eq(patientAppointments.id, apptDocA.id),
+      eq(patientAppointments.id, apptDocB.id)
+    ));
+    expect(activeRows).toHaveLength(2);
+    expect(activeRows[0].doctorId).not.toBe(activeRows[1].doctorId);
+  });
+
+  test("TEST 16: Invalid doctor ID cannot create an appointment", async () => {
+    const caller1 = createCaller({ id: patientAvail1Id, openId: "test:patient-availability-1", role: "user" });
+
+    await expect(
+      caller1.patientAppointment.request({
+        doctorId: "invalid-doctor-nonexistent-id",
+        scheduledAt: new Date(`${TEST_DATE_X}T20:00:00`),
+        reason: "Invalid doctor test",
+      })
+    ).rejects.toThrow(/Selected controlled specialist was not found/i);
   });
 });

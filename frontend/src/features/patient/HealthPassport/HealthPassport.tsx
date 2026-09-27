@@ -814,6 +814,75 @@ export const HealthPassport = () => {
       </section>
 
       {/* =====================================================================================
+          BOTTOM EDIT COMPLETION & SAVE ACTIONS (Phone & Desktop Access)
+          Enables saving immediately after all questions/fields are completed without scrolling up.
+          ===================================================================================== */}
+      {isEditing && (
+        <div
+          className="passport-bottom-save-bar"
+          style={{
+            marginTop: '28px',
+            padding: '16px 20px',
+            background: 'var(--color-surface-white)',
+            border: '1px solid var(--color-border)',
+            borderRadius: 'var(--border-radius-md)',
+            boxShadow: '0 4px 18px rgba(0, 0, 0, 0.08)',
+            display: 'flex',
+            justifyContent: 'space-between',
+            alignItems: 'center',
+            flexWrap: 'wrap',
+            gap: '12px',
+            position: 'sticky',
+            bottom: '16px',
+            zIndex: 30,
+          }}
+        >
+          <div style={{ flex: '1 1 220px' }}>
+            <strong style={{ fontSize: '0.95rem', color: 'var(--color-text)', display: 'block' }}>
+              Finished editing all fields?
+            </strong>
+            <span className="caption" style={{ color: !isPassportValid ? 'var(--color-semantic-emergency)' : 'var(--color-text-muted)' }}>
+              {!isPassportValid
+                ? 'Blood Group is required. Please select a valid Blood Group above to save.'
+                : 'Save your changes to update your verified medical passport.'}
+            </span>
+          </div>
+          <div style={{ display: 'flex', gap: '8px', alignItems: 'center', flexWrap: 'wrap' }}>
+            <Button
+              type="button"
+              variant="outline"
+              onClick={handleCancelPassportEdit}
+              disabled={isSaving}
+              style={{ display: 'flex', gap: '6px', alignItems: 'center', borderRadius: '4px' }}
+            >
+              <X size={15} /> Cancel
+            </Button>
+            <Button
+              type="button"
+              variant="primary"
+              onClick={handleSavePassport}
+              disabled={isSaving || !isPassportValid}
+              title={!isPassportValid ? 'Please complete all required fields and resolve validation errors to save.' : 'Save Changes'}
+              style={{
+                display: 'flex',
+                gap: '6px',
+                alignItems: 'center',
+                background: !isPassportValid ? 'var(--color-surface-interactive)' : 'var(--color-primary)',
+                borderColor: !isPassportValid ? 'var(--color-border)' : 'var(--color-primary)',
+                color: !isPassportValid ? 'var(--color-text-muted)' : '#FFF',
+                fontWeight: 700,
+                borderRadius: '4px',
+                cursor: !isPassportValid ? 'not-allowed' : 'pointer',
+                opacity: !isPassportValid ? 0.65 : 1,
+              }}
+            >
+              <Save size={15} /> {isSaving ? 'Saving…' : 'Save Changes'}
+            </Button>
+          </div>
+        </div>
+      )}
+
+      {/* =====================================================================================
           MODAL: ADD / EDIT EMERGENCY CONTACT
           ===================================================================================== */}
       <Popup

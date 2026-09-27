@@ -8,7 +8,7 @@
  * We use a tool called Drizzle ORM. It prevents SQL Injection attacks (hackers typing malicious code).
  * It guarantees that if we expect a 'number' for an Age, nobody can accidentally save a 'string'.
  */
-import { foreignKey, int, mysqlEnum, mysqlTable, text, timestamp, unique, varchar } from "drizzle-orm/mysql-core";
+import { foreignKey, index, int, mysqlEnum, mysqlTable, text, timestamp, unique, uniqueIndex, varchar } from "drizzle-orm/mysql-core";
 
 // Unified relational schema providing full type-safety across frontend and backend layers
 
@@ -158,9 +158,13 @@ export const patientAppointments = mysqlTable("patientAppointments", {
   status: mysqlEnum("status", ["Requested", "Pending", "Confirmed", "Completed", "Cancelled"])
     .default("Requested")
     .notNull(),                                                  // Current clinical appointment status
+  activeSlotKey: varchar("activeSlotKey", { length: 160 }),       // Virtual generated concurrency key: doctorId + scheduledAt
   createdAt: timestamp("createdAt").defaultNow().notNull(),
   updatedAt: timestamp("updatedAt").defaultNow().onUpdateNow().notNull(),
-});
+}, (table) => [
+  uniqueIndex("patientAppointments_active_slot_unique").on(table.activeSlotKey),
+  index("patientAppointments_doc_sched_idx").on(table.doctorId, table.scheduledAt, table.status),
+]);
 
 // --- Table 10: Prescriptions ---
 // Official medical prescriptions written and signed by doctors

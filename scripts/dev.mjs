@@ -150,16 +150,19 @@ async function startProcesses() {
     stdio: ["ignore", "inherit", "inherit"],                     // Pipe stdout & stderr directly to terminal
   });
 
-  // Wait for the backend API to initialize before launching Vite dev server
-  // This guarantees the Express HTTP server is active and avoids proxy ECONNREFUSED errors
-  await waitForBackendPort(API_PORT, 12000);
-
-  // 2. Spawn Frontend Process
+  // 2. Spawn Frontend Process concurrently (slashes boot time to < 2 seconds)
   frontendChild = spawn(frontendCmd, {
     cwd: process.cwd(),                                          // Run in project root directory
     env: childEnv,                                               // Provide injected environment variables
     shell: true,                                                 // Execute command within system shell
     stdio: ["ignore", "inherit", "inherit"],                     // Pipe stdout & stderr directly to terminal
+  });
+
+  // Non-blocking socket readiness check to report status without delaying Vite startup
+  waitForBackendPort(API_PORT, 12000).then((ready) => {
+    if (ready) {
+      console.log(`  [Backend Ready] Express API listening on http://localhost:${API_PORT}`);
+    }
   });
 
   const handleExit = (name) => (code, signal) => {

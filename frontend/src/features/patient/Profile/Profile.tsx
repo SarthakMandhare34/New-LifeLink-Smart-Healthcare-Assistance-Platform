@@ -12,7 +12,7 @@ import { Card } from '../../../components/ui/Card';                             
 import { Input } from '../../../components/ui/Input';                                          // Styled input field
 import { Button } from '../../../components/ui/Button';                                        // Styled button
 import { Badge } from '../../../components/ui/Badge';                                          // Status badge
-import { User, CheckCircle2, Camera, Loader2 } from 'lucide-react';                             // User identity and camera iconography
+import { User, CheckCircle2, Camera, Loader2, Edit2, X } from 'lucide-react';                  // User identity and camera iconography
 import { trpc } from '../../../lib/trpc';                                                       // Type-safe tRPC client bridge
 
 // =========================================================================================
@@ -27,6 +27,7 @@ export const Profile = () => {
   const updateMutation = trpc.patientProfile.update.useMutation();                             // Updates name & phone on server
 
   // Local form & upload state
+  const [isEditing, setIsEditing] = useState(false);                                            // Edit mode toggle
   const [isSaving, setIsSaving] = useState(false);                                              // Demographic save in-flight flag
   const [error, setError] = useState('');                                                       // Demographic error banner
   const [success, setSuccess] = useState(false);                                                // Demographic success banner
@@ -114,12 +115,24 @@ export const Profile = () => {
       });
       await trpcUtils.patientProfile.get.invalidate();                                          // Invalidate profile query
       await trpcUtils.patientDashboard.summary.invalidate();                                     // Invalidate dashboard query
+      setIsEditing(false);
       setSuccess(true);
       setTimeout(() => setSuccess(false), 3000);                                                // Auto-hide success message after 3 seconds
     } catch (err) {
       setError('Failed to update patient profile.');
     } finally {
       setIsSaving(false);
+    }
+  };
+
+  const handleCancelEdit = () => {
+    setIsEditing(false);
+    setError('');
+    if (profileQuery.data) {
+      const nameParts = profileQuery.data.name.trim().split(/\s+/);
+      setFirst(nameParts.shift() || '');
+      setLast(nameParts.join(' '));
+      setPhone(profileQuery.data.phone || '');
     }
   };
 
@@ -160,22 +173,74 @@ export const Profile = () => {
           <div style={{ flex: 1, minWidth: '200px' }}>
             <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: '16px', flexWrap: 'wrap' }}>
               <div>
-                <h2 style={{ margin: 0, fontSize: 'var(--text-h2)' }}>{profile.name}</h2>
+                <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
+                  <h2 style={{ margin: 0, fontSize: 'var(--text-h2)' }}>{profile.name}</h2>
+                  {!isEditing && (
+                    <button
+                      id="profile-name-edit-btn"
+                      type="button"
+                      onClick={() => setIsEditing(true)}
+                      title="Edit profile"
+                      style={{
+                        background: 'none',
+                        border: 'none',
+                        padding: '2px 4px',
+                        cursor: 'pointer',
+                        color: 'var(--color-primary)',
+                        display: 'inline-flex',
+                        alignItems: 'center',
+                        borderRadius: '2px',
+                      }}
+                      aria-label="Edit Profile"
+                    >
+                      <Edit2 size={16} />
+                    </button>
+                  )}
+                </div>
                 <div className="flex items-center gap-2 mt-2">
                   <Badge status="success"><CheckCircle2 size={12} /> Patient Account</Badge>
                   <span className="caption">Private profile</span>
                 </div>
               </div>
-              <Button
-                type="button"
-                variant="outline"
-                size="sm"
-                onClick={() => document.getElementById('profile-photo-input')?.click()}
-                disabled={isPhotoSaving}
-                style={{ borderRadius: '2px' }}
-              >
-                <Camera size={14} /> {isPhotoSaving ? 'Saving…' : 'Select Photo'}
-              </Button>
+              <div style={{ display: 'flex', alignItems: 'center', gap: '8px', flexWrap: 'wrap' }}>
+                {!isEditing ? (
+                  <Button
+                    id="profile-header-edit-btn"
+                    type="button"
+                    variant="outline"
+                    size="sm"
+                    onClick={() => {
+                      setIsEditing(true);
+                      setError('');
+                      setSuccess(false);
+                    }}
+                    style={{ borderRadius: '2px', display: 'flex', alignItems: 'center', gap: '6px', fontWeight: 600 }}
+                  >
+                    <Edit2 size={14} /> Edit Profile
+                  </Button>
+                ) : (
+                  <Button
+                    id="profile-header-cancel-btn"
+                    type="button"
+                    variant="outline"
+                    size="sm"
+                    onClick={handleCancelEdit}
+                    style={{ borderRadius: '2px', display: 'flex', alignItems: 'center', gap: '6px' }}
+                  >
+                    <X size={14} /> Cancel
+                  </Button>
+                )}
+                <Button
+                  type="button"
+                  variant="outline"
+                  size="sm"
+                  onClick={() => document.getElementById('profile-photo-input')?.click()}
+                  disabled={isPhotoSaving}
+                  style={{ borderRadius: '2px' }}
+                >
+                  <Camera size={14} /> {isPhotoSaving ? 'Saving…' : 'Select Photo'}
+                </Button>
+              </div>
             </div>
             {isPhotoSaving && <p className="caption" style={{ margin: '8px 0 0', color: 'var(--color-primary)', fontWeight: 600 }}>Saving your profile photo…</p>}
           </div>
@@ -189,36 +254,83 @@ export const Profile = () => {
           </div>
         )}
 
-        {/* Form fields */}
-        <form onSubmit={handleSave} style={{ display: 'flex', flexDirection: 'column', gap: '24px' }}>
-          <div style={{ display: 'flex', gap: '20px', flexWrap: 'wrap' }}>
-             <div style={{ flex: '1 1 240px' }}>
-               <label htmlFor="profile-first-name" style={{ display: 'block', marginBottom: '8px', fontWeight: 600, fontSize: 'var(--text-caption)' }}>First Name</label>
-               <Input id="profile-first-name" type="text" value={first} onChange={e => setFirst(e.target.value)} required />
-             </div>
-             <div style={{ flex: '1 1 240px' }}>
-               <label htmlFor="profile-last-name" style={{ display: 'block', marginBottom: '8px', fontWeight: 600, fontSize: 'var(--text-caption)' }}>Last Name</label>
-               <Input id="profile-last-name" type="text" value={last} onChange={e => setLast(e.target.value)} required />
-             </div>
-          </div>
+        {/* Profile Content: View mode or Edit form */}
+        {!isEditing ? (
+          <div style={{ display: 'flex', flexDirection: 'column', gap: '20px' }}>
+            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(min(100%, 240px), 1fr))', gap: '16px' }}>
+              <div style={{ padding: '16px 20px', background: 'var(--color-surface-subtle)', borderRadius: '2px', border: '1px solid var(--color-border)' }}>
+                <span className="caption" style={{ textTransform: 'uppercase', letterSpacing: '0.06em', display: 'block', marginBottom: '4px', fontSize: '11px', fontWeight: 700, color: 'var(--color-text-muted)' }}>First Name</span>
+                <strong style={{ fontSize: '1.05rem', color: 'var(--color-text)' }}>{first || '—'}</strong>
+              </div>
+              <div style={{ padding: '16px 20px', background: 'var(--color-surface-subtle)', borderRadius: '2px', border: '1px solid var(--color-border)' }}>
+                <span className="caption" style={{ textTransform: 'uppercase', letterSpacing: '0.06em', display: 'block', marginBottom: '4px', fontSize: '11px', fontWeight: 700, color: 'var(--color-text-muted)' }}>Last Name</span>
+                <strong style={{ fontSize: '1.05rem', color: 'var(--color-text)' }}>{last || '—'}</strong>
+              </div>
+            </div>
 
-          <div>
-            <label htmlFor="profile-email" style={{ display: 'block', marginBottom: '8px', fontWeight: 600, fontSize: 'var(--text-caption)' }}>Registered Email Address</label>
-            <Input id="profile-email" type="email" value={profile.email} readOnly style={{ background: 'var(--color-surface-interactive)', color: 'var(--color-text-muted)', cursor: 'not-allowed' }} />
-          </div>
+            <div style={{ padding: '16px 20px', background: 'var(--color-surface-subtle)', borderRadius: '2px', border: '1px solid var(--color-border)' }}>
+              <span className="caption" style={{ textTransform: 'uppercase', letterSpacing: '0.06em', display: 'block', marginBottom: '4px', fontSize: '11px', fontWeight: 700, color: 'var(--color-text-muted)' }}>Registered Email Address</span>
+              <strong style={{ fontSize: '1.05rem', color: 'var(--color-text)' }}>{profile.email}</strong>
+              <span className="caption" style={{ display: 'block', marginTop: '4px', color: 'var(--color-text-muted)' }}>Managed by system authentication credentials</span>
+            </div>
 
-          <div>
-            <label htmlFor="profile-phone" style={{ display: 'block', marginBottom: '8px', fontWeight: 600, fontSize: 'var(--text-caption)' }}>Primary Contact Phone</label>
-            <Input id="profile-phone" type="tel" value={phone} onChange={e => setPhone(e.target.value)} />
-          </div>
+            <div style={{ padding: '16px 20px', background: 'var(--color-surface-subtle)', borderRadius: '2px', border: '1px solid var(--color-border)' }}>
+              <span className="caption" style={{ textTransform: 'uppercase', letterSpacing: '0.06em', display: 'block', marginBottom: '4px', fontSize: '11px', fontWeight: 700, color: 'var(--color-text-muted)' }}>Primary Contact Phone</span>
+              <strong style={{ fontSize: '1.05rem', color: 'var(--color-text)' }}>{phone || 'Not provided'}</strong>
+            </div>
 
-          <div style={{ display: 'flex', alignItems: 'center', gap: '20px', marginTop: '12px' }}>
-            <Button type="submit" variant="primary" disabled={isSaving} style={{ borderRadius: '2px' }}>
-              {isSaving ? 'Saving Changes...' : 'Save Profile Changes'}
-            </Button>
-            {success && <span style={{ color: 'var(--color-semantic-success)', fontWeight: 600, fontSize: 'var(--text-caption)' }}>Profile updated successfully!</span>}
+            <div style={{ display: 'flex', alignItems: 'center', gap: '16px', marginTop: '4px' }}>
+              <Button
+                id="profile-footer-edit-btn"
+                type="button"
+                variant="primary"
+                onClick={() => setIsEditing(true)}
+                style={{ borderRadius: '2px', display: 'inline-flex', alignItems: 'center', gap: '8px', fontWeight: 600 }}
+              >
+                <Edit2 size={15} /> Edit Profile Details
+              </Button>
+              {success && <span style={{ color: 'var(--color-semantic-success)', fontWeight: 600, fontSize: 'var(--text-caption)' }}>Profile updated successfully!</span>}
+            </div>
           </div>
-        </form>
+        ) : (
+          <form onSubmit={handleSave} style={{ display: 'flex', flexDirection: 'column', gap: '24px' }}>
+            <div style={{ display: 'flex', gap: '20px', flexWrap: 'wrap' }}>
+               <div style={{ flex: '1 1 240px' }}>
+                 <label htmlFor="profile-first-name" style={{ display: 'block', marginBottom: '8px', fontWeight: 600, fontSize: 'var(--text-caption)' }}>First Name</label>
+                 <Input id="profile-first-name" type="text" value={first} onChange={e => setFirst(e.target.value)} required />
+               </div>
+               <div style={{ flex: '1 1 240px' }}>
+                 <label htmlFor="profile-last-name" style={{ display: 'block', marginBottom: '8px', fontWeight: 600, fontSize: 'var(--text-caption)' }}>Last Name</label>
+                 <Input id="profile-last-name" type="text" value={last} onChange={e => setLast(e.target.value)} required />
+               </div>
+            </div>
+
+            <div>
+              <label htmlFor="profile-email" style={{ display: 'block', marginBottom: '8px', fontWeight: 600, fontSize: 'var(--text-caption)' }}>Registered Email Address</label>
+              <Input id="profile-email" type="email" value={profile.email} readOnly style={{ background: 'var(--color-surface-interactive)', color: 'var(--color-text-muted)', cursor: 'not-allowed' }} />
+            </div>
+
+            <div>
+              <label htmlFor="profile-phone" style={{ display: 'block', marginBottom: '8px', fontWeight: 600, fontSize: 'var(--text-caption)' }}>Primary Contact Phone</label>
+              <Input id="profile-phone" type="tel" value={phone} onChange={e => setPhone(e.target.value)} placeholder="e.g. +91 98765 43210" />
+            </div>
+
+            <div style={{ display: 'flex', alignItems: 'center', gap: '16px', marginTop: '12px', flexWrap: 'wrap' }}>
+              <Button type="submit" variant="primary" disabled={isSaving} style={{ borderRadius: '2px' }}>
+                {isSaving ? 'Saving Changes...' : 'Save Profile Changes'}
+              </Button>
+              <Button
+                type="button"
+                variant="outline"
+                onClick={handleCancelEdit}
+                style={{ borderRadius: '2px' }}
+              >
+                Cancel
+              </Button>
+              {success && <span style={{ color: 'var(--color-semantic-success)', fontWeight: 600, fontSize: 'var(--text-caption)' }}>Profile updated successfully!</span>}
+            </div>
+          </form>
+        )}
       </Card>
     </div>
   );

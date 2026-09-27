@@ -70,6 +70,7 @@ export const Appointments = () => {
       await cancelMutation.mutateAsync({ id });                                            // Execute cancellation mutation
       await trpcUtils.patientAppointment.list.invalidate();                                // Refresh appointment list
       await trpcUtils.patientDashboard.summary.invalidate();                               // Refresh dashboard counters
+      await trpcUtils.patientAppointment.getDoctorAvailability.invalidate();               // Refresh slot availability immediately
     } catch (error: unknown) {
       setMutationError(error instanceof Error ? error.message : 'Unable to cancel this appointment. Please try again.');
     } finally {

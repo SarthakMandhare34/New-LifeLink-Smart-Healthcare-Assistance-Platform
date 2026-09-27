@@ -22,6 +22,7 @@ import { useNavigate, useSearchParams } from 'react-router-dom';                
 import { trpc } from '../../../lib/trpc';                                                       // Type-safe tRPC client bridge
 import { MumbaiDoctorMap } from '../../../components/MumbaiDoctorMap';                          // Interactive OpenStreetMap visualization component
 import { BrandLoadingIndicator } from '../../../components/brand/BrandLoadingIndicator';        // Official LifeLink branded loading symbol
+import type { ClinicSlotStatus, DoctorSlotAvailability } from '@shared/const'; // Canonical clinic slot types
 import './specialistFinder.css';                                                                // Bespoke responsive styles for discovery grid
 
 // Constant label strings and disclaimers for accessibility and test suite contract stability
@@ -136,11 +137,72 @@ export const SpecialistFinder = () => {
     }, { replace: true });
   };
 
+  const displayedDoctors = directoryQuery.data ?? [];
+  const targetDoctorId = selectedDocId || (directoryQuery.data?.[0]?.id ?? '');
+
+  // Doctor-scoped availability map: Record<doctorId, Record<date, { bookedSlots: string[]; slots: DoctorSlotAvailability[] }>>
+  const [availabilityByDoctor, setAvailabilityByDoctor] = useState<
+    Record<string, Record<string, { bookedSlots: string[]; slots: DoctorSlotAvailability[] }>>
+  >({});
+
+  // Query real-time availability for selected date and doctor
+  const availabilityQuery = trpc.patientAppointment.getDoctorAvailability.useQuery(
+    { doctorId: targetDoctorId, date: selectedDate },
+    { enabled: Boolean(targetDoctorId && selectedDate) }
+  );
+
+  // Synchronize incoming query data into per-doctor state cache
+  useEffect(() => {
+    if (availabilityQuery.data && targetDoctorId && selectedDate) {
+      setAvailabilityByDoctor((prev) => ({
+        ...prev,
+        [targetDoctorId]: {
+          ...(prev[targetDoctorId] || {}),
+          [selectedDate]: availabilityQuery.data,
+        },
+      }));
+    }
+  }, [availabilityQuery.data, targetDoctorId, selectedDate]);
+
+  // Read authoritative availability strictly for the active doctor and date
+  const currentDoctorAvailability = (targetDoctorId && availabilityByDoctor[targetDoctorId]?.[selectedDate])
+    ? availabilityByDoctor[targetDoctorId][selectedDate]
+    : availabilityQuery.data;
+
+  const currentBookedSlots = currentDoctorAvailability?.bookedSlots ?? [];
+  const currentSlots = currentDoctorAvailability?.slots ?? [];
+
+  // Authoritative slot status calculation: AVAILABLE | BOOKED | PAST | UNAVAILABLE
+  const getSlotStatus = (slotStartTime: string): ClinicSlotStatus => {
+    const backendSlot = currentSlots.find((s) => s.startTime === slotStartTime || s.id === slotStartTime);
+    if (backendSlot) return backendSlot.status;
+
+    const slotTimestamp = new Date(`${selectedDate}T${slotStartTime}:00`).getTime();
+    if (!isNaN(slotTimestamp) && slotTimestamp <= Date.now()) return "PAST";
+    const isBooked = currentBookedSlots.some((b) => {
+      const bookedTimestamp = new Date(b).getTime();
+      return Math.abs(bookedTimestamp - slotTimestamp) < 29 * 60 * 1000;
+    });
+    return isBooked ? "BOOKED" : "AVAILABLE";
+  };
+
+  const isSlotBooked = (slotStartTime: string) => getSlotStatus(slotStartTime) === "BOOKED";
+  const isSlotPast = (slotStartTime: string) => getSlotStatus(slotStartTime) === "PAST";
+  const isSlotAvailable = (slotStartTime: string) => getSlotStatus(slotStartTime) === "AVAILABLE";
+
   // Select a doctor on both list and map
   const selectDoctor = useCallback((doctorId: string) => {
     setSelectedDocId(doctorId);
     setRequestError('');
-  }, []);
+    // If the currently selected slot is booked or past for this newly selected doctor, clear it
+    const docSlots = availabilityByDoctor[doctorId]?.[selectedDate]?.slots;
+    if (docSlots && selectedSlotId) {
+      const targetSlot = docSlots.find((s) => s.id === selectedSlotId || s.startTime === selectedSlotId);
+      if (targetSlot && !targetSlot.isAvailable) {
+        setSelectedSlotId(null);
+      }
+    }
+  }, [availabilityByDoctor, selectedDate, selectedSlotId]);
 
   // Clear all filters
   const clearFilters = () => {
@@ -156,8 +218,8 @@ export const SpecialistFinder = () => {
 
   // Submit appointment booking request
   const handleRequest = async (doctorId: string, event: React.MouseEvent) => {
-    event.stopPropagation();                                                                    // Prevent triggering doctor selection click
-    // Auto-scroll upward immediately so pop-up and status are instantly visible without manual scrolling
+    event.stopPropagation();
+    setSelectedDocId(doctorId);
     window.scrollTo({ top: 0, behavior: 'smooth' });
 
     if (!selectedDate) {
@@ -181,53 +243,35 @@ export const SpecialistFinder = () => {
       return;
     }
 
-    setProcessingId(doctorId);                                                                  // Engage in-flight button spinner
+    if (isSlotBooked(selectedSlotId)) {
+      setRequestError('This appointment time slot is already booked for this doctor. Please select another time slot.');
+      return;
+    }
+
+    setProcessingId(doctorId);
     setRequestError('');
     try {
-      await requestMutation.mutateAsync({ doctorId, scheduledAt: bookingDate, reason: appointmentReason.trim() }); // Dispatch booking
-      await trpcUtils.patientAppointment.list.invalidate();                                     // Refresh patient appointments list
-      await trpcUtils.patientDashboard.summary.invalidate();                                     // Refresh summary cards
-      await trpcUtils.patientNotification.list.invalidate();                                     // Refresh notification bell
-      await trpcUtils.patientAppointment.getDoctorAvailability.invalidate();                    // Refresh availability slots in real time
-      setRequestedDocId(doctorId);                                                              // Mark as requested
-      setShowSuccessPopup(true);                                                                // Open confirmation modal
+      await requestMutation.mutateAsync({ doctorId, scheduledAt: bookingDate, reason: appointmentReason.trim() });
+      await trpcUtils.patientAppointment.list.invalidate();
+      await trpcUtils.patientDashboard.summary.invalidate();
+      await trpcUtils.patientNotification.list.invalidate();
+      await trpcUtils.patientAppointment.getDoctorAvailability.invalidate();
+      setRequestedDocId(doctorId);
+      setShowSuccessPopup(true);
       window.scrollTo({ top: 0, behavior: 'smooth' });
     } catch (error: unknown) {
-      setRequestError(formatUserFriendlyError(error, 'Unable to submit the appointment request.'));
+      await trpcUtils.patientAppointment.getDoctorAvailability.invalidate();
+      setSelectedSlotId(null);
+      setRequestError(formatUserFriendlyError(error, 'This appointment slot is no longer available. Please select another slot.'));
       window.scrollTo({ top: 0, behavior: 'smooth' });
     } finally {
       setProcessingId(null);
     }
   };
 
-  const targetDoctorId = selectedDocId || (directoryQuery.data?.[0]?.id ?? '');
-
-  // Query real-time availability for selected date and doctor
-  const availabilityQuery = trpc.patientAppointment.getDoctorAvailability.useQuery(
-    { doctorId: targetDoctorId, date: selectedDate },
-    { enabled: Boolean(targetDoctorId && selectedDate) }
-  );
-
-  const bookedSlots = availabilityQuery.data?.bookedSlots ?? [];
-
-  // Slot availability and past checks
-  const isSlotBooked = (slotStartTime: string) => {
-    const slotTimestamp = new Date(`${selectedDate}T${slotStartTime}:00`).getTime();
-    return bookedSlots.some((b) => {
-      const bookedTimestamp = new Date(b).getTime();
-      return Math.abs(bookedTimestamp - slotTimestamp) < 29 * 60 * 1000;
-    });
-  };
-
-  const isSlotPast = (slotStartTime: string) => {
-    const slotTimestamp = new Date(`${selectedDate}T${slotStartTime}:00`).getTime();
-    return slotTimestamp <= Date.now();
-  };
-
   const handleDateChange = (val: string) => {
     setSelectedDate(val);
     setRequestError('');
-    // If the currently selected slot is past or booked on the new date, clear slot
     if (selectedSlotId) {
       const newSlotTime = new Date(`${val}T${selectedSlotId}:00`).getTime();
       if (newSlotTime <= Date.now()) {
@@ -247,10 +291,9 @@ export const SpecialistFinder = () => {
     }
   }, [showSuccessPopup]);
 
-  // Compute displayed doctors
-  const displayedDoctors = directoryQuery.data ?? [];
   const activeFilterCount = [specialty !== ALL_FILTER].filter(Boolean).length;
   const selectedSlotDef = CLINIC_APPOINTMENT_SLOTS.find((s) => s.id === selectedSlotId);
+  const activeDoctor = displayedDoctors.find((d) => d.id === targetDoctorId) || displayedDoctors[0];
 
   // Clean branded loading indicator: appears strictly while actual data fetching is active and vanishes immediately when ready
   if (directoryQuery.isLoading || facetsQuery.isLoading) {
@@ -379,6 +422,20 @@ export const SpecialistFinder = () => {
                     <Badge status="success">
                       ✓ {selectedSlotDef.label}
                     </Badge>
+                  </div>
+                )}
+
+                {/* Active Doctor Schedule Banner */}
+                {activeDoctor && (
+                  <div style={{ display: 'flex', alignItems: 'center', padding: '8px 12px', background: 'var(--color-surface-subtle)', borderRadius: 'var(--border-radius-sm)', marginBottom: '12px', border: '1px solid var(--color-border)' }}>
+                    <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
+                      <span style={{ fontSize: '0.72rem', textTransform: 'uppercase', letterSpacing: '0.04em', color: 'var(--color-primary)', fontWeight: 700 }}>
+                        Viewing Schedule:
+                      </span>
+                      <span style={{ fontSize: '0.86rem', fontWeight: 700, color: 'var(--color-text)' }}>
+                        {activeDoctor.name.replace(/\s*\([^)]*\)\s*$/, '').trim()}
+                      </span>
+                    </div>
                   </div>
                 )}
 

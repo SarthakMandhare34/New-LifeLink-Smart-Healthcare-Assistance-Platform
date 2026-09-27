@@ -375,18 +375,15 @@ async function invokeGemini(input: AssessmentRequest): Promise<AssessmentResult>
   }
 
   // List of Gemini models to attempt sequentially in case of rate limits or service deprecation
+  // Note: gemini-2.5-flash and gemini-3.5-flash are intentionally excluded to preserve their quota for exam day
   const candidateModels = [
-    "gemini-3.5-flash-lite",
-    "gemini-3.5-flash",
-    "gemini-3.1-flash-lite",
-    "gemini-3.7-flash",
-    "gemini-2.5-flash",
-    "gemini-2.0-flash",
-    "gemini-1.5-flash",
-    "gemini-1.5-pro",
-    "gemini-1.5-flash-8b",
-    "gemini-1.0-pro",
-    "gemini-pro"
+    "gemini-3.5-flash-lite",                                                                 // 15 RPM, 500 RPD — highest daily quota, ultra-fast
+    "gemini-3.1-flash-lite",                                                                 // 15 RPM, 500 RPD — second Lite fallback
+    "gemini-3.8-flash",                                                                      // 5 RPM, 20 RPD — latest generation Flash
+    "gemini-3.7-flash",                                                                      // 5 RPM, 20 RPD — stable Flash
+    "gemini-3.6-flash",                                                                      // 5 RPM, 20 RPD — solid Flash fallback
+    "gemini-3-flash",                                                                        // 5 RPM, 20 RPD — older Flash fallback
+    "gemini-2.5-flash-lite",                                                                 // 10 RPM, 20 RPD — emergency Lite fallback
   ];
   let lastError: Error | null = null;
 

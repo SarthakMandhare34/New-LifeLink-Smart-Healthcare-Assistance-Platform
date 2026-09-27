@@ -21,6 +21,7 @@ import {
   createPatientMedicine,
   createPatientEvent,
   getDoctorBookedSlots,
+  getDoctorSlotAvailability,
   getNativePatientByEmail,
   getPatientDashboard,
   getPatientProfile,
@@ -222,8 +223,11 @@ export const patientAppointmentRouter = router({
   getDoctorAvailability: protectedProcedure
     .input(z.object({ doctorId: z.string().trim().min(1), date: z.string().trim().min(1) }))
     .query(async ({ input }) => {
-      const bookedSlots = await getDoctorBookedSlots(input.doctorId, input.date);
-      return { bookedSlots };
+      const doctor = getMockDoctorById(input.doctorId);
+      if (!doctor) {
+        throw new TRPCError({ code: "NOT_FOUND", message: "Selected controlled specialist was not found." });
+      }
+      return getDoctorSlotAvailability(doctor.id, input.date);
     }),
   request: protectedProcedure.input(appointmentInput).mutation(async ({ ctx, input }) => {
     const doctor = getMockDoctorById(input.doctorId);                                      // Find targeted doctor
@@ -233,17 +237,17 @@ export const patientAppointmentRouter = router({
     }
 
     // Real-time validation against current date and time
-    if (input.scheduledAt.getTime() <= Date.now()) {
+    if (isNaN(input.scheduledAt.getTime()) || input.scheduledAt.getTime() <= Date.now()) {
       const errorMsg = "Invalid date or time. Please select a future date and time for your appointment.";
       await recordBookingError(ctx.user.id, doctor.id, input.scheduledAt, errorMsg, "INVALID_PAST_DATE_TIME");
       throw new TRPCError({ code: "BAD_REQUEST", message: errorMsg });
     }
 
-    // Real-time slot conflict check
+    // Real-time slot conflict check (doctor-scoped pre-flight check)
     const hasConflict = await checkDoctorSlotConflict(doctor.id, input.scheduledAt);
     if (hasConflict) {
       const errorMsg = "This appointment time slot is no longer available. Please select another time slot.";
-      await recordBookingError(ctx.user.id, doctor.id, input.scheduledAt, errorMsg, "SLOT_CONFLICT");
+      await recordBookingError(ctx.user.id, doctor.id, input.scheduledAt, errorMsg, "APPOINTMENT_SLOT_UNAVAILABLE");
       throw new TRPCError({ code: "CONFLICT", message: errorMsg });
     }
 
@@ -252,7 +256,30 @@ export const patientAppointmentRouter = router({
       await createPatientEvent(ctx.user.id, "APPOINTMENT_UPDATED", String(id));              // Notify patient via SSE
       await createDoctorEvent(doctor.id, ctx.user.id, "APPOINTMENT_UPDATED", String(id));    // Notify clinician via SSE
       return { id, status: "Requested" as const };
-    } catch (err) {
+    } catch (err: any) {
+      const errStr = `${err?.message || ""} ${err?.cause?.message || ""} ${err?.code || ""} ${err?.cause?.code || ""} ${err?.errno || ""}`;
+      if (
+        err?.code === "SLOT_CONFLICT" ||
+        err?.cause?.code === "SLOT_CONFLICT" ||
+        err?.code === "ER_DUP_ENTRY" ||
+        err?.errno === 1062 ||
+        err?.code === "ER_LOCK_DEADLOCK" ||
+        err?.errno === 1213 ||
+        err?.code === "ER_LOCK_WAIT_TIMEOUT" ||
+        err?.errno === 1205 ||
+        errStr.includes("SLOT_CONFLICT") ||
+        errStr.includes("no longer available") ||
+        errStr.includes("Duplicate entry") ||
+        errStr.includes("ER_DUP_ENTRY") ||
+        errStr.includes("Deadlock") ||
+        errStr.includes("ER_LOCK_DEADLOCK") ||
+        errStr.includes("Lock wait timeout") ||
+        errStr.includes("patientAppointments_active_slot_unique")
+      ) {
+        const conflictMsg = "This appointment time slot is no longer available. Please select another time slot.";
+        await recordBookingError(ctx.user.id, doctor.id, input.scheduledAt, conflictMsg, "APPOINTMENT_SLOT_UNAVAILABLE");
+        throw new TRPCError({ code: "CONFLICT", message: conflictMsg });
+      }
       const dbErrorMsg = err instanceof Error ? err.message : "Failed to record appointment";
       await recordBookingError(ctx.user.id, doctor.id, input.scheduledAt, dbErrorMsg, "DATABASE_ERROR");
       throw new TRPCError({ code: "INTERNAL_SERVER_ERROR", message: "Unable to schedule appointment. Please try again." });

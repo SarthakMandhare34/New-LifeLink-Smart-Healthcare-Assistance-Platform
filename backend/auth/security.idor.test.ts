@@ -95,7 +95,7 @@ describe("BATCH 13: Authentication, Security, and IDOR Deep Audit", () => {
     patientAAppointmentId = await createPatientAppointment(
       patientA.id,
       mockDocA.id,
-      new Date(Date.now() + 86400000),
+      new Date(Date.now() + 172800000),
       "Heart checkup"
     );
 
