@@ -31,10 +31,13 @@ import { getMockDoctorById } from "../discovery/mockDoctorDirectory";
 
 // We will mock the context creation manually to test router directly
 function createCaller(user: any) {
+  const isDoctor = user?.role === "doctor";
   return appRouter.createCaller({
     req: {} as any,
     res: { cookie: () => {}, clearCookie: () => {} } as any,
-    user,
+    user: user ?? null,
+    patientUser: isDoctor ? null : (user ?? null),
+    doctorUser: isDoctor ? (user ?? null) : null,
   });
 }
 
