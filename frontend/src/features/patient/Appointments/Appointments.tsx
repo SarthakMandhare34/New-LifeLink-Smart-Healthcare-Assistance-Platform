@@ -79,30 +79,30 @@ export const Appointments = () => {
   };
 
   return (
-    <div style={{ display: 'flex', flexDirection: 'column', gap: '36px', width: '100%' }}>
-      <header style={{ display: 'flex', alignItems: 'center', gap: '16px' }}>
-        <div style={{ width: 48, height: 48, borderRadius: '4px', background: 'var(--color-primary-muted)', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
+    <div style={{ display: 'flex', flexDirection: 'column', gap: '36px', width: '100%', minWidth: 0 }}>
+      <header style={{ display: 'flex', alignItems: 'center', gap: '16px', flexWrap: 'wrap', width: '100%', minWidth: 0 }}>
+        <div style={{ width: 48, height: 48, borderRadius: 'var(--border-radius-sm)', background: 'var(--color-primary-muted)', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
           <CalendarIcon size={24} style={{ color: 'var(--color-primary)' }} />
         </div>
-        <div>
-          <h1 style={{ margin: 0, fontSize: '1.85rem', fontWeight: 700, color: 'var(--color-text)', letterSpacing: '-0.02em' }}>Appointments</h1>
+        <div style={{ minWidth: 0, flex: '1 1 auto' }}>
+          <h1 style={{ margin: 0, fontSize: 'clamp(1.4rem, 4.5vw, 1.85rem)', fontWeight: 700, color: 'var(--color-text)', letterSpacing: '-0.02em', lineHeight: 1.25 }}>Appointments</h1>
           <p className="caption" style={{ margin: '4px 0 0', color: 'var(--color-text-muted)' }}>Manage your scheduled clinical consultations and history.</p>
         </div>
       </header>
 
       {mutationError && <div className="alert-panel" style={{ marginBottom: '12px' }}><span className="caption">{mutationError}</span></div>}
 
-      <div>
+      <div style={{ width: '100%', minWidth: 0 }}>
         <h2 style={{ fontSize: 'var(--text-h2)', marginBottom: '20px', fontWeight: 700, color: 'var(--color-text)', letterSpacing: '-0.02em' }}>Upcoming Consultations</h2>
-        <div className="responsive-list-grid" style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(min(100%, 340px), 1fr))', gap: '24px' }}>
+        <div className="responsive-list-grid" style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(min(100%, 340px), 1fr))', gap: '24px', width: '100%', minWidth: 0 }}>
           {upcoming.map((appointment) => {
             const doctor = appointment.doctor;
             return (
-              <Card key={appointment.id} className="h-full flex-col justify-between" style={{ opacity: cancellingId === appointment.id ? 0.5 : 1, padding: 'clamp(24px, 3vw, 28px)', display: 'flex', flexDirection: 'column', gap: '18px' }}>
+              <Card key={appointment.id} className="h-full flex-col justify-between" style={{ opacity: cancellingId === appointment.id ? 0.5 : 1, padding: 'clamp(20px, 3vw, 28px)', display: 'flex', flexDirection: 'column', gap: '18px', width: '100%', minWidth: 0, boxSizing: 'border-box' }}>
                 <div>
                   <div className="flex justify-between items-start" style={{ marginBottom: '18px' }}>
                     <div className="flex items-center gap-3">
-                      <div style={{ width: 44, height: 44, borderRadius: '2px', background: 'var(--color-primary)', color: '#FFFFFF', display: 'flex', alignItems: 'center', justifyContent: 'center', fontWeight: 'bold', flexShrink: 0 }}>
+                      <div style={{ width: 44, height: 44, borderRadius: 'var(--border-radius-badge)', background: 'var(--color-primary)', color: '#FFFFFF', display: 'flex', alignItems: 'center', justifyContent: 'center', fontWeight: 'bold', flexShrink: 0 }}>
                         {doctor?.name.charAt(0) || <User size={20} />}
                       </div>
                       <div>
