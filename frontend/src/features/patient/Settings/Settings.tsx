@@ -49,7 +49,7 @@ export const Settings = () => {
           background: 'var(--color-surface-white)',
           border: '1px solid var(--color-border)',
           borderLeft: '4px solid var(--color-primary)',
-          borderRadius: '2px',
+          borderRadius: 'var(--border-radius-card)',
           boxShadow: 'none',
         }}
       >
@@ -57,7 +57,7 @@ export const Settings = () => {
           style={{
             width: '48px',
             height: '48px',
-            borderRadius: '2px',
+            borderRadius: 'var(--border-radius-sm)',
             background: 'var(--color-primary-muted)',
             border: '1px solid var(--color-primary)',
             display: 'grid',
@@ -88,7 +88,7 @@ export const Settings = () => {
             padding: 'clamp(28px, 3.5vw, 36px)',
             background: 'var(--color-surface-white)',
             border: '1px solid var(--color-border)',
-            borderRadius: '2px',
+            borderRadius: 'var(--border-radius-card)',
             boxShadow: 'none',
             display: 'flex',
             flexDirection: 'column',
@@ -98,7 +98,7 @@ export const Settings = () => {
         >
           <div>
             <div style={{ display: 'flex', alignItems: 'center', gap: '14px', marginBottom: '28px', paddingBottom: '18px', borderBottom: '1px solid var(--color-border)' }}>
-              <div style={{ width: '40px', height: '40px', borderRadius: '2px', background: 'var(--color-primary-muted)', display: 'grid', placeItems: 'center', color: 'var(--color-primary)' }}>
+              <div style={{ width: '40px', height: '40px', borderRadius: 'var(--border-radius-sm)', background: 'var(--color-primary-muted)', display: 'grid', placeItems: 'center', color: 'var(--color-primary)' }}>
                 <Bell size={20} />
               </div>
               <h2 style={{ margin: 0, fontSize: '1.25rem', fontWeight: 700, color: 'var(--color-text)', fontFamily: 'Inter, sans-serif', letterSpacing: '-0.02em' }}>
@@ -109,7 +109,7 @@ export const Settings = () => {
             <div style={{ display: 'flex', flexDirection: 'column', gap: '18px' }}>
 
               {/* Appointment Reminder Toggle Option */}
-              <div style={{ padding: '18px 22px', background: 'var(--color-surface-subtle)', borderRadius: '2px', border: '1px solid var(--color-border)', display: 'flex', alignItems: 'flex-start', justifyContent: 'space-between', gap: '18px' }}>
+              <div style={{ padding: '18px 22px', background: 'var(--color-surface-subtle)', borderRadius: 'var(--border-radius-sm)', border: '1px solid var(--color-border)', display: 'flex', alignItems: 'flex-start', justifyContent: 'space-between', gap: '18px' }}>
                 <div style={{ flex: 1 }}>
                   <label htmlFor="pref-apt-reminders" style={{ margin: 0, fontWeight: 700, fontSize: '0.95rem', color: 'var(--color-text)', display: 'block', cursor: 'pointer' }}>
                     Appointment reminder preference
@@ -129,7 +129,7 @@ export const Settings = () => {
               </div>
 
               {/* Medicine Alert Toggle Option */}
-              <div style={{ padding: '18px 22px', background: 'var(--color-surface-interactive)', borderRadius: '2px', border: '1px solid var(--color-border)', display: 'flex', alignItems: 'flex-start', justifyContent: 'space-between', gap: '18px' }}>
+              <div style={{ padding: '18px 22px', background: 'var(--color-surface-interactive)', borderRadius: 'var(--border-radius-sm)', border: '1px solid var(--color-border)', display: 'flex', alignItems: 'flex-start', justifyContent: 'space-between', gap: '18px' }}>
                 <div style={{ flex: 1 }}>
                   <label htmlFor="pref-med-alerts" style={{ margin: 0, fontWeight: 700, fontSize: '0.95rem', color: 'var(--color-text)', display: 'block', cursor: 'pointer' }}>
                     Medicine inventory preference
@@ -164,7 +164,7 @@ export const Settings = () => {
             padding: 'clamp(28px, 3.5vw, 36px)',
             background: 'var(--color-surface-white)',
             border: '1px solid var(--color-border)',
-            borderRadius: '2px',
+            borderRadius: 'var(--border-radius-card)',
             boxShadow: 'none',
             display: 'flex',
             flexDirection: 'column',
@@ -174,7 +174,7 @@ export const Settings = () => {
         >
           <div>
             <div style={{ display: 'flex', alignItems: 'center', gap: '14px', marginBottom: '28px', paddingBottom: '18px', borderBottom: '1px solid var(--color-border)' }}>
-              <div style={{ width: '40px', height: '40px', borderRadius: '2px', background: 'var(--color-primary-muted)', display: 'grid', placeItems: 'center', color: 'var(--color-primary)' }}>
+              <div style={{ width: '40px', height: '40px', borderRadius: 'var(--border-radius-sm)', background: 'var(--color-primary-muted)', display: 'grid', placeItems: 'center', color: 'var(--color-primary)' }}>
                 <Shield size={20} />
               </div>
               <h2 style={{ margin: 0, fontSize: '1.25rem', fontWeight: 700, color: 'var(--color-text)', fontFamily: 'Inter, sans-serif', letterSpacing: '-0.02em' }}>
@@ -185,33 +185,33 @@ export const Settings = () => {
             <div style={{ display: 'flex', flexDirection: 'column', gap: '18px' }}>
 
               {/* Password Option */}
-              <div style={{ padding: '18px 22px', background: 'var(--color-surface-subtle)', borderRadius: '2px', border: '1px solid var(--color-border)', display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: '18px', flexWrap: 'wrap' }}>
+              <div style={{ padding: '18px 22px', background: 'var(--color-surface-subtle)', borderRadius: 'var(--border-radius-sm)', border: '1px solid var(--color-border)', display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: '18px', flexWrap: 'wrap' }}>
                 <div style={{ flex: 1, minWidth: '220px' }}>
                   <p style={{ margin: 0, fontWeight: 700, fontSize: '0.95rem', color: 'var(--color-text)' }}>Patient password changes</p>
                   <span className="caption" style={{ display: 'block', marginTop: '6px', color: 'var(--color-text-muted)', lineHeight: 1.5 }}>
                     Password changes are not available in this workspace.
                   </span>
                 </div>
-                <Button variant="secondary" size="sm" disabled style={{ opacity: 0.85, whiteSpace: 'nowrap', borderRadius: '2px' }}>
+                <Button variant="secondary" size="sm" disabled style={{ opacity: 0.85, whiteSpace: 'nowrap', borderRadius: 'var(--border-radius-btn)' }}>
                   Not available
                 </Button>
               </div>
 
               {/* Deletion Option */}
-              <div style={{ padding: '18px 22px', background: 'var(--color-surface-subtle)', borderRadius: '2px', border: '1px solid var(--color-border)', display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: '18px', flexWrap: 'wrap' }}>
+              <div style={{ padding: '18px 22px', background: 'var(--color-surface-subtle)', borderRadius: 'var(--border-radius-sm)', border: '1px solid var(--color-border)', display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: '18px', flexWrap: 'wrap' }}>
                 <div style={{ flex: 1, minWidth: '220px' }}>
                   <p style={{ margin: 0, fontWeight: 700, fontSize: '0.95rem', color: 'var(--color-text)' }}>Delete Account</p>
                   <span className="caption" style={{ display: 'block', marginTop: '6px', color: 'var(--color-text-muted)', lineHeight: 1.5 }}>
                     Deletion requests are not available in this workspace.
                   </span>
                 </div>
-                <Button variant="outline" size="sm" disabled style={{ borderColor: 'var(--color-border)', color: 'var(--color-text-muted)', opacity: 0.85, whiteSpace: 'nowrap', borderRadius: '2px' }}>
+                <Button variant="outline" size="sm" disabled style={{ borderColor: 'var(--color-border)', color: 'var(--color-text-muted)', opacity: 0.85, whiteSpace: 'nowrap', borderRadius: 'var(--border-radius-btn)' }}>
                   Not available
                 </Button>
               </div>
 
               {/* Patient Ownership Badge Note */}
-              <div style={{ padding: '18px 22px', background: 'var(--color-primary-muted)', borderRadius: '2px', border: '1px solid var(--color-primary)', display: 'flex', alignItems: 'center', gap: '14px' }}>
+              <div style={{ padding: '18px 22px', background: 'var(--color-primary-muted)', borderRadius: 'var(--border-radius-sm)', border: '1px solid var(--color-primary)', display: 'flex', alignItems: 'center', gap: '14px' }}>
                 <UserCheck size={22} color="var(--color-primary)" style={{ flexShrink: 0 }} />
                 <span style={{ fontSize: '0.88rem', color: 'var(--color-text)', lineHeight: 1.5, fontWeight: 500 }}>
                   Logged in as <strong>{patient?.name || 'Authorized Patient'}</strong>. Your medical records remain patient-owned and protected.

@@ -140,7 +140,7 @@ export const Profile = () => {
     <div className="container patient-profile-page" style={{ maxWidth: '840px', margin: '0 auto', display: 'flex', flexDirection: 'column', gap: '36px' }}>
       {/* Profile Header */}
       <header className="patient-profile-heading flex items-center gap-3">
-        <div style={{ width: 52, height: 52, borderRadius: '2px', background: 'var(--color-primary-muted)', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
+        <div style={{ width: 52, height: 52, borderRadius: 'var(--border-radius-sm)', background: 'var(--color-primary-muted)', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
           <User size={26} style={{ color: 'var(--color-primary)' }} />
         </div>
         <div>
@@ -150,7 +150,7 @@ export const Profile = () => {
       </header>
 
       {/* Main Profile Card */}
-      <Card className="patient-profile-card" style={{ padding: 'clamp(28px, 4vw, 38px)', borderRadius: '2px' }}>
+      <Card className="patient-profile-card" style={{ padding: 'clamp(28px, 4vw, 38px)', borderRadius: 'var(--border-radius-card)' }}>
         {/* Avatar and Identity banner */}
         <div className="patient-profile-identity" style={{ display: 'flex', alignItems: 'center', gap: '24px', marginBottom: '32px', flexWrap: 'wrap' }}>
           <label className="profile-photo-picker" title="Click to choose a new photo">
@@ -189,7 +189,7 @@ export const Profile = () => {
                         color: 'var(--color-primary)',
                         display: 'inline-flex',
                         alignItems: 'center',
-                        borderRadius: '2px',
+                        borderRadius: 'var(--border-radius-badge)',
                       }}
                       aria-label="Edit Profile"
                     >
@@ -214,7 +214,7 @@ export const Profile = () => {
                       setError('');
                       setSuccess(false);
                     }}
-                    style={{ borderRadius: '2px', display: 'flex', alignItems: 'center', gap: '6px', fontWeight: 600 }}
+                    style={{ borderRadius: 'var(--border-radius-btn)', display: 'flex', alignItems: 'center', gap: '6px', fontWeight: 600 }}
                   >
                     <Edit2 size={14} /> Edit Profile
                   </Button>
@@ -225,7 +225,7 @@ export const Profile = () => {
                     variant="outline"
                     size="sm"
                     onClick={handleCancelEdit}
-                    style={{ borderRadius: '2px', display: 'flex', alignItems: 'center', gap: '6px' }}
+                    style={{ borderRadius: 'var(--border-radius-btn)', display: 'flex', alignItems: 'center', gap: '6px' }}
                   >
                     <X size={14} /> Cancel
                   </Button>
@@ -236,7 +236,7 @@ export const Profile = () => {
                   size="sm"
                   onClick={() => document.getElementById('profile-photo-input')?.click()}
                   disabled={isPhotoSaving}
-                  style={{ borderRadius: '2px' }}
+                  style={{ borderRadius: 'var(--border-radius-btn)' }}
                 >
                   <Camera size={14} /> {isPhotoSaving ? 'Saving…' : 'Select Photo'}
                 </Button>
@@ -258,23 +258,23 @@ export const Profile = () => {
         {!isEditing ? (
           <div style={{ display: 'flex', flexDirection: 'column', gap: '20px' }}>
             <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(min(100%, 240px), 1fr))', gap: '16px' }}>
-              <div style={{ padding: '16px 20px', background: 'var(--color-surface-subtle)', borderRadius: '2px', border: '1px solid var(--color-border)' }}>
+              <div style={{ padding: '16px 20px', background: 'var(--color-surface-subtle)', borderRadius: 'var(--border-radius-sm)', border: '1px solid var(--color-border)' }}>
                 <span className="caption" style={{ textTransform: 'uppercase', letterSpacing: '0.06em', display: 'block', marginBottom: '4px', fontSize: '11px', fontWeight: 700, color: 'var(--color-text-muted)' }}>First Name</span>
                 <strong style={{ fontSize: '1.05rem', color: 'var(--color-text)' }}>{first || '—'}</strong>
               </div>
-              <div style={{ padding: '16px 20px', background: 'var(--color-surface-subtle)', borderRadius: '2px', border: '1px solid var(--color-border)' }}>
+              <div style={{ padding: '16px 20px', background: 'var(--color-surface-subtle)', borderRadius: 'var(--border-radius-sm)', border: '1px solid var(--color-border)' }}>
                 <span className="caption" style={{ textTransform: 'uppercase', letterSpacing: '0.06em', display: 'block', marginBottom: '4px', fontSize: '11px', fontWeight: 700, color: 'var(--color-text-muted)' }}>Last Name</span>
                 <strong style={{ fontSize: '1.05rem', color: 'var(--color-text)' }}>{last || '—'}</strong>
               </div>
             </div>
 
-            <div style={{ padding: '16px 20px', background: 'var(--color-surface-subtle)', borderRadius: '2px', border: '1px solid var(--color-border)' }}>
+            <div style={{ padding: '16px 20px', background: 'var(--color-surface-subtle)', borderRadius: 'var(--border-radius-sm)', border: '1px solid var(--color-border)' }}>
               <span className="caption" style={{ textTransform: 'uppercase', letterSpacing: '0.06em', display: 'block', marginBottom: '4px', fontSize: '11px', fontWeight: 700, color: 'var(--color-text-muted)' }}>Registered Email Address</span>
               <strong style={{ fontSize: '1.05rem', color: 'var(--color-text)' }}>{profile.email}</strong>
               <span className="caption" style={{ display: 'block', marginTop: '4px', color: 'var(--color-text-muted)' }}>Managed by system authentication credentials</span>
             </div>
 
-            <div style={{ padding: '16px 20px', background: 'var(--color-surface-subtle)', borderRadius: '2px', border: '1px solid var(--color-border)' }}>
+            <div style={{ padding: '16px 20px', background: 'var(--color-surface-subtle)', borderRadius: 'var(--border-radius-sm)', border: '1px solid var(--color-border)' }}>
               <span className="caption" style={{ textTransform: 'uppercase', letterSpacing: '0.06em', display: 'block', marginBottom: '4px', fontSize: '11px', fontWeight: 700, color: 'var(--color-text-muted)' }}>Primary Contact Phone</span>
               <strong style={{ fontSize: '1.05rem', color: 'var(--color-text)' }}>{phone || 'Not provided'}</strong>
             </div>
@@ -285,7 +285,7 @@ export const Profile = () => {
                 type="button"
                 variant="primary"
                 onClick={() => setIsEditing(true)}
-                style={{ borderRadius: '2px', display: 'inline-flex', alignItems: 'center', gap: '8px', fontWeight: 600 }}
+                style={{ borderRadius: 'var(--border-radius-btn)', display: 'inline-flex', alignItems: 'center', gap: '8px', fontWeight: 600 }}
               >
                 <Edit2 size={15} /> Edit Profile Details
               </Button>
@@ -316,14 +316,14 @@ export const Profile = () => {
             </div>
 
             <div style={{ display: 'flex', alignItems: 'center', gap: '16px', marginTop: '12px', flexWrap: 'wrap' }}>
-              <Button type="submit" variant="primary" disabled={isSaving} style={{ borderRadius: '2px' }}>
+              <Button type="submit" variant="primary" disabled={isSaving} style={{ borderRadius: 'var(--border-radius-btn)' }}>
                 {isSaving ? 'Saving Changes...' : 'Save Profile Changes'}
               </Button>
               <Button
                 type="button"
                 variant="outline"
                 onClick={handleCancelEdit}
-                style={{ borderRadius: '2px' }}
+                style={{ borderRadius: 'var(--border-radius-btn)' }}
               >
                 Cancel
               </Button>
