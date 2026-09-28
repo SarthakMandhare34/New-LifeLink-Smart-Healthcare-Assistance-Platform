@@ -123,20 +123,20 @@ export const MedicineCabinet = () => {
   };
 
   return (
-    <div className="container medicine-cabinet-page" style={{ display: 'flex', flexDirection: 'column', gap: '36px', width: '100%', padding: 0 }}>
+    <div className="container medicine-cabinet-page" style={{ display: 'flex', flexDirection: 'column', gap: '36px', width: '100%', minWidth: 0, padding: 0 }}>
       {/* Header section with icon, title, and action button */}
-      <header style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: '16px' }}>
-        <div style={{ display: 'flex', alignItems: 'center', gap: '16px' }}>
-          <div style={{ width: 48, height: 48, borderRadius: '4px', background: 'var(--color-primary-muted)', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
+      <header style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: '16px', width: '100%', minWidth: 0 }}>
+        <div style={{ display: 'flex', alignItems: 'center', gap: '16px', minWidth: 0, flex: '1 1 min(280px, 100%)' }}>
+          <div style={{ width: 48, height: 48, borderRadius: 'var(--border-radius-sm)', background: 'var(--color-primary-muted)', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
             <Pill size={24} style={{ color: 'var(--color-primary)' }} />
           </div>
-          <div>
-            <h1 style={{ margin: 0, fontSize: '1.85rem', fontWeight: 700, letterSpacing: '-0.02em', color: 'var(--color-text)' }}>Smart Medicine Cabinet</h1>
+          <div style={{ minWidth: 0, flex: '1 1 auto' }}>
+            <h1 style={{ margin: 0, fontSize: 'clamp(1.4rem, 4.5vw, 1.85rem)', fontWeight: 700, letterSpacing: '-0.02em', color: 'var(--color-text)', lineHeight: 1.25 }}>Smart Medicine Cabinet</h1>
             <p className="caption" style={{ margin: '4px 0 0', color: 'var(--color-text-muted)' }}>Manage active medications, schedules, and stock alerts.</p>
           </div>
         </div>
         {!showForm && (
-          <Button variant="primary" onClick={handleOpenAdd}>
+          <Button variant="primary" onClick={handleOpenAdd} style={{ flexShrink: 0 }}>
             <Plus size={16} /> Add Medication
           </Button>
         )}
