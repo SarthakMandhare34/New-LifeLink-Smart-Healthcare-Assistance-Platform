@@ -40,9 +40,9 @@ export const ValidationMessage: React.FC<ValidationMessageProps> = ({
       Icon: AlertCircle,
     },
     info: {
-      color: 'var(--color-primary, #0f766e)',
-      bg: 'rgba(15, 118, 110, 0.08)',
-      border: 'rgba(15, 118, 110, 0.25)',
+      color: 'var(--lifelink-blue, #1769AA)',
+      bg: 'rgba(23, 105, 170, 0.08)',
+      border: 'rgba(23, 105, 170, 0.25)',
       Icon: Info,
     },
     success: {
@@ -66,7 +66,7 @@ export const ValidationMessage: React.FC<ValidationMessageProps> = ({
         gap: '8px',
         padding: '8px 12px',
         marginTop: '6px',
-        borderRadius: '2px',
+        borderRadius: 'var(--border-radius-badge, 4px)',
         backgroundColor: bg,
         border: `1px solid ${border}`,
         color,

@@ -1,30 +1,24 @@
 /**
  * ============================================================================
- * REUSABLE UI COMPONENTS (DESIGN SYSTEM)
+ * REUSABLE BUTTON COMPONENT — LIFELINK DESIGN SYSTEM
  * ============================================================================
- *
- * WHY THIS FILE IS SPECIAL:
- * Instead of rewriting the code for a button 50 times, we write it once here.
- * This ensures the entire application looks perfectly consistent (using Tailwind CSS)
- * and guarantees every component is accessible to screen readers for visually impaired users.
+ * Primary: Blue (#1769AA) — healthcare identity
+ * Danger: Red (#D92D20) — emergency/destructive only
+ * Outline: Neutral border — structural actions
  */
-import React from 'react';                                                                // Core React engine
+import React from 'react';
 
 interface ButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
-  variant?: 'primary' | 'secondary' | 'outline' | 'danger';                                     // Visual style variants
-  size?: 'sm' | 'md' | 'lg';                                                                    // Size presets
+  variant?: 'primary' | 'secondary' | 'outline' | 'danger';
+  size?: 'sm' | 'md' | 'lg';
 }
 
-// =========================================================================================
-// REUSABLE INTERACTIVE BUTTON COMPONENT
-// Standardized touch and click target with smooth hover micro-animations and variant styles.
-// =========================================================================================
 export const Button: React.FC<ButtonProps> = ({ variant = 'primary', size = 'md', className = '', style, ...props }) => {
   let sizeStyle: React.CSSProperties = {};
   if (size === 'sm') {
-    sizeStyle = { padding: '6px 12px', fontSize: 'var(--text-caption)' };                      // Compact size
+    sizeStyle = { padding: '6px 12px', fontSize: 'var(--text-caption)' };
   } else if (size === 'lg') {
-    sizeStyle = { padding: '14px 28px', fontSize: '16px' };                                     // Large CTA size
+    sizeStyle = { padding: '14px 28px', fontSize: '16px' };
   }
 
   return (

@@ -1,20 +1,11 @@
 /**
  * ============================================================================
- * REUSABLE UI COMPONENTS (DESIGN SYSTEM)
+ * CLINICAL TEXT INPUT — LIFELINK DESIGN SYSTEM
  * ============================================================================
- *
- * WHY THIS FILE IS SPECIAL:
- * Instead of rewriting the code for a button 50 times, we write it once here.
- * This ensures the entire application looks perfectly consistent (using Tailwind CSS)
- * and guarantees every component is accessible to screen readers for visually impaired users.
+ * Form input with 6px radius, blue focus ring, clean clinical styling.
  */
-import React from 'react';                                                                // Core React engine
+import React from 'react';
 
-// =========================================================================================
-// LIQUID-GLASS TEXT INPUT FIELD
-// Form field input component incorporating subtle cyan borders, smooth focus rings,
-// and accessible placeholder styling for high contrast readability.
-// =========================================================================================
 export const Input = React.forwardRef<HTMLInputElement, React.InputHTMLAttributes<HTMLInputElement>>(
   ({ style, className = '', ...props }, ref) => {
     const baseStyle: React.CSSProperties = {
@@ -39,4 +30,4 @@ export const Input = React.forwardRef<HTMLInputElement, React.InputHTMLAttribute
   }
 );
 
-Input.displayName = 'Input';                                                                    // React DevTools display name
+Input.displayName = 'Input';
