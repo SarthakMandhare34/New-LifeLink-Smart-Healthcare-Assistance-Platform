@@ -196,15 +196,49 @@
    DARK MODE — Clinical Night Software
    ═══════════════════════════════════════════════════════════════════════ */
 :root[data-theme="dark"], :root.dark, html.dark {
+  color-scheme: dark;
+
   --lifelink-dark-bg: #101820;
   --lifelink-dark-surface: #17212B;
   --lifelink-dark-elevated: #202C36;
   --lifelink-dark-border: #30404C;
-  --lifelink-dark-text: #F4F7F9;
-  --lifelink-dark-muted: #A9B4BC;
+  --lifelink-dark-text: #F8FAFC;
+  --lifelink-dark-muted: #CBD5E1;
   --lifelink-dark-blue: #4DA3D9;
   --lifelink-dark-blue-hover: #6BB5E3;
   --lifelink-dark-red: #FF5A52;
+
+  /* Override primary LifeLink variables for dark theme */
+  --lifelink-bg: var(--lifelink-dark-bg);
+  --lifelink-surface: var(--lifelink-dark-surface);
+  --lifelink-border: var(--lifelink-dark-border);
+  --lifelink-text: var(--lifelink-dark-text);
+  --lifelink-text-muted: var(--lifelink-dark-muted);
+  --lifelink-blue: var(--lifelink-dark-blue);
+  --lifelink-blue-hover: var(--lifelink-dark-blue-hover);
+  --lifelink-blue-deep: var(--lifelink-dark-blue-hover);
+  --lifelink-blue-soft: rgba(77, 163, 217, 0.15);
+  --lifelink-blue-border: rgba(77, 163, 217, 0.35);
+
+  --lifelink-red: var(--lifelink-dark-red);
+  --lifelink-red-hover: #FF6E68;
+  --lifelink-red-soft: rgba(217, 45, 32, 0.15);
+  --lifelink-red-border: rgba(217, 45, 32, 0.35);
+
+  --lifelink-warning: #F5C542;
+  --lifelink-warning-soft: rgba(201, 130, 0, 0.14);
+  --lifelink-warning-border: rgba(201, 130, 0, 0.35);
+
+  --lifelink-success: #34D399;
+  --lifelink-success-soft: rgba(22, 138, 98, 0.14);
+  --lifelink-success-border: rgba(22, 138, 98, 0.35);
+
+  /* Swiss dark aliases */
+  --swiss-dark-bg: var(--lifelink-dark-bg);
+  --swiss-dark-surface: var(--lifelink-dark-surface);
+  --swiss-dark-elevated: var(--lifelink-dark-elevated);
+  --swiss-dark-border: var(--lifelink-dark-border);
+  --swiss-dark-text: var(--lifelink-dark-text);
 
   /* Invert grayscale tokens for dark theme */
   --swiss-white: var(--lifelink-dark-surface);
@@ -293,16 +327,23 @@
   --liquid-inset: none;
 }
 
-/* Dark mode logo/brand adjustments */
+/* Dark mode logo/brand adjustments — institutional high-contrast mount consistency */
 :root[data-theme="dark"] .lifelink-logo-crop,
 :root.dark .lifelink-logo-crop,
 :root[data-theme="dark"] .auth-card-mobile-logo,
-:root.dark .auth-card-mobile-logo {
-  background: var(--color-surface-white);
-  border-color: var(--color-border);
+:root.dark .auth-card-mobile-logo,
+:root[data-theme="dark"] .lifelink-logo-auth,
+:root.dark .lifelink-logo-auth,
+:root[data-theme="dark"] .lifelink-logo-sidebar,
+:root.dark .lifelink-logo-sidebar,
+:root[data-theme="dark"] .workspace-portal-mark,
+:root.dark .workspace-portal-mark {
+  background: #FFFFFF !important;
+  border: 1px solid rgba(255, 255, 255, 0.28) !important;
+  box-shadow: 0 4px 18px rgba(0, 0, 0, 0.45) !important;
 }
 
-/* Dark mode typography */
+/* Dark mode typography — comprehensive high-contrast visibility */
 :root[data-theme="dark"] h1,
 :root[data-theme="dark"] h2,
 :root[data-theme="dark"] h3,
@@ -311,22 +352,64 @@
 :root[data-theme="dark"] h6,
 :root.dark h1, :root.dark h2, :root.dark h3,
 :root.dark h4, :root.dark h5, :root.dark h6 {
-  color: var(--lifelink-dark-text);
+  color: #F8FAFC !important;
+}
+
+:root[data-theme="dark"] p,
+:root.dark p,
+:root[data-theme="dark"] li,
+:root.dark li,
+:root[data-theme="dark"] td,
+:root.dark td,
+:root[data-theme="dark"] th,
+:root.dark th,
+:root[data-theme="dark"] label,
+:root.dark label,
+:root[data-theme="dark"] dt,
+:root.dark dt,
+:root[data-theme="dark"] dd,
+:root.dark dd,
+:root[data-theme="dark"] strong,
+:root.dark strong,
+:root[data-theme="dark"] b,
+:root.dark b {
+  color: #F8FAFC;
 }
 
 :root[data-theme="dark"] .caption,
 :root.dark .caption,
 :root[data-theme="dark"] .text-caption,
-:root.dark .text-caption {
-  color: var(--lifelink-dark-muted);
+:root.dark .text-caption,
+:root[data-theme="dark"] .text-muted,
+:root.dark .text-muted,
+:root[data-theme="dark"] small,
+:root.dark small {
+  color: #CBD5E1 !important;
+}
+
+:root[data-theme="dark"] a:not(.btn):not(.btn *):not(.app-sidebar-nav-item):not(.doctor-nav-item),
+:root.dark a:not(.btn):not(.btn *):not(.app-sidebar-nav-item):not(.doctor-nav-item) {
+  color: var(--lifelink-dark-blue);
+}
+
+:root[data-theme="dark"] a:not(.btn):not(.btn *):not(.app-sidebar-nav-item):not(.doctor-nav-item):hover,
+:root.dark a:not(.btn):not(.btn *):not(.app-sidebar-nav-item):not(.doctor-nav-item):hover {
+  color: var(--lifelink-dark-blue-hover);
+}
+
+:root[data-theme="dark"] .app-mobile-brand,
+:root.dark .app-mobile-brand,
+:root[data-theme="dark"] .app-mobile-brand span,
+:root.dark .app-mobile-brand span {
+  color: #FFFFFF !important;
 }
 
 :root[data-theme="dark"] input::placeholder,
 :root.dark input::placeholder,
 :root[data-theme="dark"] textarea::placeholder,
 :root.dark textarea::placeholder {
-  color: #7A8A98;
-  opacity: 1;
+  color: #94A3B8 !important;
+  opacity: 1 !important;
 }
 
 :root[data-theme="dark"] input:disabled,
@@ -339,6 +422,46 @@
 :root.dark textarea[readonly] {
   color: var(--lifelink-dark-muted);
   -webkit-text-fill-color: var(--lifelink-dark-muted);
+}
+
+:root[data-theme="dark"] input:not([type="checkbox"]):not([type="radio"]):not([type="range"]),
+:root.dark input:not([type="checkbox"]):not([type="radio"]):not([type="range"]),
+:root[data-theme="dark"] .liquid-input,
+:root.dark .liquid-input,
+:root[data-theme="dark"] textarea,
+:root.dark textarea,
+:root[data-theme="dark"] select,
+:root.dark select {
+  background-color: var(--lifelink-dark-surface) !important;
+  color: #FFFFFF !important;
+  border-color: #3B4D5D !important;
+}
+
+:root[data-theme="dark"] .doctor-nav-item.active,
+:root.dark .doctor-nav-item.active,
+:root[data-theme="dark"] .doctor-sidebar .app-sidebar-nav-item.active,
+:root.dark .doctor-sidebar .app-sidebar-nav-item.active,
+:root[data-theme="dark"] .app-sidebar-nav-item.active,
+:root.dark .app-sidebar-nav-item.active {
+  background-color: var(--swiss-blue-soft) !important;
+  color: var(--lifelink-dark-blue-hover) !important;
+  border-left-color: var(--lifelink-dark-blue) !important;
+}
+
+:root[data-theme="dark"] .urgency-low {
+  background-color: var(--swiss-green-bg);
+  border-left-color: var(--swiss-green-text);
+  color: var(--color-text);
+}
+:root[data-theme="dark"] .urgency-moderate {
+  background-color: var(--swiss-amber-bg);
+  border-left-color: var(--swiss-amber-text);
+  color: var(--color-text);
+}
+:root[data-theme="dark"] .urgency-emergency {
+  background-color: var(--swiss-red-soft);
+  border-left-color: var(--lifelink-dark-red);
+  color: var(--color-text);
 }
 
 :root[data-theme="dark"] .btn-outline,
@@ -1091,7 +1214,7 @@ select:focus {
   border-radius: var(--border-radius-sm);
   background: var(--swiss-white);
   border: 1px solid var(--swiss-gray-300);
-  padding: 4px 10px;
+  padding: 6px 14px;
   box-shadow: none;
 }
 
@@ -1099,7 +1222,7 @@ select:focus {
   display: block;
   width: auto;
   max-width: 100%;
-  height: 36px;
+  height: 40px;
   object-fit: contain;
 }
 
@@ -1108,19 +1231,40 @@ select:focus {
 .lifelink-logo-symbol .lifelink-logo { height: 32px; }
 
 .lifelink-logo-auth {
-  width: auto;
-  max-width: min(380px, 90vw);
-  margin: 0 auto var(--spacing-3);
-  padding: 8px 16px;
+  width: 100%;
+  max-width: min(420px, 94vw);
+  margin: 0 auto var(--spacing-4);
+  padding: 16px 28px;
+  background: #FFFFFF !important;
+  border: 1px solid var(--swiss-gray-300);
+  border-radius: var(--border-radius-card);
+  box-shadow: 0 4px 18px rgba(0, 0, 0, 0.08);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
 }
 
-.lifelink-logo-sidebar { width: auto; max-width: 200px; }
-.lifelink-logo-sidebar .lifelink-logo { height: 38px; }
+.lifelink-logo-auth .lifelink-logo {
+  height: clamp(58px, 7vw, 76px);
+  width: auto;
+  max-width: 100%;
+  object-fit: contain;
+}
+
+.lifelink-logo-sidebar {
+  width: auto;
+  max-width: 220px;
+  background: #FFFFFF !important;
+  padding: 6px 14px;
+  border-radius: var(--border-radius-sm);
+  border: 1px solid var(--swiss-gray-300);
+}
+.lifelink-logo-sidebar .lifelink-logo { height: 42px; }
 .lifelink-logo-sidebar-symbol { display: none; width: 32px; height: 32px; }
 
 /* Mobile Auth Logo */
 .auth-card-mobile-logo-wrap {
-  display: none;
+  display: flex !important;
   justify-content: center;
   align-items: center;
   width: 100%;
@@ -1131,16 +1275,21 @@ select:focus {
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  background: var(--color-surface-white);
-  border: 1px solid var(--color-border);
-  border-radius: var(--border-radius-md);
-  padding: 10px 20px;
-  box-shadow: none;
-  max-width: min(320px, 92vw);
+  background: #FFFFFF !important;
+  border: 1px solid var(--swiss-gray-300);
+  border-radius: var(--border-radius-card);
+  padding: 12px 24px;
+  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.08);
+  max-width: min(360px, 92vw);
   margin: 0 auto;
 }
 
-.auth-card-mobile-logo .lifelink-logo { height: 44px; max-height: 52px; }
+.auth-card-mobile-logo .lifelink-logo {
+  height: clamp(50px, 6vw, 66px);
+  width: auto;
+  max-width: 100%;
+  object-fit: contain;
+}
 
 /* Mobile Brand Link */
 .app-mobile-brand { display: none; align-items: center; gap: 7px; min-width: 0; color: var(--color-text); font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif; font-size: 14px; font-weight: 800; letter-spacing: -.035em; text-decoration: none; }
