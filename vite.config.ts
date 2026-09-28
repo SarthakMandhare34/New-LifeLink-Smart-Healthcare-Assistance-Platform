@@ -26,6 +26,7 @@ export default defineConfig({
   },
   envDir: path.resolve(import.meta.dirname),                      // Look for .env files in the project root directory
   root: path.resolve(import.meta.dirname, "frontend"),            // Set Vite's project root to the frontend folder
+  cacheDir: path.resolve(import.meta.dirname, "node_modules/.vite"), // Unify Vite dependency cache at root node_modules
   publicDir: path.resolve(import.meta.dirname, "frontend", "public"), // Folder containing static files served directly as-is
   build: {
     outDir: path.resolve(import.meta.dirname, "dist/public"),     // Compile production frontend bundle into dist/public folder
