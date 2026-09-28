@@ -35,7 +35,7 @@ export const Consultation = () => {
     <div style={{ display: "flex", flexDirection: "column", gap: "36px", width: "100%" }}>
       {/* Workspace Header */}
       <header>
-        <h1 style={{ margin: 0 }}>Consultation Workspace</h1>
+        <h1 style={{ margin: 0, color: "var(--color-doctor-text)" }}>Consultation Workspace</h1>
         <p className="caption" style={{ margin: "6px 0 0" }}>
           Authorized active consultations for your assigned clinical appointments.
         </p>
@@ -43,11 +43,11 @@ export const Consultation = () => {
 
       {/* Empty consultations view */}
       {activeConsultations.length === 0 ? (
-        <Card style={{ textAlign: "center", padding: "var(--spacing-10) var(--spacing-6)", borderRadius: "2px" }}>
+        <Card style={{ textAlign: "center", padding: "var(--spacing-10) var(--spacing-6)", borderRadius: "var(--border-radius-card)" }}>
           <Stethoscope size={40} style={{ color: "var(--color-text-muted)", opacity: 0.5, margin: "0 auto var(--spacing-3)" }} />
-          <h2 style={{ margin: "0 0 var(--spacing-2)", fontSize: "1.2rem", color: "var(--color-text)" }}>No active consultations</h2>
+          <h2 style={{ margin: "0 0 var(--spacing-2)", fontSize: "1.2rem", color: "var(--color-doctor-text)" }}>No active consultations</h2>
           <p className="caption" style={{ margin: "0 auto", maxWidth: "420px" }}>You have no active appointment requests or confirmed consultations awaiting review.</p>
-          <Button variant="primary" onClick={() => navigate("/doctor/appointments")} style={{ marginTop: "var(--spacing-4)", borderRadius: "2px", background: "var(--swiss-blue)" }}>
+          <Button variant="primary" onClick={() => navigate("/doctor/appointments")} style={{ marginTop: "var(--spacing-4)", borderRadius: "var(--border-radius-btn)", background: "var(--color-doctor-primary)" }}>
             View All Appointments
           </Button>
         </Card>
@@ -64,21 +64,21 @@ export const Consultation = () => {
                 flexWrap: "wrap",
                 gap: "20px",
                 padding: "24px 28px",
-                borderRadius: "2px",
-                borderLeft: appointment.status === "Confirmed" ? "3px solid var(--swiss-blue)" : "3px solid var(--swiss-amber-text)",
+                borderRadius: "var(--border-radius-card)",
+                borderLeft: appointment.status === "Confirmed" ? "3px solid var(--color-doctor-primary)" : "3px solid var(--color-semantic-warning)",
               }}
             >
               <div>
                 <div style={{ display: "flex", alignItems: "center", gap: "10px", marginBottom: "6px" }}>
-                  <User size={20} style={{ color: "var(--swiss-blue)" }} />
-                  <h3 style={{ margin: 0 }}>{appointment.patient.name}</h3>                     {/* Patient name */}
+                  <User size={20} style={{ color: "var(--color-doctor-primary)" }} />
+                  <h3 style={{ margin: 0, color: "var(--color-doctor-text)" }}>{appointment.patient.name}</h3>                     {/* Patient name */}
                   <span
                     style={{
-                      background: appointment.status === "Confirmed" ? "var(--swiss-blue-soft)" : "var(--swiss-amber-bg)",
-                      color: appointment.status === "Confirmed" ? "var(--swiss-blue)" : "var(--swiss-amber-text)",
-                      border: appointment.status === "Confirmed" ? "1px solid var(--swiss-blue)" : "1px solid var(--swiss-amber-border)",
+                      background: appointment.status === "Confirmed" ? "var(--color-accent-muted)" : "rgba(217, 119, 6, 0.12)",
+                      color: appointment.status === "Confirmed" ? "var(--color-doctor-primary)" : "var(--color-semantic-warning)",
+                      border: appointment.status === "Confirmed" ? "1px solid var(--color-doctor-primary)" : "1px solid rgba(217, 119, 6, 0.25)",
                       padding: "3px 8px",
-                      borderRadius: "2px",
+                      borderRadius: "var(--border-radius-badge)",
                       fontSize: "0.75rem",
                       fontWeight: 700,
                     }}
@@ -89,14 +89,14 @@ export const Consultation = () => {
                 <p className="caption" style={{ margin: "4px 0" }}>
                   Scheduled: <span style={{ fontVariantNumeric: "tabular-nums" }}>{new Date(appointment.scheduledAt).toLocaleString()}</span>
                 </p>
-                <p style={{ margin: "8px 0 0", fontSize: "0.92rem" }}>
+                <p style={{ margin: "8px 0 0", fontSize: "0.92rem", color: "var(--color-text)" }}>
                   <strong>Reason:</strong> {appointment.reason}                                 {/* Patient's reported chief complaint */}
                 </p>
               </div>
 
               {/* Action button opening patient record to prescribe */}
               <div style={{ display: "flex", gap: "12px" }}>
-                <Button variant="primary" onClick={() => navigate(`/doctor/patients/${appointment.patient.id}`)} style={{ borderRadius: "2px", background: "var(--swiss-blue)" }}>
+                <Button variant="primary" onClick={() => navigate(`/doctor/patients/${appointment.patient.id}`)} style={{ borderRadius: "var(--border-radius-btn)", background: "var(--color-doctor-primary)" }}>
                   Open Clinical Record & Prescribe
                 </Button>
               </div>

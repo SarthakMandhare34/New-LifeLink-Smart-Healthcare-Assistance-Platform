@@ -54,24 +54,24 @@ export const DoctorAppointments = () => {
   // Left border accent color depending on current status
   const getBorderColor = (status: string) => {
     switch (status) {
-      case "Completed": return "3px solid var(--swiss-gray-400)";
-      case "Confirmed": return "3px solid var(--swiss-blue)";
-      case "Cancelled": return "3px solid var(--swiss-red)";
-      default: return "3px solid var(--swiss-blue)";
+      case "Completed": return "3px solid var(--color-border-strong)";
+      case "Confirmed": return "3px solid var(--color-doctor-primary)";
+      case "Cancelled": return "3px solid var(--color-semantic-emergency)";
+      default: return "3px solid var(--color-doctor-primary)";
     }
   };
 
-  // Status badge with matching icon and standardized 2px pill styling
+  // Status badge with matching icon and standardized pill styling
   const getStatusBadge = (status: string) => {
     switch (status) {
       case "Completed":
-        return <span style={{ display: "inline-flex", alignItems: "center", gap: 4, background: "var(--swiss-gray-100)", color: "var(--swiss-gray-700)", border: "1px solid var(--swiss-gray-300)", padding: "3px 8px", borderRadius: "2px", fontSize: "0.78rem", fontWeight: 700 }}><CheckCheck size={13} /> Completed</span>;
+        return <span style={{ display: "inline-flex", alignItems: "center", gap: 4, background: "var(--color-surface-subtle)", color: "var(--color-text-muted)", border: "1px solid var(--color-border)", padding: "3px 8px", borderRadius: "var(--border-radius-badge)", fontSize: "0.78rem", fontWeight: 700 }}><CheckCheck size={13} /> Completed</span>;
       case "Confirmed":
-        return <span style={{ display: "inline-flex", alignItems: "center", gap: 4, background: "var(--swiss-blue-soft)", color: "var(--swiss-blue)", border: "1px solid var(--swiss-blue)", padding: "3px 8px", borderRadius: "2px", fontSize: "0.78rem", fontWeight: 700 }}><CheckCircle2 size={13} /> Confirmed (Active)</span>;
+        return <span style={{ display: "inline-flex", alignItems: "center", gap: 4, background: "var(--color-accent-muted)", color: "var(--color-doctor-primary)", border: "1px solid var(--color-doctor-primary)", padding: "3px 8px", borderRadius: "var(--border-radius-badge)", fontSize: "0.78rem", fontWeight: 700 }}><CheckCircle2 size={13} /> Confirmed (Active)</span>;
       case "Cancelled":
-        return <span style={{ display: "inline-flex", alignItems: "center", gap: 4, background: "var(--swiss-red-soft)", color: "var(--swiss-red)", border: "1px solid var(--swiss-red)", padding: "3px 8px", borderRadius: "2px", fontSize: "0.78rem", fontWeight: 700 }}><XCircle size={13} /> Cancelled</span>;
+        return <span style={{ display: "inline-flex", alignItems: "center", gap: 4, background: "var(--color-emergency-surface)", color: "var(--color-semantic-emergency)", border: "1px solid var(--color-semantic-emergency)", padding: "3px 8px", borderRadius: "var(--border-radius-badge)", fontSize: "0.78rem", fontWeight: 700 }}><XCircle size={13} /> Cancelled</span>;
       default:
-        return <span style={{ display: "inline-flex", alignItems: "center", gap: 4, background: "var(--swiss-amber-bg)", color: "var(--swiss-amber-text)", border: "1px solid var(--swiss-amber-border)", padding: "3px 8px", borderRadius: "2px", fontSize: "0.78rem", fontWeight: 700 }}><Clock size={13} /> {status}</span>;
+        return <span style={{ display: "inline-flex", alignItems: "center", gap: 4, background: "rgba(217, 119, 6, 0.12)", color: "var(--color-semantic-warning)", border: "1px solid rgba(217, 119, 6, 0.25)", padding: "3px 8px", borderRadius: "var(--border-radius-badge)", fontSize: "0.78rem", fontWeight: 700 }}><Clock size={13} /> {status}</span>;
     }
   };
 
@@ -79,7 +79,7 @@ export const DoctorAppointments = () => {
     <div style={{ display: "flex", flexDirection: "column", gap: "36px", width: "100%" }}>
       {/* Page Header */}
       <header>
-        <h1 style={{ margin: 0 }}>Appointments</h1>
+        <h1 style={{ margin: 0, color: "var(--color-doctor-text)" }}>Appointments</h1>
         <p className="caption" style={{ margin: "6px 0 0" }}>
           Manage patient appointment requests, confirm consultations, and mark finished consultations as Completed.
         </p>
@@ -87,7 +87,7 @@ export const DoctorAppointments = () => {
 
       {/* Dismissible feedback notification message */}
       {feedbackMessage && (
-        <div style={{ background: "var(--color-surface-interactive)", border: "1px solid var(--color-border)", color: "var(--color-text)", padding: "16px 20px", borderRadius: "2px", display: "flex", justifyContent: "space-between", alignItems: "center" }}>
+        <div style={{ background: "var(--color-surface-interactive)", border: "1px solid var(--color-border)", color: "var(--color-text)", padding: "16px 20px", borderRadius: "var(--border-radius-sm)", display: "flex", justifyContent: "space-between", alignItems: "center" }}>
           <span><strong>Status updated:</strong> {feedbackMessage}</span>
           <button type="button" aria-label="Dismiss status notification" onClick={() => setFeedbackMessage(null)} style={{ background: "none", border: "none", cursor: "pointer", color: "var(--color-text)", fontWeight: "bold", fontSize: "1.2rem", padding: "4px 8px" }}>×</button>
         </div>
@@ -95,7 +95,7 @@ export const DoctorAppointments = () => {
 
       {/* Empty appointment list fallback */}
       {!appointments.data?.length ? (
-        <Card style={{ textAlign: "center", padding: "var(--spacing-10) var(--spacing-6)", borderRadius: "2px" }}>
+        <Card style={{ textAlign: "center", padding: "var(--spacing-10) var(--spacing-6)", borderRadius: "var(--border-radius-card)" }}>
           <Clock size={40} style={{ color: "var(--color-text-muted)", opacity: 0.5, margin: "0 auto var(--spacing-3)" }} />
           <p style={{ margin: 0, fontWeight: 600, color: "var(--color-text)", fontSize: "1.1rem" }}>No assigned appointments yet.</p>
           <p className="caption" style={{ margin: "6px 0 0", color: "var(--color-text-muted)" }}>When patients book consultations with you, they will appear here for review.</p>
@@ -118,20 +118,20 @@ export const DoctorAppointments = () => {
                   alignItems: "center",
                   flexWrap: "wrap",
                   padding: "24px 28px",
-                  borderRadius: "2px",
+                  borderRadius: "var(--border-radius-card)",
                   borderLeft: getBorderColor(appointment.status),                              // Lifecycle color strip
                 }}
               >
                 {/* Appointment & Patient Info */}
                 <div style={{ flex: "1 1 min(100%, 360px)" }}>
                   <div style={{ display: "flex", alignItems: "center", gap: "10px", marginBottom: "6px" }}>
-                    <h3 style={{ margin: 0 }}>{appointment.patient.name}</h3>                   {/* Patient legal name */}
+                    <h3 style={{ margin: 0, color: "var(--color-doctor-text)" }}>{appointment.patient.name}</h3>                   {/* Patient legal name */}
                     {getStatusBadge(appointment.status)}                                        {/* Status badge */}
                   </div>
                   <p className="caption" style={{ margin: "4px 0" }}>
                     Scheduled: <span style={{ fontVariantNumeric: "tabular-nums" }}>{new Date(appointment.scheduledAt).toLocaleString()}</span>
                   </p>
-                  <p style={{ margin: "8px 0 0", fontSize: "0.92rem" }}>
+                  <p style={{ margin: "8px 0 0", fontSize: "0.92rem", color: "var(--color-text)" }}>
                     <strong>Booking reason:</strong> {appointment.reason}                       {/* Patient's reported symptom / reason */}
                   </p>
                 </div>
@@ -139,7 +139,7 @@ export const DoctorAppointments = () => {
                 {/* Doctor Action Controls */}
                 <div style={{ display: "flex", gap: "12px", flexWrap: "wrap" }}>
                   {/* View patient health record */}
-                  <Button variant="secondary" onClick={() => navigate(`/doctor/patients/${appointment.patient.id}`)} style={{ borderRadius: "2px" }}>
+                  <Button variant="secondary" onClick={() => navigate(`/doctor/patients/${appointment.patient.id}`)} style={{ borderRadius: "var(--border-radius-btn)" }}>
                     Review patient
                   </Button>
 
@@ -150,6 +150,7 @@ export const DoctorAppointments = () => {
                         variant="primary"
                         disabled={updateStatus.isPending}
                         onClick={() => updateStatus.mutate({ id: appointment.id, status: "Confirmed" })} // Confirm booking
+                        style={{ borderRadius: "var(--border-radius-btn)", background: "var(--color-doctor-primary)" }}
                       >
                         Accept
                       </Button>
@@ -157,6 +158,7 @@ export const DoctorAppointments = () => {
                         variant="secondary"
                         disabled={updateStatus.isPending}
                         onClick={() => updateStatus.mutate({ id: appointment.id, status: "Cancelled" })} // Decline booking
+                        style={{ borderRadius: "var(--border-radius-btn)" }}
                       >
                         Decline
                       </Button>
@@ -170,6 +172,7 @@ export const DoctorAppointments = () => {
                         variant="primary"
                         disabled={updateStatus.isPending}
                         onClick={() => updateStatus.mutate({ id: appointment.id, status: "Completed" })} // Mark consultation finished
+                        style={{ borderRadius: "var(--border-radius-btn)", background: "var(--color-doctor-primary)" }}
                       >
                         ✓ Mark as Completed
                       </Button>
@@ -177,6 +180,7 @@ export const DoctorAppointments = () => {
                         variant="secondary"
                         disabled={updateStatus.isPending}
                         onClick={() => updateStatus.mutate({ id: appointment.id, status: "Cancelled" })} // Cancel booking
+                        style={{ borderRadius: "var(--border-radius-btn)" }}
                       >
                         Cancel
                       </Button>
@@ -198,7 +202,7 @@ export const DoctorAppointments = () => {
 
       {/* Mutation error banner */}
       {updateStatus.isError && (
-        <p role="alert" style={{ color: "var(--color-danger)" }}>
+        <p role="alert" style={{ color: "var(--color-semantic-emergency)" }}>
           {updateStatus.error.message || "That appointment could not be updated."}
         </p>
       )}

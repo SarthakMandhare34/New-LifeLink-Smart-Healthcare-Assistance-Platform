@@ -45,7 +45,7 @@ export const DoctorPrescriptions = () => {
   const cardStyle = {
     background: 'var(--color-surface-white)',
     padding: 'clamp(24px, 3.2vw, 32px)',
-    borderRadius: '2px',
+    borderRadius: 'var(--border-radius-card)',
     border: '1px solid var(--color-border)',
     display: 'flex',
     flexDirection: 'column' as const,
@@ -58,7 +58,7 @@ export const DoctorPrescriptions = () => {
 
       {/* Workspace Header */}
       <header style={{ display: 'flex', alignItems: 'center', gap: '18px' }}>
-        <div style={{ width: '52px', height: '52px', borderRadius: '2px', background: 'var(--swiss-blue-soft)', border: '1px solid var(--swiss-blue)', display: 'grid', placeItems: 'center', color: 'var(--color-doctor-primary)', flexShrink: 0 }}>
+        <div style={{ width: '52px', height: '52px', borderRadius: 'var(--border-radius-sm)', background: 'var(--color-accent-muted)', border: '1px solid var(--color-doctor-primary)', display: 'grid', placeItems: 'center', color: 'var(--color-doctor-primary)', flexShrink: 0 }}>
           <FileText size={26} />                                                                {/* Prescriptions header icon */}
         </div>
         <div>
@@ -117,7 +117,7 @@ export const DoctorPrescriptions = () => {
                 </div>
 
                 {/* Prescribed medication items list */}
-                <div style={{ padding: '16px 18px', background: 'var(--color-surface-subtle)', borderRadius: '2px', border: '1px solid var(--color-border)', marginBottom: '4px' }}>
+                <div style={{ padding: '16px 18px', background: 'var(--color-surface-subtle)', borderRadius: 'var(--border-radius-sm)', border: '1px solid var(--color-border)', marginBottom: '4px' }}>
                   <span style={{ fontSize: '0.75rem', color: 'var(--color-text-muted)', fontWeight: 700, textTransform: 'uppercase' }}>
                     Prescribed Items:
                   </span>
@@ -181,7 +181,7 @@ export const DoctorPrescriptions = () => {
             <Button
               variant="primary"
               onClick={() => navigate('/doctor/appointments')}
-              style={{ alignSelf: 'center', borderRadius: '2px', background: 'var(--swiss-blue)' }}
+              style={{ alignSelf: 'center', borderRadius: 'var(--border-radius-btn)', background: 'var(--color-doctor-primary)' }}
             >
               Review Appointments <ArrowRight size={16} />
             </Button>
@@ -192,7 +192,7 @@ export const DoctorPrescriptions = () => {
             {assignedPatients.map((patient) => (
               <Card key={patient.id} style={cardStyle}>
                 <div style={{ display: 'flex', alignItems: 'center', gap: '14px', marginBottom: '8px' }}>
-                  <div style={{ width: '44px', height: '44px', borderRadius: '2px', background: 'var(--swiss-blue-soft)', border: '1px solid var(--swiss-blue)', display: 'grid', placeItems: 'center', color: 'var(--color-doctor-primary)', fontWeight: 800, fontSize: '1.1rem', flexShrink: 0 }}>
+                  <div style={{ width: '44px', height: '44px', borderRadius: 'var(--border-radius-badge)', background: 'var(--color-accent-muted)', border: '1px solid var(--color-doctor-primary)', display: 'grid', placeItems: 'center', color: 'var(--color-doctor-primary)', fontWeight: 800, fontSize: '1.1rem', flexShrink: 0 }}>
                     {patient.name.charAt(0).toUpperCase()}                                      {/* Patient initial avatar */}
                   </div>
                   <div>
@@ -205,7 +205,7 @@ export const DoctorPrescriptions = () => {
                   <Button
                     variant="outline"
                     size="sm"
-                    style={{ flex: 1, borderRadius: '2px' }}
+                    style={{ flex: 1, borderRadius: 'var(--border-radius-btn)' }}
                     onClick={() => navigate(`/doctor/patients/${patient.id}`)}
                   >
                     View Record
@@ -213,7 +213,7 @@ export const DoctorPrescriptions = () => {
                   <Button
                     variant="primary"
                     size="sm"
-                    style={{ flex: 1, borderRadius: '2px', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '4px', background: 'var(--swiss-blue)' }}
+                    style={{ flex: 1, borderRadius: 'var(--border-radius-btn)', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '4px', background: 'var(--color-doctor-primary)' }}
                     onClick={() => navigate(`/doctor/patients/${patient.id}`)} // Opens patient record to issue Rx
                   >
                     <Plus size={14} /> Write Rx

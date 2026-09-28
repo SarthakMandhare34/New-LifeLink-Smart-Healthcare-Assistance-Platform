@@ -105,48 +105,48 @@ export const PatientView = () => {
     <div style={{ display: "flex", flexDirection: "column", gap: "36px", width: "100%" }}>
       {/* Header */}
       <header>
-        <h1 style={{ margin: 0 }}>Patient Record</h1>
+        <h1 style={{ margin: 0, color: "var(--color-doctor-text)" }}>Patient Record</h1>
         <p className="caption" style={{ margin: "6px 0 0" }}>{patient.name} · Appointment-authorized summary</p>
       </header>
 
       {/* Health Passport summary */}
-      <Card style={{ padding: "clamp(26px, 3.5vw, 32px)", borderRadius: "2px" }}>
-        <h2 style={{ margin: "0 0 20px" }}>Health Passport summary</h2>
+      <Card style={{ padding: "clamp(26px, 3.5vw, 32px)", borderRadius: "var(--border-radius-card)" }}>
+        <h2 style={{ margin: "0 0 20px", color: "var(--color-doctor-text)" }}>Health Passport summary</h2>
         <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(min(100%, 180px), 1fr))", gap: "20px" }}>
-          <div style={{ padding: "16px 20px", background: "var(--color-surface-subtle)", borderRadius: "2px", border: "1px solid var(--color-border)" }}>
+          <div style={{ padding: "16px 20px", background: "var(--color-surface-subtle)", borderRadius: "var(--border-radius-sm)", border: "1px solid var(--color-border)" }}>
             <p className="caption" style={{ margin: "0 0 6px" }}>Blood group</p>
-            <strong style={{ fontSize: "1.1rem" }}>{patient.bloodGroup}</strong>                                               {/* Patient blood group */}
+            <strong style={{ fontSize: "1.1rem", color: "var(--color-text)" }}>{patient.bloodGroup}</strong>                                               {/* Patient blood group */}
           </div>
-          <div style={{ padding: "16px 20px", background: "var(--color-surface-subtle)", borderRadius: "2px", border: "1px solid var(--color-border)" }}>
+          <div style={{ padding: "16px 20px", background: "var(--color-surface-subtle)", borderRadius: "var(--border-radius-sm)", border: "1px solid var(--color-border)" }}>
             <p className="caption" style={{ margin: "0 0 6px" }}>Allergies</p>
-            <strong>{listOrNotRecorded(patient.allergies)}</strong>                             {/* Allergies */}
+            <strong style={{ color: "var(--color-text)" }}>{listOrNotRecorded(patient.allergies)}</strong>                             {/* Allergies */}
           </div>
-          <div style={{ padding: "16px 20px", background: "var(--color-surface-subtle)", borderRadius: "2px", border: "1px solid var(--color-border)" }}>
+          <div style={{ padding: "16px 20px", background: "var(--color-surface-subtle)", borderRadius: "var(--border-radius-sm)", border: "1px solid var(--color-border)" }}>
             <p className="caption" style={{ margin: "0 0 6px" }}>Conditions</p>
-            <strong>{listOrNotRecorded(patient.conditions)}</strong>                            {/* Chronic conditions */}
+            <strong style={{ color: "var(--color-text)" }}>{listOrNotRecorded(patient.conditions)}</strong>                            {/* Chronic conditions */}
           </div>
         </div>
         <p className="caption" style={{ marginTop: "20px" }}>Email, phone, emergency contacts, and unrelated patient records are intentionally not exposed to this doctor workspace.</p>
       </Card>
 
       {/* Booking Context */}
-      <Card style={{ padding: "clamp(26px, 3.5vw, 32px)", borderRadius: "2px" }}>
-        <h2 style={{ display: "flex", alignItems: "center", gap: "10px", margin: "0 0 20px" }}>
+      <Card style={{ padding: "clamp(26px, 3.5vw, 32px)", borderRadius: "var(--border-radius-card)" }}>
+        <h2 style={{ display: "flex", alignItems: "center", gap: "10px", margin: "0 0 20px", color: "var(--color-doctor-text)" }}>
           <CalendarCheck size={22} color="var(--color-doctor-primary)" /> Booking context
         </h2>
         <div style={{ display: "grid", gap: "16px" }}>
           {appointments.map((appointment) => (
-            <div key={appointment.id} style={{ display: "flex", justifyContent: "space-between", alignItems: "center", flexWrap: "wrap", gap: "16px", padding: "18px 22px", border: "1px solid var(--color-border)", borderRadius: "2px", background: "var(--color-surface-subtle)" }}>
+            <div key={appointment.id} style={{ display: "flex", justifyContent: "space-between", alignItems: "center", flexWrap: "wrap", gap: "16px", padding: "18px 22px", border: "1px solid var(--color-border)", borderRadius: "var(--border-radius-sm)", background: "var(--color-surface-subtle)" }}>
               <div>
-                <strong style={{ fontSize: "1rem" }}>{new Date(appointment.scheduledAt).toLocaleString()} · {appointment.status}</strong>
+                <strong style={{ fontSize: "1rem", color: "var(--color-text)" }}>{new Date(appointment.scheduledAt).toLocaleString()} · {appointment.status}</strong>
                 <p className="caption" style={{ margin: "6px 0 0" }}>Reason: {appointment.reason || "No booking reason was recorded."}</p>
               </div>
               {appointment.status === "Requested" || appointment.status === "Pending" ? (
-                <Button size="sm" variant="primary" disabled={updateStatus.isPending} aria-label={`Accept appointment on ${new Date(appointment.scheduledAt).toLocaleDateString()}`} onClick={() => updateStatus.mutate({ id: appointment.id, status: "Confirmed" })} style={{ borderRadius: "2px" }}>
+                <Button size="sm" variant="primary" disabled={updateStatus.isPending} aria-label={`Accept appointment on ${new Date(appointment.scheduledAt).toLocaleDateString()}`} onClick={() => updateStatus.mutate({ id: appointment.id, status: "Confirmed" })} style={{ borderRadius: "var(--border-radius-btn)", background: "var(--color-doctor-primary)" }}>
                   Accept Appointment
                 </Button>
               ) : appointment.status === "Confirmed" ? (
-                <Button size="sm" variant="secondary" disabled={updateStatus.isPending} aria-label={`Mark appointment on ${new Date(appointment.scheduledAt).toLocaleDateString()} completed`} onClick={() => updateStatus.mutate({ id: appointment.id, status: "Completed" })} style={{ borderRadius: "2px" }}>
+                <Button size="sm" variant="secondary" disabled={updateStatus.isPending} aria-label={`Mark appointment on ${new Date(appointment.scheduledAt).toLocaleDateString()} completed`} onClick={() => updateStatus.mutate({ id: appointment.id, status: "Completed" })} style={{ borderRadius: "var(--border-radius-btn)" }}>
                   ✓ Mark Completed
                 </Button>
               ) : null}
@@ -156,16 +156,16 @@ export const PatientView = () => {
       </Card>
 
       {/* Submitted Assessment Summaries */}
-      <Card style={{ padding: "clamp(26px, 3.5vw, 32px)", borderRadius: "2px" }}>
-        <h2 style={{ display: "flex", alignItems: "center", gap: "10px", margin: "0 0 20px" }}>
+      <Card style={{ padding: "clamp(26px, 3.5vw, 32px)", borderRadius: "var(--border-radius-card)" }}>
+        <h2 style={{ display: "flex", alignItems: "center", gap: "10px", margin: "0 0 20px", color: "var(--color-doctor-text)" }}>
           <Activity size={22} color="var(--color-doctor-primary)" /> Submitted assessment summaries
         </h2>
         {assessments.length ? (
           <div style={{ display: "grid", gap: "16px" }}>
             {assessments.map((assessment) => (
-              <div key={assessment.id} style={{ padding: "18px 22px", border: "1px solid var(--color-border)", borderRadius: "2px", background: "var(--color-surface-subtle)" }}>
-                <strong style={{ fontSize: "1rem" }}>{assessment.specialty} · {assessment.urgency}</strong>
-                <p style={{ margin: "10px 0 0" }}><b>Symptoms:</b> {assessment.symptoms}</p>
+              <div key={assessment.id} style={{ padding: "18px 22px", border: "1px solid var(--color-border)", borderRadius: "var(--border-radius-sm)", background: "var(--color-surface-subtle)" }}>
+                <strong style={{ fontSize: "1rem", color: "var(--color-text)" }}>{assessment.specialty} · {assessment.urgency}</strong>
+                <p style={{ margin: "10px 0 0", color: "var(--color-text)" }}><b>Symptoms:</b> {assessment.symptoms}</p>
                 <p className="caption" style={{ margin: "6px 0 0" }}>Duration: {assessment.duration} · Patient context: {assessment.reason}</p>
                 <p className="caption" style={{ margin: "6px 0 0" }}>Automated guidance: {assessment.guidance}</p>
               </div>
@@ -177,15 +177,15 @@ export const PatientView = () => {
       </Card>
 
       {/* Patient Medicines */}
-      <Card style={{ padding: "clamp(26px, 3.5vw, 32px)", borderRadius: "2px" }}>
-        <h2 style={{ display: "flex", alignItems: "center", gap: "10px", margin: "0 0 20px" }}>
+      <Card style={{ padding: "clamp(26px, 3.5vw, 32px)", borderRadius: "var(--border-radius-card)" }}>
+        <h2 style={{ display: "flex", alignItems: "center", gap: "10px", margin: "0 0 20px", color: "var(--color-doctor-text)" }}>
           <Pill size={22} color="var(--color-doctor-primary)" /> Medicines
         </h2>
         {medicines.length ? (
           <div style={{ display: "grid", gap: "16px" }}>
             {medicines.map((medicine) => (
-              <div key={medicine.id} style={{ padding: "16px 20px", border: "1px solid var(--color-border)", borderRadius: "2px", background: "var(--color-surface-subtle)" }}>
-                <strong style={{ fontSize: "1rem" }}>{medicine.name}</strong>
+              <div key={medicine.id} style={{ padding: "16px 20px", border: "1px solid var(--color-border)", borderRadius: "var(--border-radius-sm)", background: "var(--color-surface-subtle)" }}>
+                <strong style={{ fontSize: "1rem", color: "var(--color-text)" }}>{medicine.name}</strong>
                 <p className="caption" style={{ margin: "6px 0 0" }}>{medicine.dosage} · {medicine.frequency} · {medicine.schedule}</p>
               </div>
             ))}
@@ -196,33 +196,33 @@ export const PatientView = () => {
       </Card>
 
       {/* Create Prescription Suite */}
-      <Card style={{ padding: "clamp(26px, 3.5vw, 32px)", borderRadius: "2px" }}>
-        <h2 style={{ display: "flex", alignItems: "center", gap: "10px", margin: "0 0 20px" }}>
+      <Card style={{ padding: "clamp(26px, 3.5vw, 32px)", borderRadius: "var(--border-radius-card)" }}>
+        <h2 style={{ display: "flex", alignItems: "center", gap: "10px", margin: "0 0 20px", color: "var(--color-doctor-text)" }}>
           <FileText size={22} color="var(--color-doctor-primary)" /> Create prescription
         </h2>
         {hasActiveOrCompleted ? (
           <form onSubmit={submitPrescription} style={{ display: "grid", gap: "20px" }}>
             <label className="auth-field" style={{ display: "flex", flexDirection: "column", gap: "8px" }}>
-              <span style={{ fontWeight: 600, fontSize: "0.88rem" }}>Clinical notes (optional)</span>
-              <textarea value={clinicalNotes} onChange={(event) => setClinicalNotes(event.target.value)} maxLength={4000} rows={3} style={{ width: "100%", resize: "vertical", padding: "12px 14px", borderRadius: "2px", border: "1px solid var(--color-border)" }} />
+              <span style={{ fontWeight: 600, fontSize: "0.88rem", color: "var(--color-text)" }}>Clinical notes (optional)</span>
+              <textarea value={clinicalNotes} onChange={(event) => setClinicalNotes(event.target.value)} maxLength={4000} rows={3} style={{ width: "100%", resize: "vertical", padding: "12px 14px", borderRadius: "var(--border-radius-input)", border: "1px solid var(--color-border)", background: "var(--color-surface-white)", color: "var(--color-text)" }} />
             </label>
             {items.map((item, index) => (
-              <div key={index} style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(min(100%, 140px), 1fr)) auto", gap: "14px", alignItems: "center", padding: "16px 18px", border: "1px solid var(--color-border)", borderRadius: "2px", background: "var(--color-surface-subtle)" }}>
+              <div key={index} style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(min(100%, 140px), 1fr)) auto", gap: "14px", alignItems: "center", padding: "16px 18px", border: "1px solid var(--color-border)", borderRadius: "var(--border-radius-sm)", background: "var(--color-surface-subtle)" }}>
                 <Input placeholder="Medicine name" aria-label={`Medicine name ${index + 1}`} value={item.name} onChange={(event) => updateItem(index, "name", event.target.value)} required />
                 <Input placeholder="Dosage" aria-label={`Dosage ${index + 1}`} value={item.dosage} onChange={(event) => updateItem(index, "dosage", event.target.value)} required />
                 <Input placeholder="Instructions" aria-label={`Instructions ${index + 1}`} value={item.instructions} onChange={(event) => updateItem(index, "instructions", event.target.value)} required />
                 {items.length > 1 ? (
-                  <Button type="button" variant="outline" size="sm" onClick={() => removeItem(index)} aria-label={`Remove item ${index + 1}`} style={{ borderColor: "rgba(197, 48, 48, 0.3)", color: "var(--color-semantic-error)", height: "38px", padding: "0 8px", borderRadius: "2px" }}>
+                  <Button type="button" variant="outline" size="sm" onClick={() => removeItem(index)} aria-label={`Remove item ${index + 1}`} style={{ borderColor: "rgba(197, 48, 48, 0.3)", color: "var(--color-semantic-emergency)", height: "38px", padding: "0 8px", borderRadius: "var(--border-radius-btn)" }}>
                     <Trash2 size={14} />
                   </Button>
                 ) : null}
               </div>
             ))}
             <div style={{ display: "flex", gap: "16px", flexWrap: "wrap", marginTop: "8px" }}>
-              <Button type="button" variant="secondary" onClick={() => setItems((current) => [...current, { name: "", dosage: "", instructions: "" }])} style={{ borderRadius: "2px" }}>
+              <Button type="button" variant="secondary" onClick={() => setItems((current) => [...current, { name: "", dosage: "", instructions: "" }])} style={{ borderRadius: "var(--border-radius-btn)" }}>
                 Add medicine
               </Button>
-              <Button type="submit" variant="primary" disabled={createPrescription.isPending} style={{ borderRadius: "2px" }}>
+              <Button type="submit" variant="primary" disabled={createPrescription.isPending} style={{ borderRadius: "var(--border-radius-btn)", background: "var(--color-doctor-primary)" }}>
                 {createPrescription.isPending ? "Creating…" : "Create prescription"}
               </Button>
             </div>

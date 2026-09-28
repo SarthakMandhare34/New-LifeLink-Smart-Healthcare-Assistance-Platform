@@ -93,7 +93,7 @@ export const DoctorDashboard = () => {
     ? `Dr. ${session.data.displayName.replace(/^Dr\.?\s*/i, '')}`
     : 'Doctor';
 
-  // Swiss card & stat tokens: 1px border, 2px radius, no shadow
+  // Swiss clinical card & stat tokens: 1px border, 8px radius, no shadow
   const cardStyle: React.CSSProperties = {
     padding: '28px 32px',
     display: 'flex',
@@ -101,7 +101,7 @@ export const DoctorDashboard = () => {
     gap: '20px',
     background: 'var(--color-surface-white)',
     border: '1px solid var(--color-border)',
-    borderRadius: '2px',
+    borderRadius: 'var(--border-radius-card)',
     boxShadow: 'none',
   };
 
@@ -113,14 +113,14 @@ export const DoctorDashboard = () => {
     minHeight: '130px',
     background: 'var(--color-surface-white)',
     border: '1px solid var(--color-border)',
-    borderRadius: '2px',
+    borderRadius: 'var(--border-radius-card)',
     boxShadow: 'none',
   };
 
   return (
     <div style={{ display: 'flex', flexDirection: 'column', gap: '32px', width: '100%' }}>
 
-      {/* CLINICIAN WORKSTATION HEADER - SWISS BLUE ACCENT */}
+      {/* CLINICIAN WORKSTATION HEADER - DEEP CLINICAL BLUE */}
       <section
         style={{
           display: 'flex',
@@ -130,13 +130,16 @@ export const DoctorDashboard = () => {
           background: 'var(--color-surface-white)',
           border: '1px solid var(--color-border)',
           borderLeft: '4px solid var(--color-doctor-primary)',
-          borderRadius: '2px',
+          borderRadius: 'var(--border-radius-card)',
           boxShadow: 'none',
+          width: '100%',
+          minWidth: 0,
+          boxSizing: 'border-box',
         }}
         aria-label="Clinician identity and schedule overview"
       >
-        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', flexWrap: 'wrap', gap: '12px' }}>
-          <div>
+        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', flexWrap: 'wrap', gap: '12px', width: '100%' }}>
+          <div style={{ minWidth: 0, flex: '1 1 min(280px, 100%)' }}>
             <span style={{
               fontSize: '0.72rem',
               fontWeight: 700,
@@ -149,7 +152,7 @@ export const DoctorDashboard = () => {
               Clinical Practice Workstation &bull; Licensed Provider Session
             </span>
             <h1 style={{
-              fontSize: 'clamp(1.5rem, 2.5vw, 2rem)',
+              fontSize: 'clamp(1.4rem, 4.5vw, 2rem)',
               fontWeight: 800,
               margin: '2px 0 6px',
               color: 'var(--color-text)',
@@ -163,20 +166,20 @@ export const DoctorDashboard = () => {
             </p>
           </div>
 
-          <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+          <div style={{ display: 'flex', alignItems: 'center', gap: '8px', flexWrap: 'wrap' }}>
             <Button
               variant="outline"
               size="sm"
               onClick={() => navigate('/doctor/consultation')}
-              style={{ display: 'flex', alignItems: 'center', gap: '6px', borderRadius: '2px', fontWeight: 600 }}
+              style={{ display: 'flex', alignItems: 'center', gap: '6px', borderRadius: 'var(--border-radius-btn)', fontWeight: 600 }}
             >
-              <Stethoscope size={15} color="var(--swiss-blue)" /> Open Examination Room
+              <Stethoscope size={15} color="var(--color-doctor-primary)" /> Open Examination Room
             </Button>
             <Button
               variant="primary"
               size="sm"
               onClick={() => navigate('/doctor/prescriptions')}
-              style={{ display: 'flex', alignItems: 'center', gap: '6px', borderRadius: '2px', fontWeight: 600, background: 'var(--swiss-blue)' }}
+              style={{ display: 'flex', alignItems: 'center', gap: '6px', borderRadius: 'var(--border-radius-btn)', fontWeight: 600, background: 'var(--color-doctor-primary)' }}
             >
               <FileText size={15} /> Issue Prescription
             </Button>
@@ -186,7 +189,8 @@ export const DoctorDashboard = () => {
 
       {/* 4 OPERATIONAL CLINICAL METRIC CARDS */}
       <section
-        style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(min(100%, 210px), 1fr))', gap: '20px' }}
+        className="doctor-stats-grid"
+        style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(min(100%, 210px), 1fr))', gap: '20px', width: '100%', minWidth: 0 }}
         aria-label="Practice operational metrics"
       >
         {/* 1. Upcoming Appointments */}
@@ -261,11 +265,14 @@ export const DoctorDashboard = () => {
 
       {/* MAIN 2-COLUMN STRUCTURED CLINICAL WORKSPACE */}
       <section
+        className="doctor-workspace-grid"
         style={{
           display: 'grid',
           gridTemplateColumns: 'repeat(auto-fit, minmax(min(100%, 380px), 1fr))',
           gap: '28px',
           alignItems: 'start',
+          width: '100%',
+          minWidth: 0,
         }}
         aria-label="Clinical operational panels"
       >
@@ -347,7 +354,7 @@ export const DoctorDashboard = () => {
                             <span style={{
                               display: 'inline-block',
                               padding: '2px 8px',
-                              borderRadius: '2px',
+                              borderRadius: 'var(--border-radius-badge)',
                               fontSize: '0.72rem',
                               fontWeight: 700,
                               textTransform: 'uppercase',
@@ -366,7 +373,7 @@ export const DoctorDashboard = () => {
                 </table>
               </div>
             ) : (
-              <div style={{ padding: '24px 16px', textAlign: 'center', background: 'var(--color-surface-subtle)', borderRadius: '2px', border: '1px dashed var(--color-border)' }}>
+              <div style={{ padding: '24px 16px', textAlign: 'center', background: 'var(--color-surface-subtle)', borderRadius: 'var(--border-radius-card)', border: '1px dashed var(--color-border)' }}>
                 <p style={{ fontSize: '0.88rem', color: 'var(--color-text-muted)', margin: '0 0 12px', fontStyle: 'italic' }}>
                   No upcoming consultations scheduled.
                 </p>
@@ -374,7 +381,7 @@ export const DoctorDashboard = () => {
                   size="sm"
                   variant="primary"
                   onClick={() => navigate('/doctor/appointments')}
-                  style={{ borderRadius: '2px', background: 'var(--color-doctor-primary)' }}
+                  style={{ borderRadius: 'var(--border-radius-btn)', background: 'var(--color-doctor-primary)' }}
                 >
                   Review Appointment Ledger
                 </Button>
@@ -426,7 +433,7 @@ export const DoctorDashboard = () => {
                       style={{
                         padding: '16px 18px',
                         background: 'var(--color-surface-subtle)',
-                        borderRadius: '2px',
+                        borderRadius: 'var(--border-radius-sm)',
                         border: '1px solid var(--color-border)',
                         borderLeft: assessment.urgency === 'EMERGENCY' ? '4px solid var(--color-semantic-emergency)' : '1px solid var(--color-border)',
                         display: 'flex',
@@ -454,7 +461,7 @@ export const DoctorDashboard = () => {
                         <span
                           style={{
                             padding: '2px 8px',
-                            borderRadius: '2px',
+                            borderRadius: 'var(--border-radius-badge)',
                             fontSize: '0.72rem',
                             fontWeight: 700,
                             letterSpacing: '0.04em',
@@ -480,7 +487,7 @@ export const DoctorDashboard = () => {
                 })}
               </div>
             ) : (
-              <div style={{ padding: '24px 16px', textAlign: 'center', background: 'var(--color-surface-subtle)', borderRadius: '2px', border: '1px dashed var(--color-border)' }}>
+              <div style={{ padding: '24px 16px', textAlign: 'center', background: 'var(--color-surface-subtle)', borderRadius: 'var(--border-radius-card)', border: '1px dashed var(--color-border)' }}>
                 <p style={{ fontSize: '0.88rem', color: 'var(--color-text-muted)', margin: 0, fontStyle: 'italic' }}>
                   No recent assessments submitted by assigned patients.
                 </p>
@@ -544,7 +551,7 @@ export const DoctorDashboard = () => {
                         justifyContent: 'space-between',
                         padding: '14px 18px',
                         background: 'var(--color-surface-subtle)',
-                        borderRadius: '2px',
+                        borderRadius: 'var(--border-radius-sm)',
                         border: '1px solid var(--color-border)',
                         cursor: 'pointer',
                         transition: 'border-color 0.15s ease',
@@ -562,7 +569,7 @@ export const DoctorDashboard = () => {
                           style={{
                             width: '32px',
                             height: '32px',
-                            borderRadius: '2px',
+                            borderRadius: 'var(--border-radius-badge)',
                             background: 'var(--color-surface-white)',
                             border: '1px solid var(--color-border)',
                             color: 'var(--color-doctor-primary)',
@@ -586,7 +593,7 @@ export const DoctorDashboard = () => {
                 })}
               </div>
             ) : (
-              <div style={{ padding: '20px 16px', textAlign: 'center', background: 'var(--color-surface-subtle)', borderRadius: '2px', border: '1px dashed var(--color-border)' }}>
+              <div style={{ padding: '20px 16px', textAlign: 'center', background: 'var(--color-surface-subtle)', borderRadius: 'var(--border-radius-card)', border: '1px dashed var(--color-border)' }}>
                 <p style={{ fontSize: '0.85rem', color: 'var(--color-text-muted)', margin: 0, fontStyle: 'italic' }}>
                   No authorized patient records yet.
                 </p>
@@ -620,7 +627,7 @@ export const DoctorDashboard = () => {
                     : 'var(--color-text-muted)';
                   return (
                     <div key={apt.id || idx} style={{ display: 'flex', alignItems: 'center', gap: '14px', padding: '10px 0', borderBottom: '1px solid var(--color-border)' }}>
-                      <div style={{ width: '8px', height: '8px', borderRadius: '2px', background: dotColor, flexShrink: 0 }} />
+                      <div style={{ width: '8px', height: '8px', borderRadius: '50%', background: dotColor, flexShrink: 0 }} />
                       <div style={{ flex: 1, minWidth: 0 }}>
                         <span style={{ fontSize: '0.84rem', color: 'var(--color-text)', display: 'block', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
                           <strong style={{ fontWeight: 600 }}>{patientName}</strong> &bull; <span style={{ color: dotColor, fontWeight: 600 }}>{apt.status}</span>
@@ -634,7 +641,7 @@ export const DoctorDashboard = () => {
                 })}
               </div>
             ) : (
-              <div style={{ padding: '20px 16px', textAlign: 'center', background: 'var(--color-surface-subtle)', borderRadius: '2px' }}>
+              <div style={{ padding: '20px 16px', textAlign: 'center', background: 'var(--color-surface-subtle)', borderRadius: 'var(--border-radius-card)' }}>
                 <p style={{ fontSize: '0.85rem', color: 'var(--color-text-muted)', margin: 0, fontStyle: 'italic' }}>
                   No recent clinical activity.
                 </p>
