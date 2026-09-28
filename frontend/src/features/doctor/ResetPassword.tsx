@@ -93,7 +93,7 @@ export const DoctorResetPassword = () => {
             <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '14px' }}>
               <span
                 style={{
-                  background: 'var(--swiss-blue-soft)',
+                  background: 'var(--color-accent-muted)',
                   color: 'var(--color-doctor-primary)',
                   fontSize: '0.74rem',
                   fontWeight: 600,
@@ -101,7 +101,7 @@ export const DoctorResetPassword = () => {
                   textTransform: 'uppercase',
                   padding: '5px 14px',
                   borderRadius: 'var(--border-radius-badge)',
-                  border: '1px solid #BFDBFE'
+                  border: '1px solid var(--color-doctor-primary)'
                 }}
               >
                 Doctor Portal • Account Recovery
@@ -127,7 +127,7 @@ export const DoctorResetPassword = () => {
               maxHeight: '90vh',
               overflowY: 'auto',
               padding: 'clamp(30px, 4.5vw, 44px)',
-              borderRadius: '2px',
+              borderRadius: 'var(--border-radius-card)',
               background: 'var(--color-surface-white)',
               border: '1px solid var(--color-border)',
               boxShadow: 'none'
@@ -158,7 +158,7 @@ export const DoctorResetPassword = () => {
                   textAlign: 'center',
                   background: 'var(--color-surface-interactive)',
                   border: '1px solid var(--color-border)',
-                  borderRadius: '2px',
+                  borderRadius: 'var(--border-radius-sm)',
                   padding: '12px 16px',
                   fontSize: '0.88rem',
                   color: 'var(--color-text)'
@@ -185,7 +185,7 @@ export const DoctorResetPassword = () => {
                     onChange={(event) => setEmail(event.target.value)}
                     autoComplete="username"
                     required
-                    style={{ width: '100%', paddingLeft: '42px', borderRadius: '2px', minHeight: '46px', border: '1px solid var(--color-border)', fontSize: '0.90rem', background: 'var(--color-surface-white)', color: 'var(--color-doctor-text)' }}
+                    style={{ width: '100%', paddingLeft: '42px', borderRadius: 'var(--border-radius-input)', minHeight: '46px', border: '1px solid var(--color-border)', fontSize: '0.90rem', background: 'var(--color-surface-white)', color: 'var(--color-doctor-text)' }}
                   />
                 </div>
               </div>
@@ -206,7 +206,7 @@ export const DoctorResetPassword = () => {
                     onChange={(event) => setPassword(event.target.value)}
                     autoComplete="new-password"
                     required
-                    style={{ width: '100%', paddingLeft: '42px', borderRadius: '2px', minHeight: '46px', border: '1px solid var(--color-border)', fontSize: '0.90rem', background: 'var(--color-surface-white)', color: 'var(--color-doctor-text)' }}
+                    style={{ width: '100%', paddingLeft: '42px', borderRadius: 'var(--border-radius-input)', minHeight: '46px', border: '1px solid var(--color-border)', fontSize: '0.90rem', background: 'var(--color-surface-white)', color: 'var(--color-doctor-text)' }}
                   />
                 </div>
               </div>
@@ -226,7 +226,7 @@ export const DoctorResetPassword = () => {
                     onChange={(event) => setProvisioningCode(event.target.value)}
                     autoComplete="off"
                     required
-                    style={{ width: '100%', paddingLeft: '42px', borderRadius: '2px', minHeight: '46px', border: '1px solid var(--color-border)', fontSize: '0.90rem', background: 'var(--color-surface-white)', color: 'var(--color-doctor-text)' }}
+                    style={{ width: '100%', paddingLeft: '42px', borderRadius: 'var(--border-radius-input)', minHeight: '46px', border: '1px solid var(--color-border)', fontSize: '0.90rem', background: 'var(--color-surface-white)', color: 'var(--color-doctor-text)' }}
                   />
                 </div>
               </div>
@@ -242,7 +242,7 @@ export const DoctorResetPassword = () => {
                   padding: '11px',
                   fontSize: '0.96rem',
                   fontWeight: 600,
-                  borderRadius: '2px',
+                  borderRadius: 'var(--border-radius-btn)',
                   background: 'var(--color-doctor-primary)',
                   color: '#FFFFFF',
                   border: 'none',

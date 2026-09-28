@@ -128,7 +128,7 @@ export const DoctorLogin = () => {
               padding: 'clamp(30px, 4.5vw, 44px)',
               background: 'var(--color-surface-white)',
               border: '1px solid var(--color-border)',
-              borderRadius: '2px',
+              borderRadius: 'var(--border-radius-card)',
               boxShadow: 'none'
             }}
           >
@@ -156,9 +156,9 @@ export const DoctorLogin = () => {
                   marginBottom: '20px',
                   color: 'var(--color-semantic-emergency)',
                   textAlign: 'center',
-                  background: 'rgba(239, 68, 68, 0.12)',
-                  border: '1px solid rgba(239, 68, 68, 0.25)',
-                  borderRadius: '2px',
+                  background: 'var(--lifelink-red-soft)',
+                  border: '1px solid var(--lifelink-red-border)',
+                  borderRadius: 'var(--border-radius-badge)',
                   padding: '12px 16px',
                   fontSize: '0.88rem'
                 }}
@@ -187,7 +187,7 @@ export const DoctorLogin = () => {
                     style={{
                       width: '100%',
                       paddingLeft: '42px',
-                      borderRadius: '2px',
+                      borderRadius: 'var(--border-radius-input)',
                       minHeight: '48px',
                       fontSize: '0.90rem',
                       border: '1px solid var(--color-doctor-input-border, var(--color-doctor-border))',
@@ -218,7 +218,7 @@ export const DoctorLogin = () => {
                       width: '100%',
                       paddingLeft: '42px',
                       paddingRight: '42px',
-                      borderRadius: '2px',
+                      borderRadius: 'var(--border-radius-input)',
                       minHeight: '46px',
                       fontSize: '0.90rem',
                       border: '1px solid var(--color-doctor-input-border, var(--color-doctor-border))',
@@ -244,14 +244,13 @@ export const DoctorLogin = () => {
                 style={{
                   width: '100%',
                   minHeight: '46px',
-                  background: 'linear-gradient(180deg, #0E7279 0%, #0C5F66 100%)',
+                  background: 'var(--color-doctor-primary)',
                   border: '1px solid var(--color-doctor-accent)',
                   color: '#FFFFFF',
                   fontWeight: 700,
-                  borderRadius: '2px',
+                  borderRadius: 'var(--border-radius-btn)',
                   cursor: 'pointer',
-                  marginTop: '8px',
-                  boxShadow: '0 4px 12px rgba(12, 95, 102, 0.3)'
+                  marginTop: '8px'
                 }}
               >
                 {login.isPending ? 'Signing In…' : 'Sign In'}
