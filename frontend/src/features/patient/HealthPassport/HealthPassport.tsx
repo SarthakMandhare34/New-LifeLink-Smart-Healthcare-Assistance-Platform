@@ -319,16 +319,16 @@ export const HealthPassport = () => {
     <div style={{ display: 'flex', flexDirection: 'column', gap: '36px' }}>
 
       {/* Header with Title and Edit Toggle */}
-      <header style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', flexWrap: 'wrap', gap: '16px', borderBottom: '2px solid var(--color-border)', paddingBottom: '24px' }}>
-        <div style={{ display: 'flex', alignItems: 'center', gap: '16px' }}>
+      <header style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', flexWrap: 'wrap', gap: '16px', borderBottom: '2px solid var(--color-border)', paddingBottom: '24px', width: '100%', minWidth: 0 }}>
+        <div style={{ display: 'flex', alignItems: 'center', gap: '16px', minWidth: 0, flex: '1 1 min(280px, 100%)' }}>
           <div style={{ width: '44px', height: '44px', borderRadius: 'var(--border-radius-sm)', background: 'var(--color-primary-muted)', display: 'grid', placeItems: 'center', color: 'var(--color-primary)', flexShrink: 0 }}>
             <FileHeart size={24} />
           </div>
-          <div>
+          <div style={{ minWidth: 0, flex: '1 1 auto' }}>
             <span style={{ fontSize: '0.72rem', fontWeight: 700, color: 'var(--color-primary)', textTransform: 'uppercase', letterSpacing: '0.06em', display: 'block' }}>
               Official Medical Record
             </span>
-            <h1 style={{ fontSize: '2rem', fontWeight: 700, margin: '2px 0 0', color: 'var(--color-text)', letterSpacing: '-0.02em' }}>
+            <h1 style={{ fontSize: 'clamp(1.4rem, 4.5vw, 2rem)', fontWeight: 700, margin: '2px 0 0', color: 'var(--color-text)', letterSpacing: '-0.02em', lineHeight: 1.25 }}>
               Digital Health Passport
             </h1>
             <p style={{ color: 'var(--color-text-muted)', fontSize: '0.9rem', margin: '3px 0 0' }}>
@@ -347,7 +347,7 @@ export const HealthPassport = () => {
             <Edit2 size={15} /> Edit Passport
           </Button>
         ) : (
-          <div style={{ display: 'flex', gap: '8px', alignItems: 'center' }}>
+          <div style={{ display: 'flex', gap: '8px', alignItems: 'center', flexWrap: 'wrap' }}>
             <Button
               variant="outline"
               onClick={handleCancelPassportEdit}
@@ -380,7 +380,7 @@ export const HealthPassport = () => {
       </header>
 
       {/* SECTION: PATIENT INFORMATION */}
-      <section aria-label="Patient identity summary">
+      <section aria-label="Patient identity summary" style={{ width: '100%', minWidth: 0 }}>
         <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '12px' }}>
           <span style={{ fontSize: '0.72rem', fontWeight: 700, color: 'var(--color-text-muted)', textTransform: 'uppercase', letterSpacing: '0.06em' }}>
             Patient Information
@@ -397,6 +397,9 @@ export const HealthPassport = () => {
             display: 'grid',
             gridTemplateColumns: 'repeat(auto-fit, minmax(min(100%, 200px), 1fr))',
             gap: '24px',
+            width: '100%',
+            minWidth: 0,
+            boxSizing: 'border-box',
           }}
         >
           <div>
@@ -436,7 +439,8 @@ export const HealthPassport = () => {
           TOP ROW: Blood Group, Allergies, Existing Conditions Cards
           ===================================================================================== */}
       <section
-        style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(min(100%, 280px), 1fr))', gap: '24px' }}
+        className="health-passport-baseline-grid"
+        style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(min(100%, 280px), 1fr))', gap: '24px', width: '100%', minWidth: 0 }}
         aria-label="Core clinical information"
       >
         {/* Blood Group Card */}
