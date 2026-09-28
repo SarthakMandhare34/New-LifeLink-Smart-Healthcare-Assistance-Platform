@@ -143,37 +143,37 @@ export const AIAssessment = () => {
   };
 
   return (
-    <div className="container" style={{ padding: 0 }}>
+    <div className="container" style={{ padding: 0, display: 'flex', flexDirection: 'column', gap: '28px', width: '100%', minWidth: 0 }}>
       {/* Header section with icon and title */}
-      <header className="mb-4 flex items-center gap-3">
-        <div style={{ width: 40, height: 40, borderRadius: 'var(--border-radius-sm)', background: 'var(--color-primary-muted)', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-          <Activity size={22} color="var(--color-primary)" />
+      <header className="mb-4 flex items-center gap-3" style={{ flexWrap: 'wrap', width: '100%', minWidth: 0 }}>
+        <div style={{ width: 44, height: 44, borderRadius: 'var(--border-radius-sm)', background: 'var(--color-primary-muted)', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
+          <Activity size={24} color="var(--color-primary)" />
         </div>
-        <div>
-          <h1 style={{ margin: 0, color: 'var(--color-text)', fontSize: '2rem', fontWeight: 700, letterSpacing: '-0.02em' }}>
+        <div style={{ minWidth: 0, flex: '1 1 auto' }}>
+          <h1 style={{ margin: 0, color: 'var(--color-text)', fontSize: 'clamp(1.4rem, 4.5vw, 2rem)', fontWeight: 700, letterSpacing: '-0.02em', lineHeight: 1.25 }}>
             AI Health Assessment
           </h1>
-          <p className="caption" style={{ color: 'var(--color-text-muted)', margin: '2px 0 0' }}>
-            Enter your symptoms below to get an intelligent preliminary clinical guidance and specialist routing recommendation.
+          <p className="caption" style={{ color: 'var(--color-text-muted)', margin: '4px 0 0' }}>
+            Enter your symptoms below to get intelligent preliminary clinical guidance and specialist routing.
           </p>
         </div>
       </header>
 
       {/* Main Assessment Card */}
-      <Card variant="default" style={cardStyle}>
-        <form onSubmit={handleSubmit} style={{ display: 'flex', flexDirection: 'column', gap: '20px' }}>
+      <Card variant="default" style={{ ...cardStyle, width: '100%', minWidth: 0, boxSizing: 'border-box' }}>
+        <form onSubmit={handleSubmit} style={{ display: 'flex', flexDirection: 'column', gap: '20px', width: '100%', minWidth: 0 }}>
 
           {/* Validation Alert */}
           {apiError && (
-            <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
+            <div style={{ display: 'flex', flexDirection: 'column', gap: '8px', width: '100%' }}>
               <ValidationMessage message={apiError} type="error" />
               {apiError.includes('sign in or register') && (
-                <div style={{ display: 'flex', gap: '10px', marginTop: '4px' }}>
+                <div style={{ display: 'flex', gap: '10px', marginTop: '4px', flexWrap: 'wrap' }}>
                   <Button
                     type="button"
                     variant="outline"
                     onClick={() => navigate('/login')}
-                    style={{ fontSize: '0.85rem', padding: '6px 14px' }}
+                    style={{ fontSize: '0.85rem', padding: '6px 14px', flex: '1 1 auto' }}
                   >
                     Go to Patient Login
                   </Button>
@@ -181,7 +181,7 @@ export const AIAssessment = () => {
                     type="button"
                     variant="secondary"
                     onClick={() => navigate('/register')}
-                    style={{ fontSize: '0.85rem', padding: '6px 14px' }}
+                    style={{ fontSize: '0.85rem', padding: '6px 14px', flex: '1 1 auto' }}
                   >
                     Register New Account
                   </Button>
@@ -191,11 +191,11 @@ export const AIAssessment = () => {
           )}
 
           {/* SECTION: SYMPTOMS */}
-          <div>
+          <div style={{ width: '100%', minWidth: 0 }}>
             <span style={{ display: 'block', fontSize: '0.72rem', fontWeight: 700, color: 'var(--color-text-muted)', textTransform: 'uppercase', letterSpacing: '0.06em', marginBottom: '8px' }}>
               Symptoms
             </span>
-            <label htmlFor="ai-assessment-symptoms" style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
+            <label htmlFor="ai-assessment-symptoms" style={{ display: 'flex', flexDirection: 'column', gap: '8px', width: '100%' }}>
               <span style={{ fontSize: '0.92rem', fontWeight: 700, color: 'var(--color-text)' }}>
                 Describe your symptoms <span style={{ color: 'var(--color-semantic-emergency)' }}>*</span>
               </span>
@@ -208,6 +208,8 @@ export const AIAssessment = () => {
                 rows={4}
                 style={{
                   width: '100%',
+                  minWidth: 0,
+                  boxSizing: 'border-box',
                   padding: '12px 14px',
                   border: '1px solid var(--color-border)',
                   borderRadius: 'var(--border-radius-input)',
@@ -222,12 +224,12 @@ export const AIAssessment = () => {
           </div>
 
           {/* SECTION: PATIENT INFORMATION */}
-          <div style={{ borderTop: '1px solid var(--color-border)', paddingTop: '16px' }}>
+          <div style={{ borderTop: '1px solid var(--color-border)', paddingTop: '16px', width: '100%', minWidth: 0 }}>
             <span style={{ display: 'block', fontSize: '0.72rem', fontWeight: 700, color: 'var(--color-text-muted)', textTransform: 'uppercase', letterSpacing: '0.06em', marginBottom: '12px' }}>
               Patient Information
             </span>
-            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(min(100%, 200px), 1fr))', gap: '16px' }}>
-              <label htmlFor="ai-assessment-age" style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
+            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(min(100%, 180px), 1fr))', gap: '16px', width: '100%', minWidth: 0 }}>
+              <label htmlFor="ai-assessment-age" style={{ display: 'flex', flexDirection: 'column', gap: '8px', width: '100%', minWidth: 0 }}>
                 <span style={{ fontSize: '0.92rem', fontWeight: 700, color: 'var(--color-text)' }}>
                   Age (0 – 100) <span style={{ color: 'var(--color-semantic-emergency)' }}>*</span>
                 </span>
@@ -252,11 +254,11 @@ export const AIAssessment = () => {
                   }}
                   placeholder="e.g. 32"
                   required
-                  style={{ border: '1px solid var(--color-border)', background: 'var(--color-surface-white)', color: 'var(--color-text)', borderRadius: 'var(--border-radius-input)' }}
+                  style={{ width: '100%', minWidth: 0, boxSizing: 'border-box', border: '1px solid var(--color-border)', background: 'var(--color-surface-white)', color: 'var(--color-text)', borderRadius: 'var(--border-radius-input)' }}
                 />
               </label>
 
-              <label htmlFor="ai-assessment-gender" style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
+              <label htmlFor="ai-assessment-gender" style={{ display: 'flex', flexDirection: 'column', gap: '8px', width: '100%', minWidth: 0 }}>
                 <span style={{ fontSize: '0.92rem', fontWeight: 700, color: 'var(--color-text)' }}>
                   Biological Gender <span style={{ color: 'var(--color-semantic-emergency)' }}>*</span>
                 </span>
@@ -267,14 +269,18 @@ export const AIAssessment = () => {
                   onChange={(event) => setGender(event.target.value)}
                   required
                   style={{
-                    height: '42px',
-                    padding: '0 12px',
+                    height: '44px',
+                    width: '100%',
+                    minWidth: 0,
+                    boxSizing: 'border-box',
+                    padding: '0 40px 0 12px',
                     border: '1px solid var(--color-border)',
                     borderRadius: 'var(--border-radius-input)',
                     fontSize: '0.92rem',
                     background: 'var(--color-surface-white)',
                     color: 'var(--color-text)',
                     outline: 'none',
+                    cursor: 'pointer',
                   }}
                 >
                   <option value="" disabled>Select gender</option>
@@ -287,13 +293,13 @@ export const AIAssessment = () => {
           </div>
 
           {/* SECTION: DURATION & MEDICAL CONDITIONS */}
-          <div style={{ borderTop: '1px solid var(--color-border)', paddingTop: '16px' }}>
-            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(min(100%, 200px), 1fr))', gap: '16px' }}>
-              <div>
+          <div style={{ borderTop: '1px solid var(--color-border)', paddingTop: '16px', width: '100%', minWidth: 0 }}>
+            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(min(100%, 180px), 1fr))', gap: '16px', width: '100%', minWidth: 0 }}>
+              <div style={{ width: '100%', minWidth: 0 }}>
                 <span style={{ display: 'block', fontSize: '0.72rem', fontWeight: 700, color: 'var(--color-text-muted)', textTransform: 'uppercase', letterSpacing: '0.06em', marginBottom: '8px' }}>
                   Duration
                 </span>
-                <label htmlFor="ai-assessment-duration" style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
+                <label htmlFor="ai-assessment-duration" style={{ display: 'flex', flexDirection: 'column', gap: '8px', width: '100%' }}>
                   <span style={{ fontSize: '0.92rem', fontWeight: 700, color: 'var(--color-text)' }}>
                     Symptom Duration <span style={{ color: 'var(--color-semantic-emergency)' }}>*</span>
                   </span>
@@ -304,16 +310,16 @@ export const AIAssessment = () => {
                     onChange={(event) => setDuration(event.target.value)}
                     placeholder="e.g. 2 days, 1 week"
                     required
-                    style={{ border: '1px solid var(--color-border)', background: 'var(--color-surface-white)', color: 'var(--color-text)', borderRadius: 'var(--border-radius-input)' }}
+                    style={{ width: '100%', minWidth: 0, boxSizing: 'border-box', border: '1px solid var(--color-border)', background: 'var(--color-surface-white)', color: 'var(--color-text)', borderRadius: 'var(--border-radius-input)' }}
                   />
                 </label>
               </div>
 
-              <div>
+              <div style={{ width: '100%', minWidth: 0 }}>
                 <span style={{ display: 'block', fontSize: '0.72rem', fontWeight: 700, color: 'var(--color-text-muted)', textTransform: 'uppercase', letterSpacing: '0.06em', marginBottom: '8px' }}>
                   Medical Conditions
                 </span>
-                <label htmlFor="ai-assessment-conditions" style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
+                <label htmlFor="ai-assessment-conditions" style={{ display: 'flex', flexDirection: 'column', gap: '8px', width: '100%' }}>
                   <span style={{ fontSize: '0.92rem', fontWeight: 700, color: 'var(--color-text)' }}>
                     Existing Conditions <span style={{ color: 'var(--color-text-muted)', fontWeight: 400 }}>(optional)</span>
                   </span>
@@ -323,7 +329,7 @@ export const AIAssessment = () => {
                     value={conditions}
                     onChange={(event) => setConditions(event.target.value)}
                     placeholder="e.g. Asthma, Hypertension"
-                    style={{ border: '1px solid var(--color-border)', background: 'var(--color-surface-white)', color: 'var(--color-text)', borderRadius: 'var(--border-radius-input)' }}
+                    style={{ width: '100%', minWidth: 0, boxSizing: 'border-box', border: '1px solid var(--color-border)', background: 'var(--color-surface-white)', color: 'var(--color-text)', borderRadius: 'var(--border-radius-input)' }}
                   />
                 </label>
               </div>
@@ -331,7 +337,7 @@ export const AIAssessment = () => {
           </div>
 
           {/* SECTION: ASSESSMENT ACTION */}
-          <div style={{ borderTop: '1px solid var(--color-border)', paddingTop: '16px' }}>
+          <div style={{ borderTop: '1px solid var(--color-border)', paddingTop: '16px', width: '100%' }}>
             <Button
               type="submit"
               variant="primary"
@@ -346,6 +352,8 @@ export const AIAssessment = () => {
                 alignItems: 'center',
                 gap: '8px',
                 borderRadius: 'var(--border-radius-btn)',
+                width: '100%',
+                minHeight: '48px',
               }}
             >
               {isProcessing ? 'Analyzing symptoms…' : 'Analyse Symptoms'} <Stethoscope size={18} />
@@ -377,7 +385,7 @@ export const AIAssessment = () => {
                   style={{
                     background: 'var(--color-surface-white)',
                     padding: '20px',
-                    borderRadius: '10px',
+                    borderRadius: 'var(--border-radius-card)',
                     border: '1px solid var(--color-border)',
                     display: 'flex',
                     flexDirection: 'column',
@@ -392,7 +400,7 @@ export const AIAssessment = () => {
                     <span
                       style={{
                         padding: '3px 10px',
-                        borderRadius: '6px',
+                        borderRadius: 'var(--border-radius-badge)',
                         fontSize: '0.72rem',
                         fontWeight: 700,
                         background: badge.bg,
@@ -502,7 +510,7 @@ export const AIAssessment = () => {
                 <span
                   style={{
                     padding: '4px 12px',
-                    borderRadius: '6px',
+                    borderRadius: 'var(--border-radius-badge)',
                     fontSize: '0.78rem',
                     fontWeight: 700,
                     ...urgencyBadgeStyle(activeModalItem.urgency),
@@ -525,9 +533,9 @@ export const AIAssessment = () => {
                 <div
                   style={{
                     padding: '12px 14px',
-                    background: 'rgba(217, 119, 6, 0.08)',
-                    border: '1px solid var(--color-border)',
-                    borderRadius: '10px',
+                    background: 'var(--lifelink-blue-soft)',
+                    border: '1px solid var(--lifelink-blue-border)',
+                    borderRadius: 'var(--border-radius-card)',
                     display: 'flex',
                     alignItems: 'center',
                     justifyContent: 'space-between',
@@ -552,6 +560,7 @@ export const AIAssessment = () => {
                       fontSize: '0.78rem',
                       fontWeight: 700,
                       padding: '6px 12px',
+                      borderRadius: 'var(--border-radius-btn)',
                       whiteSpace: 'nowrap',
                       flexShrink: 0,
                     }}
@@ -591,7 +600,7 @@ export const AIAssessment = () => {
               <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
                 <Button
                   variant="danger"
-                  style={{ width: '100%', borderRadius: '8px', padding: '12px', fontWeight: 700 }}
+                  style={{ width: '100%', borderRadius: 'var(--border-radius-btn)', padding: '12px', fontWeight: 700 }}
                   onClick={() => {
                     handleCloseResult();
                     navigate('/patient/emergency');
@@ -601,7 +610,7 @@ export const AIAssessment = () => {
                 </Button>
                 <Button
                   variant="outline"
-                  style={{ width: '100%', borderRadius: '8px', borderColor: 'var(--color-border)', color: 'var(--color-text)' }}
+                  style={{ width: '100%', borderRadius: 'var(--border-radius-btn)', borderColor: 'var(--color-border)', color: 'var(--color-text)' }}
                   onClick={handleCloseResult}
                 >
                   I Understand & Close
@@ -611,7 +620,7 @@ export const AIAssessment = () => {
               <div style={{ display: 'flex', gap: '12px', flexWrap: 'wrap' }}>
                 <Button
                   variant="outline"
-                  style={{ flex: 1, borderRadius: '8px', borderColor: 'var(--color-border)', color: 'var(--color-text)' }}
+                  style={{ flex: 1, borderRadius: 'var(--border-radius-btn)', borderColor: 'var(--color-border)', color: 'var(--color-text)' }}
                   onClick={handleCloseResult}
                 >
                   Close
@@ -619,7 +628,7 @@ export const AIAssessment = () => {
                 <Button
                   variant="primary"
                   className="btn-primary"
-                  style={{ flex: 1, borderRadius: '8px', fontWeight: 700, display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '6px' }}
+                  style={{ flex: 1, borderRadius: 'var(--border-radius-btn)', fontWeight: 700, display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '6px' }}
                   onClick={() => {
                     handleCloseResult();
                     findSpecialist();
