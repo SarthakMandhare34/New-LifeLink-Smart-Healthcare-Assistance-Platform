@@ -188,21 +188,21 @@ export const DoctorAppShell = () => {
 
           {/* Clinician subtitle */}
           <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
-            <span style={{ fontSize: '0.68rem', fontWeight: 700, letterSpacing: '0.08em', textTransform: 'uppercase', color: 'var(--swiss-blue)' }}>
+            <span style={{ fontSize: '0.68rem', fontWeight: 700, letterSpacing: '0.08em', textTransform: 'uppercase', color: 'var(--color-doctor-primary)' }}>
               Doctor Workstation
             </span>
-            <span style={{ display: 'inline-block', width: '6px', height: '6px', borderRadius: '1px', background: 'var(--swiss-blue)' }} title="Provider Session Active" />
+            <span style={{ display: 'inline-block', width: '6px', height: '6px', borderRadius: '50%', background: 'var(--color-doctor-primary)' }} title="Provider Session Active" />
           </div>
         </div>
 
-        {/* Doctor workspace navigation links: Swiss list layout with 2px corners and 3px blue active indicator */}
+        {/* Doctor workspace navigation links: Swiss list layout with modern geometry and clinical blue active indicator */}
         <nav
           className="app-sidebar-nav"
           style={{
             padding: '12px 10px',
             display: 'flex',
             flexDirection: 'column',
-            gap: '3px',
+            gap: '4px',
             flex: 1,
             overflowY: 'auto'
           }}
@@ -218,12 +218,12 @@ export const DoctorAppShell = () => {
                 alignItems: 'center',
                 gap: '12px',
                 padding: '9px 12px',
-                borderRadius: '2px',
+                borderRadius: 'var(--border-radius-btn)',
                 fontSize: '0.88rem',
                 fontWeight: isActive ? 700 : 500,
-                color: isActive ? 'var(--swiss-blue)' : 'var(--color-text)',
-                background: isActive ? 'var(--swiss-blue-soft)' : 'transparent',
-                borderLeft: isActive ? '3px solid var(--swiss-blue)' : '3px solid transparent',
+                color: isActive ? 'var(--color-doctor-primary)' : 'var(--color-text)',
+                background: isActive ? 'var(--lifelink-blue-soft)' : 'transparent',
+                borderLeft: isActive ? '3px solid var(--color-doctor-primary)' : '3px solid transparent',
                 textDecoration: 'none',
                 transition: 'background 0.15s, color 0.15s, border-color 0.15s'
               })}
@@ -245,7 +245,7 @@ export const DoctorAppShell = () => {
               gap: '12px',
               width: '100%',
               padding: '9px 12px',
-              borderRadius: '2px',
+              borderRadius: 'var(--border-radius-btn)',
               border: 'none',
               background: 'transparent',
               color: 'var(--color-text)',
@@ -295,7 +295,7 @@ export const DoctorAppShell = () => {
               aria-label="Toggle theme"
               onClick={toggleTheme}
               title="Toggle theme"
-              style={{ borderRadius: '2px', border: '1px solid var(--color-border)', width: '36px', height: '36px', display: 'grid', placeItems: 'center' }}
+              style={{ borderRadius: 'var(--border-radius-btn)', border: '1px solid var(--color-border)', width: '36px', height: '36px', display: 'grid', placeItems: 'center' }}
             >
               {theme === 'light' ? <Moon size={18} /> : <Sun size={18} />}
             </button>
@@ -313,7 +313,7 @@ export const DoctorAppShell = () => {
                   background: isNotificationOpen ? 'var(--color-surface-subtle)' : 'transparent',
                   width: '36px',
                   height: '36px',
-                  borderRadius: '2px',
+                  borderRadius: 'var(--border-radius-btn)',
                   display: 'grid',
                   placeItems: 'center',
                   border: '1px solid var(--color-border)',
@@ -329,8 +329,8 @@ export const DoctorAppShell = () => {
                       right: '4px',
                       width: '8px',
                       height: '8px',
-                      borderRadius: '1px',
-                      background: 'var(--swiss-blue)',
+                      borderRadius: '50%',
+                      background: 'var(--color-doctor-primary)',
                     }}
                   />
                 )}
@@ -347,7 +347,7 @@ export const DoctorAppShell = () => {
                     width: 'min(90vw, 360px)',
                     background: 'var(--color-surface-white)',
                     border: '1px solid var(--color-border)',
-                    borderRadius: '2px',
+                    borderRadius: 'var(--border-radius-dialog)',
                     boxShadow: 'var(--shadow-lg)',
                     zIndex: 1000,
                     overflow: 'hidden',
@@ -373,7 +373,7 @@ export const DoctorAppShell = () => {
                           color: '#FFF',
                           fontSize: '0.72rem',
                           fontWeight: 700,
-                          borderRadius: '2px',
+                          borderRadius: 'var(--border-radius-badge)',
                           padding: '1px 6px',
                         }}>
                           {unreadCount} pending
@@ -409,11 +409,11 @@ export const DoctorAppShell = () => {
                           <div style={{
                             width: '32px',
                             height: '32px',
-                            borderRadius: '2px',
-                            background: appt.status === 'Requested' ? 'var(--swiss-amber-bg)' : 'var(--color-accent-muted)',
+                            borderRadius: 'var(--border-radius-badge)',
+                            background: appt.status === 'Requested' ? 'var(--lifelink-warning-soft)' : 'var(--color-accent-muted)',
                             display: 'grid',
                             placeItems: 'center',
-                            color: appt.status === 'Requested' ? 'var(--swiss-amber-text)' : 'var(--color-doctor-primary)',
+                            color: appt.status === 'Requested' ? 'var(--lifelink-warning)' : 'var(--color-doctor-primary)',
                             flexShrink: 0,
                           }}>
                             <Calendar size={16} />
@@ -427,9 +427,9 @@ export const DoctorAppShell = () => {
                                 fontSize: '0.7rem',
                                 fontWeight: 700,
                                 padding: '1px 6px',
-                                borderRadius: '2px',
-                                background: appt.status === 'Requested' ? 'rgba(217, 119, 6, 0.15)' : 'var(--color-accent-muted)',
-                                color: appt.status === 'Requested' ? '#b45309' : 'var(--color-doctor-primary)',
+                                borderRadius: 'var(--border-radius-badge)',
+                                background: appt.status === 'Requested' ? 'var(--lifelink-warning-soft)' : 'var(--color-accent-muted)',
+                                color: appt.status === 'Requested' ? 'var(--lifelink-warning)' : 'var(--color-doctor-primary)',
                                 border: '1px solid currentColor',
                               }}>
                                 {appt.status}
@@ -471,40 +471,24 @@ export const DoctorAppShell = () => {
             <button
               type="button"
               onClick={() => navigate('/doctor/profile')}
-              style={{
-                display: 'flex',
-                alignItems: 'center',
-                gap: '8px',
-                background: 'var(--color-surface-white)',
-                border: '1px solid var(--color-border)',
-                borderRadius: '2px',
-                padding: '4px 8px 4px 4px',
-                cursor: 'pointer'
-              }}
+              className="app-header-profile-btn"
               aria-label="Open your profile"
             >
               <div
+                className="app-header-profile-avatar"
                 style={{
-                  width: '30px',
-                  height: '30px',
-                  borderRadius: '2px',
                   background: 'var(--color-accent-muted)',
                   border: '1px solid var(--color-doctor-primary)',
                   color: 'var(--color-doctor-primary)',
-                  fontWeight: 700,
-                  fontSize: '0.80rem',
-                  display: 'grid',
-                  placeItems: 'center',
-                  overflow: 'hidden'
                 }}
               >
                 {initials}
               </div>
-              <div className="app-header-user-meta" style={{ display: 'flex', flexDirection: 'column', alignItems: 'flex-start', lineHeight: 1.2 }}>
-                <span style={{ fontSize: '0.82rem', fontWeight: 600, color: 'var(--color-text)' }}>{session.data?.displayName || 'Doctor'}</span>
-                <span style={{ fontSize: '0.68rem', color: 'var(--color-doctor-primary)', fontWeight: 600 }}>Active Clinician</span>
+              <div className="app-header-user-meta">
+                <span style={{ fontSize: '0.82rem', fontWeight: 600, color: 'var(--color-text)', whiteSpace: 'nowrap' }}>{session.data?.displayName || 'Doctor'}</span>
+                <span style={{ fontSize: '0.68rem', color: 'var(--color-doctor-primary)', fontWeight: 600, whiteSpace: 'nowrap' }}>Active Clinician</span>
               </div>
-              <ChevronDown size={14} color="var(--color-text-muted)" />
+              <ChevronDown size={14} className="app-header-chevron" />
             </button>
           </div>
         </header>

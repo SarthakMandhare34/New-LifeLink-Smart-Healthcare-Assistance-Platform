@@ -149,8 +149,8 @@ export const AppShell = () => {
   if (loading) {
     return (
       <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', minHeight: '100vh', width: '100%' }}>
-        <p className="caption" style={{ color: 'var(--swiss-red)', fontFamily: 'Inter, sans-serif', fontSize: '1rem', fontWeight: 600 }}>
-          Loading your LifeLink workspace…
+        <p className="caption" style={{ color: 'var(--lifelink-blue)', fontFamily: 'Inter, sans-serif', fontSize: '1rem', fontWeight: 600 }}>
+          Loading your LifeLink workspaceâ€¦
         </p>
       </div>
     );
@@ -244,12 +244,12 @@ export const AppShell = () => {
                 alignItems: 'center',
                 gap: '12px',
                 padding: '9px 12px',
-                borderRadius: '2px',
+                borderRadius: isActive ? '0 6px 6px 0' : '6px',
                 fontSize: '0.88rem',
                 fontWeight: isActive ? 700 : 500,
-                color: isActive ? 'var(--swiss-red)' : 'var(--color-text)',
-                background: isActive ? 'var(--swiss-red-soft)' : 'transparent',
-                borderLeft: isActive ? '3px solid var(--swiss-red)' : '3px solid transparent',
+                color: isActive ? 'var(--lifelink-blue)' : 'var(--color-text)',
+                background: isActive ? 'var(--lifelink-blue-soft)' : 'transparent',
+                borderLeft: isActive ? '3px solid var(--lifelink-blue)' : '3px solid transparent',
                 textDecoration: 'none',
                 transition: 'background 0.15s, color 0.15s, border-color 0.15s'
               })}
@@ -270,7 +270,7 @@ export const AppShell = () => {
               gap: '12px',
               width: '100%',
               padding: '9px 12px',
-              borderRadius: '2px',
+              borderRadius: 'var(--border-radius-btn)',
               border: 'none',
               background: 'transparent',
               color: 'var(--color-text)',
@@ -319,7 +319,7 @@ export const AppShell = () => {
               aria-label="Toggle theme"
               onClick={toggleTheme}
               title="Toggle theme"
-              style={{ borderRadius: '2px', border: '1px solid var(--color-border)', width: '36px', height: '36px', display: 'grid', placeItems: 'center' }}
+              style={{ borderRadius: 'var(--border-radius-btn)', border: '1px solid var(--color-border)', width: '36px', height: '36px', display: 'grid', placeItems: 'center' }}
             >
               {theme === 'light' ? <Moon size={18} /> : <Sun size={18} />}
             </button>
@@ -336,7 +336,7 @@ export const AppShell = () => {
                   background: isNotificationOpen ? 'var(--color-surface-subtle)' : 'transparent',
                   width: '36px',
                   height: '36px',
-                  borderRadius: '2px',
+                  borderRadius: 'var(--border-radius-btn)',
                   display: 'grid',
                   placeItems: 'center',
                   border: '1px solid var(--color-border)',
@@ -349,11 +349,11 @@ export const AppShell = () => {
                     position: 'absolute',
                     top: '-4px',
                     right: '-4px',
-                    background: 'var(--swiss-red)',
+                    background: 'var(--lifelink-red)',
                     color: '#FFFFFF',
                     fontSize: '0.65rem',
                     fontWeight: 700,
-                    borderRadius: '2px',
+                    borderRadius: 'var(--border-radius-badge)',
                     padding: '1px 5px',
                     minWidth: '16px',
                     height: '16px',
@@ -380,7 +380,7 @@ export const AppShell = () => {
                     width: 'min(90vw, 360px)',
                     background: 'var(--color-surface-white)',
                     border: '1px solid var(--color-border)',
-                    borderRadius: '2px',
+                    borderRadius: 'var(--border-radius-dialog)',
                     boxShadow: 'var(--shadow-lg)',
                     zIndex: 1000,
                     overflow: 'hidden',
@@ -402,11 +402,11 @@ export const AppShell = () => {
                       <strong style={{ fontSize: '0.92rem', color: 'var(--color-text)' }}>Notifications</strong>
                       {unreadCount > 0 && (
                         <span style={{
-                          background: 'var(--swiss-red)',
+                          background: 'var(--lifelink-red)',
                           color: '#FFF',
                           fontSize: '0.72rem',
                           fontWeight: 700,
-                          borderRadius: '2px',
+                          borderRadius: 'var(--border-radius-badge)',
                           padding: '1px 6px',
                         }}>
                           {unreadCount} new
@@ -420,7 +420,7 @@ export const AppShell = () => {
                         style={{
                           background: 'transparent',
                           border: 'none',
-                          color: 'var(--swiss-red)',
+                          color: 'var(--lifelink-blue)',
                           fontSize: '0.78rem',
                           fontWeight: 600,
                           cursor: 'pointer',
@@ -464,7 +464,7 @@ export const AppShell = () => {
                             <div style={{
                               width: '32px',
                               height: '32px',
-                              borderRadius: '2px',
+                              borderRadius: 'var(--border-radius-badge)',
                               background: item.category === 'PRESCRIPTION' ? 'var(--color-accent-muted)' : 'var(--color-surface-subtle)',
                               color: item.category === 'PRESCRIPTION' ? 'var(--color-accent)' : 'var(--color-text)',
                               display: 'grid',
@@ -480,7 +480,7 @@ export const AppShell = () => {
                                   {item.title}
                                 </strong>
                                 {isUnread && (
-                                  <span style={{ width: '6px', height: '6px', borderRadius: '50%', background: 'var(--swiss-red)', flexShrink: 0 }} />
+                                  <span style={{ width: '6px', height: '6px', borderRadius: '50%', background: 'var(--lifelink-red)', flexShrink: 0 }} />
                                 )}
                               </div>
                               <p style={{ margin: '2px 0 0', fontSize: '0.78rem', color: 'var(--color-text-muted)', lineHeight: 1.35 }}>
@@ -503,43 +503,21 @@ export const AppShell = () => {
             <button
               type="button"
               onClick={() => navigate('/patient/profile')}
-              style={{
-                display: 'flex',
-                alignItems: 'center',
-                gap: '8px',
-                background: 'var(--color-surface-white)',
-                border: '1px solid var(--color-border)',
-                borderRadius: '2px',
-                padding: '4px 8px 4px 4px',
-                cursor: 'pointer'
-              }}
+              className="app-header-profile-btn"
               aria-label="Open your profile"
             >
-              <div
-                style={{
-                  width: '30px',
-                  height: '30px',
-                  borderRadius: '2px',
-                  background: 'var(--swiss-red)',
-                  color: '#FFFFFF',
-                  fontWeight: 700,
-                  fontSize: '0.80rem',
-                  display: 'grid',
-                  placeItems: 'center',
-                  overflow: 'hidden'
-                }}
-              >
+              <div className="app-header-profile-avatar">
                 {profileQuery.data?.avatarUrl ? (
-                  <img src={profileQuery.data.avatarUrl} alt="" style={{ width: '100%', height: '100%', borderRadius: '2px', objectFit: 'cover' }} />
+                  <img src={profileQuery.data.avatarUrl} alt="" style={{ width: '100%', height: '100%', borderRadius: 'var(--border-radius-badge)', objectFit: 'cover' }} />
                 ) : (
                   initials
                 )}
               </div>
-              <div className="app-header-user-meta" style={{ display: 'flex', flexDirection: 'column', alignItems: 'flex-start', lineHeight: 1.2 }}>
-                <span style={{ fontSize: '0.82rem', fontWeight: 600, color: 'var(--color-text)' }}>{displayName}</span>
-                <span style={{ fontSize: '0.68rem', color: 'var(--color-text-muted)' }}>Patient Record</span>
+              <div className="app-header-user-meta">
+                <span style={{ fontSize: '0.82rem', fontWeight: 600, color: 'var(--color-text)', whiteSpace: 'nowrap' }}>{displayName}</span>
+                <span style={{ fontSize: '0.68rem', color: 'var(--color-text-muted)', whiteSpace: 'nowrap' }}>Patient Record</span>
               </div>
-              <ChevronDown size={14} color="var(--color-text-muted)" />
+              <ChevronDown size={14} className="app-header-chevron" />
             </button>
           </div>
         </header>
