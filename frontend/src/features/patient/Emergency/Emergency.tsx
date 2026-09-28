@@ -71,11 +71,11 @@ export const Emergency = () => {
       {/* Emergency header banner */}
       <header>
         <div style={{ display: 'flex', alignItems: 'center', gap: '16px' }}>
-          <div style={{ width: 52, height: 52, borderRadius: '4px', background: 'rgba(187, 44, 44, 0.12)', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
-            <ShieldAlert size={28} color="var(--color-primary)" />                                           {/* Emergency alert badge */}
+          <div style={{ width: 52, height: 52, borderRadius: 'var(--border-radius-sm)', background: 'var(--lifelink-red-soft)', border: '1px solid var(--lifelink-red-border)', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
+            <ShieldAlert size={28} color="var(--lifelink-red)" />                                           {/* Emergency alert badge */}
           </div>
           <div>
-            <h1 style={{ margin: 0, fontSize: '1.85rem', fontWeight: 700, letterSpacing: '-0.02em' }}>Emergency Assistance</h1>                                 {/* Page title */}
+            <h1 style={{ margin: 0, fontSize: '1.85rem', fontWeight: 700, letterSpacing: '-0.02em', color: 'var(--color-text)' }}>Emergency Assistance</h1>                                 {/* Page title */}
             <p className="caption" style={{ margin: '4px 0 0', color: 'var(--color-text-muted)' }}>Choose an action yourself. LifeLink does not call emergency services, send messages, or share your location automatically.</p>
           </div>
         </div>
@@ -87,8 +87,8 @@ export const Emergency = () => {
         <Card variant="emergency" style={{ padding: 'clamp(28px, 4vw, 36px)' }}>
           <div style={{ display: 'flex', flexDirection: 'column', gap: '20px' }}>
             <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
-              <Siren size={26} color="var(--color-primary)" />                                               {/* Siren emergency icon */}
-              <h2 style={{ margin: 0, color: 'var(--color-primary)', fontSize: '1.3rem', fontWeight: 700 }}>Call emergency response</h2>
+              <Siren size={26} color="var(--lifelink-red)" />                                               {/* Siren emergency icon */}
+              <h2 style={{ margin: 0, color: 'var(--lifelink-red)', fontSize: '1.3rem', fontWeight: 700 }}>Call emergency response</h2>
             </div>
             <p style={{ margin: 0, lineHeight: 1.6, fontSize: '0.95rem' }}>For an immediate emergency in India, you can open your device dialer for the unified emergency number <strong>{AMBULANCE_EMERGENCY_NUMBER}</strong>. Your device will ask you to place the call.</p>
             <div style={{ paddingTop: '4px' }}>
