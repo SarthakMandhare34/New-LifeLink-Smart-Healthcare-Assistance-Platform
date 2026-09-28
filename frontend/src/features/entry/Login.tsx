@@ -105,8 +105,8 @@ export const PatientLogin = () => {
           <div style={{ textAlign: 'center', maxWidth: '440px', display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
 
             {/* Proportional Brand Treatment (Section 11) */}
-            <div style={{ marginBottom: '20px', display: 'inline-flex', alignItems: 'center', justifyContent: 'center' }}>
-              <LifeLinkLogo className="lifelink-logo-auth" style={{ width: '100%', maxWidth: '240px', height: 'auto', margin: 0, padding: 0, border: 'none', background: 'transparent', boxShadow: 'none' }} />
+            <div style={{ marginBottom: '24px', display: 'flex', alignItems: 'center', justifyContent: 'center', width: '100%' }}>
+              <LifeLinkLogo className="lifelink-logo-auth" />
             </div>
 
             {/* System Subtitle & Motto */}
