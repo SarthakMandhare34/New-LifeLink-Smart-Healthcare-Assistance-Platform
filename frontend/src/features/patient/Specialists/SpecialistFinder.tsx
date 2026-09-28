@@ -22,7 +22,7 @@ import { useNavigate, useSearchParams } from 'react-router-dom';                
 import { trpc } from '../../../lib/trpc';                                                       // Type-safe tRPC client bridge
 import { MumbaiDoctorMap } from '../../../components/MumbaiDoctorMap';                          // Interactive OpenStreetMap visualization component
 import { BrandLoadingIndicator } from '../../../components/brand/BrandLoadingIndicator';        // Official LifeLink branded loading symbol
-import type { ClinicSlotStatus, DoctorSlotAvailability } from '@shared/const'; // Canonical clinic slot types
+import { SYSTEM_DOCTOR_SPECIALTIES, type ClinicSlotStatus, type DoctorSlotAvailability } from '@shared/const'; // Canonical clinic slot types and 12 specialties
 import './specialistFinder.css';                                                                // Bespoke responsive styles for discovery grid
 
 // Constant label strings and disclaimers for accessibility and test suite contract stability
@@ -138,6 +138,14 @@ export const SpecialistFinder = () => {
   };
 
   const displayedDoctors = directoryQuery.data ?? [];
+
+  // Guaranteed full list of specialties available for immediate dropdown rendering
+  const availableSpecialties = useMemo(() => {
+    if (facetsQuery.data?.specialties && facetsQuery.data.specialties.length > 0) {
+      return facetsQuery.data.specialties;
+    }
+    return SYSTEM_DOCTOR_SPECIALTIES;
+  }, [facetsQuery.data?.specialties]);
   const targetDoctorId = selectedDocId || (directoryQuery.data?.[0]?.id ?? '');
 
   // Doctor-scoped availability map: Record<doctorId, Record<date, { bookedSlots: string[]; slots: DoctorSlotAvailability[] }>>
@@ -329,54 +337,64 @@ export const SpecialistFinder = () => {
   return (
     <div className="container" style={{ padding: 0, display: 'flex', flexDirection: 'column', gap: '32px' }}>
       {/* Page header */}
-      <header className="flex items-center justify-between" style={{ marginBottom: 0 }}>
-        <div className="flex items-center gap-3">
-          <div style={{ width: 44, height: 44, borderRadius: '2px', background: 'var(--color-primary-muted)', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+      <header style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: '16px', width: '100%', minWidth: 0, marginBottom: 0 }}>
+        <div style={{ display: 'flex', alignItems: 'center', gap: '12px', flex: '1 1 min(280px, 100%)', minWidth: 0 }}>
+          <div style={{ width: 44, height: 44, borderRadius: 'var(--border-radius-sm)', background: 'var(--color-primary-muted)', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
             <UserCheck size={24} color="var(--color-primary)" />
           </div>
-          <div>
-            <h1 style={{ margin: 0, fontWeight: 700, letterSpacing: '-0.02em', color: 'var(--color-text)', fontSize: '2rem' }}>Specialist Finder</h1>
+          <div style={{ minWidth: 0, flex: '1 1 auto' }}>
+            <h1 style={{ margin: 0, fontWeight: 700, letterSpacing: '-0.02em', color: 'var(--color-text)', fontSize: 'clamp(1.4rem, 4.5vw, 2rem)', lineHeight: 1.25 }}>Specialist Finder</h1>
             <p className="caption" style={{ color: 'var(--color-text-muted)', margin: '4px 0 0' }}>Browse available Mumbai specialists by clinical specialty, view clinics on the live map, and request appointments in real time.</p>
           </div>
         </div>
 
         {/* Real-time sync badge: appears only during in-flight background query refetching */}
         {directoryQuery.isFetching && !directoryQuery.isLoading && (
-          <div className="badge badge-neutral" style={{ display: 'inline-flex', alignItems: 'center', gap: '6px' }}>
+          <div className="badge badge-neutral" style={{ display: 'inline-flex', alignItems: 'center', gap: '6px', flexShrink: 0 }}>
             <RefreshCw size={12} className="animate-spin" /> Updating live…
           </div>
         )}
       </header>
 
       {/* Filter and appointment parameters card */}
-      <Card variant="default" className="discovery-refinement-card">
-        <div className="discovery-refinement-content">
+      <Card variant="default" className="discovery-refinement-card" style={{ width: '100%', minWidth: 0, boxSizing: 'border-box' }}>
+        <div className="discovery-refinement-content" style={{ display: 'flex', flexDirection: 'column', gap: '20px', width: '100%', minWidth: 0 }}>
           {/* Specialty dropdown filter */}
-          <div className="discovery-filter-grid" style={{ gridTemplateColumns: '1fr' }}>
-            <div>
-              <label className="discovery-filter-label" htmlFor="specialty-filter">Specialty</label>
-              <select id="specialty-filter" className="discovery-filter-select" value={specialty} onChange={(event) => updateSpecialty(event.target.value)}>
+          <div className="discovery-filter-grid" style={{ display: 'flex', flexDirection: 'column', width: '100%', minWidth: 0 }}>
+            <div style={{ display: 'flex', flexDirection: 'column', width: '100%', minWidth: 0 }}>
+              <label className="discovery-filter-label" htmlFor="specialty-filter">Select Medical Specialty</label>
+              <select
+                id="specialty-filter"
+                className="discovery-filter-select"
+                value={specialty}
+                onChange={(event) => updateSpecialty(event.target.value)}
+                aria-label="Select Medical Specialty"
+              >
                 <option value={ALL_FILTER}>All specialties</option>
-                {facets?.specialties.map((value) => <option key={value} value={value}>{value}</option>)}
+                {availableSpecialties.map((value) => (
+                  <option key={value} value={value}>
+                    {value}
+                  </option>
+                ))}
               </select>
             </div>
           </div>
 
           {/* Appointment date and complaint reason input fields */}
-          <div className="discovery-request-grid">
-            <div className="discovery-request-field">
+          <div className="discovery-request-grid" style={{ width: '100%', minWidth: 0 }}>
+            <div className="discovery-request-field" style={{ width: '100%', minWidth: 0, boxSizing: 'border-box' }}>
               {/* Date Header with Custom Shortcuts */}
-              <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '8px' }}>
+              <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', flexWrap: 'wrap', gap: '8px', marginBottom: '8px', width: '100%' }}>
                 <label className="discovery-filter-label" htmlFor="requested-visit-at" style={{ margin: 0 }}>
                   Appointment Date (Customizable)
                 </label>
-                <div style={{ display: 'flex', gap: '6px' }}>
+                <div style={{ display: 'flex', gap: '6px', flexShrink: 0 }}>
                   <button
                     type="button"
                     onClick={() => handleDateChange(getTodayDateString())}
                     style={{
-                      padding: '3px 8px',
-                      fontSize: '0.75rem',
+                      padding: '4px 10px',
+                      fontSize: '0.78rem',
                       borderRadius: '6px',
                       border: '1px solid var(--color-border)',
                       background: selectedDate === getTodayDateString() ? 'var(--color-primary-muted)' : 'var(--color-surface-white)',
@@ -391,8 +409,8 @@ export const SpecialistFinder = () => {
                     type="button"
                     onClick={() => handleDateChange(getTomorrowDateString())}
                     style={{
-                      padding: '3px 8px',
-                      fontSize: '0.75rem',
+                      padding: '4px 10px',
+                      fontSize: '0.78rem',
                       borderRadius: '6px',
                       border: '1px solid var(--color-border)',
                       background: selectedDate === getTomorrowDateString() ? 'var(--color-primary-muted)' : 'var(--color-surface-white)',
@@ -413,10 +431,11 @@ export const SpecialistFinder = () => {
                 min={getTodayDateString()}
                 value={selectedDate}
                 onChange={(event) => handleDateChange(event.target.value)}
+                style={{ width: '100%', minWidth: 0, boxSizing: 'border-box' }}
               />
 
               {/* Available 30-Minute Consultation Slots */}
-              <div style={{ marginTop: '16px' }}>
+              <div style={{ marginTop: '16px', width: '100%', minWidth: 0 }}>
                 {selectedSlotDef && (
                   <div style={{ display: 'flex', justifyContent: 'flex-end', marginBottom: '10px' }}>
                     <Badge status="success">
@@ -440,14 +459,14 @@ export const SpecialistFinder = () => {
                 )}
 
                 {/* Morning & Afternoon Session: 10:00 to 15:00 */}
-                <div style={{ marginBottom: '12px' }}>
+                <div style={{ marginBottom: '14px', width: '100%', minWidth: 0 }}>
                   <div style={{ display: 'flex', alignItems: 'center', gap: '6px', marginBottom: '8px' }}>
                     <Sun size={14} color="var(--swiss-amber-text)" />
                     <span style={{ fontSize: '0.76rem', fontWeight: 700, color: 'var(--swiss-amber-text)', textTransform: 'uppercase', letterSpacing: '0.04em' }}>
                       Morning & Afternoon Session (10:00 AM – 3:00 PM)
                     </span>
                   </div>
-                  <div style={{ display: 'flex', flexWrap: 'wrap', gap: '6px' }}>
+                  <div className="discovery-slots-container">
                     {CLINIC_APPOINTMENT_SLOTS.filter((s) => s.session === 'morning').map((slot) => {
                       const isPast = isSlotPast(slot.startTime);
                       const isBooked = isSlotBooked(slot.startTime);
@@ -458,13 +477,16 @@ export const SpecialistFinder = () => {
                         <button
                           key={slot.id}
                           type="button"
+                          className="discovery-slot-btn"
                           disabled={isUnavailable}
                           onClick={() => handleSlotSelect(slot.id)}
                           style={{
-                            padding: '6px 10px',
+                            boxSizing: 'border-box',
+                            padding: '9px 10px',
                             borderRadius: 'var(--border-radius-sm)',
-                            fontSize: '0.8rem',
+                            fontSize: '0.80rem',
                             fontWeight: 600,
+                            textAlign: 'center',
                             border: '1px solid',
                             borderColor: isSelected
                               ? 'var(--color-primary)'
@@ -485,7 +507,7 @@ export const SpecialistFinder = () => {
                             opacity: isUnavailable ? 0.55 : 1,
                             textDecoration: isUnavailable ? 'line-through' : 'none',
                             boxShadow: 'none',
-                            transition: 'border-color 0.12s ease',
+                            transition: 'all 0.12s ease',
                           }}
                           title={isBooked ? 'Slot already booked' : isPast ? 'Past time' : `Book ${slot.label}`}
                         >
@@ -497,14 +519,14 @@ export const SpecialistFinder = () => {
                 </div>
 
                 {/* Evening Session: 19:00 to 22:00 */}
-                <div>
+                <div style={{ width: '100%', minWidth: 0 }}>
                   <div style={{ display: 'flex', alignItems: 'center', gap: '6px', marginBottom: '8px' }}>
                     <Moon size={14} color="var(--color-accent)" />
                     <span style={{ fontSize: '0.76rem', fontWeight: 700, color: 'var(--color-accent)', textTransform: 'uppercase', letterSpacing: '0.04em' }}>
                       Evening Session (7:00 PM – 10:00 PM)
                     </span>
                   </div>
-                  <div style={{ display: 'flex', flexWrap: 'wrap', gap: '6px' }}>
+                  <div className="discovery-slots-container">
                     {CLINIC_APPOINTMENT_SLOTS.filter((s) => s.session === 'evening').map((slot) => {
                       const isPast = isSlotPast(slot.startTime);
                       const isBooked = isSlotBooked(slot.startTime);
@@ -515,13 +537,16 @@ export const SpecialistFinder = () => {
                         <button
                           key={slot.id}
                           type="button"
+                          className="discovery-slot-btn"
                           disabled={isUnavailable}
                           onClick={() => handleSlotSelect(slot.id)}
                           style={{
-                            padding: '6px 10px',
+                            boxSizing: 'border-box',
+                            padding: '9px 10px',
                             borderRadius: 'var(--border-radius-sm)',
-                            fontSize: '0.8rem',
+                            fontSize: '0.80rem',
                             fontWeight: 600,
+                            textAlign: 'center',
                             border: '1px solid',
                             borderColor: isSelected
                               ? 'var(--color-primary)'
@@ -542,7 +567,7 @@ export const SpecialistFinder = () => {
                             opacity: isUnavailable ? 0.55 : 1,
                             textDecoration: isUnavailable ? 'line-through' : 'none',
                             boxShadow: 'none',
-                            transition: 'border-color 0.12s ease',
+                            transition: 'all 0.12s ease',
                           }}
                           title={isBooked ? 'Slot already booked' : isPast ? 'Past time' : `Book ${slot.label}`}
                         >
@@ -618,7 +643,7 @@ export const SpecialistFinder = () => {
             {displayedDoctors.map((doctor) => {
               const isSelected = selectedDocId === doctor.id;
               return (
-                  <Card key={doctor.id} variant="default" interactive selected={isSelected} className="h-full flex-col justify-between" style={{ padding: '24px 26px', borderRadius: '2px' }} onClick={() => selectDoctor(doctor.id)}>
+                  <Card key={doctor.id} variant="default" interactive selected={isSelected} className="h-full flex-col justify-between" style={{ padding: '24px 26px', borderRadius: 'var(--border-radius-card)' }} onClick={() => selectDoctor(doctor.id)}>
                     <div>
                       <div className="flex justify-between items-start mb-2">
                         <div>
