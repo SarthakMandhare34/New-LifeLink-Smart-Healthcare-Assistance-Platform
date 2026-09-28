@@ -149,7 +149,7 @@ export const PatientLogin = () => {
               padding: 'clamp(30px, 4.5vw, 44px)',
               background: 'var(--color-surface-white)',
               border: '1px solid var(--color-border)',
-              borderRadius: '2px',
+              borderRadius: 'var(--border-radius-card)',
               boxShadow: 'none'
             }}
           >
@@ -176,9 +176,9 @@ export const PatientLogin = () => {
                   marginBottom: '24px',
                   color: 'var(--color-semantic-emergency)',
                   textAlign: 'center',
-                  background: 'rgba(220, 38, 38, 0.08)',
-                  border: '1px solid rgba(220, 38, 38, 0.25)',
-                  borderRadius: '2px',
+                  background: 'var(--lifelink-red-soft)',
+                  border: '1px solid var(--lifelink-red-border)',
+                  borderRadius: 'var(--border-radius-badge)',
                   padding: '12px 14px',
                   fontSize: '0.88rem'
                 }}
@@ -207,7 +207,7 @@ export const PatientLogin = () => {
                     style={{
                       width: '100%',
                       paddingLeft: '42px',
-                      borderRadius: '2px',
+                      borderRadius: 'var(--border-radius-input)',
                       minHeight: '44px',
                       fontSize: '0.90rem',
                       border: '1px solid var(--color-input-border, var(--color-border))',
@@ -237,7 +237,7 @@ export const PatientLogin = () => {
                       width: '100%',
                       paddingLeft: '42px',
                       paddingRight: '42px',
-                      borderRadius: '2px',
+                      borderRadius: 'var(--border-radius-input)',
                       minHeight: '44px',
                       fontSize: '0.90rem',
                       border: '1px solid var(--color-input-border, var(--color-border))',
@@ -268,7 +268,7 @@ export const PatientLogin = () => {
                   padding: '11px',
                   fontSize: '0.96rem',
                   fontWeight: 600,
-                  borderRadius: '2px',
+                  borderRadius: 'var(--border-radius-btn)',
                   marginTop: '6px',
                   cursor: 'pointer',
                   opacity: isLoading ? 0.7 : 1
@@ -293,7 +293,7 @@ export const PatientLogin = () => {
                   onClick={handleGoogleClick}
                   title="Continue with Google"
                   style={{
-                    borderRadius: '2px',
+                    borderRadius: 'var(--border-radius-btn)',
                     minHeight: '44px',
                     fontSize: '0.90rem',
                     width: '100%',
