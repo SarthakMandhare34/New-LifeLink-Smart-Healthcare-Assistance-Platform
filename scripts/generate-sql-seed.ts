@@ -4,8 +4,6 @@ import { mockDoctorDirectory } from "../backend/discovery/mockDoctorDirectory";
 import { hashPatientPassword } from "../backend/auth/nativePatientAuth";
 
 async function generateSql() {
-  const patientHash = await hashPatientPassword("patient@lifelink");
-
   const sqlLines: string[] = [
     "-- ============================================================================",
     "-- LIFELINK COMPLETE DATABASE SETUP & CREDENTIAL SEED FOR MYSQL WORKBENCH",
@@ -14,7 +12,7 @@ async function generateSql() {
     "-- 1. Start your MySQL Server (in Workbench: Administration -> Startup/Shutdown -> Start Server).",
     "-- 2. Open this file (File -> Open SQL Script -> database/seed_doctors.sql).",
     "-- 3. Click the ⚡ Execute button (or Ctrl + Shift + Enter).",
-    "-- 4. The Result Grid at the bottom will display all 52 doctor logins + patient login.",
+    "-- 4. The Result Grid at the bottom will display all 52 doctor logins.",
     "-- ============================================================================",
     "",
     "CREATE DATABASE IF NOT EXISTS `lifelink` CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;",
@@ -206,25 +204,27 @@ async function generateSql() {
     "  UNIQUE KEY `provider_subject_unique` (`provider`,`subject`),",
     "  CONSTRAINT `fk_patient_prov_user` FOREIGN KEY (`userId`) REFERENCES `users` (`id`) ON DELETE CASCADE",
     ") ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;",
+    "-- ============================================================================",
+    "-- CLEANUP: PURGE RESIDUAL PATIENT DATA & NON-DOCTOR USERS",
+    "-- ============================================================================",
+    "SET FOREIGN_KEY_CHECKS = 0;",
+    "TRUNCATE TABLE `bookingErrors`;",
+    "TRUNCATE TABLE `doctorEvents`;",
+    "TRUNCATE TABLE `patientAppointments`;",
+    "TRUNCATE TABLE `patientAssessments`;",
+    "TRUNCATE TABLE `patientCredentials`;",
+    "TRUNCATE TABLE `patientEmergencyContacts`;",
+    "TRUNCATE TABLE `patientEvents`;",
+    "TRUNCATE TABLE `patientMedicines`;",
+    "TRUNCATE TABLE `patientPrescriptionItems`;",
+    "TRUNCATE TABLE `patientPrescriptions`;",
+    "TRUNCATE TABLE `patientProfiles`;",
+    "TRUNCATE TABLE `patientProviderIdentities`;",
+    "DELETE FROM `users` WHERE `role` != 'doctor';",
+    "SET FOREIGN_KEY_CHECKS = 1;",
     "",
     "-- ============================================================================",
-    "-- SEED 1: DEMO PATIENT ACCOUNT",
-    "-- Email: patient@lifelink.com  |  Password: patient@lifelink",
-    "-- ============================================================================",
-    "INSERT INTO users (openId, name, email, loginMethod, role, createdAt, updatedAt, lastSignedIn)",
-    "VALUES ('native:patient-demo', 'Aarav Mehta', 'patient@lifelink.com', 'native-patient', 'user', NOW(), NOW(), NOW())",
-    "ON DUPLICATE KEY UPDATE name = 'Aarav Mehta', email = 'patient@lifelink.com', role = 'user', updatedAt = NOW();",
-    "",
-    "INSERT INTO patientCredentials (userId, email, passwordHash, createdAt, updatedAt)",
-    `VALUES ((SELECT id FROM users WHERE openId = 'native:patient-demo'), 'patient@lifelink.com', '${patientHash}', NOW(), NOW())`,
-    `ON DUPLICATE KEY UPDATE email = 'patient@lifelink.com', passwordHash = '${patientHash}', updatedAt = NOW();`,
-    "",
-    "INSERT INTO patientProfiles (userId, bloodGroup, phone, allergiesJson, conditionsJson, createdAt, updatedAt)",
-    "VALUES ((SELECT id FROM users WHERE openId = 'native:patient-demo'), 'O+', '+91 98765 43210', '[]', '[]', NOW(), NOW())",
-    "ON DUPLICATE KEY UPDATE bloodGroup = 'O+', phone = '+91 98765 43210', updatedAt = NOW();",
-    "",
-    "-- ============================================================================",
-    "-- SEED 2: 52 CLINICIAN WORKSTATION ACCOUNTS (100% FICTIONAL & COMPLIANT)",
+    "-- SEED: 52 CLINICIAN WORKSTATION ACCOUNTS (MUMBAI MEDICAL DIRECTORY)",
     "-- ============================================================================",
   ];
 
@@ -260,10 +260,8 @@ async function generateSql() {
   sqlLines.push("JOIN syntheticDoctorCredentials c ON u.id = c.userId");
   sqlLines.push("ORDER BY u.id ASC;");
   sqlLines.push("");
-  sqlLines.push("-- View Patient login accounts:");
-  sqlLines.push("SELECT u.id AS user_id, u.name AS patient_name, u.email AS patient_email, u.role, u.createdAt");
-  sqlLines.push("FROM users u");
-  sqlLines.push("WHERE u.role = 'user';");
+  sqlLines.push("-- Confirm 0 non-doctor accounts exist (Clean State):");
+  sqlLines.push("SELECT COUNT(*) AS total_non_doctor_users FROM users WHERE role != 'doctor';");
 
   const outPath = path.resolve(process.cwd(), "database/seed_doctors.sql");
   fs.writeFileSync(outPath, sqlLines.join("\n"), "utf8");
