@@ -244,7 +244,7 @@ LifeLink-Smart-Healthcare-Assistance-Platform/
 ├── .prettierignore                        # Prettier exclusion rules
 ├── .prettierrc                            # Prettier formatting rules (endOfLine: auto)
 ├── CHANGELOG.md                           # Version release notes (v1.3.0 documented)
-├── CONTRIBUTORS.md                        # Project governance, maintainers & standards
+├── CONTRIBUTORS.md                        # Project author, contributors & development guidelines
 ├── LICENSE                                # MIT open-source license
 ├── README.md                              # Main documentation entry point
 ├── SECURITY.md                            # Security policies, reporting & controls
@@ -1102,6 +1102,6 @@ For deeper technical deep-dives, consult the specialized documentation guides in
 - 🧪 [**Automated Testing Guide (TESTING.md)**](TESTING.md) — Complete 33-suite test breakdown, execution commands, and security verification matrix.
 - 🔒 [**Security Policy & IDOR Controls (SECURITY.md)**](SECURITY.md) — Vulnerability disclosure process, cryptographic Scrypt hashing, and dual cookie isolation.
 - 📊 [**System Architecture & Technical Diagrams (SYSTEM_DIAGRAMS.md)**](SYSTEM_DIAGRAMS.md) — Entity-relationship diagrams, directory layout, and Mermaid sequence charts.
-- 👥 [**Governance & Contributors (CONTRIBUTORS.md)**](CONTRIBUTORS.md) — Project leadership, maintainer standards, and code hygiene guidelines.
+- 👥 [**Contributors & Development Guidelines (CONTRIBUTORS.md)**](CONTRIBUTORS.md) — Project author, contributor acknowledgments, and development guidelines.
 - 📋 [**Release Changelog (CHANGELOG.md)**](CHANGELOG.md) — Complete version release history and technical changelog notes.
 - ⚖️ [**Open Source License (LICENSE)**](LICENSE) — MIT License terms and conditions.

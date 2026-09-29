@@ -1,15 +1,15 @@
-# LifeLink Platform Contributors & Governance
+# LifeLink — Project Contributors & Development Guidelines
 
-## Project Leadership & Maintainers
+## Project Author & Contributors
 
 LifeLink is designed, architected, and maintained by:
 
 - **Sarthak Mandhare** ([@sarthakmandhare34](https://github.com/sarthakmandhare34))
-  - **Role**: Lead Developer, System Architect & Project Owner
+  - **Role**: Lead Developer & Project Author
   - **Responsibilities**: Full-stack platform architecture, database schema, AI safety guardrails, doctor-patient dual authentication workflows, and UI engineering.
 
 - **Google**
-  - **Role**: AI Architectural & Development Partner
+  - **Role**: AI Development Partner & LLM Infrastructure
   - **Responsibilities**: Gemini AI models (`gemini-3.5-flash-lite`, `gemini-3.5-flash`, `gemini-3.7-flash`), structured schema triage integration, and latency optimization.
 
 ---
