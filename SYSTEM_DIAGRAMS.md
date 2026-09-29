@@ -374,22 +374,19 @@ flowchart TD
     end
 
     subgraph ActiveScope["Current Operational Scope (Mumbai Metropolitan Region)"]
-        MMR_Data[shared/mumbaiRailNetwork.ts & mumbaiStationCoordinates.ts]
-        MMR_Lines["Western, Central & Harbour Lines (19 Stations)"]
-        MMR_Docs["52 Mumbai Railway Specialists Directory"]
+        MMR_Data[Local Proximity: 19 Railway Stations & Corridors]
+        MMR_Docs[52 Mumbai Railway Specialists Directory]
     end
 
-    subgraph PanIndiaRoadmap["Future Pan-India Expansion (Pluggable Regional Catalogs)"]
-        DMRC["Delhi-NCR Metro Rail Network"]
-        NAMMA["Bengaluru Namma Metro"]
-        HYD["Hyderabad Metro Rail"]
-        KOL["Kolkata Metro Network"]
-        IRCTC["Indian Railways National Inter-City Junctions"]
-        TIER2["Tier-2/Tier-3 Dist. Hospitals & PHCs/CHCs"]
+    subgraph PanIndiaRoadmap["Future Pan-India Expansion (Location-Based Registries)"]
+        METRO["Major Metropolitan Cities: Delhi-NCR, Bengaluru, Hyderabad, Chennai, Kolkata, Pune"]
+        TIER2["Tier-2 & Tier-3 District Hospitals"]
+        RURAL["Rural Primary & Community Health Centres: PHCs / CHCs"]
+        LANG["Multilingual Regional Language Support"]
     end
 
     ActiveScope --> CoreEngine
-    PanIndiaRoadmap -.->|Modular Registry Plugins| CoreEngine
+    PanIndiaRoadmap -.->|Location & PIN-Code Catalogs| CoreEngine
 ```
 
 ---
