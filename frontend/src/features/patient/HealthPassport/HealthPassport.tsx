@@ -473,10 +473,10 @@ export const HealthPassport = () => {
                     onChange={(e) => setBloodGroup(e.target.value)}                               // Update selected blood type
                     style={{
                       height: '46px',
-                      padding: '0 14px',
+                      padding: '0 38px 0 14px',
                       borderRadius: '8px',
                       border: !isBloodGroupValid ? '1px solid var(--color-semantic-emergency)' : '1px solid var(--color-border)',
-                      background: 'var(--color-background)',
+                      backgroundColor: 'var(--color-background)',
                       color: 'var(--color-text)',
                       fontSize: '1.1rem',
                       fontWeight: 700,

@@ -277,7 +277,7 @@ export const AIAssessment = () => {
                     border: '1px solid var(--color-border)',
                     borderRadius: 'var(--border-radius-input)',
                     fontSize: '0.92rem',
-                    background: 'var(--color-surface-white)',
+                    backgroundColor: 'var(--color-surface-white)',
                     color: 'var(--color-text)',
                     outline: 'none',
                     cursor: 'pointer',
