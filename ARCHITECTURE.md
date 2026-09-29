@@ -110,6 +110,16 @@ The [`shared/`](shared/) directory contains code executed by both the browser an
 - **`shared/mumbaiRailNetwork.ts`**: Declares suburban railway lines (Western, Central, Harbour), corridor sequences, and station definitions.
 - **`shared/mumbaiStationCoordinates.ts`**: Defines calibrated GPS latitude and longitude coordinates for all 19 transit stations.
 
+### Modular Regional Coverage & Pan-India Extensibility Pattern
+
+While the initial deployment and operational range are focused on the **Mumbai Metropolitan Region (MMR)**, the architecture decouples transit data from application logic:
+
+- **Reference Regional Implementation (Mumbai)**: `mumbaiRailNetwork.ts` and `mumbaiStationCoordinates.ts` act as the initial regional data provider.
+- **Pan-India Extensibility Architecture**:
+  1. *Schema Universality*: The `doctors` table in [`database/schema.ts`](database/schema.ts) stores universal decimal coordinates (`latitude`, `longitude`) alongside transit attributes (`stationCode`, `stationName`, `line`). No city-specific assumptions are embedded in the schema.
+  2. *Regional Transit Providers*: Expansion to new regions (e.g., Delhi Metro DMRC, Bengaluru Namma Metro, Hyderabad Metro, Chennai MRTS, Kolkata Metro) only requires registering corresponding regional station and coordinate dictionaries under `shared/`.
+  3. *Unchanged Core Engines*: The tRPC routing tier, 5-layer AI triage engine, Scrypt authentication, 5-stage appointment state machine, and SSE streaming pipeline remain 100% agnostic to geographic locality.
+
 ---
 
 ## 5. Server Application Layer (Express & Node.js)
@@ -269,3 +279,17 @@ Doctor Workstation              Express / tRPC Backend                          
       │                                  │── 7. Broadcast SSE: "PRESCRIPTION_CREATED"          │
       │<─ 8. Return Signed Prescription ─│                                                     │
 ```
+
+---
+
+## 10. Architectural Roadmap & Pan-India Scalability
+
+LifeLink's operational boundary is currently deployed in the Mumbai Metropolitan Region. The system is engineered to expand to a nationwide Pan-India footprint via the following architectural phases:
+
+1. **Multi-Region Transit Registry**:
+   - Introduce an abstract transit provider interface (`RegionalTransitCatalog`) that dynamically loads station datasets and line geometries based on the user's selected or detected metropolitan region (e.g., Mumbai, Delhi-NCR, Bengaluru, Hyderabad, Chennai, Kolkata).
+2. **Multi-Tenant / Multi-City Database Partitioning**:
+   - The MySQL database schema naturally supports city and state indexing. As clinical listings expand across India, queries can be partitioned by state or postal code (PIN code) without breaking relational foreign keys or appointment uniqueness invariants.
+3. **Low-Bandwidth & Offline Sync (PWA)**:
+   - For tier-2, tier-3, and rural health corridors where connectivity fluctuates, the client application can leverage IndexedDB and service workers for offline prescription caching and medication reminders, synchronizing back via tRPC upon network restoration.
+

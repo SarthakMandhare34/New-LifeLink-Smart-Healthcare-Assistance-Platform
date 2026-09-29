@@ -362,6 +362,36 @@ flowchart TD
     ShowToast --> RedirectLogin[Redirect to /login with Replace History]
 ```
 
+### D. Regional Scope: Current Mumbai Suburban Reference vs. Pan-India Modular Expansion
+```mermaid
+flowchart TD
+    subgraph CoreEngine["LifeLink Core Platform (Region-Agnostic)"]
+        TRPC[tRPC v11 API & Procedures]
+        AI[5-Layer AI Clinical Triage]
+        Auth[Scrypt Auth & Dual Sessions]
+        Appt[Multi-Doctor Slot Scheduling]
+        SSE[Server-Sent Events Realtime Engine]
+    end
+
+    subgraph ActiveScope["Current Operational Scope (Mumbai Metropolitan Region)"]
+        MMR_Data[shared/mumbaiRailNetwork.ts & mumbaiStationCoordinates.ts]
+        MMR_Lines["Western, Central & Harbour Lines (19 Stations)"]
+        MMR_Docs["52 Mumbai Railway Specialists Directory"]
+    end
+
+    subgraph PanIndiaRoadmap["Future Pan-India Expansion (Pluggable Regional Catalogs)"]
+        DMRC["Delhi-NCR Metro Rail Network"]
+        NAMMA["Bengaluru Namma Metro"]
+        HYD["Hyderabad Metro Rail"]
+        KOL["Kolkata Metro Network"]
+        IRCTC["Indian Railways National Inter-City Junctions"]
+        TIER2["Tier-2/Tier-3 Dist. Hospitals & PHCs/CHCs"]
+    end
+
+    ActiveScope --> CoreEngine
+    PanIndiaRoadmap -.->|Modular Registry Plugins| CoreEngine
+```
+
 ---
 
 ## 5. Sequence Diagrams

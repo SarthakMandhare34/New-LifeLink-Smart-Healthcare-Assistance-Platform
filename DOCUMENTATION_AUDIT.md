@@ -94,6 +94,9 @@ During the code audit, several discrepancies between legacy documentation and th
    - *Legacy Script*: Contained comments referencing "55 authentic Indian doctor workstations".
    - *Current Reality*: `mockDoctorDirectory.ts` defines exactly 52 verified Mumbai railway doctors across 19 stations.
    - *Correction*: Corrected the comments in `scripts/seed-doctors.ts` to 52.
+11. **Regional Operational Scope vs. Pan-India Extensibility Clarification**:
+   - *Audit Finding*: The operational directory and physical clinic coordinates are currently populated exclusively for the Mumbai Metropolitan Region (19 stations across Western, Central, and Harbour lines). However, the platform architecture (database schema, client-side Haversine distance engine, and transit catalog interfaces) was deliberately designed to be region-agnostic for easy expansion to Pan-India coverage.
+   - *Correction*: Explicitly documented the Mumbai-only operational boundary under Scope and Limitations, while articulating the Pan-India modular expansion roadmap across `README.md` (Sections 1, 4, 21, 30), `ARCHITECTURE.md` (Sections 4 & 10), and `SYSTEM_DIAGRAMS.md` (Section 4.D).
 
 ---
 

@@ -51,7 +51,7 @@
 
 ## 1. Project Overview
 
-**LifeLink** is a full-stack smart healthcare assistance platform tailored for the **Mumbai Metropolitan Region (MMR)**. It connects daily train commuters and local residents with fast health guidance and verified medical specialists near their connecting railway stations.
+**LifeLink** is a full-stack smart healthcare assistance platform whose initial operational range and live coverage are centered on the **Mumbai Metropolitan Region (MMR)**. It connects daily train commuters and local residents with fast health guidance and verified medical specialists near their connecting railway stations. While current operational coverage is focused on Mumbai's suburban transit corridors, the platform architecture has been deliberately designed to be region-agnostic, enabling seamless future expansion to a **Pan-India** healthcare network.
 
 In large metropolitan cities like Mumbai, over 7.5 million passengers travel daily across the suburban railway network. When commuters experience sudden health symptoms during transit, they face three common challenges:
 - They do not know whether their condition is an emergency or something that can wait.
@@ -62,6 +62,7 @@ LifeLink addresses these challenges by combining:
 1. **A 5-Layer AI Clinical Symptom Triage Engine** powered by Google Gemini, which evaluates symptoms against biological and emergency rules to recommend an appropriate medical specialty and urgency level.
 2. **A Mumbai Rail Transit Specialist Directory** covering 52 verified doctor profiles across 19 major railway stations on the Western, Central, and Harbour lines.
 3. **An Integrated Patient & Doctor Workflow**, providing appointment booking, personal Health Passports, medicine tracking, tamper-evident digital prescriptions, and live updates via Server-Sent Events (SSE).
+4. **A Modular Regional Extensibility Framework**, allowing the transit mapping, clinic directory, and coordinate calculations to be scaled beyond Mumbai to any city or state across India.
 
 ---
 
@@ -86,6 +87,7 @@ LifeLink was designed and built to fulfill the following specific objectives:
 4. **Digitize Personal Health Records Securely**: Allow patients to maintain an Emergency Health Passport, an active medicine cabinet, and digital prescriptions with cryptographic integrity checks.
 5. **Implement Strict Healthcare Security**: Enforce Scrypt password hashing with individual random salts, dual HTTP-only session cookies, 5-minute inactivity termination, and comprehensive IDOR protections.
 6. **Support Real-Time Communication**: Push live appointment and prescription status changes to connected browsers instantly using lightweight Server-Sent Events (SSE).
+7. **Architect for Pan-India Scalability**: Maintain clean separation between regional transit datasets and core clinical business logic, ensuring straightforward expansion to other metropolitan transit networks across India.
 
 ---
 
@@ -95,6 +97,7 @@ To provide an accurate assessment of the platform, the project boundary is clear
 
 ### Currently Implemented
 
+- **Regional Operational Range (Mumbai Metropolitan Region)**: Full specialist discovery and transit directory currently active across 19 major railway stations (Western, Central, and Harbour lines) with calibrated GPS coordinates and verified clinic listings.
 - **Dual Workspaces**: Dedicated, isolated workspaces for patients (`/patient/*`) and clinicians (`/doctor/*`).
 - **Authentication**: Native email/password authentication with memory-hard Scrypt hashing (16-byte random salts), timing-safe verification, and optional Google OAuth 2.0.
 - **AI Symptom Triage**: 5-layer triage pipeline utilizing Google Gemini Flash models with deterministic 0ms emergency regex overrides, biological checks, and offline fallbacks.
@@ -109,6 +112,7 @@ To provide an accurate assessment of the platform, the project boundary is clear
 
 ### Outside Current Scope (Future Roadmap)
 
+- **Pan-India Coverage Expansion**: The active directory, range, and physical clinic listings are currently deployed exclusively for Mumbai. Expanding live clinical listings to other Indian states and metropolitan transit corridors (Delhi-NCR, Bengaluru, Hyderabad, Kolkata, Chennai, Pune) is planned as a modular extension.
 - **Financial Transactions**: In-app payment gateways, billing collections, and health insurance claim processing.
 - **Live Telemedicine Video**: WebRTC-based video or audio calls between patients and doctors.
 - **Automated Emergency Dispatch**: Automatic GPS dispatch of municipal ambulances or emergency vehicles without user confirmation.
@@ -802,6 +806,14 @@ The Specialist Finder maps accredited clinics to the **Mumbai Suburban Railway N
   where $R = 6371\text{ km}$ (Earth's radius), $\phi$ is latitude, and $\lambda$ is longitude.
 - **Privacy-Bounded Geolocation**: The patient's GPS coordinates are evaluated **in-memory within the browser only**. Coordinates are **never transmitted to the backend server, never written to server logs, and never stored in the database**.
 
+### Current Regional Scope & Pan-India Extensibility Design
+
+While LifeLink's active range and directory coverage are currently deployed exclusively in the **Mumbai Metropolitan Region**, the entire subsystem is architectured for straightforward **Pan-India** scaling:
+
+1. **Decoupled Relational Schema**: The MySQL `doctors` table in [`database/schema.ts`](database/schema.ts) models physical clinic locations generically via `stationCode`, `stationName`, `line`, `address`, `latitude`, and `longitude`. The schema contains zero city-specific hardcoded assumptions, allowing any Indian city, district, or PIN code to be populated without database migrations.
+2. **Modular Transit Registry Pattern**: Transit corridors in [`shared/mumbaiRailNetwork.ts`](shared/mumbaiRailNetwork.ts) and [`shared/mumbaiStationCoordinates.ts`](shared/mumbaiStationCoordinates.ts) follow a standardized dictionary structure. Adding a new regional transit authority (e.g., Delhi Metro DMRC, Bengaluru Namma Metro, Chennai MRTS, Kolkata Metro, or Hyderabad Metro) requires only introducing a corresponding regional catalog without modifying core scheduling, triage, or security engines.
+3. **Universal Mathematical Geodesics**: The client-side Haversine distance engine calculates physical separation on standard spherical Earth coordinates ($R = 6371\text{ km}$). It functions with equal mathematical accuracy anywhere across India or globally.
+
 ---
 
 ## 22. Responsive Design & Accessibility
@@ -1044,12 +1056,17 @@ Patient GPS coordinates are processed entirely in-memory within the user's web b
 ### Current Limitations
 1. **Synthetic Clinical Directory**: The 52 Mumbai railway doctors are realistic synthetic profiles created for testing and demonstration. Production deployment would require official credential verification and clinical onboarding.
 2. **Fixed Consultation Slots**: The scheduling engine uses predefined 30-minute intervals and does not integrate with external calendar systems (e.g., Google Calendar, Outlook).
-3. **Geographic Focus**: Station lists, transit corridors, and coordinates are tailored specifically to the Mumbai Metropolitan Region. Supporting other cities would require expanding the station catalog.
+3. **Regional Operational Range (Mumbai Only)**: The existing range, live specialist directory, and physical clinic coordinates are currently available only within the Mumbai Metropolitan Region (19 stations across Western, Central, and Harbour lines). Specialists and transit networks in other Indian cities and states are not yet populated in the active database.
 4. **No Financial Processing**: Payment gateway integration, co-pays, and insurance verification are outside the current release scope.
 
 ### Future Enhancements (Planned)
-1. **Telemedicine Audio/Video**: WebRTC-based video and audio consultation rooms connecting patients and clinicians directly.
-2. **Multi-City Transit Expansion**: Adapting the transit directory to other metropolitan railway networks (such as Delhi Metro, Bengaluru Namma Metro, and Kolkata Metro).
+1. **Pan-India Coverage & Multi-Modal Transit Expansion**:
+   While existing range and coverage are currently available only in Mumbai, LifeLink's architecture is engineered to scale across India:
+   - **Metropolitan Transit Networks**: Extending specialist directories to major Indian metro rail networks, including Delhi Metro (DMRC), Bengaluru Namma Metro, Hyderabad Metro, Chennai Metro, and Kolkata Metro.
+   - **National Railway Corridors**: Integrating long-distance Indian Railways (IRCTC) junctions and inter-city commuter corridors (such as Vande Bharat express routes) to assist passengers traveling between states.
+   - **Tier-2, Tier-3 & Rural Healthcare**: Expanding clinical listings to district hospitals, Community Health Centres (CHCs), and Primary Health Centres (PHCs) across Indian states.
+   - **Regional Language Localization**: Adding multilingual localization for major Indian languages (Hindi, Marathi, Kannada, Tamil, Telugu, Bengali, Gujarati).
+2. **Telemedicine Audio/Video**: WebRTC-based video and audio consultation rooms connecting patients and clinicians directly.
 3. **ABDM / FHIR Compliance**: Integrating with the Ayushman Bharat Digital Mission (ABDM) and FHIR healthcare interoperability standards.
 4. **Offline Mobile App**: Packaging the patient portal as a progressive web app (PWA) with offline medication reminders and SMS backup.
 
