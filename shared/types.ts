@@ -1,12 +1,14 @@
 /**
  * ============================================================================
- * SHARED ISOMORPHIC LOGIC
+ * LifeLink Smart Healthcare Assistance Platform
+ * Isomorphic Type Contracts & Schema Re-Exports (v1.3.0)
  * ============================================================================
  *
- * WHY THIS FILE IS SPECIAL:
- * The code in this folder is executed by BOTH the front-end browser and the back-end server.
- * This ensures that when we calculate things (like the distance between clinics),
- * both the server and the phone agree on the exact same mathematical rules.
+ * Cross-boundary type safety:
+ * - Re-exports database schema models and Zod inferred validation types.
+ * - Isomorphic error hierarchy shared between Express API and React client.
+ * - Guarantees full end-to-end compile-time type safety across network borders.
+ * ============================================================================
  */
 export type * from "../database/schema";                                                         // Re-export all database table schemas and Zod inferred types
 export * from "./_core/errors";                                                                 // Re-export common HTTP error definitions

@@ -1,3 +1,10 @@
+/**
+ * ============================================================================
+ * LifeLink Smart Healthcare Assistance Platform
+ * Client Bundling, Development Proxy & Build Configuration (v1.3.0)
+ * ============================================================================
+ */
+
 import tailwindcss from "@tailwindcss/vite";                   // Vite plugin for compiling Tailwind CSS utility classes
 import react from "@vitejs/plugin-react";                        // Official Vite plugin providing React Fast Refresh and JSX support
 import path from "node:path";                                    // Node.js built-in module for resolving cross-platform file paths

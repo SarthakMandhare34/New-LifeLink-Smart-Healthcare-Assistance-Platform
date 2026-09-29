@@ -10,7 +10,7 @@ A comprehensive visual and technical reference illustrating the software archite
 LifeLink-Smart-Healthcare-Assistance-Platform/
 │
 ├── 🗄️ DATABASE PERSISTENCE LAYER [Related to: Section 2 ER Diagram]
-│   ├── database/schema.ts                 <-- [EDIT] Drizzle MySQL schema (11 relational tables & relations)
+│   ├── database/schema.ts                 <-- [EDIT] Drizzle MySQL schema (14 relational tables & relations)
 │   ├── database/drizzle.config.ts         <-- [READ] Database connection & Drizzle Studio config
 │   └── database/migrations/               <-- [AUTO] Versioned SQL migration history
 │
@@ -26,38 +26,46 @@ LifeLink-Smart-Healthcare-Assistance-Platform/
 │   ├── backend/ai/assessmentService.ts    <-- [EDIT] 5-layer AI symptom triage & Gemini Flash cascade engine
 │   ├── backend/realtime/eventBus.ts       <-- [EDIT] Scoped Server-Sent Events (SSE) notification broadcaster
 │   ├── backend/storage.ts                 <-- [READ] Cloud S3 / local profile asset storage adapter
-│   ├── backend/syntheticDoctor.ts        <-- [READ] 24 Mumbai specialist accounts provisioning helpers
-│   └── backend/auth/                      <-- [READ] Native bcrypt hashing, JWT issuance, Google OAuth
+│   ├── backend/syntheticDoctor.ts        <-- [READ] 52 Mumbai specialist accounts provisioning helpers
+│   └── backend/auth/                      <-- [READ] Scrypt hashing with 16-byte random salts, JWT issuance, Google OAuth
 │
 ├── 💻 FRONTEND CLIENT INTERFACE LAYER [Related to: Section 3 Component & Section 4 Activity Diagrams]
 │   ├── frontend/src/App.tsx               <-- [EDIT] React Router hierarchy (/patient/*, /doctor/*, /workspace)
-│   ├── frontend/src/index.css             <-- [EDIT] Liquid-Glass design tokens, atmospheric mesh, WCAG 2.1 AA rules
+│   ├── frontend/src/index.css             <-- [EDIT] Swiss Clinical Humanist design tokens, high-contrast dark mode, WCAG 2.1 AA rules
 │   ├── frontend/src/components/layout/
 │   │   ├── AppShell.tsx                   <-- [EDIT] Patient portal navigation, drawer & header shell
 │   │   └── DoctorAppShell.tsx             <-- [EDIT] Clinician workspace navigation, drawer & header shell
 │   ├── frontend/src/components/ui/
-│   │   ├── Card.tsx                       <-- [EDIT] Liquid-Glass surface container primitive
+│   │   ├── Card.tsx                       <-- [EDIT] High-contrast clinical container primitive
 │   │   ├── Button.tsx                     <-- [EDIT] Accessible button primitive
 │   │   └── Popup.tsx                      <-- [EDIT] Modal dialog with useId accessibility
 │   ├── frontend/src/hooks/
 │   │   ├── patientInactivity.ts           <-- [EDIT] 5-minute inactivity session tracking hook
-│   │   └── useSSE.ts                      <-- [EDIT] Live Server-Sent Events subscription hook
+│   │   ├── usePatientRealtime.ts          <-- [EDIT] Patient Server-Sent Events subscription hook
+│   │   └── useDoctorRealtime.ts           <-- [EDIT] Doctor Server-Sent Events subscription hook
 │   └── frontend/src/features/
 │       ├── patient/
-│       │   ├── Dashboard.tsx              <-- [EDIT] Aggregated clinical overview
+│       │   ├── Dashboard/                 <-- [EDIT] Aggregated clinical overview
 │       │   ├── Assessment/                <-- [EDIT] 5-stage AI Symptom Checker & Triage interface
 │       │   ├── Specialists/               <-- [EDIT] Mumbai Specialist Rail Network directory & Leaflet map
 │       │   ├── Appointments/              <-- [EDIT] Appointment booking & consultation history
 │       │   ├── HealthPassport/            <-- [EDIT] Medical passport, chronic conditions, emergency contacts
-│       │   └── Medicines/                 <-- [EDIT] Medicine cabinet & schedule tracker
+│       │   ├── Medicines/                 <-- [EDIT] Medicine cabinet & schedule tracker
+│       │   ├── Prescriptions/             <-- [EDIT] Patient digital prescription records
+│       │   ├── Emergency/                 <-- [EDIT] Emergency SOS 112 rapid dispatch view
+│       │   ├── Profile/                   <-- [EDIT] Patient profile & avatar management
+│       │   └── Settings/                  <-- [EDIT] Patient preferences & appearance
 │       ├── doctor/
-│       │   ├── Dashboard.tsx              <-- [EDIT] Doctor appointments queue & clinical statistics
-│       │   ├── Setup.tsx                  <-- [EDIT] Specialist onboarding & consultation schedule
-│       │   ├── Login.tsx                  <-- [EDIT] Clinician credential authentication (split layout)
-│       │   ├── ResetPassword.tsx          <-- [EDIT] Clinician password recovery workflow (split layout)
+│       │   ├── Dashboard/                 <-- [EDIT] Doctor appointments queue & clinical statistics
+│       │   ├── Appointments/              <-- [EDIT] Clinical consultation queue & scheduling
 │       │   ├── Patients/                  <-- [EDIT] Patient roster & medical history view
 │       │   ├── Consultations/             <-- [EDIT] Clinical consultation & notes workspace
-│       │   └── Prescriptions/             <-- [EDIT] Digital prescription authoring & SHA-256 signer
+│       │   ├── Prescriptions/             <-- [EDIT] Digital prescription authoring & SHA-256 signer
+│       │   ├── Assessments/               <-- [EDIT] Specialty triage assessments review
+│       │   ├── Profile/                   <-- [EDIT] Clinician credentials & hospital affiliation
+│       │   ├── Settings/                  <-- [EDIT] Clinician workstation preferences
+│       │   ├── Login.tsx                  <-- [EDIT] Clinician credential authentication (split layout)
+│       │   └── ResetPassword.tsx          <-- [EDIT] Clinician password recovery workflow (split layout)
 │       └── entry/
 │           ├── Login.tsx                  <-- [EDIT] Patient login (credentials & Google OAuth, split layout)
 │           ├── Register.tsx               <-- [EDIT] Patient registration (credentials & Google OAuth, split layout)
@@ -72,9 +80,12 @@ LifeLink-Smart-Healthcare-Assistance-Platform/
 │
 └── 🛠️ RUNTIME & SETUP SCRIPTS
     ├── scripts/init-db.ts                 <-- [RUN] Idempotently provisions 'lifelink' database in MySQL
-    ├── scripts/seed-doctors.ts            <-- [RUN] Seeds 12 Mumbai specialist work accounts
-    ├── scripts/sync-doctors.ts            <-- [RUN] Audits & synchronizes 12 doctor accounts in MySQL
-    ├── scripts/clear-users.ts             <-- [RUN] Atomically wipes all user records and history
+    ├── scripts/sync-doctors.ts            <-- [RUN] Audits & synchronizes 52 doctor accounts in MySQL
+    ├── scripts/generate-sql-seed.ts       <-- [RUN] Generates zero-dependency seed_doctors.sql script
+    ├── scripts/clear-users.ts             <-- [RUN] Atomically wipes test patient data while preserving 52 doctors
+    ├── scripts/delete-user.ts             <-- [RUN] Selectively deletes a single user account by email
+    ├── scripts/list-doctor-credentials.ts <-- [RUN] Displays verified clinician credentials for login
+    ├── scripts/seed-doctors.ts            <-- [RUN] Seeds 52 doctor accounts via Drizzle ORM
     └── scripts/dev.mjs                    <-- [RUN] Development runtime orchestrator (Vite on 5173, Express on 4000 with fallbacks)
 ```
 
@@ -96,6 +107,8 @@ users (Central Identity & Role Registry)
 ├── 1 : N ──> patientMedicines (name, dosage, frequency, schedule, quantity)
 ├── 1 : N ──> patientEmergencyContacts (name, relationship, phone)
 ├── 1 : N ──> patientEvents (type: APPOINTMENT_UPDATED, ASSESSMENT_COMPLETED, PRESCRIPTION_CREATED)
+├── 1 : N ──> doctorEvents (type: APPOINTMENT_REQUESTED, APPOINTMENT_CANCELLED)
+├── 1 : N ──> bookingErrors (audit log of booking conflicts and past-date attempts)
 │
 └── 1 : N ──> patientPrescriptions (doctorId, status: UNSIGNED/SIGNED, integrityReference)
               │
@@ -240,7 +253,7 @@ classDiagram
     class ClientLayer {
         +AppShell (Patient)
         +DoctorAppShell (Clinician)
-        +Card (Liquid-Glass Surface)
+        +Card (Swiss Clinical Surface)
         +registerPatientInactivityTimer()
     }
 
@@ -419,12 +432,12 @@ npx tsx scripts/init-db.ts
 # 3. Apply Drizzle Schema Migrations
 npm run db:push
 
-# 4. Seed Default Mumbai Specialists & Reset Test Data
-npx tsx scripts/seed-doctors.ts
+# 4. Synchronize 52 Mumbai Railway Doctors
+npm run db:sync:doctors
 
 # 5. Start Full-Stack Development Server
 npm run dev
 
-# 6. Execute Full Verification Pipeline
+# 6. Execute Full Verification Pipeline (Typecheck, Test, Build)
 npm run verify
 ```

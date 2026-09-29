@@ -1,3 +1,10 @@
+/**
+ * ============================================================================
+ * LifeLink Smart Healthcare Assistance Platform
+ * Vitest Automated Test Runner Configuration (v1.3.0 — 241 Tests)
+ * ============================================================================
+ */
+
 import { defineConfig } from "vitest/config";                 // Vitest configuration helper function for typed test runner settings
 import path from "path";                                         // Node.js path module for resolving absolute filesystem paths
 

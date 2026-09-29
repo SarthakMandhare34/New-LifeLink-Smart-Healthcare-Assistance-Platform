@@ -4,6 +4,24 @@ All notable changes to the LifeLink Smart Healthcare Assistance Platform will be
 
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/), and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [1.3.0] - 2026-09-29
+
+### Added & Enhanced
+- **Swiss Clinical Humanist UI Transformation & Dark Mode Overhaul**:
+  - Implemented high-contrast AAA typography in dark mode with `#F8FAFC` primary headings/text and `#CBD5E1` secondary/muted copy.
+  - Enabled native `color-scheme: dark;` on `:root[data-theme="dark"]` for seamless browser autofill, controls, and form element styling.
+  - Form inputs, textareas, and `<select>` dropdowns in dark mode now feature high-contrast `#FFFFFF` text on `#17212B` surfaces with `#3B4D5D` structural borders and `#94A3B8` placeholders.
+  - Standardized the official LifeLink logo mounting plate (`background: #FFFFFF !important;`) on `.lifelink-logo-crop`, `.lifelink-logo-auth`, `.auth-card-mobile-logo`, `.lifelink-logo-sidebar`, and `.workspace-portal-mark` across both light and dark modes, ensuring the navy "Life" and dark charcoal tagline "Smart Healthcare Assistance Platform" remain 100% visible and crisp without fading.
+  - Enlarged the auth logo (`.lifelink-logo-auth` and `.auth-card-mobile-logo`) to generous responsive dimensions (`clamp(58px, 7vw, 76px)` and `clamp(50px, 6vw, 66px)`), giving the brand name and tagline maximum prominence across all device viewports.
+- **Clean 52-Doctor Exam-Ready MySQL Database Architecture**:
+  - Automated database purge script (`npm run db:clear`) that truncates all 12 patient activity tables and removes non-doctor accounts while preserving all 52 Mumbai clinician workstations intact.
+  - Updated `database/seed_doctors.sql` and `scripts/generate-sql-seed.ts` with built-in safe reset routines and doctor verification queries.
+  - Zero pre-stored patient records to ensure 100% authentic, real-time dynamic registration during live evaluations and exams.
+- **Comprehensive Verification & Test Suite Expansion (241 Tests)**:
+  - All 33 Vitest test suites (241 tests) pass with 100% success across auth, security IDOR, appointment lifecycles, and responsive design systems.
+
+---
+
 ## [1.2.0] - 2026-09-14
 
 ### Added & Optimized
@@ -18,7 +36,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
   - Added arrow translation micro-animations (`.btn-arrow-hover`) on interactive navigation elements.
   - Enhanced `Card.tsx` to automatically inject interactive keyboard handling (`Enter`, `Space`) for accessible card selection without prop drilling.
 - **Comprehensive Multi-Tier Documentation**:
-  - Added dedicated architectural documentation guides in `frontend/README.md` and `backend/README.md` explaining client and server lifecycles in clear, detailed language.
+  - Added dedicated architectural documentation guides in `ARCHITECTURE.md` and `SYSTEM_DIAGRAMS.md` explaining client and server lifecycles in clear, detailed language.
   - Updated root `README.md` with complete 12-specialty clinician directory, administrative secret key specifications, and system diagram links.
 - **Client-Side Query Caching for Instant Tab Switching**:
   - Configured TanStack `QueryClient` in `frontend/src/main.tsx` with `staleTime: 60_000` (1 minute) and `gcTime: 300_000` (5 minutes).

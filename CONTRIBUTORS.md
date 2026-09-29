@@ -32,21 +32,26 @@ We welcome contributions to the LifeLink platform. When submitting pull requests
 * Never execute Gemini API calls or store API keys in the client layer.
 
 ### 3. Design System & Accessibility
-* Maintain the hybrid **Liquid-Glass** (`backdrop-filter: blur(24px) saturate(155%)`, iridescent border sheen) and **Clinical Aqua** palette (`#E6F9FC`, `#9FFBFF`, `#00C4CC`, `#102B2D`).
-* Adhere to **WCAG 2.1 AA** standards: all interactive components must support keyboard navigation (`Tab`, `Enter`, `Escape`), accessible ARIA labels, and focus rings.
+* Maintain the **Swiss Clinical Humanist** design system, combining precision clinical typography, high-contrast medical palettes (`#0284C7`, `#0F766E`, `#10B981`), enlarged brand identity, responsive flex-grid layouts, and full light/dark mode contrast parity.
+* Adhere strictly to **WCAG 2.1 AA** standards: all interactive components must support keyboard navigation (`Tab`, `Enter`, `Escape`), accessible ARIA labels, minimum 4.5:1 text contrast ratios, and visible focus rings.
 
 ### 4. Code Hygiene & Testing
 * Run `npm run verify` prior to submitting commits.
-* Ensure 0 TypeScript compilation errors (`npm run check`) and passing unit/integration test suites (`npm test`).
+* Ensure 0 TypeScript compilation errors (`npm run check`) and 241 passing automated tests across 33 test files (`npm test`) with 100% pass rate.
 
 ### 5. Atomic Commit Conventions
 * Format commit messages according to Conventional Commits (`feat:`, `fix:`, `docs:`, `perf:`, `build:`, `refactor:`) to maintain a clean, readable git history.
 
 ---
 
-## 📄 Related Project Policies
+## 📄 Related Documentation & Policies
 
-* [**Code of Security & Vulnerability Reporting**](SECURITY.md)
-* [**Changelog & Release Notes**](CHANGELOG.md)
-* [**System Architecture & Diagrams**](SYSTEM_DIAGRAMS.md)
-* [**MIT License**](LICENSE)
+* [**Main Documentation Entry Point (README.md)**](README.md)
+* [**System Architecture & Technical Specifications (ARCHITECTURE.md)**](ARCHITECTURE.md)
+* [**Relational Database Reference (DATABASE.md)**](DATABASE.md)
+* [**Local Development & Installation Guide (SETUP.md)**](SETUP.md)
+* [**Automated Testing & Verification Guide (TESTING.md)**](TESTING.md)
+* [**Security Policy & Vulnerability Reporting (SECURITY.md)**](SECURITY.md)
+* [**System Architecture & Technical Diagrams (SYSTEM_DIAGRAMS.md)**](SYSTEM_DIAGRAMS.md)
+* [**Changelog & Version History (CHANGELOG.md)**](CHANGELOG.md)
+* [**MIT License (LICENSE)**](LICENSE)

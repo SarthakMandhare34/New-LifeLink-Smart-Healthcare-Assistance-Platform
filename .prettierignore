@@ -1,3 +1,7 @@
+# ============================================================================
+# LifeLink Smart Healthcare Assistance Platform - Prettier Ignore Rules
+# ============================================================================
+
 # Dependencies
 node_modules/
 .pnpm-store/

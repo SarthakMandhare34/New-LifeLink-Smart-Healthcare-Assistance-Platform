@@ -10,7 +10,7 @@
  * 1. Audits existing database doctor credentials against `mockDoctorDirectory`.
  * 2. Identifies missing or drifted clinician accounts across Mumbai railway corridors.
  * 3. Automatically inserts missing doctors and updates passwords/hashes if required.
- * 4. Ensures all 55 workstations remain completely in sync with official directory records.
+ * 4. Ensures all 52 workstations remain completely in sync with official directory records.
  */
 import "dotenv/config";                                                               // Loads .env credentials (DATABASE_URL) into process.env
 import { getDb, createSyntheticDoctorCredential, refreshSyntheticDoctorCredentialByDoctorId } from "../backend/db"; // DB client and doctor persistence methods

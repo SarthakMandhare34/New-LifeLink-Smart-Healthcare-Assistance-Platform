@@ -1,12 +1,16 @@
 /**
  * ============================================================================
- * SYSTEM CORE & INFRASTRUCTURE
+ * LifeLink Smart Healthcare Assistance Platform
+ * Backend Server Entry & HTTP Pipeline Orchestration (v1.3.0)
  * ============================================================================
  *
- * WHY THIS FILE IS SPECIAL:
- * These are the foundational building blocks of the backend server.
- * It sets up the Express framework, cookie parsing, and environment variables.
- * Without this core infrastructure, the application cannot boot or talk to the internet securely.
+ * Core architectural backbone:
+ * - Express HTTP Server & tRPC API Bridge
+ * - Dual Session Extraction (app_session_id & doctor_session_id)
+ * - Server-Sent Events (SSE) Realtime Streaming Bus
+ * - Google OAuth 2.0 & Cryptographic Salted Scrypt Authentication
+ * - Vite Production Asset Serving & Dynamic Port Scanning
+ * ============================================================================
  */
 import "dotenv/config";                                          // Load secret environment variables from .env into process.env
 import express from "express";                                   // Express web framework for routing and middleware

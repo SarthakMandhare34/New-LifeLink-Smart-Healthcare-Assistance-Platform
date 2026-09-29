@@ -1,12 +1,16 @@
 /**
  * ============================================================================
- * RELATIONAL DATABASE SCHEMA (DRIZZLE ORM)
+ * LifeLink Smart Healthcare Assistance Platform
+ * Relational Database Schema & Type Contracts (v1.3.0 — Drizzle ORM)
  * ============================================================================
  *
- * WHY THIS FILE IS SPECIAL:
- * This file is the absolute blueprint of how data is stored permanently.
- * We use a tool called Drizzle ORM. It prevents SQL Injection attacks (hackers typing malicious code).
- * It guarantees that if we expect a 'number' for an Age, nobody can accidentally save a 'string'.
+ * 14 Relational Tables with ACID integrity & foreign key constraints:
+ * - Central Identity: users, patientCredentials, syntheticDoctorCredentials, patientProviderIdentities
+ * - Medical Profiles & Safety: patientProfiles, patientEmergencyContacts, patientMedicines
+ * - Clinical Triage & Care: patientAssessments, patientAppointments, patientConsultations
+ * - Tamper-Evident Rx: patientPrescriptions, patientPrescriptionItems
+ * - Realtime Event Bus: patientEvents, doctorEvents
+ * ============================================================================
  */
 import { foreignKey, index, int, mysqlEnum, mysqlTable, text, timestamp, unique, uniqueIndex, varchar } from "drizzle-orm/mysql-core";
 

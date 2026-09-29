@@ -9,7 +9,7 @@
  * WHAT THIS SCRIPT DOES:
  * 1. Connects to the local MySQL database using Drizzle ORM.
  * 2. Cleans out stale records to avoid duplicate or conflicting accounts.
- * 3. Seeds 55 authentic Indian doctor workstations across 12 specialties & General Practice
+ * 3. Seeds 52 authentic Indian doctor workstations across 12 specialties & General Practice
  *    located along Mumbai's railway corridors (Western, Central, Harbour).
  * 4. Applies a memorable and consistent credential format for all clinicians:
  *    - Email: <id-slug>@lifelink.com (e.g. central-cardiology-csmt@lifelink.com)
@@ -19,7 +19,7 @@
  */
 import "dotenv/config";                                                               // Loads .env database connection strings
 import { getDb, createSyntheticDoctorCredential } from "../backend/db";                   // Drizzle DB connection and credential creation helper
-import { mockDoctorDirectory } from "../backend/discovery/mockDoctorDirectory";             // Standard clinical directory of 55 workstations
+import { mockDoctorDirectory } from "../backend/discovery/mockDoctorDirectory";             // Standard clinical directory of 52 workstations
 import { hashPatientPassword } from "../backend/auth/nativePatientAuth";                   // Password hashing function using scrypt
 
 async function resetAndSeedDatabase() {

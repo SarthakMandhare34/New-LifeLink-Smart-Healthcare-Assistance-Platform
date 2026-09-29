@@ -6,7 +6,8 @@ We provide security updates and patches for the following versions of the LifeLi
 
 | Version | Supported          | Status |
 | :--- | :---: | :--- |
-| **1.2.x** | :white_check_mark: | Active production release |
+| **1.3.x** | :white_check_mark: | Active production release |
+| **1.2.x** | :white_check_mark: | Supported maintenance release |
 | **1.1.x** | :white_check_mark: | Supported maintenance release |
 | **1.0.x** | :white_check_mark: | Supported maintenance release |
 | **< 1.0** | :x:                | End of life (development milestones) |
@@ -63,21 +64,22 @@ To prevent medical hallucinations, dangerous clinical advice, or AI prompt injec
 - Initial setup and credential resetting for doctor workstations (`/doctor/setup`, `/doctor/reset`) require the administrative master secret code `lifelink-controlled-clinician-secret-key-2026`.
 - Doctor accounts are strictly tied to `@lifelink.com` work domain emails; informal accounts and email updates without master key validation are rejected.
 
-### 3.5. Cryptographic Digital Prescription Integrity
+### 3.6. Cryptographic Digital Prescription Integrity
 - When a clinician issues a prescription, the server generates a SHA-256 hash incorporating the issuing doctor ID, patient ID, canonicalized medication list, and authorization timestamp.
 - The resulting `integrityReference` hash is stored alongside the prescription, ensuring tamper evidence across the complete prescription lifecycle.
 
-### 3.6. Privacy-Bounded Geospatial Architecture
+### 3.7. Privacy-Bounded Geospatial Architecture
 - The Mumbai Specialist Rail Network Finder operates completely in-memory on the client browser.
 - Patient GPS coordinates are never transmitted to the backend server, never written to log files, and never stored in the database.
 
-### 3.7. Password Hashing & Secret Management
-- Passwords for native patient accounts and synthetic doctor credentials are salted and hashed using standard bcrypt algorithms.
+### 3.8. Password Hashing & Scrypt Cryptography
+- Passwords for native patient accounts and synthetic doctor credentials are salted with unique 16-byte random salts and hashed using Node.js crypto `scrypt`.
+- Password verification utilizes `crypto.timingSafeEqual` to prevent side-channel timing attacks.
 - All secrets (`JWT_SECRET`, `GEMINI_API_KEY`, `DATABASE_URL`) are read strictly from environment variables and must never be committed to version control.
 - In production (`NODE_ENV=production`), the application strictly throws an error if `JWT_SECRET` is omitted or empty, preventing fallback secret keys.
-- Database provisioning scripts (`scripts/seed-doctors.ts`) enforce strict `NODE_ENV=production` guards, preventing destructive table truncations in production database environments.
+- Database provisioning scripts (`scripts/sync-doctors.ts`) enforce strict clean table guards and validation checks.
 
-### 3.8. Google OAuth 2.0 Security & Patient-Clinician Role Separation
+### 3.9. Google OAuth 2.0 Security & Patient-Clinician Role Separation
 - **Cryptographic State & Nonce Protection**: During OAuth initialization, a cryptographically random 32-byte state and nonce pair is signed into a secure, `httpOnly`, short-lived (10-minute) cookie (`lifelink_google_oauth_state`). On callback, the state is compared using constant-time evaluation (`crypto.timingSafeEqual`) to prevent Cross-Site Request Forgery (CSRF) and token replay attacks.
 - **Strict Role Sandboxing**: Google OAuth authentication is strictly limited to the patient domain (`resolveProviderPatient`). Clinician accounts cannot authenticate or be provisioned via Google OAuth, safeguarding medical governance and preventing unauthorized access to the Doctor Workspace.
 - **Account Hijacking Mitigation**: If a Google OAuth account attempts to authenticate with an email that is already registered natively as a patient or doctor, the system detects the collision (`ProviderAccountConflictError`) and halts authorization, prompting the user to sign in using their established credentials.

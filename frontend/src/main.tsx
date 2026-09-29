@@ -1,11 +1,15 @@
 /**
  * ============================================================================
- * FRONTEND REACT CORE
+ * LifeLink Smart Healthcare Assistance Platform
+ * React 19 Application Root & Provider Pipeline (v1.3.0)
  * ============================================================================
  *
- * WHY THIS FILE IS SPECIAL:
- * This is the root configuration of the React application.
- * It sets up the Routing (which URL goes to which page) and global Theme Contexts.
+ * Core frontend architecture:
+ * - TanStack React Query client with fast-fail retry policies
+ * - tRPC batch HTTP link with superjson serialization
+ * - ThemeContext for clinical dark/light mode switching
+ * - StrictMode root mounting
+ * ============================================================================
  */
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";               // TanStack React Query cache and provider
 import { httpBatchLink } from "@trpc/client";                                              // tRPC HTTP batch network link
@@ -14,7 +18,7 @@ import ReactDOM from "react-dom/client";                                        
 import superjson from "superjson";                                                         // Superjson serializer supporting complex types
 import App from "./App.tsx";                                                               // Root application router component
 import { ThemeProvider } from "./context/ThemeContext.tsx";                                // Dark/light mode theme provider
-import "./index.css";                                                                      // Global liquid-glass CSS styles and animations
+import "./index.css";                                                                      // Global Swiss Clinical Humanist CSS styles and animations
 import { trpc } from "./lib/trpc";                                                         // Type-safe tRPC React hooks
 
 // STEP 1: Initialize TanStack Query Client with intelligent caching and fast-fail policy
