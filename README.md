@@ -688,7 +688,7 @@ LifeLink incorporates strict security controls to protect sensitive healthcare d
   - JPEG: `FF D8 FF`
   - PNG: `89 50 4E 47 0D 0A 1A 0A`
   - WebP: `RIFF .... WEBP`
-- Files exceeding 2 MB are rejected. Requests require a custom `x-lifelink-request: profile-photo` header to prevent Cross-Site Request Forgery (CSRF).
+- Files exceeding 10 MB are rejected. Requests require a custom `x-lifelink-request: profile-photo` header to prevent Cross-Site Request Forgery (CSRF).
 
 ---
 

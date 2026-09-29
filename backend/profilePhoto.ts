@@ -9,7 +9,7 @@
  *
  * SECURITY & VALIDATION FEATURES:
  * 1. Magic Bytes Deep Inspection: Validates raw binary file signatures to prevent file spoofing.
- * 2. Strict File Size Caps: Limits upload payloads strictly to 2 MB to prevent DoS attacks.
+ * 2. Strict File Size Caps: Limits upload payloads strictly to 10 MB to prevent DoS attacks.
  * 3. CSRF Guard: Requires custom header `x-lifelink-request: profile-photo` to thwart forged uploads.
  * 4. User Ownership: Extracts patient identity strictly from cryptographically signed HTTP-only JWT cookies.
  * 5. Event Publishing: Broadcasts `PROFILE_UPDATED` SSE events so all open browser tabs update instantly.
@@ -19,7 +19,7 @@ import { createPatientEvent, updatePatientAvatarKey } from "./db";              
 import { authSession } from "./auth/authUtil";                                             // JWT session validator
 import { storagePut } from "./storage";                                                    // Local disk file persistence helper
 
-export const PROFILE_PHOTO_MAX_BYTES = 2 * 1024 * 1024;                                    // 2 MB maximum allowable upload size limit
+export const PROFILE_PHOTO_MAX_BYTES = 10 * 1024 * 1024;                                   // 10 MB maximum allowable upload size limit
 
 // Whitelist mapping of supported image MIME types to file extensions
 const profilePhotoTypes = {
@@ -41,16 +41,16 @@ function hasExpectedSignature(contentType: ProfilePhotoType, body: Buffer) {
 export function validateProfilePhotoUpload(contentType: string, body: unknown): { ok: true; extension: string } | { ok: false; message: string } {
   if (!(contentType in profilePhotoTypes)) return { ok: false, message: "Use a JPG, PNG, or WebP image." }; // Content-Type check
   if (!Buffer.isBuffer(body) || body.length === 0) return { ok: false, message: "Choose an image to upload." }; // Empty buffer check
-  if (body.length > PROFILE_PHOTO_MAX_BYTES) return { ok: false, message: "Choose an image smaller than 2 MB." }; // Size limit check
+  if (body.length > PROFILE_PHOTO_MAX_BYTES) return { ok: false, message: "Choose an image smaller than 10 MB." }; // Size limit check
   if (!hasExpectedSignature(contentType as ProfilePhotoType, body)) return { ok: false, message: "The selected file does not match its image type." }; // Binary signature check
   return { ok: true, extension: profilePhotoTypes[contentType as ProfilePhotoType] };      // Approved upload with sanitized extension
 }
 
-/** Accepts one small image, derives patient ownership from the signed cookie, and stores only a managed key. */
+/** Accepts one image, derives patient ownership from the signed cookie, and stores only a managed key. */
 export function registerPatientProfilePhotoRoute(app: Express) {
   app.post(
     "/api/patient/profile-photo",
-    express.raw({ type: () => true, limit: `${PROFILE_PHOTO_MAX_BYTES}b` }),               // Read raw binary payload up to 2 MB
+    express.raw({ type: () => true, limit: `${PROFILE_PHOTO_MAX_BYTES}b` }),               // Read raw binary payload up to 10 MB
     async (req, res) => {
       if (req.get("x-lifelink-request") !== "profile-photo") {                             // CSRF security check header
         return res.status(403).json({ error: "Invalid profile-photo request." });

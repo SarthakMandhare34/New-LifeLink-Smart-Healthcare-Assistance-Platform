@@ -65,9 +65,9 @@ export const Profile = () => {
       setPhotoError('Use a JPG, PNG, or WebP image.');
       return;
     }
-    // Validate file size limit (2 MB)
-    if (photo.size > 2 * 1024 * 1024) {
-      setPhotoError('Choose an image smaller than 2 MB.');
+    // Validate file size limit (10 MB)
+    if (photo.size > 10 * 1024 * 1024) {
+      setPhotoError('Choose an image smaller than 10 MB.');
       return;
     }
 
