@@ -249,7 +249,6 @@ LifeLink-Smart-Healthcare-Assistance-Platform/
 ├── README.md                              # Main documentation entry point
 ├── SECURITY.md                            # Security policies, reporting & controls
 ├── SYSTEM_DIAGRAMS.md                     # Visual architecture diagrams and ER hierarchy
-├── components.json                        # UI component library configuration
 ├── package.json                           # NPM project manifest, scripts & dependencies
 ├── package-lock.json                      # Pinned dependency lockfile
 ├── tsconfig.json                          # Main TypeScript compiler configuration
