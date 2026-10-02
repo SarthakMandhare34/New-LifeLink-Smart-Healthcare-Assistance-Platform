@@ -506,7 +506,7 @@ The Patient Portal provides an integrated interface for managing health journeys
 6. **Health Passport (`/patient/health-passport`)**: A digital medical passport storing blood group, contact phone, uploaded profile photo, verified allergies, and chronic conditions.
 7. **Digital Prescriptions (`/patient/prescriptions`)**: Displays official prescriptions issued by assigned clinicians with active status badges (`SIGNED — CONTROLLED STATE` vs `UNSIGNED / CONTROLLED WORKSPACE`), itemized medication lines, dosage instructions, and tamper-evident cryptographic verification indicators.
 8. **Emergency Hub (`/patient/emergency`)**: Rapid emergency assistance providing direct links to India's national emergency number (`112`) and ambulance helplines, complete with confirmation dialogs to prevent accidental calls.
-9. **Profile & Settings (`/patient/profile`, `/patient/settings`)**: Account management interface for uploading avatar photos (validated via binary magic bytes) and toggling dark/light theme preferences.
+9. **Profile & Settings (`/patient/profile`, `/patient/settings`)**: Account management interface for uploading avatar photos (validated via binary magic bytes), changing account passwords, executing permanent account deletion (with cascading database removal), and toggling dark/light theme preferences.
 
 ---
 
@@ -632,8 +632,10 @@ The backend runs on Node.js using Express and tRPC v11:
 |:---|:---|:---:|:---|
 | `auth` | `auth.me` | Query | Returns currently authenticated user session. |
 | `auth` | `auth.logout` | Mutation | Clears session cookie and logs out user. |
-| `patientAuth` | `patientAuth.register` | Mutation | Registers a new patient with email, name, and Scrypt-hashed password. |
+| `patientAuth` | `patientAuth.register` | Mutation | Registers a new patient with email, name, and Scrypt-hashed password. (Guarantees email uniqueness globally) |
 | `patientAuth` | `patientAuth.login` | Mutation | Authenticates patient credentials and sets `app_session_id` cookie. |
+| `patientAuth` | `patientAuth.changePassword` | Mutation | Updates patient password securely using constant-time old password checks and salt regeneration. |
+| `patientAuth` | `patientAuth.deleteAccount` | Mutation | Permanently deletes patient account, destroying all health data via cascading DB removals. |
 | `doctorAuth` | `doctorAuth.login` | Mutation | Authenticates clinician credentials and sets `doctor_session_id` cookie. |
 | `doctorAuth` | `doctorAuth.resetPassword`| Mutation | Resets clinician password using administrative master access code. |
 | `assessment` | `assessment.analyze` | Mutation | Submits symptoms to 5-layer triage pipeline and saves assessment. |
@@ -698,6 +700,12 @@ LifeLink incorporates strict security controls to protect sensitive healthcare d
   - PNG: `89 50 4E 47 0D 0A 1A 0A`
   - WebP: `RIFF .... WEBP`
 - Files exceeding 10 MB are rejected. Requests require a custom `x-lifelink-request: profile-photo` header to prevent Cross-Site Request Forgery (CSRF).
+
+### 7. Account Deletion & Data Purging (Right to Erasure)
+- Patients can permanently delete their accounts from the Workspace Preferences menu.
+- Deletion invokes a strict database-level `ON DELETE CASCADE` constraint.
+- When the primary `users` record is removed, all associated data across the system (passwords, AI triage assessments, health passports, medicines, prescriptions, and appointments) is instantly and irreversibly wiped.
+- The user's active session cookie is immediately cleared upon execution.
 
 ---
 
