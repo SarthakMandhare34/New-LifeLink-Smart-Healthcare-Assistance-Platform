@@ -36,6 +36,26 @@ export const Settings = () => {
   const [aptReminders, setAptReminders] = useState(true);
   const [medAlerts, setMedAlerts] = useState(true);
 
+  // Local state for password change
+  const [currentPassword, setCurrentPassword] = useState('');
+  const [newPassword, setNewPassword] = useState('');
+  const [passwordMsg, setPasswordMsg] = useState('');
+
+  const changePassword = trpc.patientAuth.changePassword.useMutation({
+    onSuccess: () => {
+      setPasswordMsg('Password changed successfully.');
+      setCurrentPassword('');
+      setNewPassword('');
+    },
+    onError: (err) => setPasswordMsg(err.message),
+  });
+
+  const deleteAccount = trpc.patientAuth.deleteAccount.useMutation({
+    onSuccess: () => {
+      window.location.href = '/';
+    },
+  });
+
   return (
     <div style={{ display: 'flex', flexDirection: 'column', gap: '36px', width: '100%', maxWidth: '1400px', margin: '0 auto' }}>
 
@@ -185,16 +205,24 @@ export const Settings = () => {
             <div style={{ display: 'flex', flexDirection: 'column', gap: '18px' }}>
 
               {/* Password Option */}
-              <div style={{ padding: '18px 22px', background: 'var(--color-surface-subtle)', borderRadius: 'var(--border-radius-sm)', border: '1px solid var(--color-border)', display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: '18px', flexWrap: 'wrap' }}>
-                <div style={{ flex: 1, minWidth: '220px' }}>
-                  <p style={{ margin: 0, fontWeight: 700, fontSize: '0.95rem', color: 'var(--color-text)' }}>Patient password changes</p>
+              <div style={{ padding: '18px 22px', background: 'var(--color-surface-subtle)', borderRadius: 'var(--border-radius-sm)', border: '1px solid var(--color-border)', display: 'flex', flexDirection: 'column', gap: '14px' }}>
+                <p style={{ margin: 0, fontWeight: 700, fontSize: '0.95rem', color: 'var(--color-text)' }}>Patient password changes</p>
+                {patient?.loginMethod === 'native-patient' ? (
+                  <>
+                    <input type="password" placeholder="Current Password" value={currentPassword} onChange={e => setCurrentPassword(e.target.value)} style={{ padding: '8px 12px', borderRadius: '4px', border: '1px solid var(--color-border)', fontSize: '14px', width: '100%', maxWidth: '300px' }} />
+                    <input type="password" placeholder="New Password (min 8 characters)" value={newPassword} onChange={e => setNewPassword(e.target.value)} style={{ padding: '8px 12px', borderRadius: '4px', border: '1px solid var(--color-border)', fontSize: '14px', width: '100%', maxWidth: '300px' }} />
+                    <Button variant="primary" size="sm" onClick={() => changePassword.mutate({ currentPassword, newPassword })} disabled={changePassword.isPending || !currentPassword || newPassword.length < 8} style={{ width: 'fit-content' }}>
+                      {changePassword.isPending ? 'Updating...' : 'Update Password'}
+                    </Button>
+                    {passwordMsg && (
+                      <span style={{ color: changePassword.isError ? 'var(--color-danger)' : 'var(--color-primary)', fontSize: '0.85rem' }}>{passwordMsg}</span>
+                    )}
+                  </>
+                ) : (
                   <span className="caption" style={{ display: 'block', marginTop: '6px', color: 'var(--color-text-muted)', lineHeight: 1.5 }}>
-                    Password changes are not available in this workspace.
+                    Password changes are not available for Google OAuth accounts.
                   </span>
-                </div>
-                <Button variant="secondary" size="sm" disabled style={{ opacity: 0.85, whiteSpace: 'nowrap', borderRadius: 'var(--border-radius-btn)' }}>
-                  Not available
-                </Button>
+                )}
               </div>
 
               {/* Deletion Option */}
@@ -202,11 +230,11 @@ export const Settings = () => {
                 <div style={{ flex: 1, minWidth: '220px' }}>
                   <p style={{ margin: 0, fontWeight: 700, fontSize: '0.95rem', color: 'var(--color-text)' }}>Delete Account</p>
                   <span className="caption" style={{ display: 'block', marginTop: '6px', color: 'var(--color-text-muted)', lineHeight: 1.5 }}>
-                    Deletion requests are not available in this workspace.
+                    Permanently delete your account, health records, and all associated data. This action cannot be undone.
                   </span>
                 </div>
-                <Button variant="outline" size="sm" disabled style={{ borderColor: 'var(--color-border)', color: 'var(--color-text-muted)', opacity: 0.85, whiteSpace: 'nowrap', borderRadius: 'var(--border-radius-btn)' }}>
-                  Not available
+                <Button variant="danger" size="sm" onClick={() => { if (window.confirm('Are you absolutely sure you want to delete your account? This action cannot be undone.')) { deleteAccount.mutate(); } }} disabled={deleteAccount.isPending} style={{ whiteSpace: 'nowrap', borderRadius: 'var(--border-radius-btn)' }}>
+                  {deleteAccount.isPending ? 'Deleting...' : 'Delete Account'}
                 </Button>
               </div>
 

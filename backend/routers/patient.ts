@@ -35,6 +35,8 @@ import {
   removeOwnedPatientEmergencyContact,
   updateOwnedPatientEmergencyContact,
   updatePatientProfile,
+  updatePatientPassword,
+  deletePatientAccount,
 } from "../db";
 import { filterMockDoctorDirectory, getMockDoctorById, getMockDoctorDirectoryFacets } from "../discovery/mockDoctorDirectory";
 import { hashPatientPassword, verifyPatientPassword } from "../auth/nativePatientAuth";
@@ -121,6 +123,32 @@ export const patientAuthRouter = router({
     }
     await establishNativeSession(ctx, record.user);                                        // Issue session cookie
     return { id: record.user.id, name: record.user.name ?? "", email: record.user.email ?? "" }; // Return authenticated patient
+  }),
+
+  changePassword: protectedProcedure
+    .input(z.object({ currentPassword: z.string(), newPassword: z.string().min(8).max(128) }))
+    .mutation(async ({ ctx, input }) => {
+      if (ctx.user.loginMethod !== "native-patient") {
+        throw new TRPCError({ code: "FORBIDDEN", message: "Only native accounts can change passwords." });
+      }
+      if (!ctx.user.email) throw new TRPCError({ code: "UNAUTHORIZED", message: "User not found." });
+      const record = await getNativePatientByEmail(ctx.user.email);
+      if (!record) throw new TRPCError({ code: "UNAUTHORIZED", message: "User not found." });
+      
+      const isValid = await verifyPatientPassword(input.currentPassword, record.credential.passwordHash);
+      if (!isValid) throw new TRPCError({ code: "UNAUTHORIZED", message: "Incorrect current password." });
+      
+      const newPasswordHash = await hashPatientPassword(input.newPassword);
+      await updatePatientPassword(ctx.user.id, newPasswordHash);
+      return { success: true };
+    }),
+
+  deleteAccount: protectedProcedure.mutation(async ({ ctx }) => {
+    await deletePatientAccount(ctx.user.id);
+    const cookieOptions = getSessionCookieOptions(ctx.req);
+    const { maxAge: _, ...clearOptions } = cookieOptions as any;
+    ctx.res.clearCookie(COOKIE_NAME, clearOptions);
+    return { success: true };
   }),
 });
 

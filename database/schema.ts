@@ -21,7 +21,7 @@ export const users = mysqlTable("users", {
   id: int("id").autoincrement().primaryKey(),                    // Auto-incrementing unique user ID (Primary Key)
   openId: varchar("openId", { length: 64 }).notNull().unique(),  // Unique session subject key (e.g. "native:...", "synthetic-doctor:...")
   name: text("name"),                                            // Full legal or preferred name of the user
-  email: varchar("email", { length: 320 }),                      // User's verified email address
+  email: varchar("email", { length: 320 }).unique(),             // User's verified email address
   loginMethod: varchar("loginMethod", { length: 64 }),           // Auth provider used ("native-patient", "google-oauth", "synthetic-clinician")
   role: mysqlEnum("role", ["user", "doctor", "admin"]).default("user").notNull(), // User access permission tier
   createdAt: timestamp("createdAt").defaultNow().notNull(),      // Timestamp when user account was registered

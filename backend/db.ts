@@ -260,8 +260,8 @@ export async function createNativePatient(input: { name: string; email: string; 
   const db = await getDb();                                      // Obtain active database connection
   if (!db) throw new Error("Database is not available");
 
-  const existing = await getNativePatientByEmail(input.email);   // Prevent duplicate registration with same email
-  if (existing) return null;                                     // Email already registered, abort safely
+  const existingUsers = await db.select().from(users).where(eq(users.email, input.email)).limit(1); // Prevent duplicate registration with same email across all providers
+  if (existingUsers.length > 0) return null;                     // Email already registered, abort safely
 
   const openId = `native:${randomUUID()}`;                       // Generate unique UUID-based openId for native patient
   // 1. Create user account record
@@ -290,6 +290,18 @@ export async function createNativePatient(input: { name: string; email: string; 
     conditionsJson: "[]",                                        // Empty initial preexisting conditions list
   });
   return user;                                                   // Return fully provisioned patient user object
+}
+
+export async function updatePatientPassword(userId: number, passwordHash: string) {
+  const db = await getDb();
+  if (!db) throw new Error("Database is not available");
+  await db.update(patientCredentials).set({ passwordHash }).where(eq(patientCredentials.userId, userId));
+}
+
+export async function deletePatientAccount(userId: number) {
+  const db = await getDb();
+  if (!db) throw new Error("Database is not available");
+  await db.delete(users).where(eq(users.id, userId));
 }
 
 // --- Cluster: Patient Lookup by Email ---
