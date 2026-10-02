@@ -8,7 +8,7 @@
 [![Google Gemini AI](https://img.shields.io/badge/Google%20Gemini-AI-4285F4?style=for-the-badge&logo=google&logoColor=white)](https://ai.google.dev/)
 [![MySQL](https://img.shields.io/badge/MySQL-8.0-4479A1?style=for-the-badge&logo=mysql&logoColor=white)](https://www.mysql.com/)
 [![Drizzle ORM](https://img.shields.io/badge/Drizzle-ORM-C5F74F?style=for-the-badge&logo=drizzle&logoColor=black)](https://orm.drizzle.team/)
-[![Tests Passing](https://img.shields.io/badge/Vitest-241%20Tests%20Passed-success?style=for-the-badge&logo=vitest&logoColor=white)](#26-automated-testing-framework--test-breakdown)
+[![Tests Passing](https://img.shields.io/badge/Vitest-247%20Tests%20Passed-success?style=for-the-badge&logo=vitest&logoColor=white)](#26-automated-testing-framework--test-breakdown)
 
 ---
 
@@ -105,8 +105,8 @@ To provide an accurate assessment of the platform, the project boundary is clear
 - **Appointment Scheduling**: Complete 5-stage lifecycle (`Requested`, `Pending`, `Confirmed`, `Completed`, `Cancelled`) with doctor-specific slot conflict detection and database unique constraints.
 - **Medicine Cabinet**: CRUD operations for prescribed and personal medications with dosage, frequency, and adherence tracking.
 - **Emergency Health Passport**: Digital medical ID storing blood group, contact phone, uploaded photo avatar, structured allergies, and chronic conditions.
-- **Digital Prescriptions**: Doctor-authored prescriptions with individual medication items and SHA-256 digital signature hashes.
-- **Emergency Assistance View**: Immediate access to India's national emergency helpline (`112`), Mumbai railway police (`1512`), and ambulance contacts with confirmation dialogues.
+- **Digital Prescriptions**: Two-phase prescription lifecycle (drafting in `UNSIGNED / CONTROLLED WORKSPACE` $\rightarrow$ explicit execution of `doctorWorkspace.prescriptions.sign` mutation $\rightarrow$ `SIGNED — CONTROLLED STATE`) generating an immutable canonical SHA-256 integrity seal, with UI presentation using verified tamper-evident security badges.
+- **Emergency Assistance View**: Immediate access to India's national emergency helpline (`112`) and ambulance contacts with confirmation dialogues.
 - **Real-Time Push Updates**: Server-Sent Events (SSE) streaming updates across 5 patient event types and 3 clinician event types with `Last-Event-ID` reconnection replay.
 - **Design System & Contrast**: Swiss Clinical Humanist UI theme supporting light and dark modes with WCAG 2.1 AA compliant contrast ratios.
 
@@ -140,7 +140,7 @@ A clinician operating from an accredited clinic or hospital workstation.
 - **Dashboard & Queue**: Views upcoming visits, completed consultation totals, pending patient requests, and specialty-relevant triage summaries.
 - **Appointment Lifecycle**: Reviews requested appointments, confirms bookings, marks visits completed, or cancels appointments.
 - **Patient Roster**: Views detailed medical profiles, chronic conditions, and allergy histories for patients with active bookings.
-- **Prescription Issuance**: Authors digital prescriptions with medication line items, dosages, instructions, and automated SHA-256 integrity signatures.
+- **Prescription Lifecycle & Sealing**: Authors draft prescriptions with medication line items, dosages, and instructions (`UNSIGNED / CONTROLLED WORKSPACE`), then explicitly executes the dedicated signing mutation to seal the record with an immutable SHA-256 integrity reference (`SIGNED — CONTROLLED STATE`).
 - **Session Cookie**: Managed via `doctor_session_id`.
 
 ---
@@ -157,8 +157,8 @@ A clinician operating from an accredited clinic or hospital workstation.
 | **Appointment Booking** | Both | Doctor-specific consultation scheduling with active-slot concurrency protection and status management. |
 | **Medicine Cabinet** | Patient | Virtual medicine cabinet tracking dosage, administration frequency, refill quantity, and expiration dates. |
 | **Health Passport** | Patient | Digital emergency ID recording blood group, allergies, chronic conditions, and emergency contact details. |
-| **Digital Prescriptions** | Both | Clinician-authored prescription management with tamper-evident SHA-256 cryptographic hashes. |
-| **Emergency SOS Hub** | Patient | Quick-access emergency protocol with explicit user confirmation for dialing national emergency (`112`) and railway police (`1512`). |
+| **Digital Prescriptions** | Both | Two-stage prescription authoring (unsigned draft $\rightarrow$ explicit digital signing mutation) with tamper-evident SHA-256 cryptographic sealing and secure verification badges. |
+| **Emergency SOS Hub** | Patient | Quick-access emergency protocol with explicit user confirmation for dialing national emergency (`112`) and ambulance services. |
 | **Realtime Event Stream** | Both | Server-Sent Events (SSE) pushing database changes to connected clients with automatic reconnection replay. |
 | **Swiss Clinical Humanist UI** | Both | High-contrast, clean medical interface with full light and dark mode parity. |
 
@@ -229,7 +229,7 @@ All dependencies and versions are verified directly against [`package.json`](pac
 | **UI Components** | Radix UI / Lucide | `^0.453.0` | Accessible UI primitives and clinical icons |
 | **Security / Crypto** | Node.js `crypto` | Built-in | Salted Scrypt hashing, SHA-256 signatures, `timingSafeEqual` |
 | **JWT / Cookies** | Jose / Cookie | `6.1.0` / `^1.0.2` | Stateless cryptographic JWT signing and cookie serialization |
-| **Testing Engine** | Vitest | `^5.0.1` | Unit and integration test runner (241 passing tests) |
+| **Testing Engine** | Vitest | `^5.0.1` | Unit and integration test runner (247 passing tests, 1 skipped across 33 test files) |
 | **Testing Utilities** | React Testing Library | `^16.3.3` | Component interaction testing in a simulated browser DOM |
 
 ---
@@ -390,7 +390,7 @@ LifeLink-Smart-Healthcare-Assistance-Platform/
 ### `backend/ai/`
 - **Location**: `backend/ai/`
 - **Purpose**: Implements the 5-layer clinical triage pipeline, Google Gemini API communication, biological validation integration, and offline fallback algorithms.
-- **Used by**: `backend/routers.ts` through the `assessment.create` procedure.
+- **Used by**: `backend/routers.ts` through the `assessment.analyze` mutation.
 
 ### `backend/auth/`
 - **Location**: `backend/auth/`
@@ -458,7 +458,7 @@ LifeLink-Smart-Healthcare-Assistance-Platform/
 | [`backend/_core/trpc.ts`](backend/_core/trpc.ts) | Procedure definitions | Routers | Exports `publicProcedure`, `protectedProcedure` (requires patient authentication), and `doctorProcedure` (requires clinician authentication). |
 | [`backend/routers.ts`](backend/routers.ts) | Master tRPC router | Express / Client | Combines all domain sub-routers (`patientAuth`, `doctorAuth`, `doctorWorkspace`, `patientProfile`, `patientAppointment`, `patientMedicine`, `assessment`, etc.) into `appRouter`. |
 | [`backend/db.ts`](backend/db.ts) | Database access layer | Routers / Services | Encapsulates all Drizzle SQL queries, foreign key joins, transaction blocks, and entity mappings. |
-| [`backend/ai/assessmentService.ts`](backend/ai/assessmentService.ts) | Clinical triage engine | `assessment.create` | Implements the 5-layer triage pipeline, biological checking, emergency pattern matching, Google Gemini Flash REST calls, and offline fallback mapping. |
+| [`backend/ai/assessmentService.ts`](backend/ai/assessmentService.ts) | Clinical triage engine | `assessment.analyze` | Implements the 5-layer triage pipeline, biological checking, emergency pattern matching, Google Gemini Flash REST calls, and offline fallback mapping. |
 | [`backend/auth/nativePatientAuth.ts`](backend/auth/nativePatientAuth.ts) | Patient password hashing | Patient auth | Generates a 16-byte random salt and hashes passwords using Node.js `scrypt` (64-byte key length). Verifies passwords using `crypto.timingSafeEqual`. |
 | [`backend/auth/doctorAuth.ts`](backend/auth/doctorAuth.ts) | Clinician auth router | Doctor workstation | Handles clinician login, session cookie generation, and administrative credential resets requiring the master provisioning code. |
 | [`backend/discovery/mockDoctorDirectory.ts`](backend/discovery/mockDoctorDirectory.ts) | Specialist catalog | Discovery & Booking | Defines 52 verified Mumbai railway doctor profiles across 19 stations, ensuring at least 1 General Practitioner per station. |
@@ -504,8 +504,8 @@ The Patient Portal provides an integrated interface for managing health journeys
 4. **Appointments (`/patient/appointments`)**: Allows patients to select an available future 30-minute time slot for their chosen specialist. Shows active bookings with statuses (`Requested`, `Pending`, `Confirmed`, `Completed`, `Cancelled`) and allows instant cancellation.
 5. **Medicine Cabinet (`/patient/medicines`)**: A virtual medicine cabinet where patients record daily medications, dosage amounts, time schedules (e.g., "Morning & Evening"), remaining pill counts, and expiration dates.
 6. **Health Passport (`/patient/health-passport`)**: A digital medical passport storing blood group, contact phone, uploaded profile photo, verified allergies, and chronic conditions.
-7. **Digital Prescriptions (`/patient/prescriptions`)**: Displays official prescriptions written and authorized by clinicians, complete with individual medication items, instructions, and SHA-256 digital signature hashes.
-8. **Emergency Hub (`/patient/emergency`)**: Rapid emergency assistance providing direct links to India's national emergency number (`112`), Mumbai railway police (`1512`), and ambulance helplines, complete with confirmation dialogs to prevent accidental calls.
+7. **Digital Prescriptions (`/patient/prescriptions`)**: Displays official prescriptions issued by assigned clinicians with active status badges (`SIGNED — CONTROLLED STATE` vs `UNSIGNED / CONTROLLED WORKSPACE`), itemized medication lines, dosage instructions, and tamper-evident cryptographic verification indicators.
+8. **Emergency Hub (`/patient/emergency`)**: Rapid emergency assistance providing direct links to India's national emergency number (`112`) and ambulance helplines, complete with confirmation dialogs to prevent accidental calls.
 9. **Profile & Settings (`/patient/profile`, `/patient/settings`)**: Account management interface for uploading avatar photos (validated via binary magic bytes) and toggling dark/light theme preferences.
 
 ---
@@ -520,7 +520,7 @@ The Doctor Workspace is a focused clinical environment designed for healthcare p
 4. **Patient Roster (`/doctor/patients`)**: Lists all patients who have booked consultations with this clinician. Clicking a patient opens their detailed medical record (`/doctor/patients/:id`).
 5. **Patient Detail View (`/doctor/patients/:id`)**: Displays the patient's Emergency Health Passport (blood group, allergies, chronic conditions) and past consultation history. **Enforces IDOR security**: doctors can only view patients who have an active or historical appointment with them.
 6. **Consultation Workspace (`/doctor/consultation`)**: A clinical examination workspace where doctors record consultation notes and initiate prescriptions.
-7. **Digital Prescription Authoring (`/doctor/prescriptions`)**: Clinicians author prescriptions by adding medication names, dosages, frequencies, and administration instructions. Upon signing, the backend generates an immutable SHA-256 integrity reference hash.
+7. **Digital Prescription Lifecycle & Sealing (`/doctor/prescriptions`)**: Clinicians author multi-item prescriptions by specifying medication names, dosages, and administration instructions. Saving as a draft invokes `prescriptions.create`, maintaining the record in `UNSIGNED / CONTROLLED WORKSPACE` with a clear status indicator. Choosing **Sign & Seal** triggers the explicit `prescriptions.sign` mutation, which verifies clinician authorization, transitions the status to `SIGNED — CONTROLLED STATE`, generates a canonical SHA-256 integrity seal, and emits an instant Server-Sent Event (SSE) to the patient's portal.
 8. **Credential Setup & Reset (`/doctor/reset`)**: Administrative tool allowing clinicians to reset workstation passwords using the administrative master secret code (`LIFELINK_DEMO_DOCTOR_ACCESS_CODE`).
 
 ---
@@ -608,7 +608,7 @@ users (Central Identity Registry)
 | 7 | `patientMedicines` | Virtual medicine cabinet | `id`, `userId`, `name`, `dosage`, `frequency`, `schedule`, `quantity`, `expiry` | Foreign key to `users.id` (cascade); tracks active medications, dosages, and schedules. |
 | 8 | `patientAssessments` | AI triage record | `id`, `userId`, `symptoms`, `age`, `gender`, `urgency`, `specialty`, `reason`, `guidance` | Foreign key to `users.id` (cascade); records raw inputs and AI triage output. |
 | 9 | `patientAppointments` | Doctor consultations | `id`, `userId`, `doctorId`, `scheduledAt`, `status`, `activeSlotKey` | Unique index on `activeSlotKey`; composite index on `(doctorId, scheduledAt, status)`. |
-| 10 | `patientPrescriptions` | Official prescriptions | `id`, `userId`, `doctorId`, `issuedAt`, `status`, `clinicalNotes`, `integrityReference` | Foreign key to `users.id` (cascade); stores SHA-256 integrity signature hash. |
+| 10 | `patientPrescriptions` | Official prescriptions | `id`, `userId`, `doctorId`, `issuedAt`, `status`, `clinicalNotes`, `integrityReference` | Foreign key to `users.id` (cascade); status tracks 'UNSIGNED / CONTROLLED WORKSPACE' or 'SIGNED — CONTROLLED STATE'; stores canonical SHA-256 seal upon explicit signing. |
 | 11 | `patientPrescriptionItems` | Prescription line items | `id`, `prescriptionId`, `name`, `dosage`, `instructions` | Foreign key to `patientPrescriptions.id` (cascade); deletes automatically if prescription is deleted. |
 | 12 | `patientEvents` | Patient SSE backlog | `id`, `userId`, `type`, `entityId`, `createdAt` | Foreign key to `users.id` (cascade); queried for event replay using `Last-Event-ID`. |
 | 13 | `doctorEvents` | Doctor SSE backlog | `id`, `doctorId`, `patientUserId`, `type`, `entityId`, `createdAt` | Foreign key to `users.id` (cascade); streams appointment and patient updates to clinicians. |
@@ -636,18 +636,27 @@ The backend runs on Node.js using Express and tRPC v11:
 | `patientAuth` | `patientAuth.login` | Mutation | Authenticates patient credentials and sets `app_session_id` cookie. |
 | `doctorAuth` | `doctorAuth.login` | Mutation | Authenticates clinician credentials and sets `doctor_session_id` cookie. |
 | `doctorAuth` | `doctorAuth.resetPassword`| Mutation | Resets clinician password using administrative master access code. |
-| `assessment` | `assessment.create` | Mutation | Submits symptoms to 5-layer triage pipeline and saves assessment. |
-| `assessment` | `assessment.history` | Query | Retrieves patient's historical symptom assessments. |
+| `assessment` | `assessment.analyze` | Mutation | Submits symptoms to 5-layer triage pipeline and saves assessment. |
+| `assessment` | `assessment.list` | Query | Retrieves patient's historical symptom assessments. |
 | `patientDiscovery`| `patientDiscovery.search` | Query | Filters 52 doctors by station, specialty, railway line, or keyword. |
-| `patientAppointment`| `patientAppointment.request`| Mutation | Books appointment slot with conflict detection and concurrency key. |
+| `patientAppointment`| `patientAppointment.list` | Query | Lists patient's appointments with assigned specialist metadata. |
+| `patientAppointment`| `patientAppointment.request`| Mutation | Books appointment slot with doctor-specific conflict detection and concurrency key. |
 | `patientAppointment`| `patientAppointment.cancel` | Mutation | Cancels patient appointment and reopens time slot. |
 | `patientMedicine`| `patientMedicine.list` | Query | Lists all active medicines in patient's cabinet. |
 | `patientMedicine`| `patientMedicine.create` | Mutation | Adds a new medication regimen with dosage and schedule. |
+| `patientProfile`| `patientProfile.get` | Query | Retrieves patient's complete Emergency Health Passport. |
 | `patientProfile`| `patientProfile.update` | Mutation | Updates blood group, phone, allergies, and chronic conditions. |
+| `patientPrescription`| `patientPrescription.list` | Query | Retrieves patient's list of issued prescriptions. |
+| `patientPrescription`| `patientPrescription.getById` | Query | Retrieves itemized prescription details with clinician info (IDOR protected). |
 | `doctorWorkspace`| `doctorWorkspace.dashboard`| Query | Returns clinical statistics, upcoming bookings, and triage counts. |
+| `doctorWorkspace`| `doctorWorkspace.appointments.list` | Query | Lists scheduled appointments for the authenticated clinician. |
 | `doctorWorkspace`| `doctorWorkspace.appointments.updateStatus` | Mutation | Clinician updates appointment status (`Confirmed`, `Completed`, `Cancelled`). |
+| `doctorWorkspace`| `doctorWorkspace.patients` | Query | Lists unique patients who have scheduled appointments with clinician. |
 | `doctorWorkspace`| `doctorWorkspace.patientDetail` | Query | Retrieves medical history for an assigned patient (IDOR protected). |
-| `doctorWorkspace`| `doctorWorkspace.prescriptions.create` | Mutation | Issues signed prescription with medication items and SHA-256 hash. |
+| `doctorWorkspace`| `doctorWorkspace.prescriptions.list` | Query | Lists prescriptions authored by authenticated clinician. |
+| `doctorWorkspace`| `doctorWorkspace.prescriptions.getById` | Query | Retrieves itemized prescription details for clinician (IDOR protected). |
+| `doctorWorkspace`| `doctorWorkspace.prescriptions.create` | Mutation | Authors unsigned draft prescription in `UNSIGNED / CONTROLLED WORKSPACE`. |
+| `doctorWorkspace`| `doctorWorkspace.prescriptions.sign` | Mutation | Explicitly signs and seals prescription, transitioning to `SIGNED — CONTROLLED STATE` with SHA-256 hash. |
 
 ---
 
@@ -969,24 +978,24 @@ npm test
 | `backend/realtime/security.realtime.test.ts` | **32 tests** | Real-time Server-Sent Events (SSE) packet delivery, listener error handling, stream reconnection, and cleanup. |
 | `backend/appointmentLifecycle.test.ts` | **26 tests** | 5-stage appointment state machine: `Requested` $\rightarrow$ `Pending` $\rightarrow$ `Confirmed` $\rightarrow$ `Completed` / `Cancelled`, slot conflicts, and past dates. |
 | `backend/auth/security.idor.test.ts` | **15 tests** | IDOR boundaries ensuring patients cannot access or modify records belonging to other users. |
+| `backend/prescriptionLifecycle.test.ts` | **15 tests** | Multi-item prescriptions, two-stage signing workflow (`UNSIGNED` $\rightarrow$ `SIGNED`), canonical SHA-256 seal calculation, anti-tampering proofs, duplicate signing prevention, clinician isolation, input validation, and real-time SSE event emission. |
+| `backend/routers/doctor.test.ts` | **13 tests** | Doctor workstation endpoints, appointment status updates, consultation metrics, authorized patient detail, draft prescription creation, and explicit prescription signing mutation (`prescriptions.sign`). |
 | `backend/healthPassport.test.ts` | **12 tests** | Emergency Health Passport: blood group validation, serialized allergy/condition lists, and profile updates. |
-| `backend/prescriptionLifecycle.test.ts` | **12 tests** | Multi-item prescriptions, status transitions, and SHA-256 digital signature hash verification. |
 | `frontend/src/features/patient/Emergency/Emergency.test.tsx` | **11 tests** | Emergency assistance UI flows, SOS triggers, transit navigation, and modal management. |
-| `backend/routers/doctor.test.ts` | **10 tests** | Doctor workstation endpoints, appointment status updates, and prescription issuance. |
 | `backend/auth/doctorAuth.test.ts` | **8 tests** | Doctor Scrypt password checks, institutional email login, timing-safe password resets, and session cookies. |
 | `backend/medicine.test.ts` | **7 tests** | Medicine cabinet operations, daily schedules, adherence tracking, and inventory counts. |
 | `frontend/src/responsiveLayout.test.ts` | **6 tests** | Responsive rendering across 320px, 360px, 390px, 430px, 480px, 768px, and 4K screens with safe-area insets. |
 | `frontend/src/features/patient/Specialists/SpecialistFinder.test.ts` | **5 tests** | Station filter, transit line filter, distance calculation, and doctor profile display. |
 | `backend/discovery/mockDoctorDirectory.test.ts` | **4 tests** | Verifies 52 doctors, 1 GP per station guarantee across 19 stations, GPS coordinates, and line filters. |
 | `frontend/src/features/entry/WorkspaceSelector.test.ts` | **4 tests** | Multi-role workspace switching, contrast verification, and responsive landing layout. |
-| `backend/auth/providerAuth.test.ts` | **4 tests** | Clinician authorization middleware and role enforcement. |
+| `backend/auth/providerAuth.test.ts` | **4 tests (3 passed, 1 skipped)** | Clinician authorization middleware, Google OAuth availability detector, and role enforcement (1 test skipped when external Google credentials are intentionally unconfigured). |
 | `frontend/src/components/layout/AppShell.test.ts` | **3 tests** | Global navigation shell, dark/light theme switching, and safe header rendering. |
 | `backend/realtime/patientRealtime.test.ts` | **3 tests** | SSE connection management and patient channel subscription isolation. |
 | `backend/auth/nativePatientAuth.test.ts` | **2 tests** | Native patient signup, password complexity, unique Scrypt random salting, and `timingSafeEqual` login. |
 | `backend/geminiKey.test.ts` | **2 tests** | Gemini API key environment configuration and connection tests. |
 | `backend/ai/assessment.validation.test.ts` | **2 tests** | Zod input schema validation for triage requests (symptoms length, age limits, gender values). |
 | `frontend/src/hooks/patientInactivity.test.ts` | **2 tests** | Inactivity timeout detection and automatic session locking after 5 minutes of idle time. |
-| `frontend/src/activeCopyAudit.test.ts` | **2 tests** | Copy audit ensuring professional clinical terminology across views. |
+| `frontend/src/features/patient/activeCopyAudit.test.ts` | **2 tests** | Copy audit ensuring professional clinical terminology across views. |
 | `frontend/src/styles.motion.test.ts` | **2 tests** | Framer motion animation token validation and reduced motion compliance. |
 | `frontend/src/typography.test.ts` | **2 tests** | Typography scale and tabular font rendering tests. |
 | `scripts/dev.test.ts` | **2 tests** | Development server port scanner and proxy configuration tests. |
@@ -995,10 +1004,10 @@ npm test
 | `backend/auth/simultaneousAuth.test.ts` | **1 test** | Dual session cookie isolation (`app_session_id` vs `doctor_session_id`). |
 | `frontend/src/components/EntryThemeToggle.test.ts` | **1 test** | Theme toggle switch interaction and persistence tests. |
 | `frontend/src/backgroundBranding.test.ts` | **1 test** | Official brand asset existence and path integrity tests. |
-| `frontend/src/discoveryLocation.test.ts` | **1 test** | Client-side Haversine geodesic calculation tests. |
-| `frontend/src/patientAuthRoutes.test.ts` | **1 test** | Patient authentication route configuration tests. |
+| `frontend/src/features/patient/Specialists/discoveryLocation.test.ts` | **1 test** | Client-side Haversine geodesic calculation tests. |
+| `frontend/src/features/patient/patientAuthRoutes.test.ts` | **1 test** | Patient authentication route configuration tests. |
 | `backend/auth/auth.logout.test.ts` | **1 test** | Session cookie invalidation and logout tests. |
-| **Total** | **241 tests** | **100% Passing Test Suite (33 Test Files)** |
+| **Total** | **248 tests (247 passed, 1 skipped)** | **100% Passing Test Suite (33 Test Files)** |
 
 ---
 
@@ -1006,9 +1015,9 @@ npm test
 
 Verification checks executed on the current repository codebase:
 
-- **Automated Tests**: **PASS** (`241 passed, 1 skipped across 33 test files` via `npm test`)
+- **Automated Tests**: **PASS** (`247 passed, 1 skipped across 33 test files` via `npm test`)
 - **TypeScript Compilation**: **PASS** (`0 errors` via `npm run check`)
-- **Production Build**: **PASS** (`Vite client bundle + backend esbuild bundle compiled successfully in 3.54s` via `npm run build`)
+- **Production Build**: **PASS** (`Vite client bundle + backend esbuild bundle compiled successfully in ~26.6s` via `npm run build`)
 - **Browser Verification**: Browser verification was not completed because a supported browser environment was unavailable.
 
 ---
@@ -1043,7 +1052,7 @@ Verification checks executed on the current repository codebase:
 LifeLink is an educational and clinical assistance software platform. The AI symptom triage module generates **preliminary health guidance only**. It **does not formulate a clinical diagnosis**, prescribe pharmaceutical treatments, or replace formal medical evaluations by a qualified physician. Users experiencing severe or acute symptoms must seek immediate medical care at a hospital emergency room.
 
 ### 2. Emergency Calling Boundaries
-LifeLink provides quick-dial telephone links to emergency services (`112` and `1512`). It **does not automatically dispatch ambulances, emergency vehicles, or medical responders**. Calling requires explicit user confirmation on the device.
+LifeLink provides quick-dial telephone links to emergency services (`112`). It **does not automatically dispatch ambulances, emergency vehicles, or medical responders**. Calling requires explicit user confirmation on the device.
 
 ### 3. Geolocation Data Privacy
 Patient GPS coordinates are processed entirely in-memory within the user's web browser using client-side JavaScript. **Patient location data is never sent to the backend server, never written to server log files, and never stored in the database**.
@@ -1080,7 +1089,7 @@ All scripts verified directly from [`package.json`](package.json):
 | `npm run build` | `vite build && esbuild backend/_core/index.ts --platform=node --packages=external --bundle --format=esm --outdir=dist` | Builds production frontend into `dist/public` and bundles backend into `dist/index.js`. |
 | `npm start` | `node dist/index.js` | Runs production server serving both the Express API and compiled frontend assets. |
 | `npm run check` | `tsc --noEmit` | Executes TypeScript type-checking without emitting files (0 errors). |
-| `npm test` | `vitest run` | Runs all 241 automated unit and integration tests across 33 test files. |
+| `npm test` | `vitest run` | Runs all 248 automated unit and integration tests across 33 test files (247 passed, 1 skipped). |
 | `npm run format` | `prettier --write .` | Formats all code and documentation files according to Prettier formatting standards. |
 | `npm run verify` | `npm run check && npm test && npm run build` | Sequentially runs type checking, test suites, and production build verification. |
 | `npm run db:push` | `drizzle-kit generate --config database/drizzle.config.ts && drizzle-kit migrate --config database/drizzle.config.ts` | Generates and applies schema migrations directly to MySQL. |

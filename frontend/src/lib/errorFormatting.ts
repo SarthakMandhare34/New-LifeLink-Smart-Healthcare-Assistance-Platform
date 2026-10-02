@@ -33,8 +33,14 @@ export function formatUserFriendlyError(error: unknown, fallbackMessage = 'An un
         const issue = issues[0];
         const path = Array.isArray(issue.path) ? issue.path.join('.') : '';
 
-        if (path === 'age' || issue.code === 'too_big' || issue.code === 'too_small') {
+        if (path === 'age' || (path.includes('age') && (issue.code === 'too_big' || issue.code === 'too_small'))) {
           return 'Please enter a valid age between 0 and 100 years.';
+        }
+        if (path.includes('items') || path.includes('dosage') || path.includes('instructions')) {
+          return 'Please complete all required medication fields (medicine name, dosage, and instructions).';
+        }
+        if (path === 'id' || path.includes('prescription')) {
+          return 'Invalid prescription record or identifier.';
         }
         if (path === 'phone' || issue.message?.toLowerCase().includes('contact number') || issue.message?.toLowerCase().includes('phone')) {
           return 'Please enter a valid phone number (minimum 7 digits).';
@@ -51,6 +57,15 @@ export function formatUserFriendlyError(error: unknown, fallbackMessage = 'An un
         if (path === 'bloodGroup') {
           return 'Please select a valid blood group (A+, A-, B+, B-, AB+, AB-, O+, O-).';
         }
+        if (path.toLowerCase().includes('password')) {
+          if (issue.code === 'too_small') {
+            return `Password must be at least ${issue.minimum || 8} characters.`;
+          }
+          return issue.message || 'Please enter a valid password.';
+        }
+        if (path.toLowerCase().includes('email')) {
+          return 'Please enter a valid email address.';
+        }
         if (issue.message && typeof issue.message === 'string' && !issue.message.includes('{')) {
           return issue.message;
         }
@@ -58,6 +73,15 @@ export function formatUserFriendlyError(error: unknown, fallbackMessage = 'An un
     } catch {
       // If JSON parsing fails, continue to string pattern matching
     }
+  }
+
+  // Common pattern replacements
+  if (rawMessage.includes('already signed') || rawMessage.includes('already sealed')) {
+    return 'This prescription has already been cryptographically signed and sealed.';
+  }
+
+  if (rawMessage.includes('cannot be signed') || rawMessage.includes('current state')) {
+    return 'This prescription cannot be signed in its current state.';
   }
 
   // Common pattern replacements

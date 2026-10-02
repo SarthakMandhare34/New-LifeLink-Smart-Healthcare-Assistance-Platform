@@ -20,6 +20,7 @@ import {
   listDoctorAppointments,
   listDoctorAuthorizedAssessments,
   listDoctorPrescriptions,
+  signDoctorAuthorizedPrescription,
   updateDoctorAppointmentStatus
 } from "../db";                                                                            // Database CRUD operations for doctor queries
 import { doctorProcedure, router } from "../_core/trpc";                                   // Doctor-authenticated procedure and router constructors
@@ -163,6 +164,30 @@ export const doctorWorkspaceRouter = router({
         if (!prescriptionId) throw new TRPCError({ code: "FORBIDDEN", message: "A confirmed appointment assigned to this doctor is required before a prescription can be created." });
         await createPatientEvent(input.patientId, "PRESCRIPTION_CREATED", String(prescriptionId)); // Send real-time SSE event to patient
         return { id: prescriptionId, status: "UNSIGNED / CONTROLLED WORKSPACE" as const }; // Return issued prescription ID
+      }),
+
+    // Dedicated explicit mutation to transition prescription from UNSIGNED to SIGNED
+    sign: doctorProcedure
+      .input(z.object({ id: z.number().int().positive() }))
+      .mutation(async ({ ctx, input }) => {
+        const doctor = currentDoctor(ctx.user.openId);                                     // Authenticate clinician
+        const result = await signDoctorAuthorizedPrescription(doctor.id, input.id);         // Atomically validate & sign
+        if (!result.success) {
+          if (result.reason === "NOT_FOUND") {
+            throw new TRPCError({ code: "NOT_FOUND", message: "Prescription record not found or not assigned to your clinician account." });
+          }
+          if (result.reason === "ALREADY_SIGNED") {
+            throw new TRPCError({ code: "BAD_REQUEST", message: "This prescription is already signed and sealed." });
+          }
+          throw new TRPCError({ code: "BAD_REQUEST", message: "Prescription cannot be signed in its current state." });
+        }
+        await createPatientEvent(result.prescription.userId, "PRESCRIPTION_CREATED", String(result.prescription.id)); // Broadcast real-time SSE push
+        return {
+          id: result.prescription.id,
+          status: result.prescription.status,
+          integrityReference: result.prescription.integrityReference,
+          issuedAt: result.prescription.issuedAt,
+        };
       }),
   }),
 });

@@ -18,6 +18,7 @@ const mocks = vi.hoisted(() => ({
   createDoctorEvent: vi.fn(),
   getDoctorAuthorizedPatientDetail: vi.fn(),
   createDoctorAuthorizedPrescription: vi.fn(),
+  signDoctorAuthorizedPrescription: vi.fn(),
   listDoctorAuthorizedAssessments: vi.fn(),
 }));
 
@@ -28,6 +29,7 @@ vi.mock("../db", () => ({
   createDoctorEvent: mocks.createDoctorEvent,
   getDoctorAuthorizedPatientDetail: mocks.getDoctorAuthorizedPatientDetail,
   createDoctorAuthorizedPrescription: mocks.createDoctorAuthorizedPrescription,
+  signDoctorAuthorizedPrescription: mocks.signDoctorAuthorizedPrescription,
   listDoctorAuthorizedAssessments: mocks.listDoctorAuthorizedAssessments,
 }));
 
@@ -61,6 +63,7 @@ describe("doctor workspace authorization", () => {
     mocks.createDoctorEvent.mockReset();
     mocks.getDoctorAuthorizedPatientDetail.mockReset();
     mocks.createDoctorAuthorizedPrescription.mockReset();
+    mocks.signDoctorAuthorizedPrescription.mockReset();
     mocks.listDoctorAuthorizedAssessments.mockReset();
     mocks.listDoctorAuthorizedAssessments.mockResolvedValue([]);
   });
@@ -159,5 +162,59 @@ describe("doctor workspace authorization", () => {
   it("does not return a patient detail record when no assignment exists", async () => {
     mocks.getDoctorAuthorizedPatientDetail.mockResolvedValue(null);
     await expect(doctorWorkspaceRouter.createCaller(context("doctor")).patientDetail({ patientId: 14 })).rejects.toMatchObject({ code: "FORBIDDEN" });
+  });
+
+  it("explicitly transitions an unsigned prescription to SIGNED via the dedicated mutation", async () => {
+    const issuedDate = new Date();
+    mocks.signDoctorAuthorizedPrescription.mockResolvedValue({
+      success: true,
+      prescription: {
+        id: 91,
+        userId: 9,
+        doctorId: "mock-central-cardiology-csmt",
+        status: "SIGNED — CONTROLLED STATE",
+        integrityReference: "sha256:fedcba9876543210fedcba9876543210fedcba9876543210fedcba9876543210",
+        issuedAt: issuedDate,
+      },
+    });
+
+    const result = await doctorWorkspaceRouter.createCaller(context("doctor")).prescriptions.sign({ id: 91 });
+
+    expect(mocks.signDoctorAuthorizedPrescription).toHaveBeenCalledWith("mock-central-cardiology-csmt", 91);
+    expect(result).toEqual({
+      id: 91,
+      status: "SIGNED — CONTROLLED STATE",
+      integrityReference: "sha256:fedcba9876543210fedcba9876543210fedcba9876543210fedcba9876543210",
+      issuedAt: issuedDate,
+    });
+    expect(mocks.createPatientEvent).toHaveBeenCalledWith(9, "PRESCRIPTION_CREATED", "91");
+  });
+
+  it("rejects signing when the prescription is already signed and sealed", async () => {
+    mocks.signDoctorAuthorizedPrescription.mockResolvedValue({
+      success: false,
+      reason: "ALREADY_SIGNED",
+    });
+
+    await expect(
+      doctorWorkspaceRouter.createCaller(context("doctor")).prescriptions.sign({ id: 91 })
+    ).rejects.toMatchObject({
+      code: "BAD_REQUEST",
+      message: "This prescription is already signed and sealed.",
+    });
+  });
+
+  it("rejects signing when the prescription is not found or not owned by the clinician", async () => {
+    mocks.signDoctorAuthorizedPrescription.mockResolvedValue({
+      success: false,
+      reason: "NOT_FOUND",
+    });
+
+    await expect(
+      doctorWorkspaceRouter.createCaller(context("doctor")).prescriptions.sign({ id: 999 })
+    ).rejects.toMatchObject({
+      code: "NOT_FOUND",
+      message: "Prescription record not found or not assigned to your clinician account.",
+    });
   });
 });

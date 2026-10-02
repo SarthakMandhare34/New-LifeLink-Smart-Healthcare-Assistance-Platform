@@ -246,7 +246,7 @@ Coordinates are calculated entirely client-side, safeguarding commuter privacy.
 ```text
 Patient Browser                Express / tRPC Backend            Google Gemini            MySQL Database
       │                                  │                             │                         │
-      │── 1. assessment.create(symptoms)─>│                             │                         │
+      │── 1. assessment.analyze(symptoms)─>│                            │                         │
       │                                  │── 2. Biological Check       │                         │
       │                                  │── 3. Emergency Pattern Check │                         │
       │                                  │── 4. POST generateContent ─>│                         │
@@ -264,7 +264,7 @@ Patient Browser                Express / tRPC Backend            Google Gemini  
       │<─ 15. Return Confirmed Booking ──│                                                       │
 ```
 
-### Sequence 2: Doctor Consultation & Digital Prescription Signing
+### Sequence 2: Doctor Consultation & Two-Phase Prescription Signing
 
 ```text
 Doctor Workstation              Express / tRPC Backend                                   MySQL Database
@@ -273,11 +273,15 @@ Doctor Workstation              Express / tRPC Backend                          
       │<─ 2. Return Queue & Details ─────│                                                     │
       │                                  │                                                     │
       │── 3. prescriptions.create ───────>│── 4. Verify Doctor Session                          │
-      │      (patientId, notes, items)   │── 5. Generate SHA-256 Hash                          │
-      │                                  │      hash(doctorId + patientId + items + timestamp) │
-      │                                  │── 6. Insert Prescription & Line Items ─────────────>│
-      │                                  │── 7. Broadcast SSE: "PRESCRIPTION_CREATED"          │
-      │<─ 8. Return Signed Prescription ─│                                                     │
+      │      (patientId, notes, items)   │── 5. Insert Draft Prescription & Items ─────────────>│
+      │                                  │      status: "UNSIGNED / CONTROLLED WORKSPACE"      │
+      │<─ 6. Return Draft Prescription ──│                                                     │
+      │                                  │                                                     │
+      │── 7. prescriptions.sign({ id }) ─>│── 8. Verify Unsigned State & Clinician Ownership    │
+      │      (Explicit Sign Mutation)    │── 9. Generate Canonical SHA-256 Hash Seal           │
+      │                                  │── 10. Update Status: "SIGNED — CONTROLLED STATE" ───>│
+      │                                  │── 11. Broadcast SSE: "PRESCRIPTION_CREATED"         │
+      │<─ 12. Return Sealed Prescription ─│                                                     │
 ```
 
 ---

@@ -12,7 +12,7 @@ import React, { useState } from 'react';                                        
 import { Card } from '../../../components/ui/Card';                                            // Reusable glassmorphic UI container
 import { Button } from '../../../components/ui/Button';                                        // Styled user interaction action button
 import { Badge } from '../../../components/ui/Badge';                                          // Visual indicator chip for status badges
-import { FileText, Lock, ArrowLeft, Pill, Clock, UserCheck, Stethoscope } from 'lucide-react';  // Medical and navigation iconography
+import { FileText, Lock, ArrowLeft, Pill, Clock, UserCheck, Stethoscope, CheckCircle2 } from 'lucide-react';  // Medical and navigation iconography
 import { trpc } from '../../../lib/trpc';                                                       // Type-safe client RPC gateway
 
 // =========================================================================================
@@ -113,8 +113,13 @@ export const Prescriptions = () => {
                 </div>
 
                 <div style={{ textAlign: 'right', display: 'flex', flexDirection: 'column', alignItems: 'flex-end', gap: '6px' }}>
-                  <Badge status="neutral">
-                    <Lock size={12} style={{ marginRight: '4px' }} /> {rx.status}
+                  <Badge status={rx.status === "SIGNED — CONTROLLED STATE" ? "success" : "warning"}>
+                    {rx.status === "SIGNED — CONTROLLED STATE" ? (
+                      <CheckCircle2 size={12} style={{ marginRight: '4px' }} />
+                    ) : (
+                      <Lock size={12} style={{ marginRight: '4px' }} />
+                    )}
+                    {rx.status}
                   </Badge>
                   <span className="caption" style={{ color: 'var(--color-text-muted)', fontVariantNumeric: 'tabular-nums' }}>
                     Issue Date: {new Date(rx.issuedAt).toLocaleDateString(undefined, { month: 'long', day: 'numeric', year: 'numeric' })}
@@ -148,28 +153,19 @@ export const Prescriptions = () => {
                 </div>
               </div>
 
-              {/* SHA-256 Integrity Hash Reference */}
-              {rx.integrityReference && (
-                <div style={{ marginTop: '12px' }}>
-                  <span style={{ fontSize: '0.68rem', color: 'var(--color-text-muted)', fontWeight: 700, letterSpacing: '0.05em', textTransform: 'uppercase', display: 'block', marginBottom: '4px' }}>
-                    SHA-256 Cryptographic Integrity Reference
+              {/* Digital Signature Verification Status */}
+              {rx.status === "SIGNED — CONTROLLED STATE" ? (
+                <div style={{ marginTop: '14px', display: 'flex', alignItems: 'center', gap: '8px', padding: '10px 14px', background: 'var(--color-surface-subtle)', borderRadius: 'var(--border-radius-sm)', border: '1px solid var(--color-border)' }}>
+                  <CheckCircle2 size={16} color="var(--color-semantic-success, #16a34a)" />
+                  <span style={{ fontSize: '0.85rem', fontWeight: 600, color: 'var(--color-text)' }}>
+                    Digitally Signed &amp; Sealed · Tamper-Evident Verification Active
                   </span>
-                  <p
-                    style={{
-                      margin: 0,
-                      fontSize: '0.75rem',
-                      fontFamily: 'monospace',
-                      color: 'var(--color-text)',
-                      background: 'var(--color-surface-white)',
-                      padding: '6px 10px',
-                      borderRadius: 'var(--border-radius-sm)',
-                      border: '1px solid var(--color-border)',
-                      wordBreak: 'break-all',
-                      overflowWrap: 'anywhere',
-                    }}
-                  >
-                    {rx.integrityReference}
-                  </p>
+                </div>
+              ) : (
+                <div style={{ marginTop: '14px', padding: '10px 14px', background: 'var(--color-surface-subtle)', borderRadius: 'var(--border-radius-sm)', border: '1px dashed var(--color-border)' }}>
+                  <span className="caption" style={{ color: 'var(--color-text-muted)', fontStyle: 'italic' }}>
+                    Unsigned Draft · Awaiting clinician signature
+                  </span>
                 </div>
               )}
             </div>
@@ -320,8 +316,13 @@ export const Prescriptions = () => {
                       </span>
                     </div>
                   </div>
-                  <Badge status="neutral">
-                    <Lock size={10} style={{ marginRight: '3px' }} /> {prescription.status}
+                  <Badge status={prescription.status === "SIGNED — CONTROLLED STATE" ? "success" : "warning"}>
+                    {prescription.status === "SIGNED — CONTROLLED STATE" ? (
+                      <CheckCircle2 size={10} style={{ marginRight: '3px' }} />
+                    ) : (
+                      <Lock size={10} style={{ marginRight: '3px' }} />
+                    )}
+                    {prescription.status}
                   </Badge>
                 </div>
 

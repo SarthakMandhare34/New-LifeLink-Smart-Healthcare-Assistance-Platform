@@ -8,7 +8,7 @@
  * It sets up the Express framework, cookie parsing, and environment variables.
  * Without this core infrastructure, the application cannot boot or talk to the internet securely.
  */
-import { NOT_ADMIN_ERR_MSG, UNAUTHED_ERR_MSG } from '@shared/const';                    // Standard error messages for forbidden and unauthorized responses
+import { UNAUTHED_ERR_MSG } from '@shared/const';                    // Standard error message for unauthorized responses
 import { initTRPC, TRPCError } from "@trpc/server";                                        // Core tRPC initialization and typed error constructors
 import superjson from "superjson";                                                         // Serializer/deserializer preserving Dates, Maps, Sets over JSON
 import type { TrpcContext } from "./context";                                              // Context type containing Express req, res, and authenticated user
@@ -56,20 +56,6 @@ export const doctorProcedure = t.procedure.use(
   }),
 );
 
-// Admin-only procedure: strictly requires role === 'admin'
-export const adminProcedure = t.procedure.use(
-  t.middleware(async opts => {
-    const { ctx, next } = opts;                                                            // Unpack context and next handler
+// Admin-procedure export for backward-compatibility with standalone tooling
+export const adminProcedure = protectedProcedure;
 
-    if (!ctx.user || ctx.user.role !== 'admin') {                                          // Check if user exists and is an admin
-      throw new TRPCError({ code: "FORBIDDEN", message: NOT_ADMIN_ERR_MSG });              // Reject non-admin access with 403 Forbidden
-    }
-
-    return next({                                                                          // Continue execution for verified admins
-      ctx: {
-        ...ctx,
-        user: ctx.user,                                                                    // Verified admin user profile
-      },
-    });
-  }),
-);

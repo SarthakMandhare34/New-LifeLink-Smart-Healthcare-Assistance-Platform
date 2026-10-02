@@ -15,7 +15,6 @@ export const DOCTOR_COOKIE_NAME = "doctor_session_id";           // Name of the 
 export const ONE_YEAR_MS = 1000 * 60 * 60 * 24 * 365;           // One full year in milliseconds (used for persistent session duration)
 export const AXIOS_TIMEOUT_MS = 30_000;                          // Maximum 30-second network timeout for external API requests
 export const UNAUTHED_ERR_MSG = 'Please login (10001)';          // Error message displayed when an unauthenticated user calls a protected route
-export const NOT_ADMIN_ERR_MSG = 'You do not have required permission (10002)'; // Error message displayed when a non-admin calls admin endpoints
 
 // --- Cluster: OAuth State & CSRF Protection ---
 // The `__Host-` prefix forces the cookie to be host-only (Secure, Path=/, no Domain),

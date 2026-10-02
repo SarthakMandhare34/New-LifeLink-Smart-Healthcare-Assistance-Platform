@@ -148,15 +148,15 @@ describe("Prescription Workflow & Integrity", () => {
     prescription1Id = result.id;
   });
 
-  // Step 2: Verify prescription header persistence and SHA-256 seal presence in database
-  test("2. Prescription persistence: Verifies prescription record in DB", async () => {
+  // Step 2: Verify initial prescription state is strictly UNSIGNED with no cryptographic seal
+  test("2. Prescription persistence: Verifies initial unsigned draft in DB", async () => {
     const rows = await db.select().from(patientPrescriptions).where(eq(patientPrescriptions.id, prescription1Id));
     expect(rows.length).toBe(1);
     expect(rows[0].userId).toBe(patient1Id);
     expect(rows[0].doctorId).toBe(DOCTOR_1_ID);
     expect(rows[0].clinicalNotes).toContain("mild arrhythmia");
     expect(rows[0].status).toBe("UNSIGNED / CONTROLLED WORKSPACE");
-    expect(rows[0].integrityReference).toMatch(/^sha256:[a-f0-9]{64}$/);                        // Must be valid sha256 hex string
+    expect(rows[0].integrityReference).toBeNull(); // Cryptographic seal is ONLY created upon explicit signing!
   });
 
   // Step 3: Verify itemized medicine line items in patientPrescriptionItems
@@ -246,8 +246,32 @@ describe("Prescription Workflow & Integrity", () => {
     ).rejects.toMatchObject({ code: "NOT_FOUND" });
   });
 
-  // Step 9: Mathematical Verification - Canonical SHA-256 seal calculation
-  test("9. Deterministic SHA-256 integrity reference: exact match with expected canonical calculation", async () => {
+  // Step 9: Explicit Signing Mutation: Doctor 1 explicitly transitions prescription from UNSIGNED to SIGNED
+  test("9. Explicit signing mutation transitions status from UNSIGNED to SIGNED and generates cryptographic seal", async () => {
+    const doctorCaller = createCaller({ id: doctor1UserId, openId: DOCTOR_1_OPENID, role: "doctor" });
+
+    // Verify initial status is strictly UNSIGNED with no integrity reference
+    const beforeRows = await db.select().from(patientPrescriptions).where(eq(patientPrescriptions.id, prescription1Id));
+    expect(beforeRows[0].status).toBe("UNSIGNED / CONTROLLED WORKSPACE");
+    expect(beforeRows[0].integrityReference).toBeNull();
+
+    // Execute dedicated signing mutation
+    const signResult = await doctorCaller.doctorWorkspace.prescriptions.sign({ id: prescription1Id });
+
+    expect(signResult.id).toBe(prescription1Id);
+    expect(signResult.status).toBe("SIGNED — CONTROLLED STATE");
+    expect(signResult.integrityReference).toMatch(/^sha256:[a-f0-9]{64}$/);
+    expect(signResult.issuedAt).toBeDefined();
+
+    // Verify atomic state update in MySQL database
+    const afterRows = await db.select().from(patientPrescriptions).where(eq(patientPrescriptions.id, prescription1Id));
+    expect(afterRows[0].status).toBe("SIGNED — CONTROLLED STATE");
+    expect(afterRows[0].integrityReference).toBe(signResult.integrityReference);
+    expect(afterRows[0].issuedAt).not.toBeNull();
+  });
+
+  // Step 10: Mathematical Verification - Canonical SHA-256 seal calculation
+  test("10. Deterministic SHA-256 integrity reference: exact match with expected canonical calculation", async () => {
     const rows = await db.select().from(patientPrescriptions).where(eq(patientPrescriptions.id, prescription1Id));
     const expectedCanonical = JSON.stringify({
       doctorId: DOCTOR_1_ID,
@@ -264,8 +288,8 @@ describe("Prescription Workflow & Integrity", () => {
     expect(rows[0].integrityReference).toBe(expectedHash);
   });
 
-  // Step 10: Anti-Tampering Proof - Altering even one dosage invalidates the cryptographic hash
-  test("10. Changed prescription content produces changed hash", async () => {
+  // Step 11: Anti-Tampering Proof - Altering even one dosage invalidates the cryptographic hash
+  test("11. Changed prescription content produces changed hash", async () => {
     const originalCanonical = JSON.stringify({
       doctorId: DOCTOR_1_ID,
       patientUserId: patient1Id,
@@ -292,7 +316,31 @@ describe("Prescription Workflow & Integrity", () => {
     expect(hash1).not.toBe(hash2);
   });
 
-  test("11. Invalid prescription input rejected: empty items or missing fields", async () => {
+  // Step 12: Duplicate Signing Prevention: Prevents signing an already signed prescription
+  test("12. Duplicate signing prevention: rejects second signing attempt on already signed record", async () => {
+    const doctorCaller = createCaller({ id: doctor1UserId, openId: DOCTOR_1_OPENID, role: "doctor" });
+
+    await expect(
+      doctorCaller.doctorWorkspace.prescriptions.sign({ id: prescription1Id }),
+    ).rejects.toMatchObject({
+      code: "BAD_REQUEST",
+      message: "This prescription is already signed and sealed.",
+    });
+  });
+
+  // Step 13: Authorization check: Doctor 2 cannot sign Doctor 1's prescription
+  test("13. Clinician isolation: Doctor 2 cannot sign Doctor 1's prescription", async () => {
+    const doctor2Caller = createCaller({ id: doctor2UserId, openId: DOCTOR_2_OPENID, role: "doctor" });
+
+    await expect(
+      doctor2Caller.doctorWorkspace.prescriptions.sign({ id: prescription1Id }),
+    ).rejects.toMatchObject({
+      code: "NOT_FOUND",
+      message: "Prescription record not found or not assigned to your clinician account.",
+    });
+  });
+
+  test("14. Invalid prescription input rejected: empty items or missing fields", async () => {
     const doctorCaller = createCaller({ id: doctor1UserId, openId: DOCTOR_1_OPENID, role: "doctor" });
 
     // Empty items array
@@ -320,7 +368,7 @@ describe("Prescription Workflow & Integrity", () => {
     ).rejects.toThrow();
   });
 
-  test("12. Realtime event emitted on prescription creation", async () => {
+  test("15. Realtime event emitted on prescription creation", async () => {
     const events = await db
       .select()
       .from(patientEvents)

@@ -1,6 +1,6 @@
 # 🧪 LifeLink — Automated Testing Framework & Verification Guide
 
-This document provides a comprehensive technical guide to the **LifeLink Automated Testing Suite**. The project utilizes **Vitest 5.0.1** and **React Testing Library 16.3.3** ([`vitest.config.ts`](vitest.config.ts)), executing **241 automated unit and integration tests across 33 test files with a 100% pass rate**.
+This document provides a comprehensive technical guide to the **LifeLink Automated Testing Suite**. The project utilizes **Vitest 5.0.1** and **React Testing Library 16.3.3** ([`vitest.config.ts`](vitest.config.ts)), executing **248 automated unit and integration tests (247 passed, 1 skipped) across 33 test files with a 100% pass rate**.
 
 ---
 
@@ -14,7 +14,7 @@ This document provides a comprehensive technical guide to the **LifeLink Automat
    - [4.2. Realtime SSE Deep Audit (32 Tests)](#42-realtime-sse-deep-audit-32-tests)
    - [4.3. Appointment Lifecycle & Concurrency (26 Tests)](#43-appointment-lifecycle--concurrency-26-tests)
    - [4.4. Security, IDOR & Authorization (15 Tests)](#44-security-idor--authorization-15-tests)
-   - [4.5. Digital Prescriptions & SHA-256 Hashes (12 Tests)](#45-digital-prescriptions--sha-256-hashes-12-tests)
+   - [4.5. Digital Prescriptions & Cryptographic Integrity Seals (15 Tests)](#45-digital-prescriptions--cryptographic-integrity-seals-15-tests)
    - [4.6. Emergency Health Passport (12 Tests)](#46-emergency-health-passport-12-tests)
    - [4.7. Responsive Layout & Accessibility (6 Tests)](#47-responsive-layout--accessibility-6-tests)
 5. [Verified Test Results Audit](#5-verified-test-results-audit)
@@ -39,7 +39,7 @@ All test commands are declared in [`package.json`](package.json) and executed vi
 ```bash
 npm test
 ```
-*Executes all 241 automated tests across 33 test files and prints the summary report.*
+*Executes all 248 automated tests across 33 test files (247 passed, 1 skipped) and prints the summary report.*
 
 ### Run Tests in Watch Mode (Development)
 ```bash
@@ -71,16 +71,16 @@ npm run verify
 | 3 | `backend/appointmentLifecycle.test.ts` | **26 tests** | 5-stage appointment state machine: `Requested` $\rightarrow$ `Pending` $\rightarrow$ `Confirmed` $\rightarrow$ `Completed` / `Cancelled`, past date rejection, and concurrency slot conflicts. |
 | 4 | `backend/auth/security.idor.test.ts` | **15 tests** | IDOR boundaries ensuring patients cannot access, view, or modify records belonging to other users. |
 | 5 | `backend/healthPassport.test.ts` | **12 tests** | Emergency Health Passport: blood group validation, serialized allergy/condition lists, and profile updates. |
-| 6 | `backend/prescriptionLifecycle.test.ts` | **12 tests** | Multi-item prescriptions, status transitions, and SHA-256 digital signature hash verification. |
+| 6 | `backend/prescriptionLifecycle.test.ts` | **15 tests** | Multi-item prescriptions, two-stage signing workflow (`UNSIGNED` $\rightarrow$ `SIGNED`), canonical SHA-256 seal calculation, anti-tampering proofs, duplicate signing prevention, clinician isolation, input validation, and real-time SSE event emission. |
 | 7 | `frontend/src/features/patient/Emergency/Emergency.test.tsx` | **11 tests** | Emergency assistance UI flows, SOS triggers, transit navigation, and modal management. |
-| 8 | `backend/routers/doctor.test.ts` | **10 tests** | Doctor workstation endpoints, appointment status updates, and prescription issuance. |
+| 8 | `backend/routers/doctor.test.ts` | **13 tests** | Doctor workstation endpoints, appointment status updates, consultation metrics, authorized patient detail, draft prescription creation, and explicit prescription signing mutation (`prescriptions.sign`). |
 | 9 | `backend/auth/doctorAuth.test.ts` | **8 tests** | Doctor Scrypt password checks, institutional email login, timing-safe password resets, and session cookies. |
 | 10 | `backend/medicine.test.ts` | **7 tests** | Medicine cabinet operations, daily schedules, adherence tracking, and inventory counts. |
 | 11 | `frontend/src/responsiveLayout.test.ts` | **6 tests** | Responsive rendering across 320px, 360px, 390px, 430px, 480px, 768px, and 4K screens with safe-area insets. |
 | 12 | `frontend/src/features/patient/Specialists/SpecialistFinder.test.ts` | **5 tests** | Station filter, transit line filter, distance calculation, and doctor profile display. |
 | 13 | `backend/discovery/mockDoctorDirectory.test.ts` | **4 tests** | Verifies 52 doctors, 1 GP per station guarantee across 19 stations, GPS coordinates, and line filters. |
 | 14 | `frontend/src/features/entry/WorkspaceSelector.test.ts` | **4 tests** | Multi-role workspace switching, contrast verification, and responsive landing layout. |
-| 15 | `backend/auth/providerAuth.test.ts` | **4 tests** | Clinician authorization middleware and role enforcement. |
+| 15 | `backend/auth/providerAuth.test.ts` | **4 tests (3 passed, 1 skipped)** | Clinician authorization middleware, Google OAuth availability detector, and role enforcement (1 test skipped when external Google credentials are intentionally unconfigured). |
 | 16 | `frontend/src/components/layout/AppShell.test.ts` | **3 tests** | Global navigation shell, dark/light theme switching, and safe header rendering. |
 | 17 | `backend/realtime/patientRealtime.test.ts` | **3 tests** | SSE connection management and patient channel subscription isolation. |
 | 18 | `backend/auth/nativePatientAuth.test.ts` | **2 tests** | Native patient signup, password complexity, unique Scrypt random salting, and `timingSafeEqual` login. |
@@ -99,7 +99,7 @@ npm run verify
 | 31 | `frontend/src/features/patient/Specialists/discoveryLocation.test.ts` | **1 test** | Client-side Haversine geodesic calculation tests. |
 | 32 | `frontend/src/features/patient/patientAuthRoutes.test.ts` | **1 test** | Patient authentication route configuration tests. |
 | 33 | `backend/auth/auth.logout.test.ts` | **1 test** | Session cookie invalidation and logout tests. |
-| **Total** | **33 Test Files** | **241 Tests** | **100% Pass Rate (241 passed, 1 skipped)** |
+| **Total** | **33 Test Files** | **248 Tests** | **100% Pass Rate (247 passed, 1 skipped)** |
 
 ---
 
@@ -126,9 +126,14 @@ npm run verify
 - Tests that patients cannot access other patients' health passports, appointments, or prescriptions.
 - Verifies that clinicians cannot view medical records for patients not assigned to them via an active appointment.
 
-### 4.5. Digital Prescriptions & SHA-256 Hashes (12 Tests)
-- Verifies that prescription signing computes a valid SHA-256 hash across doctor ID, patient ID, medication items, and timestamp.
-- Tests tamper evidence: altering a prescription's line items invalidates the integrity hash.
+### 4.5. Digital Prescriptions & Cryptographic Integrity Seals (15 Tests)
+- Verifies the two-stage authoring lifecycle: draft prescription created in `UNSIGNED / CONTROLLED WORKSPACE` with null integrity reference.
+- Executes the explicit `prescriptions.sign` mutation to transition status to `SIGNED — CONTROLLED STATE` and generate the canonical SHA-256 integrity seal.
+- Verifies that prescription signing computes a valid SHA-256 hash across doctor ID, patient ID, medication items, instructions, and clinical notes.
+- Tests tamper evidence: altering a prescription's line items or dosages invalidates the integrity hash.
+- Tests duplicate signing prevention: attempts to re-sign an already sealed prescription are rejected with `BAD_REQUEST`.
+- Confirms clinician isolation: doctors cannot sign prescriptions authored by other clinicians.
+- Asserts that real-time SSE `PRESCRIPTION_CREATED` events are broadcast to the patient portal.
 
 ### 4.6. Emergency Health Passport (12 Tests)
 - Verifies validation of valid blood groups (`O+`, `A+`, `B+`, `AB+`, `O-`, `A-`, `B-`, `AB-`).
@@ -144,8 +149,7 @@ npm run verify
 
 ```text
 Test Files  33 passed (33)
-     Tests  241 passed | 1 skipped (242)
-  Duration  5.28s
+     Tests  247 passed | 1 skipped (248)
 ```
 
-All 241 tests pass consistently with 0 failures.
+All 247 active tests pass consistently with 0 failures (1 test skipped when optional external Google OAuth credentials are unconfigured in local development).
