@@ -1107,8 +1107,8 @@ graph TB
     AuthHandler -->|HTTPS OAuth Code Exchange| GoogleOAuth
 
     SSEBus -.->|Streaming SSE + 25s Keepalive| RevProxy
-    RevProxy -.->|Immediate Flush (X-Accel-Buffering: no)| PatBrowser
-    RevProxy -.->|Immediate Flush (X-Accel-Buffering: no)| DocBrowser
+    RevProxy -.->|Immediate Flush Unbuffered Stream| PatBrowser
+    RevProxy -.->|Immediate Flush Unbuffered Stream| DocBrowser
 ```
 
 ---
