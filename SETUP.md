@@ -14,6 +14,7 @@ This guide provides step-by-step instructions for setting up, configuring, runni
 6. [Testing the Installation](#6-testing-the-installation)
 7. [Verified Test Credentials](#7-verified-test-credentials)
 8. [Comprehensive Troubleshooting Guide](#8-comprehensive-troubleshooting-guide)
+9. [Production Deployment Guide: Render.com & TiDB Serverless Cloud](#9-production-deployment-guide-rendercom--tidb-serverless-cloud)
 
 ---
 
@@ -205,5 +206,149 @@ This sequentially executes:
 - **Symptom**: Uploading an avatar photo returns a validation error.
 - **Diagnosis**: The image is either larger than 10 MB or the binary header does not match its file extension.
 - **Fix**: Ensure the image is under 10 MB and is a genuine JPEG, PNG, or WebP file.
+
+---
+
+## 9. Production Deployment Guide: Render.com & TiDB Serverless Cloud
+
+This section covers deploying LifeLink to a 24/7 cloud environment using **Render.com** (for the full-stack web service) and **TiDB Serverless Cloud** (for the distributed MySQL database).
+
+🌍 **Live Production Reference:** [https://new-lifelink-smart-healthcare-assistance.onrender.com/](https://new-lifelink-smart-healthcare-assistance.onrender.com/)
+
+---
+
+### Step 1: Provision TiDB Serverless Cloud Database
+
+1. Navigate to [TiDB Cloud](https://tidbcloud.com/) and register or log in with your Google or GitHub account.
+2. In the TiDB Cloud Console, click **Create Cluster** (or **Create Project**).
+3. Select the **Serverless** cluster type:
+   - **Cost**: Free Tier (includes 5 GiB storage and 50 million Request Units monthly).
+   - **Cloud Provider**: AWS.
+   - **Region**: Choose the region closest to your deployment, such as `ap-southeast-1` (Singapore).
+4. Set a cluster name (e.g., `lifelink-db`) and define a strong root password.
+5. Once the cluster is active (typically 10-20 seconds), click **Connect**:
+   - Choose **Connect with: General**.
+   - Copy the generated connection string. It will look like:
+     ```text
+     mysql://3EF4bZSNjaGdwTj.root:<YOUR_PASSWORD>@gateway01.ap-southeast-1.prod.aws.tidbcloud.com:4000/test
+     ```
+6. **Enforce SSL/TLS**: TiDB Cloud requires TLS 1.3 certificate validation. Append the SSL query parameter to the end of the URL:
+   ```text
+   ?ssl={"rejectUnauthorized":true}
+   ```
+   **Final Cloud Database URL Format**:
+   ```text
+   mysql://3EF4bZSNjaGdwTj.root:<YOUR_PASSWORD>@gateway01.ap-southeast-1.prod.aws.tidbcloud.com:4000/test?ssl={"rejectUnauthorized":true}
+   ```
+
+---
+
+### Step 2: Push Schema Migrations & Seed Doctors from Developer CLI
+
+Before launching the web service on Render, apply the 14 relational database tables and synchronize all 52 doctor workstation accounts directly to the remote TiDB database.
+
+Run these commands in your local terminal using `cross-env` to ensure proper quotation handling across Windows PowerShell and macOS/Linux:
+
+```powershell
+# 1. Apply Drizzle Schema Migrations to TiDB Cloud
+npx cross-env DATABASE_URL='mysql://3EF4bZSNjaGdwTj.root:<YOUR_PASSWORD>@gateway01.ap-southeast-1.prod.aws.tidbcloud.com:4000/test?ssl={"rejectUnauthorized":true}' npm run db:push
+
+# 2. Seed All 52 Mumbai Railway Specialists to TiDB Cloud
+npx cross-env DATABASE_URL='mysql://3EF4bZSNjaGdwTj.root:<YOUR_PASSWORD>@gateway01.ap-southeast-1.prod.aws.tidbcloud.com:4000/test?ssl={"rejectUnauthorized":true}' npm run db:sync:doctors
+```
+
+**Verification Output**:
+- `npm run db:push` will display: `14 tables migrated successfully`.
+- `npm run db:sync:doctors` will log: `Verified 52 Mumbai railway doctors synchronized with valid Scrypt credentials`.
+
+---
+
+### Step 3: Configure Google Cloud OAuth 2.0 Credentials
+
+If enabling Google Sign-In for patients, configure your OAuth Client in the [Google Cloud Console](https://console.cloud.google.com/):
+
+1. Go to **APIs & Services $\rightarrow$ Credentials**.
+2. Click your OAuth 2.0 Client ID (or create a new one under Web Application).
+3. Under **Authorized JavaScript Origins**, add both development and production domains:
+   - `https://new-lifelink-smart-healthcare-assistance.onrender.com`
+   - `http://localhost:5173`
+4. Under **Authorized Redirect URIs**, register the exact callback endpoints:
+   - `https://new-lifelink-smart-healthcare-assistance.onrender.com/api/auth/google/callback`
+   - `http://localhost:5173/api/auth/google/callback`
+5. Click **Save**.
+
+---
+
+### Step 4: Create the Render.com Web Service
+
+1. Navigate to the [Render Dashboard](https://dashboard.render.com/) and sign in with GitHub.
+2. Click **New +** in the top navigation bar and select **Web Service**.
+3. Choose **Build and deploy from a Git repository** and connect:
+   - Repository: `SarthakMandhare34/New-LifeLink-Smart-Healthcare-Assistance-Platform`
+4. Configure the service settings:
+   - **Name**: `new-lifelink-smart-healthcare-assistance`
+   - **Region**: Singapore (Southeast Asia) *(recommended to match TiDB AWS ap-southeast-1)*
+   - **Branch**: `main`
+   - **Root Directory**: *(leave blank)*
+   - **Runtime**: `Node`
+   - **Build Command**: `npm run build`
+   - **Start Command**: `npm start`
+   - **Instance Type**: `Free`
+
+---
+
+### Step 5: Configure Production Environment Variables on Render
+
+In the **Environment Variables** section on Render, add the following key-value pairs:
+
+| Environment Key | Required | Value / Example | Notes |
+|:---|:---:|:---|:---|
+| `NODE_ENV` | **Yes** | `production` | Enables Express production optimizations. |
+| `DATABASE_URL` | **Yes** | `mysql://3EF4bZSNjaGdwTj.root:<PASSWORD>@gateway01.ap-southeast-1.prod.aws.tidbcloud.com:4000/test?ssl={"rejectUnauthorized":true}` | Your TiDB Cloud connection string with SSL parameter. |
+| `JWT_SECRET` | **Yes** | *(Generate a 64-char random string)* | Used for cryptographic signing of session JWTs. |
+| `LIFELINK_DEMO_DOCTOR_ACCESS_CODE` | **Yes** | `lifelink-controlled-clinician-secret-key-2026` | Master access code for doctor account provisioning. |
+| `GEMINI_API_KEY` | **Yes** | `AIzaSy...` | Your Google Gemini API key for symptom triage. |
+| `GOOGLE_OAUTH_CLIENT_ID` | Optional | `420856394354-...apps.googleusercontent.com` | Google Cloud OAuth Client ID. |
+| `GOOGLE_OAUTH_CLIENT_SECRET` | Optional | `GOCSPX-...` | Google Cloud OAuth Client Secret. |
+| `AUTH_PUBLIC_BASE_URL` | **Yes** | `https://new-lifelink-smart-healthcare-assistance.onrender.com` | **Critical**: Sets canonical public origin for OAuth callbacks. |
+
+Click **Save Changes** and trigger the manual deploy if it does not start automatically.
+
+---
+
+### Step 6: Post-Deployment Smoke Test & Verification
+
+Once Render displays **Deploy live** with a green status indicator, verify core subsystems:
+
+1. **Production Health Check**:
+   Navigate to `https://new-lifelink-smart-healthcare-assistance.onrender.com/api/health`.
+   Expected response:
+   ```json
+   { "status": "ok", "uptime": 12.4 }
+   ```
+2. **Patient Registration & Login**:
+   - Visit `https://new-lifelink-smart-healthcare-assistance.onrender.com/register`.
+   - Register a new test patient account and verify redirection to `/patient/dashboard`.
+3. **Doctor Workstation Authentication**:
+   - Visit `https://new-lifelink-smart-healthcare-assistance.onrender.com/doctor/login`.
+   - Sign in using:
+     - Email: `central-cardiology-csmt@accounts.lifelink.test`
+     - Password: `Doctor@123`
+   - Verify that the clinician dashboard displays consultation queue metrics.
+4. **Real-Time Push Verification**:
+   - Open browser Developer Tools $\rightarrow$ **Network** tab $\rightarrow$ filter by `EventStream` or `Fetch/XHR`.
+   - Verify `/sse/patient` (or `/sse/doctor`) remains in status `200 Pending` and receives periodic `:keepalive` comment pulses every 25 seconds.
+
+---
+
+### Step 7: Production Troubleshooting
+
+| Symptom | Probable Cause | Immediate Resolution |
+|:---|:---|:---|
+| **`SSL connect error` or `Handshake failed`** | Missing SSL parameter in `DATABASE_URL`. | Append `?ssl={"rejectUnauthorized":true}` to `DATABASE_URL` in the Render Environment tab. |
+| **`Error 400: redirect_uri_mismatch` on Google Login** | Google Cloud Console callback URI does not match `AUTH_PUBLIC_BASE_URL`. | Ensure `https://new-lifelink-smart-healthcare-assistance.onrender.com/api/auth/google/callback` is added under Authorized Redirect URIs in Google Cloud Console. |
+| **Initial Page Load Takes ~40 Seconds** | Render Free Tier container cold start. | The free tier hibernates after 15 minutes of inactivity. The initial wake-up takes 30-50s. Subsequent requests load in under 200ms. External monitors (e.g. UptimeRobot) can ping `/api/health` every 10 minutes to maintain hot standby. |
+| **`ECONNREFUSED` on Port 4000 on Render** | Hardcoded port instead of `$PORT`. | LifeLink automatically reads `process.env.PORT` assigned by Render. Ensure `PORT` is not manually overridden in Render environment settings. |
+
 
 

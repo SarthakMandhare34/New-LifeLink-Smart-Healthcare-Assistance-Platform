@@ -13,7 +13,7 @@
 [![Google Gemini AI](https://img.shields.io/badge/Google%20Gemini-AI-4285F4?style=for-the-badge&logo=google&logoColor=white)](https://ai.google.dev/)
 [![MySQL](https://img.shields.io/badge/MySQL-8.0-4479A1?style=for-the-badge&logo=mysql&logoColor=white)](https://www.mysql.com/)
 [![Drizzle ORM](https://img.shields.io/badge/Drizzle-ORM-C5F74F?style=for-the-badge&logo=drizzle&logoColor=black)](https://orm.drizzle.team/)
-[![Tests Passing](https://img.shields.io/badge/Vitest-247%20Tests%20Passed-success?style=for-the-badge&logo=vitest&logoColor=white)](#26-automated-testing-framework--test-breakdown)
+[![Tests Passing](https://img.shields.io/badge/Vitest-247%20Tests%20Passed-success?style=for-the-badge&logo=vitest&logoColor=white)](#27-automated-testing-framework--test-breakdown)
 
 ---
 
@@ -44,13 +44,14 @@
 23. [Step-by-Step Local Development Setup](#23-step-by-step-local-development-setup)
 24. [Environment Variables Reference](#24-environment-variables-reference)
 25. [Database Operations & Management](#25-database-operations--management)
-26. [Automated Testing Framework & Test Breakdown](#26-automated-testing-framework--test-breakdown)
-27. [Verified Test & Build Results](#27-verified-test--build-results)
-28. [Troubleshooting Guide](#28-troubleshooting-guide)
-29. [Medical Safety & Privacy Disclaimers](#29-medical-safety--privacy-disclaimers)
-30. [Current Limitations & Future Enhancements](#30-current-limitations--future-enhancements)
-31. [Complete Verified NPM Script Quick Reference](#31-complete-verified-npm-script-quick-reference)
-32. [Modular Documentation Index & Cross-References](#32-modular-documentation-index--cross-references)
+26. [Production Cloud Deployment & Live Infrastructure (Render.com + TiDB Serverless)](#26-production-cloud-deployment--live-infrastructure-rendercom--tidb-serverless)
+27. [Automated Testing Framework & Test Breakdown](#27-automated-testing-framework--test-breakdown)
+28. [Verified Test & Build Results](#28-verified-test--build-results)
+29. [Troubleshooting Guide](#29-troubleshooting-guide)
+30. [Medical Safety & Privacy Disclaimers](#30-medical-safety--privacy-disclaimers)
+31. [Current Limitations & Future Enhancements](#31-current-limitations--future-enhancements)
+32. [Complete Verified NPM Script Quick Reference](#32-complete-verified-npm-script-quick-reference)
+33. [Modular Documentation Index & Cross-References](#33-modular-documentation-index--cross-references)
 
 ---
 
@@ -58,10 +59,10 @@
 
 ### 🚀 2026 Latest Updates: Production Architecture & Deployment
 This project has undergone a complete architectural upgrade to support production-level deployment:
-- **Cloud Infrastructure:** Successfully deployed as a live full-stack application on **Render.com**.
-- **Serverless Database:** Migrated from a local MySQL instance to **TiDB Serverless Cloud** for 24/7 high-availability and zero-downtime scaling.
+- **Cloud Infrastructure:** Successfully deployed as a live full-stack application on **Render.com** (See [Section 26](#26-production-cloud-deployment--live-infrastructure-rendercom--tidb-serverless)).
+- **Serverless Database:** Migrated from local MySQL to **TiDB Serverless Cloud** for 24/7 high-availability and zero-downtime scaling.
 - **Single-Page Application (SPA):** Completely refactored the frontend routing to support isolated, concurrent session states for Patient and Doctor workspaces without requiring tab isolation.
-- **Google OAuth 2.0:** Hardened authentication with strict URI callbacks matching the production environment.
+- **Google OAuth 2.0:** Hardened authentication with strict URI callbacks matching the production cloud environment.
 - **Database Synchronization:** Securely seeded 52 Doctor workstation accounts into the live production database while preserving patient privacy constraints.
 
 **LifeLink** is a full-stack smart healthcare assistance platform whose initial operational range and live coverage are centered on the **Mumbai Metropolitan Region (MMR)**. In Mumbai, the platform uses major suburban railway stations as practical local landmarks, connecting daily train commuters and residents with fast health guidance and verified medical specialists near their transit stops. While current operational coverage is focused on Mumbai, the platform architecture has been deliberately designed to be location-agnostic, enabling seamless future expansion to a **Pan-India** healthcare network across cities, districts, and rural regions.
@@ -983,7 +984,250 @@ npm run db:studio
 
 ---
 
-## 26. Automated Testing Framework & Test Breakdown
+## 26. Production Cloud Deployment & Live Infrastructure (Render.com + TiDB Serverless)
+
+LifeLink is engineered as a unified, production-ready cloud application deployed on **Render.com** and powered by a distributed **TiDB Serverless Cloud** database cluster. This architecture replaces local developer instances with high-availability, zero-downtime, and geographically resilient infrastructure.
+
+🌍 **Live Production URL:** [https://new-lifelink-smart-healthcare-assistance.onrender.com/](https://new-lifelink-smart-healthcare-assistance.onrender.com/)
+
+---
+
+### 26.1 Live Production Architecture & Cloud Topology
+
+The production deployment leverages a modern cloud stack decoupling stateless web computation from distributed, auto-scaling relational persistence:
+
+```text
+[ Patient Web Browser ]                   [ Clinician Workstation ]
+        │                                             │
+        │ HTTPS (TLS 1.3 / Port 443)                  │ HTTPS (TLS 1.3 / Port 443)
+        └──────────────────────┬──────────────────────┘
+                               │
+                               ▼
+┌─────────────────────────────────────────────────────────────────────────────┐
+│                       RENDER.COM CLOUD EDGE LAYER                           │
+│   • Global Anycast Ingress & Cloudflare-backed DDoS Mitigation              │
+│   • Managed Automatic TLS/SSL Termination (Let's Encrypt Wildcard)          │
+│   • HTTP/2 Multiplexing & Reverse Proxy Gateway Routing                     │
+│   • Non-buffered Server-Sent Events (SSE) Streaming Pipeline                │
+└──────────────────────────────────────┬──────────────────────────────────────┘
+                                       │ Internal Reverse Proxy ($PORT)
+                                       ▼
+┌─────────────────────────────────────────────────────────────────────────────┐
+│                 RENDER WEB SERVICE CONTAINER (NODE.JS v22 LTS)              │
+│                 Image: Alpine Linux / Node.js 22 Runtime Engine              │
+│                                                                             │
+│   ┌─────────────────────────────────────────────────────────────────────┐   │
+│   │               Express Application & Static Asset Pipeline           │   │
+│   │                                                                     │   │
+│   │   • Single-Container Unified Runtime: Serves API & Frontend on $PORT│   │
+│   │   • Static Asset Serving: /dist/public (React 19 Vite Production)   │   │
+│   │   • SPA History Fallback: Non-API GET requests serve index.html     │   │
+│   │   • tRPC JSON-RPC Endpoint: /trpc (appRouter query & mutation bus)  │   │
+│   │   • SSE Real-Time Channel: /sse/patient & /sse/doctor broadcast     │   │
+│   │   • Health Monitor Probe: GET /api/health                           │   │
+│   │   • Google OAuth Handshake: /api/auth/google & /api/auth/callback   │   │
+│   └──────────────────┬───────────────────────────────┬──────────────────┘   │
+│                      │                               │                      │
+└──────────────────────┼───────────────────────────────┼──────────────────────┘
+                       │                               │
+       ┌───────────────┴───────────────┐               │ HTTPS API Outbound
+       │ TLS 1.3 Encrypted Wire Tunnel │               ▼
+       │ Port: 4000 (rejectUnauth=true)│    ┌─────────────────────────────────┐
+       ▼                               │    │     GOOGLE CLOUD PLATFORM       │
+┌─────────────────────────────────┐    │    │                                 │
+│      TiDB SERVERLESS CLUSTER    │    │    │  • Gemini 1.5/2.0 Flash AI API  │
+│  (AWS ap-southeast-1 Singapore) │    │    │  • Google Cloud OAuth 2.0 Auth  │
+│                                 │    │    │    (Strict production callback) │
+│   ┌─────────────────────────┐   │    │    └─────────────────────────────────┘
+│   │   TiDB SQL Parser Node  │   │    │
+│   │   • MySQL 8.0 Protocol  │   │    │
+│   │   • Distributed Planner │   │    │
+│   └────────────┬────────────┘   │    │
+│                ▼                │    │
+│   ┌─────────────────────────┐   │    │
+│   │  TiKV Storage Engines   │   │    │
+│   │  • Multi-Raft Consensus │   │    │
+│   │  • 14 Relational Tables │   │    │
+│   │  • 52 Doctor Accounts   │   │    │
+│   │  • Serverless RU Scaling│   │    │
+│   └─────────────────────────┘   │    │
+└─────────────────────────────────┘    ┘
+```
+
+---
+
+### 26.2 Render.com Web Service Hosting Mechanics
+
+#### 1. Single-Container Full-Stack Architecture
+Unlike traditional deployments that split client and server across separate hosts (such as Vercel for frontend and AWS/Heroku for backend), LifeLink utilizes a unified single-container architecture:
+- **Zero CORS Friction**: Because API endpoints (`/api/*`, `/trpc/*`, `/sse/*`) and frontend assets reside on the same origin (`https://new-lifelink-smart-healthcare-assistance.onrender.com`), the browser eliminates pre-flight `OPTIONS` overhead and cross-origin blocking.
+- **Cryptographic Cookie Sharing**: Authentication cookies (`app_session_id` and `doctor_session_id`) operate seamlessly across both frontend and backend within the same domain scope under `SameSite=Lax` and `Secure=true`.
+- **SPA Fallback Routing**: Express serves pre-compiled Vite assets from `dist/public/`. Any incoming GET request not matching an API endpoint or static file is automatically routed to `dist/public/index.html`, allowing client-side React Router navigation (`/patient/*`, `/doctor/*`, `/workspace`) to resolve without 404 errors.
+
+#### 2. Dual Build Pipeline (`npm run build`)
+The production build script executes a two-stage compilation pipeline:
+```bash
+vite build && esbuild backend/_core/index.ts --platform=node --packages=external --bundle --format=esm --outdir=dist
+```
+1. **Frontend Vite Build**:
+   - Compiles React 19 JSX, TypeScript, and Tailwind CSS into tree-shaken, hashed bundles in `dist/public/`.
+   - Asset optimization includes CSS minification, code-splitting, SVG compression, and HTML template generation.
+2. **Backend esbuild Compilation**:
+   - Bundles the entire backend TypeScript codebase (Express server, tRPC routers, AI triage engine, database layer) into a single ECMAScript module (`dist/index.js`).
+   - Marks external Node.js modules as external packages to minimize bundle weight while retaining binary native module compatibility.
+
+#### 3. Execution & Dynamic Port Binding (`npm start`)
+When Render boots the application:
+```bash
+node dist/index.js
+```
+The server dynamically reads the internal listening port from `process.env.PORT` (assigned arbitrarily by Render's container orchestration layer, typically `10000`). Express binds to `0.0.0.0:$PORT`, while Render's edge reverse proxy routes external HTTPS traffic on port 443 directly to the listening process.
+
+#### 4. Automated Git Continuous Deployment (CI/CD)
+The Render service is connected directly to the repository's `main` branch:
+- Pushing a new commit to `main` automatically triggers Render's build container.
+- Render installs dependencies (`npm install`), executes the build pipeline (`npm run build`), and verifies that the output bundle starts successfully before redirecting live traffic (Zero-Downtime Rolling Deployment).
+
+---
+
+### 26.3 TiDB Serverless Cloud Database Architecture
+
+#### 1. Why TiDB Serverless?
+Local MySQL instances (`127.0.0.1:3306`) cannot be accessed from cloud containers without complex tunneling. Rather than provisioning a costly fixed-size cloud MySQL instance, LifeLink integrates **TiDB Serverless Cloud** (hosted on AWS `ap-southeast-1`, Singapore):
+- **100% MySQL 8.0 Protocol Wire Compatibility**: Uses the existing `mysql2` driver and Drizzle ORM configuration without modifying any database queries, schema definitions, or migration files.
+- **Stateless Compute & Distributed Storage Separation**: Query execution is handled by stateless TiDB nodes, while persistent state is sharded across distributed TiKV storage engines utilizing the Multi-Raft replication consensus algorithm.
+- **Elastic Serverless Scaling**: Automatically scales Request Units (RU) from zero to accommodate fluctuating patient traffic without manual provision sizing or cost overhead.
+- **Enterprise-Grade Availability**: Automatic cross-availability zone replication ensures continuous clinical record persistence even during cloud node failures.
+
+#### 2. Production Connection String Anatomy & TLS 1.3 Encryption
+TiDB Cloud enforces strict TLS 1.3 encryption for all external database sessions. The production `DATABASE_URL` is structured as follows:
+
+```text
+mysql://3EF4bZSNjaGdwTj.root:<PASSWORD>@gateway01.ap-southeast-1.prod.aws.tidbcloud.com:4000/test?ssl={"rejectUnauthorized":true}
+```
+
+| Component | Value / Anatomy | Purpose & Architectural Function |
+|:---|:---|:---|
+| **Protocol** | `mysql://` | Standard MySQL wire-protocol URI scheme recognized by `mysql2` driver. |
+| **Username** | `3EF4bZSNjaGdwTj.root` | Cluster-prefixed tenant identifier (`3EF4bZSNjaGdwTj`) routing the session to the allocated TiDB Serverless cluster. |
+| **Password** | `<STRONG_SECRET>` | Strong cryptographic database password. |
+| **Gateway Host** | `gateway01.ap-southeast-1.prod.aws.tidbcloud.com` | AWS Singapore regional proxy gateway providing Anycast connection load balancing. |
+| **Port** | `4000` | Standard TiDB cluster listener port. |
+| **Database Name** | `test` (or `lifelink`) | Production schema namespace hosting all 14 relational tables. |
+| **SSL Enforcement** | `?ssl={"rejectUnauthorized":true}` | **Critical SSL parameter**: Enforces strict TLS certificate validation. Rejects untrusted or man-in-the-middle certificates to protect patient medical data in transit. |
+
+---
+
+### 26.4 Dual-Database Architecture: Development vs. Production
+
+LifeLink strictly separates development from live production data, preventing mock records or test experiments from contaminating clinical databases:
+
+| Architectural Property | Local Development Instance | Production Cloud Instance |
+|:---|:---|:---|
+| **Database Engine** | Local MySQL Server 8.0 | TiDB Serverless Cloud (Distributed MySQL 8.0) |
+| **Host & Port** | `127.0.0.1:3306` | `gateway01.ap-southeast-1.prod.aws.tidbcloud.com:4000` |
+| **Transport Encryption** | Plaintext / Local Loopback | **TLS 1.3 Encrypted Tunnel (`rejectUnauthorized: true`)** |
+| **Primary Use Case** | Unit testing, local feature development, fast iteration | Live patient consultations, public demo, doctor evaluations |
+| **Execution Script** | `npm run dev` | Render Cloud Container (`node dist/index.js`) |
+| **Doctor Workstations** | 52 synchronized local accounts | 52 synchronized production cloud accounts |
+
+#### Executing Remote Cloud Migrations from Developer CLI
+To update the cloud schema or synchronize doctor accounts without modifying your local `.env`, use `cross-env` to pass the remote connection string:
+
+```powershell
+# 1. Push Drizzle Schema & Run Migrations to TiDB Cloud
+npx cross-env DATABASE_URL='mysql://3EF4bZSNjaGdwTj.root:<PASSWORD>@gateway01.ap-southeast-1.prod.aws.tidbcloud.com:4000/test?ssl={"rejectUnauthorized":true}' npm run db:push
+
+# 2. Seed All 52 Mumbai Railway Specialists to TiDB Cloud
+npx cross-env DATABASE_URL='mysql://3EF4bZSNjaGdwTj.root:<PASSWORD>@gateway01.ap-southeast-1.prod.aws.tidbcloud.com:4000/test?ssl={"rejectUnauthorized":true}' npm run db:sync:doctors
+```
+
+---
+
+### 26.5 Google OAuth 2.0 Cloud Security Handshake
+
+In production, Google Cloud OAuth enforces strict origin validation. Any mismatch between the URL registered in Google Cloud Console and the originating request results in an authorization failure (`Error 400: redirect_uri_mismatch`).
+
+#### 1. Google Cloud Console URI Whitelist
+To support both local development and live cloud production, Google Cloud Console credentials must contain both URI environments:
+
+| Console Setting | Local Development Value | Live Render Production Value |
+|:---|:---|:---|
+| **Authorized JavaScript Origins** | `http://localhost:5173` | `https://new-lifelink-smart-healthcare-assistance.onrender.com` |
+| **Authorized Redirect URIs** | `http://localhost:5173/api/auth/google/callback` | `https://new-lifelink-smart-healthcare-assistance.onrender.com/api/auth/google/callback` |
+
+#### 2. The Role of `AUTH_PUBLIC_BASE_URL`
+In production on Render, the backend must construct the absolute OAuth redirect URI sent to Google. Because Render proxies traffic through an internal port (`process.env.PORT`), inspecting `req.headers.host` can sometimes resolve to internal network IPs or loopbacks.
+Setting:
+```ini
+AUTH_PUBLIC_BASE_URL="https://new-lifelink-smart-healthcare-assistance.onrender.com"
+```
+forces the backend to construct the exact canonical redirect URL:
+`https://new-lifelink-smart-healthcare-assistance.onrender.com/api/auth/google/callback`
+guaranteeing 100% cryptographic handshake agreement with Google Cloud identity servers.
+
+---
+
+### 26.6 Server-Sent Events (SSE) Over Cloud Reverse Proxy
+
+Real-time doctor queue updates and patient appointment state notifications are pushed over **Server-Sent Events (SSE)** (`/sse/patient` and `/sse/doctor`). In a cloud environment, reverse proxies (like Render's edge proxy or Nginx) introduce specific challenges:
+
+#### 1. Proxy Buffering Disabling
+By default, cloud proxies buffer incoming HTTP responses to optimize packet delivery. For streaming SSE channels, buffering would delay real-time alerts until the buffer fills up. LifeLink explicitly disables proxy buffering via HTTP headers:
+```http
+HTTP/1.1 200 OK
+Content-Type: text/event-stream
+Cache-Control: no-cache, no-transform
+Connection: keep-alive
+X-Accel-Buffering: no
+```
+The `X-Accel-Buffering: no` header instructs Render and upstream Nginx proxies to flush SSE chunks immediately to the connected client.
+
+#### 2. 25-Second Keep-Alive Heartbeat Strategy
+Render's cloud edge terminates any HTTP connection that remains idle with no byte transmission for longer than **100 seconds**.
+LifeLink's real-time event bus ([`backend/realtime/eventBus.ts`](backend/realtime/eventBus.ts)) runs an automated heartbeat timer:
+- Every **25 seconds**, a comment packet is broadcast to all active SSE streams:
+  ```text
+  :keepalive\n\n
+  ```
+- This heartbeat consumes negligible bandwidth (~12 bytes per tick) while permanently resetting the reverse proxy idle timeout, ensuring doctor and patient sessions remain connected indefinitely.
+
+---
+
+### 26.7 Comprehensive Production Environment Variables Matrix
+
+To configure the live application on Render, the following environment variables are set in the **Render Dashboard $\rightarrow$ Environment** tab:
+
+| Environment Variable | Required | Production Value / Pattern | Security Tier | Operational Functionality |
+|:---|:---:|:---|:---:|:---|
+| `NODE_ENV` | **Yes** | `production` | Public | Enables production optimizations in Express, disables verbose dev stack traces. |
+| `DATABASE_URL` | **Yes** | `mysql://...tidbcloud.com:4000/test?ssl={"rejectUnauthorized":true}` | **CRITICAL** | Encrypted TLS connection URI to TiDB Serverless cloud cluster. |
+| `JWT_SECRET` | **Yes** | *(High-entropy 64+ char random string)* | **CRITICAL** | Cryptographic key used to sign HMAC-SHA256 session tokens. |
+| `LIFELINK_DEMO_DOCTOR_ACCESS_CODE` | **Yes** | `lifelink-controlled-clinician-secret-key-2026` | **RESTRICTED** | Master clinician authorization code for workstation reset and verification. |
+| `GEMINI_API_KEY` | **Yes** | `AIzaSy...` | **RESTRICTED** | Google Gemini 1.5/2.0 API key for AI symptom assessment & urgency triage. |
+| `GOOGLE_OAUTH_CLIENT_ID` | Optional | `420856394354-...apps.googleusercontent.com` | Public | Google Cloud OAuth 2.0 Client ID for patient Google Sign-In. |
+| `GOOGLE_OAUTH_CLIENT_SECRET` | Optional | `GOCSPX-...` | **CRITICAL** | Google Cloud OAuth Client Secret for token exchange. |
+| `AUTH_PUBLIC_BASE_URL` | **Yes** | `https://new-lifelink-smart-healthcare-assistance.onrender.com` | Public | Public origin used for canonical Google OAuth callbacks. |
+| `PORT` | Auto | *Assigned dynamically by Render (e.g. 10000)* | Internal | Listen port assigned by Render container supervisor. Express binds to `0.0.0.0:$PORT`. |
+
+---
+
+### 26.8 Cold Start Management & Production Resiliency
+
+#### 1. Free Tier Lifecycle & Hibernation
+When deployed on Render's free compute tier:
+- **Inactivity Spin-Down**: The container automatically spins down (hibernates) after **15 minutes** of zero incoming HTTP requests to conserve cloud resources.
+- **Cold Boot Recovery**: When a new request arrives, Render boots the container within **30 to 50 seconds**. Subsequent requests are served immediately with sub-millisecond response times.
+
+#### 2. Stateless Architecture & Zero Data Loss
+Because LifeLink is designed with strict **stateless container semantics**:
+- All patient records, consultations, prescriptions, and audit events reside durably in TiDB Serverless Cloud.
+- No medical or operational data is lost during container hibernation, restart, or rolling deploy.
+- The `/api/health` endpoint allows external uptime monitors (such as UptimeRobot or Cron-Job.org) to ping the instance periodically (e.g. every 10 minutes) if zero-downtime hot standby is desired.
+
+---
+
+## 27. Automated Testing Framework & Test Breakdown
 
 LifeLink includes an automated test suite executed via Vitest ([`vitest.config.ts`](vitest.config.ts)):
 
@@ -1032,7 +1276,7 @@ npm test
 
 ---
 
-## 27. Verified Test & Build Results
+## 28. Verified Test & Build Results
 
 Verification checks executed on the current repository codebase:
 
@@ -1043,7 +1287,7 @@ Verification checks executed on the current repository codebase:
 
 ---
 
-## 28. Troubleshooting Guide
+## 29. Troubleshooting Guide
 
 ### 1. Database Connection Fails (`ECONNREFUSED` on port 3306)
 - **Cause**: MySQL server is not running or credentials in `.env` are incorrect.
@@ -1067,7 +1311,7 @@ Verification checks executed on the current repository codebase:
 
 ---
 
-## 29. Medical Safety & Privacy Disclaimers
+## 30. Medical Safety & Privacy Disclaimers
 
 ### 1. Non-Diagnostic Medical Guidance Disclaimer
 LifeLink is an educational and clinical assistance software platform. The AI symptom triage module generates **preliminary health guidance only**. It **does not formulate a clinical diagnosis**, prescribe pharmaceutical treatments, or replace formal medical evaluations by a qualified physician. Users experiencing severe or acute symptoms must seek immediate medical care at a hospital emergency room.
@@ -1080,7 +1324,7 @@ Patient GPS coordinates are processed entirely in-memory within the user's web b
 
 ---
 
-## 30. Current Limitations & Future Enhancements
+## 31. Current Limitations & Future Enhancements
 
 ### Current Limitations
 1. **Synthetic Clinical Directory**: The 52 Mumbai railway doctors are realistic synthetic profiles created for testing and demonstration. Production deployment would require official credential verification and clinical onboarding.
@@ -1100,7 +1344,7 @@ Patient GPS coordinates are processed entirely in-memory within the user's web b
 
 ---
 
-## 31. Complete Verified NPM Script Quick Reference
+## 32. Complete Verified NPM Script Quick Reference
 
 All scripts verified directly from [`package.json`](package.json):
 
@@ -1121,7 +1365,7 @@ All scripts verified directly from [`package.json`](package.json):
 
 ---
 
-## 32. Modular Documentation Index & Cross-References
+## 33. Modular Documentation Index & Cross-References
 
 For deeper technical deep-dives, consult the specialized documentation guides in the repository:
 

@@ -4,6 +4,20 @@ All notable changes to the LifeLink Smart Healthcare Assistance Platform will be
 
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/), and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [1.3.1] - 2026-10-10
+
+### Added & Deployed
+- **Production Cloud Deployment & Live Infrastructure (Render.com + TiDB Serverless)**:
+  - Deployed full-stack LifeLink platform to production Web Service on **Render.com** at `https://new-lifelink-smart-healthcare-assistance.onrender.com/`.
+  - Migrated production database to **TiDB Serverless Cloud** (AWS `ap-southeast-1`), delivering zero-cost auto-scaling, distributed Multi-Raft consensus, and 100% MySQL 8.0 protocol wire compatibility.
+  - Hardened external database transit with TLS 1.3 certificate validation using the connection parameter `?ssl={"rejectUnauthorized":true}`.
+  - Implemented remote Drizzle schema migrations (`npm run db:push`) and remote synchronization of all 52 Mumbai railway doctors (`npm run db:sync:doctors`) targeting cloud TiDB instances via `cross-env`.
+  - Configured Google Cloud OAuth 2.0 with production domain whitelisting and dynamic `AUTH_PUBLIC_BASE_URL` canonical callback resolution, eliminating `redirect_uri_mismatch` errors.
+  - Optimized Server-Sent Events (SSE) streaming under Render's cloud reverse proxy with `X-Accel-Buffering: no` and 25-second keepalive comment heartbeats to prevent 100-second idle connection timeouts.
+  - Added comprehensive production deployment guides, cloud architecture diagrams, and step-by-step setup walkthroughs across `README.md`, `ARCHITECTURE.md`, `SETUP.md`, and `SYSTEM_DIAGRAMS.md`.
+
+---
+
 ## [1.3.0] - 2026-09-29
 
 ### Added & Enhanced

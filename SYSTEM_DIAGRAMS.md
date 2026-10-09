@@ -4,6 +4,18 @@ A comprehensive visual and technical reference illustrating the software archite
 
 ---
 
+## 📑 Table of Contents
+
+1. [Project Files & Directory Architecture](#1-project-files--directory-architecture)
+2. [Relational Database Entity-Relationship Diagram (14 Tables)](#2-relational-database-entity-relationship-diagram-14-tables)
+3. [UML Class & Structure Diagrams](#3-uml-class--structure-diagrams)
+4. [System Activity Lifecycles & State Machines](#4-system-activity-lifecycles--state-machines)
+5. [Sequence Lifecycles & End-to-End Execution Flows](#5-sequence-lifecycles--end-to-end-execution-flows)
+6. [How to Run & Verify from Scratch](#6-how-to-run--verify-from-scratch)
+7. [Production Cloud Infrastructure & Network Deployment Topology Diagram](#7-production-cloud-infrastructure--network-deployment-topology-diagram)
+
+---
+
 ## 1. Project Files & Directory Architecture
 
 ```text
@@ -468,5 +480,66 @@ npm run dev
 # 6. Execute Full Verification Pipeline (Typecheck, Test, Build)
 npm run verify
 ```
+
+---
+
+## 7. Production Cloud Infrastructure & Network Deployment Topology Diagram
+
+```mermaid
+graph TB
+    subgraph Clients["Patient & Doctor Endpoints"]
+        PatBrowser["Patient Browser (/patient/*)"]
+        DocBrowser["Doctor Workstation (/doctor/*)"]
+    end
+
+    subgraph RenderEdge["Render.com Global Cloud Edge"]
+        Anycast["Anycast DNS & DDoS Shield"]
+        TLS["TLS 1.3 Termination (Let's Encrypt)"]
+        RevProxy["HTTP/2 Reverse Proxy Router"]
+    end
+
+    subgraph RenderContainer["Render Web Service (Linux / Node.js 22 LTS Container)"]
+        Express["Express HTTP Server ($PORT = 10000)"]
+        StaticVite["Static Assets (/dist/public - React 19 SPA)"]
+        tRPCRouter["tRPC v11 JSON-RPC Router (/trpc)"]
+        SSEBus["EventBus Real-time SSE (/sse/*)"]
+        AuthHandler["Dual-Cookie & Google OAuth Handlers"]
+    end
+
+    subgraph TiDBCloud["TiDB Serverless Cloud (AWS ap-southeast-1 Singapore)"]
+        TiDBGate["TiDB Gateway Proxy (Port 4000 / TLS 1.3)"]
+        TiDBSQL["Stateless TiDB SQL Parsing & Execution Nodes"]
+        TiKVStorage["Distributed TiKV Storage Engines (Multi-Raft Consensus)"]
+    end
+
+    subgraph GoogleCloud["External Google Cloud Services"]
+        GeminiAI["Google Gemini 1.5/2.0 Flash AI API"]
+        GoogleOAuth["Google Cloud OAuth 2.0 Auth Server"]
+    end
+
+    PatBrowser -->|HTTPS 443| Anycast
+    DocBrowser -->|HTTPS 443| Anycast
+    Anycast --> TLS
+    TLS --> RevProxy
+    RevProxy -->|Internal Proxy| Express
+
+    Express --> StaticVite
+    Express --> tRPCRouter
+    Express --> SSEBus
+    Express --> AuthHandler
+
+    tRPCRouter -->|Encrypted TLS 1.3 Tunnel| TiDBGate
+    AuthHandler -->|Encrypted TLS 1.3 Tunnel| TiDBGate
+    TiDBGate --> TiDBSQL
+    TiDBSQL --> TiKVStorage
+
+    tRPCRouter -->|HTTPS POST| GeminiAI
+    AuthHandler -->|HTTPS OAuth Code Exchange| GoogleOAuth
+
+    SSEBus -.->|Streaming SSE + 25s Keepalive| RevProxy
+    RevProxy -.->|Immediate Flush (X-Accel-Buffering: no)| PatBrowser
+    RevProxy -.->|Immediate Flush (X-Accel-Buffering: no)| DocBrowser
+```
+
 
 

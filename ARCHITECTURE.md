@@ -17,6 +17,8 @@ This document provides a comprehensive technical architecture guide for the **Li
 9. [Relational Data Layer (Drizzle ORM & MySQL 8.0)](#9-relational-data-layer-drizzle-orm--mysql-80)
 10. [Geospatial Mathematics: Client-Side Haversine Calculation](#10-geospatial-mathematics-client-side-haversine-calculation)
 11. [Sequence Lifecycles & Workflows](#11-sequence-lifecycles--workflows)
+12. [Production Cloud Infrastructure & Deployment Topology (Render.com & TiDB Serverless)](#12-production-cloud-infrastructure--deployment-topology-rendercom--tidb-serverless)
+13. [Architectural Roadmap & Pan-India Scalability](#13-architectural-roadmap--pan-india-scalability)
 
 ---
 
@@ -286,7 +288,135 @@ Doctor Workstation              Express / tRPC Backend                          
 
 ---
 
-## 10. Architectural Roadmap & Pan-India Scalability
+## 12. Production Cloud Infrastructure & Deployment Topology (Render.com & TiDB Serverless)
+
+LifeLink is engineered for production deployment utilizing a cloud-native, decoupled topology that combines stateless container execution on **Render.com** with distributed NewSQL persistence on **TiDB Serverless Cloud**.
+
+### 12.1 Cloud Hosting Topology & Distributed Ingress
+
+```text
+┌─────────────────────────────────────────────────────────────────────────────┐
+│                           PUBLIC INTERNET INGRESS                           │
+│   • Patients (/patient/*)               • Clinicians (/doctor/*)            │
+│   • Mobile Browsers (PWA Viewport)      • Transit Kiosk Clients             │
+└──────────────────────────────────────┬──────────────────────────────────────┘
+                                       │ HTTPS / TLS 1.3 (Port 443)
+                                       ▼
+┌─────────────────────────────────────────────────────────────────────────────┐
+│                       RENDER.COM CLOUD EDGE LAYER                           │
+│   • Global Anycast DNS & Edge Network                                       │
+│   • Automated TLS Certificate Provisioning & Renewal (Let's Encrypt)        │
+│   • HTTP/2 Multiplexed Ingress & Reverse Proxy Router                       │
+│   • Immediate Chunk Streaming (Bypasses Proxy Buffering)                    │
+└──────────────────────────────────────┬──────────────────────────────────────┘
+                                       │ Loopback Ingress ($PORT, e.g. 10000)
+                                       ▼
+┌─────────────────────────────────────────────────────────────────────────────┐
+│                   RENDER WEB SERVICE APPLICATION CONTAINER                  │
+│                   Image: Alpine Linux / Node.js 22 LTS Runtime               │
+│                                                                             │
+│   ┌─────────────────────────────────────────────────────────────────────┐   │
+│   │               Express Application & Static Asset Pipeline           │   │
+│   │                                                                     │   │
+│   │   • Static Serving: dist/public (React 19 SPA Vite Bundle)          │   │
+│   │   • History API Fallback: Catch-all GET -> dist/public/index.html   │   │
+│   │   • tRPC JSON-RPC Bus: POST /trpc (appRouter procedure dispatcher)   │   │
+│   │   • Real-Time Gateway: GET /sse/patient & GET /sse/doctor           │   │
+│   │   • Health Monitor Probe: GET /api/health                           │   │
+│   │   • OAuth Handshake: /api/auth/google & /api/auth/google/callback   │   │
+│   └──────────────────┬───────────────────────────────┬──────────────────┘   │
+│                      │                               │                      │
+└──────────────────────┼───────────────────────────────┼──────────────────────┘
+                       │                               │
+       ┌───────────────┴───────────────┐               │ Outbound HTTPS Requests
+       │ TLS 1.3 Encrypted Wire Tunnel │               ▼
+       │ Port: 4000 (rejectUnauth=true)│    ┌─────────────────────────────────┐
+       ▼                               │    │     EXTERNAL CLOUD PLATFORMS    │
+┌─────────────────────────────────┐    │    │                                 │
+│      TiDB SERVERLESS CLUSTER    │    │    │  • Google Gemini Flash AI       │
+│  (AWS ap-southeast-1 Singapore) │    │    │    (Symptom Triage Pipeline)    │
+│                                 │    │    │  • Google Cloud OAuth 2.0       │
+│   ┌─────────────────────────┐   │    │    │    (Strict Production Callback) │
+│   │   TiDB SQL Parser Layer │   │    │    └─────────────────────────────────┘
+│   │   • MySQL 8.0 Protocol  │   │    │
+│   │   • Cost-based Planner  │   │    │
+│   └────────────┬────────────┘   │    │
+│                ▼                │    │
+│   ┌─────────────────────────┐   │    │
+│   │  TiKV Storage Engines   │   │    │
+│   │  • Multi-Raft Consensus │   │    │
+│   │  • 14 Relational Tables │   │    │
+│   │  • 52 Doctor Accounts   │   │    │
+│   │  • Serverless RU Auto   │   │    │
+│   └─────────────────────────┘   │    │
+└─────────────────────────────────┘    ┘
+```
+
+---
+
+### 12.2 Single-Container Isomorphic Serving Pipeline
+
+In production, LifeLink runs inside a single Node.js 22 LTS container to guarantee atomicity, eliminate cross-origin request issues (CORS), and simplify deployment:
+
+1. **Dual-Artifact Build Process**:
+   - `vite build`: Compiles the React 19 client into minified JavaScript, CSS, and optimized static assets written to `dist/public/`.
+   - `esbuild backend/_core/index.ts --platform=node --packages=external --bundle --format=esm --outdir=dist`: Bundles all backend TypeScript code, tRPC routers, AI logic, and Drizzle query adapters into a single ECMAScript module (`dist/index.js`).
+2. **Dynamic Port Binding**:
+   - The container does not hardcode port 4000 in production. Instead, it inspects `process.env.PORT` injected dynamically by Render (commonly port `10000`) and binds Express to `0.0.0.0:$PORT`.
+3. **SPA History API Fallback**:
+   - When users directly access client-side URLs such as `/patient/appointments` or `/doctor/workspace`, the Express static file handler intercepts the GET request. If no physical asset or API route matches, it returns `dist/public/index.html` with status 200, allowing React Router to instantiate and mount the correct view.
+
+---
+
+### 12.3 Distributed Relational Engine: TiDB Serverless & MySQL 8.0 Compatibility
+
+LifeLink utilizes **TiDB Serverless Cloud** as its production relational database:
+
+1. **MySQL 8.0 Wire Compatibility**:
+   - TiDB is fully compatible with the MySQL 8.0 client protocol. LifeLink uses the production-standard `mysql2` driver and Drizzle ORM without requiring any database driver modifications or proprietary SDKs.
+2. **Storage and Compute Separation**:
+   - **Compute (TiDB SQL Layer)**: Stateless SQL execution nodes accept incoming connections, parse SQL statements, validate relational schemas, and produce distributed query execution plans.
+   - **Storage (TiKV Layer)**: A distributed transactional key-value store that implements Multi-Raft consensus across independent availability zones in AWS Singapore (`ap-southeast-1`). Data is automatically sharded into continuous key ranges (Regions) of ~96 MB each.
+3. **Transport Encryption (TLS 1.3)**:
+   - All database traffic transmitted between Render (Linux container) and TiDB Serverless travels over an encrypted TLS 1.3 tunnel.
+   - The connection string requires `?ssl={"rejectUnauthorized":true}` to enforce strict CA validation, preventing unauthorized traffic interception or man-in-the-middle exploits.
+4. **Serverless Auto-Scaling (RU)**:
+   - TiDB automatically allocates Request Units (RU) based on real-time query volume, scaling down to zero during idle nighttime periods and elastically scaling up during peak commuter morning triage surges.
+
+---
+
+### 12.4 Real-Time Push Subsystem Over Cloud Reverse Proxy
+
+Streaming real-time data over cloud proxies presents specific architectural challenges:
+
+1. **Reverse Proxy Buffering Mitigation**:
+   - Cloud reverse proxies (such as Nginx, Cloudflare, and Render's edge load balancer) typically buffer HTTP response bodies to optimize MTU packet delivery.
+   - LifeLink dispatches HTTP response headers that explicitly instruct upstream proxies to bypass buffering:
+     ```http
+     Content-Type: text/event-stream
+     Cache-Control: no-cache, no-transform
+     Connection: keep-alive
+     X-Accel-Buffering: no
+     ```
+2. **25-Second Keep-Alive Heartbeat Pulse**:
+   - Render's load balancer terminates open TCP sockets that remain silent for longer than **100 seconds**.
+   - LifeLink's event bus ([`backend/realtime/eventBus.ts`](backend/realtime/eventBus.ts)) maintains a scheduled interval timer that pushes an SSE comment ping (`:keepalive\n\n`) every **25 seconds** to every connected patient and clinician socket.
+   - This keeps the HTTP/2 tunnel open indefinitely while consuming less than 50 bytes per minute of idle bandwidth.
+
+---
+
+### 12.5 Google Cloud OAuth 2.0 Security State Machine in Production
+
+When operating behind a cloud reverse proxy:
+1. **Dynamic Origin Resolution**:
+   - The application relies on `AUTH_PUBLIC_BASE_URL` (`https://new-lifelink-smart-healthcare-assistance.onrender.com`) to compute the canonical `redirect_uri` for Google OAuth 2.0 authorization codes.
+   - This avoids issues where reverse proxy headers (`X-Forwarded-Host`, `Host`) might otherwise report internal container hostnames (`localhost:10000`).
+2. **Session Cookie Isolation**:
+   - In production, session cookies are configured with `secure: true` (only transmitted over HTTPS), `httpOnly: true` (inaccessible to malicious client scripts), and `sameSite: "lax"` (protects against CSRF during cross-site navigations).
+
+---
+
+## 13. Architectural Roadmap & Pan-India Scalability
 
 LifeLink's operational boundary is currently deployed in the Mumbai Metropolitan Region (using railway stations as commuter landmark anchors). The system is engineered to expand to a nationwide Pan-India footprint via the following architectural phases:
 
