@@ -205,3 +205,5 @@ This sequentially executes:
 - **Symptom**: Uploading an avatar photo returns a validation error.
 - **Diagnosis**: The image is either larger than 10 MB or the binary header does not match its file extension.
 - **Fix**: Ensure the image is under 10 MB and is a genuine JPEG, PNG, or WebP file.
+
+

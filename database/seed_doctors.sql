@@ -700,3 +700,4 @@ ORDER BY u.id ASC;
 
 -- Confirm 0 non-doctor accounts exist (Clean State):
 SELECT COUNT(*) AS total_non_doctor_users FROM users WHERE role != 'doctor';
+

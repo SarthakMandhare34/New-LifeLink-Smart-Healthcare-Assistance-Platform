@@ -68,3 +68,5 @@ async function initDatabase() {
 }
 
 initDatabase();                                                   // Execute initialization function immediately on run
+
+

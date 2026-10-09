@@ -153,3 +153,5 @@ Test Files  33 passed (33)
 ```
 
 All 247 active tests pass consistently with 0 failures (1 test skipped when optional external Google OAuth credentials are unconfigured in local development).
+
+

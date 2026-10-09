@@ -297,3 +297,5 @@ LifeLink's operational boundary is currently deployed in the Mumbai Metropolitan
 3. **Low-Bandwidth & Offline Sync (PWA)**:
    - For tier-2, tier-3, and rural health corridors where connectivity fluctuates, the client application can leverage IndexedDB and service workers for offline prescription caching and medication reminders, synchronizing back via tRPC upon network restoration.
 
+
+

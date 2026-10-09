@@ -151,3 +151,5 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 - Initial project scaffolding with React 19, TypeScript 5.9, Express 4.21, and Vite 7.
 - Relational database schema with 11 core tables in MySQL managed via Drizzle ORM.
 - tRPC 11 type-safe RPC boundary connecting frontend client and Express backend.
+
+

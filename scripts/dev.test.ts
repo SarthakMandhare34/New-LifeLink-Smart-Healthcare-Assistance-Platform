@@ -14,3 +14,5 @@ describe("local development server", () => {
     expect(wrapper).toContain("cross-env NODE_ENV=development tsx watch backend/_core/index.ts");
   });
 });
+
+

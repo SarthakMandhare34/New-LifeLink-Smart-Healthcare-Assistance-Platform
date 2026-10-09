@@ -301,3 +301,5 @@ All database maintenance tasks are performed via NPM scripts:
 | `npx tsx scripts/delete-user.ts <email>` | [`scripts/delete-user.ts`](scripts/delete-user.ts) | Selectively deletes a single user by email with cascading cleanup. |
 | `npx tsx scripts/init-db.ts` | [`scripts/init-db.ts`](scripts/init-db.ts) | Creates the `lifelink` database in MySQL if it does not already exist. |
 | `npx tsx scripts/generate-sql-seed.ts` | [`scripts/generate-sql-seed.ts`](scripts/generate-sql-seed.ts) | Generates zero-dependency [`database/seed_doctors.sql`](database/seed_doctors.sql). |
+
+

@@ -124,3 +124,5 @@ export function getIndiaDayBounds(dateStr: string): { startOfDay: Date; endOfDay
 export function isValidClinicSlot(slotStartTime: string): boolean {
   return STANDARD_SLOTS.includes(slotStartTime);
 }
+
+

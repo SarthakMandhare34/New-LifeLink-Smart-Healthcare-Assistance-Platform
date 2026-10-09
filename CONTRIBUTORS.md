@@ -55,3 +55,5 @@ We welcome contributions to the LifeLink platform. When submitting pull requests
 * [**System Architecture & Technical Diagrams (SYSTEM_DIAGRAMS.md)**](SYSTEM_DIAGRAMS.md)
 * [**Changelog & Version History (CHANGELOG.md)**](CHANGELOG.md)
 * [**MIT License (LICENSE)**](LICENSE)
+
+

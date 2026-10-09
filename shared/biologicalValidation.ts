@@ -73,3 +73,5 @@ export function checkBiologicalImpossibility(symptoms: string, gender: string): 
 
   return null;                                                   // Symptoms are biologically consistent
 }
+
+

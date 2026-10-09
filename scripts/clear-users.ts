@@ -95,3 +95,5 @@ clearDatabase().catch((err) => {
   console.error("Error clearing database:", err);
   process.exit(1);
 });
+
+

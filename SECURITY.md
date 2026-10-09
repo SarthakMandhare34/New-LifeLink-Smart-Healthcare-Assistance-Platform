@@ -85,3 +85,5 @@ To prevent medical hallucinations, dangerous clinical advice, or AI prompt injec
 - **Account Hijacking Mitigation**: If a Google OAuth account attempts to authenticate with an email that is already registered natively as a patient or doctor, the system detects the collision (`ProviderAccountConflictError`) and halts authorization, prompting the user to sign in using their established credentials.
 - **Strict Origin Validation**: OAuth callback URLs are validated via `googleAvailabilityFromConfig` to strictly enforce HTTPS in production environments while securely permitting loopback development (`http://localhost:5173`).
 
+
+

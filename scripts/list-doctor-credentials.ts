@@ -28,3 +28,5 @@ mockDoctorDirectory.forEach((d: MockDoctorDirectoryEntry, i: number) => {
 
   console.log(`| ${i + 1} | **${d.name}** | ${d.specialty} | ${d.hospital} (${d.locality}) | \`${email}\` | \`${primaryPassword}\` | \`${easyPassword}\` |`);
 });
+
+

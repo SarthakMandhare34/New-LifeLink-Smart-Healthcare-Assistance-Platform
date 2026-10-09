@@ -205,3 +205,5 @@ The following boundaries reflect intentional project design constraints and are 
 3. **Regional Transit Scope**: Geographic transit corridors are currently limited to the Mumbai Metropolitan Region (Western, Central, and Harbour lines).
 4. **No Financial Processing**: Payment gateways, co-pays, and insurance claim processing are outside the current release scope.
 5. **Browser Verification**: An interactive Chrome or Brave browser session could not be executed in the current environment; automated component DOM tests in Vitest / JSDOM verify UI rendering.
+
+

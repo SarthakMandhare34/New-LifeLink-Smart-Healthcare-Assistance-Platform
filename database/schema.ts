@@ -261,3 +261,5 @@ export type PatientEvent = typeof patientEvents.$inferSelect;
 export type DoctorEvent = typeof doctorEvents.$inferSelect;
 export type BookingError = typeof bookingErrors.$inferSelect;
 export type InsertBookingError = typeof bookingErrors.$inferInsert;
+
+
