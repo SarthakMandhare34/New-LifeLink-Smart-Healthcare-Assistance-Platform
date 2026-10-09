@@ -9,91 +9,129 @@
  * provides optional Google OAuth federation, and establishes the authenticated session
  * required to access the patient-owned health passport and AI triage services.
  */
-import React, { useState, useEffect } from 'react';
-import { useNavigate, useSearchParams } from 'react-router-dom';
-import { Card } from '../../components/ui/Card';
-import { Button } from '../../components/ui/Button';
-import { Input } from '../../components/ui/Input';
-import { LifeLinkLogo } from '../../components/brand/LifeLinkLogo';
-import { EntryThemeToggle } from '../../components/EntryThemeToggle';
-import { trpc } from '../../lib/trpc';
-import { formatUserFriendlyError } from '../../lib/errorFormatting';
-import { Lock, User as UserIcon, Mail, HeartPulse, ShieldCheck, Shield } from 'lucide-react';
-import { PATIENT_DASHBOARD_PATH } from '../patient/patientAuthRoutes';
+import React, { useState, useEffect } from "react";
+import { useNavigate, useSearchParams } from "react-router-dom";
+import { Card } from "../../components/ui/Card";
+import { Button } from "../../components/ui/Button";
+import { Input } from "../../components/ui/Input";
+import { LifeLinkLogo } from "../../components/brand/LifeLinkLogo";
+import { EntryThemeToggle } from "../../components/EntryThemeToggle";
+import { trpc } from "../../lib/trpc";
+import { formatUserFriendlyError } from "../../lib/errorFormatting";
+import {
+  Lock,
+  User as UserIcon,
+  Mail,
+  HeartPulse,
+  ShieldCheck,
+  Shield,
+} from "lucide-react";
+import { PATIENT_DASHBOARD_PATH } from "../patient/patientAuthRoutes";
 
 const GoogleIcon = () => (
   <svg width="18" height="18" viewBox="0 0 24 24" aria-hidden="true">
-    <path fill="#4285F4" d="M23.745 12.27c0-.7-.06-1.4-.19-2.07H12v4.51h6.6c-.29 1.52-1.14 2.82-2.4 3.68v3.05h3.88c2.27-2.09 3.665-5.17 3.665-9.17z"/>
-    <path fill="#34A853" d="M12 24c3.24 0 5.95-1.08 7.93-2.91l-3.88-3.05c-1.08.72-2.45 1.16-4.05 1.16-3.12 0-5.77-2.1-6.72-4.93H1.25v3.15C3.26 21.36 7.33 24 12 24z"/>
-    <path fill="#FBBC05" d="M5.28 14.27a7.18 7.18 0 0 1 0-4.54V6.58H1.25a11.97 11.97 0 0 0 0 10.84l4.03-3.15z"/>
-    <path fill="#EA4335" d="M12 4.75c1.77 0 3.35.61 4.6 1.8l3.42-3.42C17.95 1.19 15.24 0 12 0 7.33 0 3.26 2.64 1.25 6.58l4.03 3.15c.95-2.83 3.6-4.98 6.72-4.98z"/>
+    <path
+      fill="#4285F4"
+      d="M23.745 12.27c0-.7-.06-1.4-.19-2.07H12v4.51h6.6c-.29 1.52-1.14 2.82-2.4 3.68v3.05h3.88c2.27-2.09 3.665-5.17 3.665-9.17z"
+    />
+    <path
+      fill="#34A853"
+      d="M12 24c3.24 0 5.95-1.08 7.93-2.91l-3.88-3.05c-1.08.72-2.45 1.16-4.05 1.16-3.12 0-5.77-2.1-6.72-4.93H1.25v3.15C3.26 21.36 7.33 24 12 24z"
+    />
+    <path
+      fill="#FBBC05"
+      d="M5.28 14.27a7.18 7.18 0 0 1 0-4.54V6.58H1.25a11.97 11.97 0 0 0 0 10.84l4.03-3.15z"
+    />
+    <path
+      fill="#EA4335"
+      d="M12 4.75c1.77 0 3.35.61 4.6 1.8l3.42-3.42C17.95 1.19 15.24 0 12 0 7.33 0 3.26 2.64 1.25 6.58l4.03 3.15c.95-2.83 3.6-4.98 6.72-4.98z"
+    />
   </svg>
 );
 
 // Patient registration page component for creating new accounts
 export const PatientRegistration = () => {
-  const navigate = useNavigate();                                                          // Navigation hook for dashboard redirection
-  const [searchParams] = useSearchParams();                                                // URL search parameters for OAuth error notifications
-  const trpcUtils = trpc.useUtils();                                                       // tRPC utility cache client
-  const registerMutation = trpc.patientAuth.register.useMutation();                        // Mutation hook creating new native patient in DB
-  const providerQuery = trpc.auth.providers.useQuery(undefined, {                          // Query available social OAuth providers
-    retry: 3,                                                                              // Retry up to 3 times
-    staleTime: 10000,                                                                      // Cache provider availability for 10 seconds
+  const navigate = useNavigate(); // Navigation hook for dashboard redirection
+  const [searchParams] = useSearchParams(); // URL search parameters for OAuth error notifications
+  const trpcUtils = trpc.useUtils(); // tRPC utility cache client
+  const registerMutation = trpc.patientAuth.register.useMutation(); // Mutation hook creating new native patient in DB
+  const providerQuery = trpc.auth.providers.useQuery(undefined, {
+    // Query available social OAuth providers
+    retry: 3, // Retry up to 3 times
+    staleTime: 10000, // Cache provider availability for 10 seconds
   });
-  const [name, setName] = useState('');                                                    // Controlled full name state
-  const [email, setEmail] = useState('');                                                  // Controlled email state
-  const [password, setPassword] = useState('');                                            // Controlled password state
-  const [confirmPassword, setConfirmPassword] = useState('');                              // Controlled confirm password state
-  const [isLoading, setIsLoading] = useState(false);                                       // Registration submission loading state
-  const [error, setError] = useState('');                                                  // Validation or server error message
+  const [name, setName] = useState(""); // Controlled full name state
+  const [email, setEmail] = useState(""); // Controlled email state
+  const [password, setPassword] = useState(""); // Controlled password state
+  const [confirmPassword, setConfirmPassword] = useState(""); // Controlled confirm password state
+  const [isLoading, setIsLoading] = useState(false); // Registration submission loading state
+  const [error, setError] = useState(""); // Validation or server error message
 
-  const authErrorParam = searchParams.get('authError');                                    // Check if arriving from failed Google registration
+  const authErrorParam = searchParams.get("authError"); // Check if arriving from failed Google registration
   useEffect(() => {
     if (authErrorParam) {
       const errorMap: Record<string, string> = {
-        invalid_provider_state: "The Google authorization session expired. Please try again.",
+        invalid_provider_state:
+          "The Google authorization session expired. Please try again.",
         provider_sign_in_cancelled: "Google sign-up was cancelled.",
-        account_exists: "An account with this Google email already exists. Please sign in instead.",
-        provider_sign_in_failed: "Google registration could not be verified. Please try again.",
+        account_exists:
+          "An account with this Google email already exists. Please sign in instead.",
+        provider_sign_in_failed:
+          "Google registration could not be verified. Please try again.",
       };
-      setError(errorMap[authErrorParam] || "Google registration failed. Please try again.");
+      setError(
+        errorMap[authErrorParam] ||
+          "Google registration failed. Please try again."
+      );
     }
   }, [authErrorParam]);
 
   // Validates matching passwords and calls backend registration mutation
   const handleRegister = async (e: React.FormEvent) => {
-    e.preventDefault();                                                                    // Prevent form refresh
-    setIsLoading(true);                                                                    // Show progress state
-    setError('');                                                                          // Clear existing error
-    if (password !== confirmPassword) {                                                    // Client-side password match verification
-      setError('Passwords do not match.');
+    e.preventDefault(); // Prevent form refresh
+    setIsLoading(true); // Show progress state
+    setError(""); // Clear existing error
+    if (password !== confirmPassword) {
+      // Client-side password match verification
+      setError("Passwords do not match.");
       setIsLoading(false);
       return;
     }
     try {
-      await registerMutation.mutateAsync({ name, email, password });                       // Call tRPC registration procedure
-      sessionStorage.setItem('lifelink_patient_session', 'active');                        // Establish isolated session for current browser tab
-      await trpcUtils.auth.me.refetch();                                                   // Update authenticated user context
-      navigate(PATIENT_DASHBOARD_PATH, { replace: true });                                 // Direct new patient to dashboard
+      await registerMutation.mutateAsync({ name, email, password }); // Call tRPC registration procedure
+      sessionStorage.setItem("lifelink_patient_session", "active"); // Establish isolated session for current browser tab
+      await trpcUtils.auth.me.refetch(); // Update authenticated user context
+      navigate(PATIENT_DASHBOARD_PATH, { replace: true }); // Direct new patient to dashboard
     } catch (err: unknown) {
-      setError(formatUserFriendlyError(err, 'Registration failed. Please try again.')); // Display user-friendly failure reason
-      setIsLoading(false);                                                                 // Reset loading state
+      setError(
+        formatUserFriendlyError(err, "Registration failed. Please try again.")
+      ); // Display user-friendly failure reason
+      setIsLoading(false); // Reset loading state
     }
   };
 
   // Initiates Google OAuth sign-up flow
   const handleGoogleClick = () => {
-    sessionStorage.setItem('lifelink_patient_session', 'active');                          // Flag tab session before OAuth handshake
-    const startUrl = providerQuery.data?.googleRegistrationStartUrl ?? providerQuery.data?.googleAuthorizationStartUrl ?? '/api/auth/google?intent=register'; // Registration intent endpoint
-    window.location.assign(startUrl);                                                      // Redirect to Google consent screen
+    sessionStorage.setItem("lifelink_patient_session", "active"); // Flag tab session before OAuth handshake
+    const startUrl =
+      providerQuery.data?.googleRegistrationStartUrl ??
+      providerQuery.data?.googleAuthorizationStartUrl ??
+      "/api/auth/google?intent=register"; // Registration intent endpoint
+    window.location.assign(startUrl); // Redirect to Google consent screen
   };
 
   return (
     <main className="auth-page" aria-labelledby="patient-register-heading">
-      <header className="workspace-portal-header" aria-label="LifeLink portal header">
+      <header
+        className="workspace-portal-header"
+        aria-label="LifeLink portal header"
+      >
         <div className="workspace-portal-brand">
           <span className="workspace-portal-mark" aria-hidden="true">
-            <LifeLinkLogo variant="symbol" style={{ width: '100%', height: '100%', objectFit: 'contain' }} />
+            <LifeLinkLogo
+              variant="symbol"
+              style={{ width: "100%", height: "100%", objectFit: "contain" }}
+            />
           </span>
           <span>
             <strong>LifeLink</strong>
@@ -108,69 +146,137 @@ export const PatientRegistration = () => {
       </header>
 
       <div className="patient-auth-layout auth-split-layout">
-
         {/* Branding Panel (Left Column): Clean Nordic Clinical Identity */}
         <div className="auth-branding-panel">
-          <div style={{ textAlign: 'center', maxWidth: '440px', display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
-
+          <div
+            style={{
+              textAlign: "center",
+              maxWidth: "440px",
+              display: "flex",
+              flexDirection: "column",
+              alignItems: "center",
+            }}
+          >
             {/* Proportional Brand Treatment (Section 11) */}
-            <div style={{ marginBottom: '24px', display: 'flex', alignItems: 'center', justifyContent: 'center', width: '100%' }}>
+            <div
+              style={{
+                marginBottom: "24px",
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "center",
+                width: "100%",
+              }}
+            >
               <LifeLinkLogo className="lifelink-logo-auth" />
             </div>
 
             {/* System Subtitle & Motto */}
-            <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '14px' }}>
+            <div
+              style={{
+                display: "flex",
+                flexDirection: "column",
+                alignItems: "center",
+                gap: "14px",
+              }}
+            >
               <span
                 style={{
-                  background: 'var(--color-primary-muted)',
-                  color: 'var(--color-primary)',
-                  fontSize: '0.74rem',
+                  background: "var(--color-primary-muted)",
+                  color: "var(--color-primary)",
+                  fontSize: "0.74rem",
                   fontWeight: 600,
-                  letterSpacing: '0.06em',
-                  textTransform: 'uppercase',
-                  padding: '4px 12px',
-                  borderRadius: 'var(--border-radius-badge)',
-                  border: '1px solid var(--color-border)'
+                  letterSpacing: "0.06em",
+                  textTransform: "uppercase",
+                  padding: "4px 12px",
+                  borderRadius: "var(--border-radius-badge)",
+                  border: "1px solid var(--color-border)",
                 }}
               >
                 Smart Healthcare & Wellness Platform
               </span>
 
-              <h2 style={{ fontSize: '1.5rem', fontWeight: 700, margin: '6px 0 0', color: 'var(--color-text)', letterSpacing: '-0.02em' }}>
+              <h2
+                style={{
+                  fontSize: "1.5rem",
+                  fontWeight: 700,
+                  margin: "6px 0 0",
+                  color: "var(--color-text)",
+                  letterSpacing: "-0.02em",
+                }}
+              >
                 Care. Connect. Cure.
               </h2>
-              <p style={{ fontSize: '0.92rem', color: 'var(--color-text-muted)', margin: 0, lineHeight: 1.5, maxWidth: '380px' }}>
-                Create your personal health profile to securely store your medical history, book appointments with trusted doctors, and get smart AI guidance.
+              <p
+                style={{
+                  fontSize: "0.92rem",
+                  color: "var(--color-text-muted)",
+                  margin: 0,
+                  lineHeight: 1.5,
+                  maxWidth: "380px",
+                }}
+              >
+                Create your personal health profile to securely store your
+                medical history, book appointments with trusted doctors, and get
+                smart AI guidance.
               </p>
             </div>
           </div>
         </div>
 
         {/* Form Container (Right Column): Solid Clinical Surface */}
-        <div className="auth-card-column" style={{ flex: 1.1, display: 'flex', justifyContent: 'center', alignItems: 'center', padding: 'clamp(8px, 1.5vw, 20px)', zIndex: 1, width: '100%' }}>
+        <div
+          className="auth-card-column"
+          style={{
+            flex: 1.1,
+            display: "flex",
+            justifyContent: "center",
+            alignItems: "center",
+            padding: "clamp(8px, 1.5vw, 20px)",
+            zIndex: 1,
+            width: "100%",
+          }}
+        >
           <Card
             className="card auth-card"
             style={{
-              width: '100%',
-              maxWidth: '520px',
-              padding: 'clamp(20px, 3.2vw, 32px)',
-              background: 'var(--color-surface-white)',
-              border: '1px solid var(--color-border)',
-              borderRadius: 'var(--border-radius-card)',
-              boxShadow: 'none',
-              boxSizing: 'border-box'
+              width: "100%",
+              maxWidth: "520px",
+              padding: "clamp(20px, 3.2vw, 32px)",
+              background: "var(--color-surface-white)",
+              border: "1px solid var(--color-border)",
+              borderRadius: "var(--border-radius-card)",
+              boxShadow: "none",
+              boxSizing: "border-box",
             }}
           >
             {/* Form Card Header */}
-            <header className="auth-card-header" style={{ textAlign: 'center', marginBottom: '20px' }}>
+            <header
+              className="auth-card-header"
+              style={{ textAlign: "center", marginBottom: "20px" }}
+            >
               <div className="auth-card-mobile-logo-wrap">
                 <LifeLinkLogo className="lifelink-logo-auth auth-card-mobile-logo" />
               </div>
 
-              <h1 id="patient-register-heading" style={{ fontSize: '1.65rem', fontWeight: 700, marginBottom: '8px', color: 'var(--color-text)', letterSpacing: '-0.02em' }}>
+              <h1
+                id="patient-register-heading"
+                style={{
+                  fontSize: "1.65rem",
+                  fontWeight: 700,
+                  marginBottom: "8px",
+                  color: "var(--color-text)",
+                  letterSpacing: "-0.02em",
+                }}
+              >
                 Create Patient Account
               </h1>
-              <p style={{ color: 'var(--color-text-muted)', fontSize: '0.90rem', margin: 0 }}>
+              <p
+                style={{
+                  color: "var(--color-text-muted)",
+                  fontSize: "0.90rem",
+                  margin: 0,
+                }}
+              >
                 Set up your secure, patient-owned health passport
               </p>
             </header>
@@ -181,14 +287,14 @@ export const PatientRegistration = () => {
                 className="alert-panel auth-message"
                 role="alert"
                 style={{
-                  marginBottom: '24px',
-                  color: 'var(--color-semantic-emergency)',
-                  textAlign: 'center',
-                  background: 'var(--lifelink-red-soft)',
-                  border: '1px solid var(--lifelink-red-border)',
-                  borderRadius: 'var(--border-radius-badge)',
-                  padding: '12px 16px',
-                  fontSize: '0.88rem'
+                  marginBottom: "24px",
+                  color: "var(--color-semantic-emergency)",
+                  textAlign: "center",
+                  background: "var(--lifelink-red-soft)",
+                  border: "1px solid var(--lifelink-red-border)",
+                  borderRadius: "var(--border-radius-badge)",
+                  padding: "12px 16px",
+                  fontSize: "0.88rem",
                 }}
               >
                 {error}
@@ -196,117 +302,217 @@ export const PatientRegistration = () => {
             )}
 
             {/* Registration form */}
-            <form onSubmit={handleRegister} className="auth-form" style={{ display: 'grid', gap: '20px' }}>
+            <form
+              onSubmit={handleRegister}
+              className="auth-form"
+              style={{ display: "grid", gap: "20px" }}
+            >
               {/* Full Name field */}
-              <div style={{ display: 'flex', flexDirection: 'column', gap: '6px' }}>
-                <label htmlFor="patient-name" style={{ fontWeight: 600, fontSize: '0.86rem', color: 'var(--color-text)' }}>
+              <div
+                style={{ display: "flex", flexDirection: "column", gap: "6px" }}
+              >
+                <label
+                  htmlFor="patient-name"
+                  style={{
+                    fontWeight: 600,
+                    fontSize: "0.86rem",
+                    color: "var(--color-text)",
+                  }}
+                >
                   Full Name
                 </label>
-                <div style={{ position: 'relative', display: 'flex', alignItems: 'center' }}>
-                  <UserIcon size={18} style={{ position: 'absolute', left: '14px', color: 'var(--color-text-muted)', pointerEvents: 'none' }} />
+                <div
+                  style={{
+                    position: "relative",
+                    display: "flex",
+                    alignItems: "center",
+                  }}
+                >
+                  <UserIcon
+                    size={18}
+                    style={{
+                      position: "absolute",
+                      left: "14px",
+                      color: "var(--color-text-muted)",
+                      pointerEvents: "none",
+                    }}
+                  />
                   <Input
                     id="patient-name"
                     type="text"
                     placeholder="Enter full name"
                     value={name}
-                    onChange={(event) => setName(event.target.value)}
+                    onChange={event => setName(event.target.value)}
                     required
                     style={{
-                      width: '100%',
-                      paddingLeft: '42px',
-                      borderRadius: 'var(--border-radius-input)',
-                      minHeight: '46px',
-                      fontSize: '0.90rem',
-                      border: '1px solid var(--color-input-border, var(--color-border))',
-                      background: 'var(--color-surface-white)',
-                      color: 'var(--color-text)'
+                      width: "100%",
+                      paddingLeft: "42px",
+                      borderRadius: "var(--border-radius-input)",
+                      minHeight: "46px",
+                      fontSize: "0.90rem",
+                      border:
+                        "1px solid var(--color-input-border, var(--color-border))",
+                      background: "var(--color-surface-white)",
+                      color: "var(--color-text)",
                     }}
                   />
                 </div>
               </div>
 
               {/* Email field */}
-              <div style={{ display: 'flex', flexDirection: 'column', gap: '6px' }}>
-                <label htmlFor="patient-email" style={{ fontWeight: 600, fontSize: '0.86rem', color: 'var(--color-text)' }}>
+              <div
+                style={{ display: "flex", flexDirection: "column", gap: "6px" }}
+              >
+                <label
+                  htmlFor="patient-email"
+                  style={{
+                    fontWeight: 600,
+                    fontSize: "0.86rem",
+                    color: "var(--color-text)",
+                  }}
+                >
                   Email
                 </label>
-                <div style={{ position: 'relative', display: 'flex', alignItems: 'center' }}>
-                  <Mail size={18} style={{ position: 'absolute', left: '14px', color: 'var(--color-text-muted)', pointerEvents: 'none' }} />
+                <div
+                  style={{
+                    position: "relative",
+                    display: "flex",
+                    alignItems: "center",
+                  }}
+                >
+                  <Mail
+                    size={18}
+                    style={{
+                      position: "absolute",
+                      left: "14px",
+                      color: "var(--color-text-muted)",
+                      pointerEvents: "none",
+                    }}
+                  />
                   <Input
                     id="patient-email"
                     type="email"
                     placeholder="Enter email"
                     value={email}
-                    onChange={(event) => setEmail(event.target.value)}
+                    onChange={event => setEmail(event.target.value)}
                     autoComplete="username"
                     required
                     style={{
-                      width: '100%',
-                      paddingLeft: '42px',
-                      borderRadius: 'var(--border-radius-input)',
-                      minHeight: '46px',
-                      fontSize: '0.90rem',
-                      border: '1px solid var(--color-input-border, var(--color-border))',
-                      background: 'var(--color-surface-white)',
-                      color: 'var(--color-text)'
+                      width: "100%",
+                      paddingLeft: "42px",
+                      borderRadius: "var(--border-radius-input)",
+                      minHeight: "46px",
+                      fontSize: "0.90rem",
+                      border:
+                        "1px solid var(--color-input-border, var(--color-border))",
+                      background: "var(--color-surface-white)",
+                      color: "var(--color-text)",
                     }}
                   />
                 </div>
               </div>
 
               {/* Password field */}
-              <div style={{ display: 'flex', flexDirection: 'column', gap: '6px' }}>
-                <label htmlFor="patient-password" style={{ fontWeight: 600, fontSize: '0.86rem', color: 'var(--color-text)' }}>
+              <div
+                style={{ display: "flex", flexDirection: "column", gap: "6px" }}
+              >
+                <label
+                  htmlFor="patient-password"
+                  style={{
+                    fontWeight: 600,
+                    fontSize: "0.86rem",
+                    color: "var(--color-text)",
+                  }}
+                >
                   Password
                 </label>
-                <div style={{ position: 'relative', display: 'flex', alignItems: 'center' }}>
-                  <Lock size={18} style={{ position: 'absolute', left: '14px', color: 'var(--color-text-muted)', pointerEvents: 'none' }} />
+                <div
+                  style={{
+                    position: "relative",
+                    display: "flex",
+                    alignItems: "center",
+                  }}
+                >
+                  <Lock
+                    size={18}
+                    style={{
+                      position: "absolute",
+                      left: "14px",
+                      color: "var(--color-text-muted)",
+                      pointerEvents: "none",
+                    }}
+                  />
                   <Input
                     id="patient-password"
                     type="password"
                     placeholder="Enter password"
                     value={password}
-                    onChange={(event) => setPassword(event.target.value)}
+                    onChange={event => setPassword(event.target.value)}
                     autoComplete="new-password"
                     required
                     style={{
-                      width: '100%',
-                      paddingLeft: '42px',
-                      borderRadius: 'var(--border-radius-input)',
-                      minHeight: '46px',
-                      fontSize: '0.90rem',
-                      border: '1px solid var(--color-input-border, var(--color-border))',
-                      background: 'var(--color-surface-white)',
-                      color: 'var(--color-text)'
+                      width: "100%",
+                      paddingLeft: "42px",
+                      borderRadius: "var(--border-radius-input)",
+                      minHeight: "46px",
+                      fontSize: "0.90rem",
+                      border:
+                        "1px solid var(--color-input-border, var(--color-border))",
+                      background: "var(--color-surface-white)",
+                      color: "var(--color-text)",
                     }}
                   />
                 </div>
               </div>
 
               {/* Confirm Password field */}
-              <div style={{ display: 'flex', flexDirection: 'column', gap: '6px' }}>
-                <label htmlFor="patient-confirm-password" style={{ fontWeight: 600, fontSize: '0.86rem', color: 'var(--color-text)' }}>
+              <div
+                style={{ display: "flex", flexDirection: "column", gap: "6px" }}
+              >
+                <label
+                  htmlFor="patient-confirm-password"
+                  style={{
+                    fontWeight: 600,
+                    fontSize: "0.86rem",
+                    color: "var(--color-text)",
+                  }}
+                >
                   Confirm Password
                 </label>
-                <div style={{ position: 'relative', display: 'flex', alignItems: 'center' }}>
-                  <Lock size={18} style={{ position: 'absolute', left: '14px', color: 'var(--color-text-muted)', pointerEvents: 'none' }} />
+                <div
+                  style={{
+                    position: "relative",
+                    display: "flex",
+                    alignItems: "center",
+                  }}
+                >
+                  <Lock
+                    size={18}
+                    style={{
+                      position: "absolute",
+                      left: "14px",
+                      color: "var(--color-text-muted)",
+                      pointerEvents: "none",
+                    }}
+                  />
                   <Input
                     id="patient-confirm-password"
                     type="password"
                     placeholder="Confirm password"
                     value={confirmPassword}
-                    onChange={(event) => setConfirmPassword(event.target.value)}
+                    onChange={event => setConfirmPassword(event.target.value)}
                     autoComplete="new-password"
                     required
                     style={{
-                      width: '100%',
-                      paddingLeft: '42px',
-                      borderRadius: 'var(--border-radius-input)',
-                      minHeight: '46px',
-                      fontSize: '0.90rem',
-                      border: '1px solid var(--color-input-border, var(--color-border))',
-                      background: 'var(--color-surface-white)',
-                      color: 'var(--color-text)'
+                      width: "100%",
+                      paddingLeft: "42px",
+                      borderRadius: "var(--border-radius-input)",
+                      minHeight: "46px",
+                      fontSize: "0.90rem",
+                      border:
+                        "1px solid var(--color-input-border, var(--color-border))",
+                      background: "var(--color-surface-white)",
+                      color: "var(--color-text)",
                     }}
                   />
                 </div>
@@ -319,29 +525,53 @@ export const PatientRegistration = () => {
                 className="btn-primary"
                 disabled={isLoading}
                 style={{
-                  width: '100%',
-                  minHeight: '48px',
-                  padding: '12px',
-                  fontSize: '0.96rem',
+                  width: "100%",
+                  minHeight: "48px",
+                  padding: "12px",
+                  fontSize: "0.96rem",
                   fontWeight: 700,
-                  borderRadius: 'var(--border-radius-btn)',
-                  marginTop: '8px',
-                  cursor: 'pointer',
-                  opacity: isLoading ? 0.7 : 1
+                  borderRadius: "var(--border-radius-btn)",
+                  marginTop: "8px",
+                  cursor: "pointer",
+                  opacity: isLoading ? 0.7 : 1,
                 }}
               >
-                {isLoading ? 'Creating account…' : 'Create Patient Account'}
+                {isLoading ? "Creating account…" : "Create Patient Account"}
               </Button>
             </form>
 
             {/* Alternative registration provider divider */}
-            <div className="social-auth" style={{ marginTop: '24px' }}>
-              <div className="social-auth-divider" style={{ display: 'flex', alignItems: 'center', gap: '14px', color: 'var(--color-text-muted)', fontSize: '0.80rem' }}>
-                <div style={{ flex: 1, height: '1px', background: 'var(--color-border)' }} />
+            <div className="social-auth" style={{ marginTop: "24px" }}>
+              <div
+                className="social-auth-divider"
+                style={{
+                  display: "flex",
+                  alignItems: "center",
+                  gap: "14px",
+                  color: "var(--color-text-muted)",
+                  fontSize: "0.80rem",
+                }}
+              >
+                <div
+                  style={{
+                    flex: 1,
+                    height: "1px",
+                    background: "var(--color-border)",
+                  }}
+                />
                 <span>OR SIGN UP WITH</span>
-                <div style={{ flex: 1, height: '1px', background: 'var(--color-border)' }} />
+                <div
+                  style={{
+                    flex: 1,
+                    height: "1px",
+                    background: "var(--color-border)",
+                  }}
+                />
               </div>
-              <div className="social-auth-actions" style={{ marginTop: '16px' }}>
+              <div
+                className="social-auth-actions"
+                style={{ marginTop: "16px" }}
+              >
                 <Button
                   type="button"
                   variant="outline"
@@ -349,19 +579,19 @@ export const PatientRegistration = () => {
                   onClick={handleGoogleClick}
                   title="Sign up with Google"
                   style={{
-                    borderRadius: 'var(--border-radius-btn)',
-                    minHeight: '46px',
-                    fontSize: '0.90rem',
-                    width: '100%',
-                    display: 'flex',
-                    justifyContent: 'center',
-                    alignItems: 'center',
-                    gap: '10px',
-                    cursor: 'pointer',
+                    borderRadius: "var(--border-radius-btn)",
+                    minHeight: "46px",
+                    fontSize: "0.90rem",
+                    width: "100%",
+                    display: "flex",
+                    justifyContent: "center",
+                    alignItems: "center",
+                    gap: "10px",
+                    cursor: "pointer",
                     fontWeight: 600,
-                    border: '1px solid var(--color-border)',
-                    background: 'var(--color-surface-white)',
-                    color: 'var(--color-text)'
+                    border: "1px solid var(--color-border)",
+                    background: "var(--color-surface-white)",
+                    color: "var(--color-text)",
                   }}
                 >
                   <GoogleIcon /> Continue with Google
@@ -370,12 +600,27 @@ export const PatientRegistration = () => {
             </div>
 
             {/* Link back to sign in */}
-            <div style={{ textAlign: 'center', marginTop: '24px', fontSize: '0.86rem' }}>
-              <span style={{ color: 'var(--color-text-muted)' }}>Already registered? </span>
+            <div
+              style={{
+                textAlign: "center",
+                marginTop: "24px",
+                fontSize: "0.86rem",
+              }}
+            >
+              <span style={{ color: "var(--color-text-muted)" }}>
+                Already registered?{" "}
+              </span>
               <button
                 type="button"
-                onClick={() => navigate('/login')}
-                style={{ background: 'none', border: 'none', color: 'var(--color-primary)', fontWeight: 700, cursor: 'pointer', padding: 0 }}
+                onClick={() => navigate("/login")}
+                style={{
+                  background: "none",
+                  border: "none",
+                  color: "var(--color-primary)",
+                  fontWeight: 700,
+                  cursor: "pointer",
+                  padding: 0,
+                }}
               >
                 Sign in
               </button>

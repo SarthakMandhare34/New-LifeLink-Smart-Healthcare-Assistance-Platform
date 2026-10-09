@@ -9,64 +9,181 @@
  * Features customizable date selection (pure calendar without browser time wheels)
  * and structured 30-minute consultation slots (10:00–15:00 and 19:00–22:00).
  */
-import { useCallback, useEffect, useMemo, useState } from 'react';                          // Core React state, memoization, and callback hooks
-import { Card } from '../../../components/ui/Card';                                            // Reusable glass/solid container
-import { Input } from '../../../components/ui/Input';                                          // Styled input field component
-import { Button } from '../../../components/ui/Button';                                        // Styled button component
-import { Badge } from '../../../components/ui/Badge';                                          // Small indicator badge
-import { Popup } from '../../../components/ui/Popup';                                          // Modal confirmation dialog
-import { ValidationMessage } from '../../../components/ui/ValidationMessage';
-import { formatUserFriendlyError } from '../../../lib/errorFormatting';
-import { UserCheck, MapPin, Building, Route, AlertCircle, RefreshCw, RotateCcw, CheckCircle, Clock, Sun, Moon } from 'lucide-react'; // Specialist directory and clinic icons
-import { useNavigate, useSearchParams } from 'react-router-dom';                                 // Navigation and query parameter synchronization hooks
-import { trpc } from '../../../lib/trpc';                                                       // Type-safe tRPC client bridge
-import { MumbaiDoctorMap } from '../../../components/MumbaiDoctorMap';                          // Interactive OpenStreetMap visualization component
-import { BrandLoadingIndicator } from '../../../components/brand/BrandLoadingIndicator';        // Official LifeLink branded loading symbol
-import { SYSTEM_DOCTOR_SPECIALTIES, type ClinicSlotStatus, type DoctorSlotAvailability } from '@shared/const'; // Canonical clinic slot types and 12 specialties
-import './specialistFinder.css';                                                                // Bespoke responsive styles for discovery grid
+import { useCallback, useEffect, useMemo, useState } from "react"; // Core React state, memoization, and callback hooks
+import { Card } from "../../../components/ui/Card"; // Reusable glass/solid container
+import { Input } from "../../../components/ui/Input"; // Styled input field component
+import { Button } from "../../../components/ui/Button"; // Styled button component
+import { Badge } from "../../../components/ui/Badge"; // Small indicator badge
+import { Popup } from "../../../components/ui/Popup"; // Modal confirmation dialog
+import { ValidationMessage } from "../../../components/ui/ValidationMessage";
+import { formatUserFriendlyError } from "../../../lib/errorFormatting";
+import {
+  UserCheck,
+  MapPin,
+  Building,
+  Route,
+  AlertCircle,
+  RefreshCw,
+  RotateCcw,
+  CheckCircle,
+  Clock,
+  Sun,
+  Moon,
+} from "lucide-react"; // Specialist directory and clinic icons
+import { useNavigate, useSearchParams } from "react-router-dom"; // Navigation and query parameter synchronization hooks
+import { trpc } from "../../../lib/trpc"; // Type-safe tRPC client bridge
+import { MumbaiDoctorMap } from "../../../components/MumbaiDoctorMap"; // Interactive OpenStreetMap visualization component
+import { BrandLoadingIndicator } from "../../../components/brand/BrandLoadingIndicator"; // Official LifeLink branded loading symbol
+import {
+  SYSTEM_DOCTOR_SPECIALTIES,
+  type ClinicSlotStatus,
+  type DoctorSlotAvailability,
+} from "@shared/const"; // Canonical clinic slot types and 12 specialties
+import "./specialistFinder.css"; // Bespoke responsive styles for discovery grid
 
 // Constant label strings and disclaimers for accessibility and test suite contract stability
-const ALL_FILTER = 'all';                                                                       // Sentinel value denoting no specialty filter
+const ALL_FILTER = "all"; // Sentinel value denoting no specialty filter
 
 // Structured 30-minute appointment slots for morning/afternoon (10:00–15:00) and evening (19:00–22:00)
 export const CLINIC_APPOINTMENT_SLOTS = [
   // Morning & Afternoon Clinic: 10:00 AM to 15:00 (3:00 PM) in 30-minute intervals
-  { id: "10:00", startTime: "10:00", endTime: "10:30", label: "10:00 – 10:30 AM", session: "morning" as const },
-  { id: "10:30", startTime: "10:30", endTime: "11:00", label: "10:30 – 11:00 AM", session: "morning" as const },
-  { id: "11:00", startTime: "11:00", endTime: "11:30", label: "11:00 – 11:30 AM", session: "morning" as const },
-  { id: "11:30", startTime: "11:30", endTime: "12:00", label: "11:30 AM – 12:00 PM", session: "morning" as const },
-  { id: "12:00", startTime: "12:00", endTime: "12:30", label: "12:00 – 12:30 PM", session: "morning" as const },
-  { id: "12:30", startTime: "12:30", endTime: "13:00", label: "12:30 – 1:00 PM", session: "morning" as const },
-  { id: "13:00", startTime: "13:00", endTime: "13:30", label: "1:00 – 1:30 PM", session: "morning" as const },
-  { id: "13:30", startTime: "13:30", endTime: "14:00", label: "1:30 – 2:00 PM", session: "morning" as const },
-  { id: "14:00", startTime: "14:00", endTime: "14:30", label: "2:00 – 2:30 PM", session: "morning" as const },
-  { id: "14:30", startTime: "14:30", endTime: "15:00", label: "2:30 – 3:00 PM", session: "morning" as const },
+  {
+    id: "10:00",
+    startTime: "10:00",
+    endTime: "10:30",
+    label: "10:00 – 10:30 AM",
+    session: "morning" as const,
+  },
+  {
+    id: "10:30",
+    startTime: "10:30",
+    endTime: "11:00",
+    label: "10:30 – 11:00 AM",
+    session: "morning" as const,
+  },
+  {
+    id: "11:00",
+    startTime: "11:00",
+    endTime: "11:30",
+    label: "11:00 – 11:30 AM",
+    session: "morning" as const,
+  },
+  {
+    id: "11:30",
+    startTime: "11:30",
+    endTime: "12:00",
+    label: "11:30 AM – 12:00 PM",
+    session: "morning" as const,
+  },
+  {
+    id: "12:00",
+    startTime: "12:00",
+    endTime: "12:30",
+    label: "12:00 – 12:30 PM",
+    session: "morning" as const,
+  },
+  {
+    id: "12:30",
+    startTime: "12:30",
+    endTime: "13:00",
+    label: "12:30 – 1:00 PM",
+    session: "morning" as const,
+  },
+  {
+    id: "13:00",
+    startTime: "13:00",
+    endTime: "13:30",
+    label: "1:00 – 1:30 PM",
+    session: "morning" as const,
+  },
+  {
+    id: "13:30",
+    startTime: "13:30",
+    endTime: "14:00",
+    label: "1:30 – 2:00 PM",
+    session: "morning" as const,
+  },
+  {
+    id: "14:00",
+    startTime: "14:00",
+    endTime: "14:30",
+    label: "2:00 – 2:30 PM",
+    session: "morning" as const,
+  },
+  {
+    id: "14:30",
+    startTime: "14:30",
+    endTime: "15:00",
+    label: "2:30 – 3:00 PM",
+    session: "morning" as const,
+  },
 
   // Evening Clinic: 19:00 (7:00 PM) to 22:00 (10:00 PM) in 30-minute intervals
-  { id: "19:00", startTime: "19:00", endTime: "19:30", label: "7:00 – 7:30 PM", session: "evening" as const },
-  { id: "19:30", startTime: "19:30", endTime: "20:00", label: "7:30 – 8:00 PM", session: "evening" as const },
-  { id: "20:00", startTime: "20:00", endTime: "20:30", label: "8:00 – 8:30 PM", session: "evening" as const },
-  { id: "20:30", startTime: "20:30", endTime: "21:00", label: "8:30 – 9:00 PM", session: "evening" as const },
-  { id: "21:00", startTime: "21:00", endTime: "21:30", label: "9:00 – 9:30 PM", session: "evening" as const },
-  { id: "21:30", startTime: "21:30", endTime: "22:00", label: "9:30 – 10:00 PM", session: "evening" as const },
+  {
+    id: "19:00",
+    startTime: "19:00",
+    endTime: "19:30",
+    label: "7:00 – 7:30 PM",
+    session: "evening" as const,
+  },
+  {
+    id: "19:30",
+    startTime: "19:30",
+    endTime: "20:00",
+    label: "7:30 – 8:00 PM",
+    session: "evening" as const,
+  },
+  {
+    id: "20:00",
+    startTime: "20:00",
+    endTime: "20:30",
+    label: "8:00 – 8:30 PM",
+    session: "evening" as const,
+  },
+  {
+    id: "20:30",
+    startTime: "20:30",
+    endTime: "21:00",
+    label: "8:30 – 9:00 PM",
+    session: "evening" as const,
+  },
+  {
+    id: "21:00",
+    startTime: "21:00",
+    endTime: "21:30",
+    label: "9:00 – 9:30 PM",
+    session: "evening" as const,
+  },
+  {
+    id: "21:30",
+    startTime: "21:30",
+    endTime: "22:00",
+    label: "9:30 – 10:00 PM",
+    session: "evening" as const,
+  },
 ] as const;
 
-export const STANDARD_SLOTS = CLINIC_APPOINTMENT_SLOTS.map((s) => s.startTime);
+export const STANDARD_SLOTS = CLINIC_APPOINTMENT_SLOTS.map(s => s.startTime);
 
-export const RESIDENCE_CORRIDOR_LABEL = 'Which part of Mumbai do you live in?';                 // Label for geographic corridor selection
-export const RESIDENCE_STATION_LABEL = 'Which station is closest to where you live?';           // Label for local rail station selection
-export const BROWSER_LOCATION_TITLE = 'Optional browser location';                              // Section title for device geolocation
-export const BROWSER_LOCATION_PRIVACY = 'Optional: use your browser location to order only the visible controlled specialist entries. Your location is not stored or sent to LifeLink.'; // Privacy guarantee
-export const SPECIALTY_SEARCH_GUIDANCE = 'Free-text search matches specialties only. Use the Mumbai area and station filters below for where you live.'; // User search hint
-export const SPECIALIST_LOAD_ERROR_TITLE = 'We couldn’t load the specialist directory';          // Error title
-export const SPECIALIST_LOAD_ERROR_MESSAGE = 'Please check your connection and try again. Your filters will stay unchanged.'; // Error guidance
+export const RESIDENCE_CORRIDOR_LABEL = "Which part of Mumbai do you live in?"; // Label for geographic corridor selection
+export const RESIDENCE_STATION_LABEL =
+  "Which station is closest to where you live?"; // Label for local rail station selection
+export const BROWSER_LOCATION_TITLE = "Optional browser location"; // Section title for device geolocation
+export const BROWSER_LOCATION_PRIVACY =
+  "Optional: use your browser location to order only the visible controlled specialist entries. Your location is not stored or sent to LifeLink."; // Privacy guarantee
+export const SPECIALTY_SEARCH_GUIDANCE =
+  "Free-text search matches specialties only. Use the Mumbai area and station filters below for where you live."; // User search hint
+export const SPECIALIST_LOAD_ERROR_TITLE =
+  "We couldn’t load the specialist directory"; // Error title
+export const SPECIALIST_LOAD_ERROR_MESSAGE =
+  "Please check your connection and try again. Your filters will stay unchanged."; // Error guidance
 
 // Formats today's date in YYYY-MM-DD
 function getTodayDateString(): string {
   const d = new Date();
   const year = d.getFullYear();
-  const month = String(d.getMonth() + 1).padStart(2, '0');
-  const day = String(d.getDate()).padStart(2, '0');
+  const month = String(d.getMonth() + 1).padStart(2, "0");
+  const day = String(d.getDate()).padStart(2, "0");
   return `${year}-${month}-${day}`;
 }
 
@@ -75,8 +192,8 @@ function getTomorrowDateString(): string {
   const d = new Date();
   d.setDate(d.getDate() + 1);
   const year = d.getFullYear();
-  const month = String(d.getMonth() + 1).padStart(2, '0');
-  const day = String(d.getDate()).padStart(2, '0');
+  const month = String(d.getMonth() + 1).padStart(2, "0");
+  const day = String(d.getDate()).padStart(2, "0");
   return `${year}-${month}-${day}`;
 }
 
@@ -86,83 +203,102 @@ function getTomorrowDateString(): string {
 // view clinic locations on an interactive Leaflet canvas, and request appointments in real time.
 // =========================================================================================
 export const SpecialistFinder = () => {
-  const trpcUtils = trpc.useUtils();                                                            // Client cache invalidator
-  const [searchParams, setSearchParams] = useSearchParams();                                    // URL search params reader and writer
-  const initialSpecialty = searchParams.get('specialty') || ALL_FILTER;                          // Initialize specialty from URL query if present
-  const [specialty, setSpecialty] = useState(initialSpecialty);                                  // Active specialty filter state
+  const trpcUtils = trpc.useUtils(); // Client cache invalidator
+  const [searchParams, setSearchParams] = useSearchParams(); // URL search params reader and writer
+  const initialSpecialty = searchParams.get("specialty") || ALL_FILTER; // Initialize specialty from URL query if present
+  const [specialty, setSpecialty] = useState(initialSpecialty); // Active specialty filter state
 
   // Memoize filter object passed to tRPC query to avoid redundant network refetches
-  const discoveryFilters = useMemo(() => ({
-    city: 'Mumbai' as const,                                                                    // Locked to Mumbai clinical operational radius
-    specialty: specialty === ALL_FILTER ? undefined : specialty,                                // Filter by selected specialty
-  }), [specialty]);
+  const discoveryFilters = useMemo(
+    () => ({
+      city: "Mumbai" as const, // Locked to Mumbai clinical operational radius
+      specialty: specialty === ALL_FILTER ? undefined : specialty, // Filter by selected specialty
+    }),
+    [specialty]
+  );
 
-  const directoryQuery = trpc.patientDiscovery.list.useQuery(discoveryFilters);                 // Query to fetch doctors matching filters
-  const facetsQuery = trpc.patientDiscovery.facets.useQuery();                                  // Query to fetch available specialties and localities
-  const requestMutation = trpc.patientAppointment.request.useMutation();                       // Mutation to submit appointment booking request
-  const navigate = useNavigate();                                                               // Page navigation controller
+  const directoryQuery = trpc.patientDiscovery.list.useQuery(discoveryFilters); // Query to fetch doctors matching filters
+  const facetsQuery = trpc.patientDiscovery.facets.useQuery(); // Query to fetch available specialties and localities
+  const requestMutation = trpc.patientAppointment.request.useMutation(); // Mutation to submit appointment booking request
+  const navigate = useNavigate(); // Page navigation controller
 
   // Local booking form: Pure date selection (no browser time wheel) & half-hour slots
-  const [selectedDate, setSelectedDate] = useState(getTodayDateString());                       // Calendar date chosen by patient
-  const [selectedSlotId, setSelectedSlotId] = useState<string | null>(null);                   // Selected 30-minute slot (e.g. "10:00")
-  const [appointmentReason, setAppointmentReason] = useState('');                               // Chief complaint or medical reason
-  const [requestedDocId, setRequestedDocId] = useState<string | null>(null);                    // Tracks doctor successfully booked
-  const [processingId, setProcessingId] = useState<string | null>(null);                        // Disables request button while booking is in flight
-  const [selectedDocId, setSelectedDocId] = useState<string | null>(null);                      // Highlights selected doctor marker on map
-  const [requestError, setRequestError] = useState('');                                         // Inline error message for appointment validation
-  const [showSuccessPopup, setShowSuccessPopup] = useState(false);                              // Modal confirmation popup visibility
+  const [selectedDate, setSelectedDate] = useState(getTodayDateString()); // Calendar date chosen by patient
+  const [selectedSlotId, setSelectedSlotId] = useState<string | null>(null); // Selected 30-minute slot (e.g. "10:00")
+  const [appointmentReason, setAppointmentReason] = useState(""); // Chief complaint or medical reason
+  const [requestedDocId, setRequestedDocId] = useState<string | null>(null); // Tracks doctor successfully booked
+  const [processingId, setProcessingId] = useState<string | null>(null); // Disables request button while booking is in flight
+  const [selectedDocId, setSelectedDocId] = useState<string | null>(null); // Highlights selected doctor marker on map
+  const [requestError, setRequestError] = useState(""); // Inline error message for appointment validation
+  const [showSuccessPopup, setShowSuccessPopup] = useState(false); // Modal confirmation popup visibility
 
   // Full timestamp for backwards compatibility
-  const requestedAt = selectedSlotId ? `${selectedDate}T${selectedSlotId}` : selectedDate;
+  const requestedAt = selectedSlotId
+    ? `${selectedDate}T${selectedSlotId}`
+    : selectedDate;
 
   // Synchronize URL specialty parameter with component state
   useEffect(() => {
-    const requestedSpecialty = searchParams.get('specialty') || ALL_FILTER;
+    const requestedSpecialty = searchParams.get("specialty") || ALL_FILTER;
     if (requestedSpecialty !== specialty) setSpecialty(requestedSpecialty);
   }, [searchParams, specialty]);
 
   // Deselect doctor if filtered list no longer contains the currently selected doctor
   useEffect(() => {
-    if (selectedDocId && !directoryQuery.data?.some((doctor) => doctor.id === selectedDocId)) setSelectedDocId(null);
+    if (
+      selectedDocId &&
+      !directoryQuery.data?.some(doctor => doctor.id === selectedDocId)
+    )
+      setSelectedDocId(null);
   }, [directoryQuery.data, selectedDocId]);
 
   // Update specialty filter in both React state and URL query string
   const updateSpecialty = (nextSpecialty: string) => {
     setSpecialty(nextSpecialty);
-    setSearchParams((current) => {
-      const next = new URLSearchParams(current);
-      if (nextSpecialty === ALL_FILTER) next.delete('specialty');
-      else next.set('specialty', nextSpecialty);
-      return next;
-    }, { replace: true });
+    setSearchParams(
+      current => {
+        const next = new URLSearchParams(current);
+        if (nextSpecialty === ALL_FILTER) next.delete("specialty");
+        else next.set("specialty", nextSpecialty);
+        return next;
+      },
+      { replace: true }
+    );
   };
 
   const displayedDoctors = directoryQuery.data ?? [];
 
   // Guaranteed full list of specialties available for immediate dropdown rendering
   const availableSpecialties = useMemo(() => {
-    if (facetsQuery.data?.specialties && facetsQuery.data.specialties.length > 0) {
+    if (
+      facetsQuery.data?.specialties &&
+      facetsQuery.data.specialties.length > 0
+    ) {
       return facetsQuery.data.specialties;
     }
     return SYSTEM_DOCTOR_SPECIALTIES;
   }, [facetsQuery.data?.specialties]);
-  const targetDoctorId = selectedDocId || (directoryQuery.data?.[0]?.id ?? '');
+  const targetDoctorId = selectedDocId || (directoryQuery.data?.[0]?.id ?? "");
 
   // Doctor-scoped availability map: Record<doctorId, Record<date, { bookedSlots: string[]; slots: DoctorSlotAvailability[] }>>
   const [availabilityByDoctor, setAvailabilityByDoctor] = useState<
-    Record<string, Record<string, { bookedSlots: string[]; slots: DoctorSlotAvailability[] }>>
+    Record<
+      string,
+      Record<string, { bookedSlots: string[]; slots: DoctorSlotAvailability[] }>
+    >
   >({});
 
   // Query real-time availability for selected date and doctor
-  const availabilityQuery = trpc.patientAppointment.getDoctorAvailability.useQuery(
-    { doctorId: targetDoctorId, date: selectedDate },
-    { enabled: Boolean(targetDoctorId && selectedDate) }
-  );
+  const availabilityQuery =
+    trpc.patientAppointment.getDoctorAvailability.useQuery(
+      { doctorId: targetDoctorId, date: selectedDate },
+      { enabled: Boolean(targetDoctorId && selectedDate) }
+    );
 
   // Synchronize incoming query data into per-doctor state cache
   useEffect(() => {
     if (availabilityQuery.data && targetDoctorId && selectedDate) {
-      setAvailabilityByDoctor((prev) => ({
+      setAvailabilityByDoctor(prev => ({
         ...prev,
         [targetDoctorId]: {
           ...(prev[targetDoctorId] || {}),
@@ -173,49 +309,62 @@ export const SpecialistFinder = () => {
   }, [availabilityQuery.data, targetDoctorId, selectedDate]);
 
   // Read authoritative availability strictly for the active doctor and date
-  const currentDoctorAvailability = (targetDoctorId && availabilityByDoctor[targetDoctorId]?.[selectedDate])
-    ? availabilityByDoctor[targetDoctorId][selectedDate]
-    : availabilityQuery.data;
+  const currentDoctorAvailability =
+    targetDoctorId && availabilityByDoctor[targetDoctorId]?.[selectedDate]
+      ? availabilityByDoctor[targetDoctorId][selectedDate]
+      : availabilityQuery.data;
 
   const currentBookedSlots = currentDoctorAvailability?.bookedSlots ?? [];
   const currentSlots = currentDoctorAvailability?.slots ?? [];
 
   // Authoritative slot status calculation: AVAILABLE | BOOKED | PAST | UNAVAILABLE
   const getSlotStatus = (slotStartTime: string): ClinicSlotStatus => {
-    const backendSlot = currentSlots.find((s) => s.startTime === slotStartTime || s.id === slotStartTime);
+    const backendSlot = currentSlots.find(
+      s => s.startTime === slotStartTime || s.id === slotStartTime
+    );
     if (backendSlot) return backendSlot.status;
 
-    const slotTimestamp = new Date(`${selectedDate}T${slotStartTime}:00`).getTime();
+    const slotTimestamp = new Date(
+      `${selectedDate}T${slotStartTime}:00`
+    ).getTime();
     if (!isNaN(slotTimestamp) && slotTimestamp <= Date.now()) return "PAST";
-    const isBooked = currentBookedSlots.some((b) => {
+    const isBooked = currentBookedSlots.some(b => {
       const bookedTimestamp = new Date(b).getTime();
       return Math.abs(bookedTimestamp - slotTimestamp) < 29 * 60 * 1000;
     });
     return isBooked ? "BOOKED" : "AVAILABLE";
   };
 
-  const isSlotBooked = (slotStartTime: string) => getSlotStatus(slotStartTime) === "BOOKED";
-  const isSlotPast = (slotStartTime: string) => getSlotStatus(slotStartTime) === "PAST";
-  const isSlotAvailable = (slotStartTime: string) => getSlotStatus(slotStartTime) === "AVAILABLE";
+  const isSlotBooked = (slotStartTime: string) =>
+    getSlotStatus(slotStartTime) === "BOOKED";
+  const isSlotPast = (slotStartTime: string) =>
+    getSlotStatus(slotStartTime) === "PAST";
+  const isSlotAvailable = (slotStartTime: string) =>
+    getSlotStatus(slotStartTime) === "AVAILABLE";
 
   // Select a doctor on both list and map
-  const selectDoctor = useCallback((doctorId: string) => {
-    setSelectedDocId(doctorId);
-    setRequestError('');
-    // If the currently selected slot is booked or past for this newly selected doctor, clear it
-    const docSlots = availabilityByDoctor[doctorId]?.[selectedDate]?.slots;
-    if (docSlots && selectedSlotId) {
-      const targetSlot = docSlots.find((s) => s.id === selectedSlotId || s.startTime === selectedSlotId);
-      if (targetSlot && !targetSlot.isAvailable) {
-        setSelectedSlotId(null);
+  const selectDoctor = useCallback(
+    (doctorId: string) => {
+      setSelectedDocId(doctorId);
+      setRequestError("");
+      // If the currently selected slot is booked or past for this newly selected doctor, clear it
+      const docSlots = availabilityByDoctor[doctorId]?.[selectedDate]?.slots;
+      if (docSlots && selectedSlotId) {
+        const targetSlot = docSlots.find(
+          s => s.id === selectedSlotId || s.startTime === selectedSlotId
+        );
+        if (targetSlot && !targetSlot.isAvailable) {
+          setSelectedSlotId(null);
+        }
       }
-    }
-  }, [availabilityByDoctor, selectedDate, selectedSlotId]);
+    },
+    [availabilityByDoctor, selectedDate, selectedSlotId]
+  );
 
   // Clear all filters
   const clearFilters = () => {
     updateSpecialty(ALL_FILTER);
-    setRequestError('');
+    setRequestError("");
   };
 
   // Refetch directory queries on error retry
@@ -228,50 +377,67 @@ export const SpecialistFinder = () => {
   const handleRequest = async (doctorId: string, event: React.MouseEvent) => {
     event.stopPropagation();
     setSelectedDocId(doctorId);
-    window.scrollTo({ top: 0, behavior: 'smooth' });
+    window.scrollTo({ top: 0, behavior: "smooth" });
 
     if (!selectedDate) {
-      setRequestError('Please select a date for your appointment.');
+      setRequestError("Please select a date for your appointment.");
       return;
     }
 
     if (!selectedSlotId) {
-      setRequestError('Please select an available 30-minute appointment time slot.');
+      setRequestError(
+        "Please select an available 30-minute appointment time slot."
+      );
       return;
     }
 
     const bookingDate = new Date(`${selectedDate}T${selectedSlotId}:00`);
     if (isNaN(bookingDate.getTime()) || bookingDate.getTime() <= Date.now()) {
-      setRequestError('Invalid date or time. Please select a future date and time for your appointment.');
+      setRequestError(
+        "Invalid date or time. Please select a future date and time for your appointment."
+      );
       return;
     }
 
     if (appointmentReason.trim().length < 3) {
-      setRequestError('Briefly tell the assigned specialist why you are requesting this appointment.');
+      setRequestError(
+        "Briefly tell the assigned specialist why you are requesting this appointment."
+      );
       return;
     }
 
     if (isSlotBooked(selectedSlotId)) {
-      setRequestError('This appointment time slot is already booked for this doctor. Please select another time slot.');
+      setRequestError(
+        "This appointment time slot is already booked for this doctor. Please select another time slot."
+      );
       return;
     }
 
     setProcessingId(doctorId);
-    setRequestError('');
+    setRequestError("");
     try {
-      await requestMutation.mutateAsync({ doctorId, scheduledAt: bookingDate, reason: appointmentReason.trim() });
+      await requestMutation.mutateAsync({
+        doctorId,
+        scheduledAt: bookingDate,
+        reason: appointmentReason.trim(),
+      });
       await trpcUtils.patientAppointment.list.invalidate();
       await trpcUtils.patientDashboard.summary.invalidate();
       await trpcUtils.patientNotification.list.invalidate();
       await trpcUtils.patientAppointment.getDoctorAvailability.invalidate();
       setRequestedDocId(doctorId);
       setShowSuccessPopup(true);
-      window.scrollTo({ top: 0, behavior: 'smooth' });
+      window.scrollTo({ top: 0, behavior: "smooth" });
     } catch (error: unknown) {
       await trpcUtils.patientAppointment.getDoctorAvailability.invalidate();
       setSelectedSlotId(null);
-      setRequestError(formatUserFriendlyError(error, 'This appointment slot is no longer available. Please select another slot.'));
-      window.scrollTo({ top: 0, behavior: 'smooth' });
+      setRequestError(
+        formatUserFriendlyError(
+          error,
+          "This appointment slot is no longer available. Please select another slot."
+        )
+      );
+      window.scrollTo({ top: 0, behavior: "smooth" });
     } finally {
       setProcessingId(null);
     }
@@ -279,7 +445,7 @@ export const SpecialistFinder = () => {
 
   const handleDateChange = (val: string) => {
     setSelectedDate(val);
-    setRequestError('');
+    setRequestError("");
     if (selectedSlotId) {
       const newSlotTime = new Date(`${val}T${selectedSlotId}:00`).getTime();
       if (newSlotTime <= Date.now()) {
@@ -290,18 +456,21 @@ export const SpecialistFinder = () => {
 
   const handleSlotSelect = (slotId: string) => {
     setSelectedSlotId(slotId);
-    setRequestError('');
+    setRequestError("");
   };
 
   useEffect(() => {
     if (showSuccessPopup) {
-      window.scrollTo({ top: 0, behavior: 'smooth' });
+      window.scrollTo({ top: 0, behavior: "smooth" });
     }
   }, [showSuccessPopup]);
 
   const activeFilterCount = [specialty !== ALL_FILTER].filter(Boolean).length;
-  const selectedSlotDef = CLINIC_APPOINTMENT_SLOTS.find((s) => s.id === selectedSlotId);
-  const activeDoctor = displayedDoctors.find((d) => d.id === targetDoctorId) || displayedDoctors[0];
+  const selectedSlotDef = CLINIC_APPOINTMENT_SLOTS.find(
+    s => s.id === selectedSlotId
+  );
+  const activeDoctor =
+    displayedDoctors.find(d => d.id === targetDoctorId) || displayedDoctors[0];
 
   // Clean branded loading indicator: appears strictly while actual data fetching is active and vanishes immediately when ready
   if (directoryQuery.isLoading || facetsQuery.isLoading) {
@@ -317,61 +486,170 @@ export const SpecialistFinder = () => {
   }
 
   // Error boundary state
-  if (directoryQuery.isError || facetsQuery.isError) return (
-    <div className="container" style={{ padding: 0 }}>
-      <div role="alert"><Card variant="solid" className="discovery-load-error">
-        <div className="discovery-load-error-icon"><AlertCircle size={24} aria-hidden="true" /></div>
-        <div>
-          <h1>{SPECIALIST_LOAD_ERROR_TITLE}</h1>
-          <p className="caption">{SPECIALIST_LOAD_ERROR_MESSAGE}</p>
-          <Button type="button" variant="primary" onClick={retryDirectory} disabled={directoryQuery.isFetching || facetsQuery.isFetching}>
-            <RefreshCw size={16} aria-hidden="true" /> {directoryQuery.isFetching || facetsQuery.isFetching ? 'Trying again…' : 'Try again'}
-          </Button>
+  if (directoryQuery.isError || facetsQuery.isError)
+    return (
+      <div className="container" style={{ padding: 0 }}>
+        <div role="alert">
+          <Card variant="solid" className="discovery-load-error">
+            <div className="discovery-load-error-icon">
+              <AlertCircle size={24} aria-hidden="true" />
+            </div>
+            <div>
+              <h1>{SPECIALIST_LOAD_ERROR_TITLE}</h1>
+              <p className="caption">{SPECIALIST_LOAD_ERROR_MESSAGE}</p>
+              <Button
+                type="button"
+                variant="primary"
+                onClick={retryDirectory}
+                disabled={directoryQuery.isFetching || facetsQuery.isFetching}
+              >
+                <RefreshCw size={16} aria-hidden="true" />{" "}
+                {directoryQuery.isFetching || facetsQuery.isFetching
+                  ? "Trying again…"
+                  : "Try again"}
+              </Button>
+            </div>
+          </Card>
         </div>
-      </Card></div>
-    </div>
-  );
+      </div>
+    );
 
   const facets = facetsQuery.data;
 
   return (
-    <div className="container" style={{ padding: 0, display: 'flex', flexDirection: 'column', gap: '32px' }}>
+    <div
+      className="container"
+      style={{
+        padding: 0,
+        display: "flex",
+        flexDirection: "column",
+        gap: "32px",
+      }}
+    >
       {/* Page header */}
-      <header style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: '16px', width: '100%', minWidth: 0, marginBottom: 0 }}>
-        <div style={{ display: 'flex', alignItems: 'center', gap: '12px', flex: '1 1 min(280px, 100%)', minWidth: 0 }}>
-          <div style={{ width: 44, height: 44, borderRadius: 'var(--border-radius-sm)', background: 'var(--color-primary-muted)', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
+      <header
+        style={{
+          display: "flex",
+          justifyContent: "space-between",
+          alignItems: "center",
+          flexWrap: "wrap",
+          gap: "16px",
+          width: "100%",
+          minWidth: 0,
+          marginBottom: 0,
+        }}
+      >
+        <div
+          style={{
+            display: "flex",
+            alignItems: "center",
+            gap: "12px",
+            flex: "1 1 min(280px, 100%)",
+            minWidth: 0,
+          }}
+        >
+          <div
+            style={{
+              width: 44,
+              height: 44,
+              borderRadius: "var(--border-radius-sm)",
+              background: "var(--color-primary-muted)",
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "center",
+              flexShrink: 0,
+            }}
+          >
             <UserCheck size={24} color="var(--color-primary)" />
           </div>
-          <div style={{ minWidth: 0, flex: '1 1 auto' }}>
-            <h1 style={{ margin: 0, fontWeight: 700, letterSpacing: '-0.02em', color: 'var(--color-text)', fontSize: 'clamp(1.4rem, 4.5vw, 2rem)', lineHeight: 1.25 }}>Specialist Finder</h1>
-            <p className="caption" style={{ color: 'var(--color-text-muted)', margin: '4px 0 0' }}>Browse available Mumbai specialists by clinical specialty, view clinics on the live map, and request appointments in real time.</p>
+          <div style={{ minWidth: 0, flex: "1 1 auto" }}>
+            <h1
+              style={{
+                margin: 0,
+                fontWeight: 700,
+                letterSpacing: "-0.02em",
+                color: "var(--color-text)",
+                fontSize: "clamp(1.4rem, 4.5vw, 2rem)",
+                lineHeight: 1.25,
+              }}
+            >
+              Specialist Finder
+            </h1>
+            <p
+              className="caption"
+              style={{ color: "var(--color-text-muted)", margin: "4px 0 0" }}
+            >
+              Browse available Mumbai specialists by clinical specialty, view
+              clinics on the live map, and request appointments in real time.
+            </p>
           </div>
         </div>
 
         {/* Real-time sync badge: appears only during in-flight background query refetching */}
         {directoryQuery.isFetching && !directoryQuery.isLoading && (
-          <div className="badge badge-neutral" style={{ display: 'inline-flex', alignItems: 'center', gap: '6px', flexShrink: 0 }}>
+          <div
+            className="badge badge-neutral"
+            style={{
+              display: "inline-flex",
+              alignItems: "center",
+              gap: "6px",
+              flexShrink: 0,
+            }}
+          >
             <RefreshCw size={12} className="animate-spin" /> Updating live…
           </div>
         )}
       </header>
 
       {/* Filter and appointment parameters card */}
-      <Card variant="default" className="discovery-refinement-card" style={{ width: '100%', minWidth: 0, boxSizing: 'border-box' }}>
-        <div className="discovery-refinement-content" style={{ display: 'flex', flexDirection: 'column', gap: '20px', width: '100%', minWidth: 0 }}>
+      <Card
+        variant="default"
+        className="discovery-refinement-card"
+        style={{ width: "100%", minWidth: 0, boxSizing: "border-box" }}
+      >
+        <div
+          className="discovery-refinement-content"
+          style={{
+            display: "flex",
+            flexDirection: "column",
+            gap: "20px",
+            width: "100%",
+            minWidth: 0,
+          }}
+        >
           {/* Specialty dropdown filter */}
-          <div className="discovery-filter-grid" style={{ display: 'flex', flexDirection: 'column', width: '100%', minWidth: 0 }}>
-            <div style={{ display: 'flex', flexDirection: 'column', width: '100%', minWidth: 0 }}>
-              <label className="discovery-filter-label" htmlFor="specialty-filter">Select Medical Specialty</label>
+          <div
+            className="discovery-filter-grid"
+            style={{
+              display: "flex",
+              flexDirection: "column",
+              width: "100%",
+              minWidth: 0,
+            }}
+          >
+            <div
+              style={{
+                display: "flex",
+                flexDirection: "column",
+                width: "100%",
+                minWidth: 0,
+              }}
+            >
+              <label
+                className="discovery-filter-label"
+                htmlFor="specialty-filter"
+              >
+                Select Medical Specialty
+              </label>
               <select
                 id="specialty-filter"
                 className="discovery-filter-select"
                 value={specialty}
-                onChange={(event) => updateSpecialty(event.target.value)}
+                onChange={event => updateSpecialty(event.target.value)}
                 aria-label="Select Medical Specialty"
               >
                 <option value={ALL_FILTER}>All specialties</option>
-                {availableSpecialties.map((value) => (
+                {availableSpecialties.map(value => (
                   <option key={value} value={value}>
                     {value}
                   </option>
@@ -381,26 +659,52 @@ export const SpecialistFinder = () => {
           </div>
 
           {/* Appointment date and complaint reason input fields */}
-          <div className="discovery-request-grid" style={{ width: '100%', minWidth: 0 }}>
-            <div className="discovery-request-field" style={{ width: '100%', minWidth: 0, boxSizing: 'border-box' }}>
+          <div
+            className="discovery-request-grid"
+            style={{ width: "100%", minWidth: 0 }}
+          >
+            <div
+              className="discovery-request-field"
+              style={{ width: "100%", minWidth: 0, boxSizing: "border-box" }}
+            >
               {/* Date Header with Custom Shortcuts */}
-              <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', flexWrap: 'wrap', gap: '8px', marginBottom: '8px', width: '100%' }}>
-                <label className="discovery-filter-label" htmlFor="requested-visit-at" style={{ margin: 0 }}>
+              <div
+                style={{
+                  display: "flex",
+                  alignItems: "center",
+                  justifyContent: "space-between",
+                  flexWrap: "wrap",
+                  gap: "8px",
+                  marginBottom: "8px",
+                  width: "100%",
+                }}
+              >
+                <label
+                  className="discovery-filter-label"
+                  htmlFor="requested-visit-at"
+                  style={{ margin: 0 }}
+                >
                   Appointment Date (Customizable)
                 </label>
-                <div style={{ display: 'flex', gap: '6px', flexShrink: 0 }}>
+                <div style={{ display: "flex", gap: "6px", flexShrink: 0 }}>
                   <button
                     type="button"
                     onClick={() => handleDateChange(getTodayDateString())}
                     style={{
-                      padding: '4px 10px',
-                      fontSize: '0.78rem',
-                      borderRadius: '6px',
-                      border: '1px solid var(--color-border)',
-                      background: selectedDate === getTodayDateString() ? 'var(--color-primary-muted)' : 'var(--color-surface-white)',
-                      color: selectedDate === getTodayDateString() ? 'var(--color-primary)' : 'var(--color-text)',
+                      padding: "4px 10px",
+                      fontSize: "0.78rem",
+                      borderRadius: "6px",
+                      border: "1px solid var(--color-border)",
+                      background:
+                        selectedDate === getTodayDateString()
+                          ? "var(--color-primary-muted)"
+                          : "var(--color-surface-white)",
+                      color:
+                        selectedDate === getTodayDateString()
+                          ? "var(--color-primary)"
+                          : "var(--color-text)",
                       fontWeight: 600,
-                      cursor: 'pointer',
+                      cursor: "pointer",
                     }}
                   >
                     Today
@@ -409,14 +713,20 @@ export const SpecialistFinder = () => {
                     type="button"
                     onClick={() => handleDateChange(getTomorrowDateString())}
                     style={{
-                      padding: '4px 10px',
-                      fontSize: '0.78rem',
-                      borderRadius: '6px',
-                      border: '1px solid var(--color-border)',
-                      background: selectedDate === getTomorrowDateString() ? 'var(--color-primary-muted)' : 'var(--color-surface-white)',
-                      color: selectedDate === getTomorrowDateString() ? 'var(--color-primary)' : 'var(--color-text)',
+                      padding: "4px 10px",
+                      fontSize: "0.78rem",
+                      borderRadius: "6px",
+                      border: "1px solid var(--color-border)",
+                      background:
+                        selectedDate === getTomorrowDateString()
+                          ? "var(--color-primary-muted)"
+                          : "var(--color-surface-white)",
+                      color:
+                        selectedDate === getTomorrowDateString()
+                          ? "var(--color-primary)"
+                          : "var(--color-text)",
                       fontWeight: 600,
-                      cursor: 'pointer',
+                      cursor: "pointer",
                     }}
                   >
                     Tomorrow
@@ -430,44 +740,99 @@ export const SpecialistFinder = () => {
                 type="date"
                 min={getTodayDateString()}
                 value={selectedDate}
-                onChange={(event) => handleDateChange(event.target.value)}
-                style={{ width: '100%', minWidth: 0, boxSizing: 'border-box' }}
+                onChange={event => handleDateChange(event.target.value)}
+                style={{ width: "100%", minWidth: 0, boxSizing: "border-box" }}
               />
 
               {/* Available 30-Minute Consultation Slots */}
-              <div style={{ marginTop: '16px', width: '100%', minWidth: 0 }}>
+              <div style={{ marginTop: "16px", width: "100%", minWidth: 0 }}>
                 {selectedSlotDef && (
-                  <div style={{ display: 'flex', justifyContent: 'flex-end', marginBottom: '10px' }}>
-                    <Badge status="success">
-                      ✓ {selectedSlotDef.label}
-                    </Badge>
+                  <div
+                    style={{
+                      display: "flex",
+                      justifyContent: "flex-end",
+                      marginBottom: "10px",
+                    }}
+                  >
+                    <Badge status="success">✓ {selectedSlotDef.label}</Badge>
                   </div>
                 )}
 
                 {/* Active Doctor Schedule Banner */}
                 {activeDoctor && (
-                  <div style={{ display: 'flex', alignItems: 'center', padding: '8px 12px', background: 'var(--color-surface-subtle)', borderRadius: 'var(--border-radius-sm)', marginBottom: '12px', border: '1px solid var(--color-border)' }}>
-                    <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
-                      <span style={{ fontSize: '0.72rem', textTransform: 'uppercase', letterSpacing: '0.04em', color: 'var(--color-primary)', fontWeight: 700 }}>
+                  <div
+                    style={{
+                      display: "flex",
+                      alignItems: "center",
+                      padding: "8px 12px",
+                      background: "var(--color-surface-subtle)",
+                      borderRadius: "var(--border-radius-sm)",
+                      marginBottom: "12px",
+                      border: "1px solid var(--color-border)",
+                    }}
+                  >
+                    <div
+                      style={{
+                        display: "flex",
+                        alignItems: "center",
+                        gap: "6px",
+                      }}
+                    >
+                      <span
+                        style={{
+                          fontSize: "0.72rem",
+                          textTransform: "uppercase",
+                          letterSpacing: "0.04em",
+                          color: "var(--color-primary)",
+                          fontWeight: 700,
+                        }}
+                      >
                         Viewing Schedule:
                       </span>
-                      <span style={{ fontSize: '0.86rem', fontWeight: 700, color: 'var(--color-text)' }}>
-                        {activeDoctor.name.replace(/\s*\([^)]*\)\s*$/, '').trim()}
+                      <span
+                        style={{
+                          fontSize: "0.86rem",
+                          fontWeight: 700,
+                          color: "var(--color-text)",
+                        }}
+                      >
+                        {activeDoctor.name
+                          .replace(/\s*\([^)]*\)\s*$/, "")
+                          .trim()}
                       </span>
                     </div>
                   </div>
                 )}
 
                 {/* Morning & Afternoon Session: 10:00 to 15:00 */}
-                <div style={{ marginBottom: '14px', width: '100%', minWidth: 0 }}>
-                  <div style={{ display: 'flex', alignItems: 'center', gap: '6px', marginBottom: '8px' }}>
+                <div
+                  style={{ marginBottom: "14px", width: "100%", minWidth: 0 }}
+                >
+                  <div
+                    style={{
+                      display: "flex",
+                      alignItems: "center",
+                      gap: "6px",
+                      marginBottom: "8px",
+                    }}
+                  >
                     <Sun size={14} color="var(--swiss-amber-text)" />
-                    <span style={{ fontSize: '0.76rem', fontWeight: 700, color: 'var(--swiss-amber-text)', textTransform: 'uppercase', letterSpacing: '0.04em' }}>
+                    <span
+                      style={{
+                        fontSize: "0.76rem",
+                        fontWeight: 700,
+                        color: "var(--swiss-amber-text)",
+                        textTransform: "uppercase",
+                        letterSpacing: "0.04em",
+                      }}
+                    >
                       Morning & Afternoon Session (10:00 AM – 3:00 PM)
                     </span>
                   </div>
                   <div className="discovery-slots-container">
-                    {CLINIC_APPOINTMENT_SLOTS.filter((s) => s.session === 'morning').map((slot) => {
+                    {CLINIC_APPOINTMENT_SLOTS.filter(
+                      s => s.session === "morning"
+                    ).map(slot => {
                       const isPast = isSlotPast(slot.startTime);
                       const isBooked = isSlotBooked(slot.startTime);
                       const isUnavailable = isPast || isBooked;
@@ -481,37 +846,45 @@ export const SpecialistFinder = () => {
                           disabled={isUnavailable}
                           onClick={() => handleSlotSelect(slot.id)}
                           style={{
-                            boxSizing: 'border-box',
-                            padding: '9px 10px',
-                            borderRadius: 'var(--border-radius-sm)',
-                            fontSize: '0.80rem',
+                            boxSizing: "border-box",
+                            padding: "9px 10px",
+                            borderRadius: "var(--border-radius-sm)",
+                            fontSize: "0.80rem",
                             fontWeight: 600,
-                            textAlign: 'center',
-                            border: '1px solid',
+                            textAlign: "center",
+                            border: "1px solid",
                             borderColor: isSelected
-                              ? 'var(--color-primary)'
+                              ? "var(--color-primary)"
                               : isUnavailable
-                              ? 'var(--color-border)'
-                              : 'var(--color-border)',
+                                ? "var(--color-border)"
+                                : "var(--color-border)",
                             background: isSelected
-                              ? 'var(--color-primary)'
+                              ? "var(--color-primary)"
                               : isUnavailable
-                              ? 'var(--color-surface-subtle)'
-                              : 'var(--color-surface-white)',
+                                ? "var(--color-surface-subtle)"
+                                : "var(--color-surface-white)",
                             color: isSelected
-                              ? '#FFFFFF'
+                              ? "#FFFFFF"
                               : isUnavailable
-                              ? 'var(--color-text-muted)'
-                              : 'var(--color-text)',
-                            cursor: isUnavailable ? 'not-allowed' : 'pointer',
+                                ? "var(--color-text-muted)"
+                                : "var(--color-text)",
+                            cursor: isUnavailable ? "not-allowed" : "pointer",
                             opacity: isUnavailable ? 0.55 : 1,
-                            textDecoration: isUnavailable ? 'line-through' : 'none',
-                            boxShadow: 'none',
-                            transition: 'all 0.12s ease',
+                            textDecoration: isUnavailable
+                              ? "line-through"
+                              : "none",
+                            boxShadow: "none",
+                            transition: "all 0.12s ease",
                           }}
-                          title={isBooked ? 'Slot already booked' : isPast ? 'Past time' : `Book ${slot.label}`}
+                          title={
+                            isBooked
+                              ? "Slot already booked"
+                              : isPast
+                                ? "Past time"
+                                : `Book ${slot.label}`
+                          }
                         >
-                          {slot.label} {isBooked ? '(Booked)' : ''}
+                          {slot.label} {isBooked ? "(Booked)" : ""}
                         </button>
                       );
                     })}
@@ -519,15 +892,32 @@ export const SpecialistFinder = () => {
                 </div>
 
                 {/* Evening Session: 19:00 to 22:00 */}
-                <div style={{ width: '100%', minWidth: 0 }}>
-                  <div style={{ display: 'flex', alignItems: 'center', gap: '6px', marginBottom: '8px' }}>
+                <div style={{ width: "100%", minWidth: 0 }}>
+                  <div
+                    style={{
+                      display: "flex",
+                      alignItems: "center",
+                      gap: "6px",
+                      marginBottom: "8px",
+                    }}
+                  >
                     <Moon size={14} color="var(--color-accent)" />
-                    <span style={{ fontSize: '0.76rem', fontWeight: 700, color: 'var(--color-accent)', textTransform: 'uppercase', letterSpacing: '0.04em' }}>
+                    <span
+                      style={{
+                        fontSize: "0.76rem",
+                        fontWeight: 700,
+                        color: "var(--color-accent)",
+                        textTransform: "uppercase",
+                        letterSpacing: "0.04em",
+                      }}
+                    >
                       Evening Session (7:00 PM – 10:00 PM)
                     </span>
                   </div>
                   <div className="discovery-slots-container">
-                    {CLINIC_APPOINTMENT_SLOTS.filter((s) => s.session === 'evening').map((slot) => {
+                    {CLINIC_APPOINTMENT_SLOTS.filter(
+                      s => s.session === "evening"
+                    ).map(slot => {
                       const isPast = isSlotPast(slot.startTime);
                       const isBooked = isSlotBooked(slot.startTime);
                       const isUnavailable = isPast || isBooked;
@@ -541,37 +931,45 @@ export const SpecialistFinder = () => {
                           disabled={isUnavailable}
                           onClick={() => handleSlotSelect(slot.id)}
                           style={{
-                            boxSizing: 'border-box',
-                            padding: '9px 10px',
-                            borderRadius: 'var(--border-radius-sm)',
-                            fontSize: '0.80rem',
+                            boxSizing: "border-box",
+                            padding: "9px 10px",
+                            borderRadius: "var(--border-radius-sm)",
+                            fontSize: "0.80rem",
                             fontWeight: 600,
-                            textAlign: 'center',
-                            border: '1px solid',
+                            textAlign: "center",
+                            border: "1px solid",
                             borderColor: isSelected
-                              ? 'var(--color-primary)'
+                              ? "var(--color-primary)"
                               : isUnavailable
-                              ? 'var(--color-border)'
-                              : 'var(--color-border)',
+                                ? "var(--color-border)"
+                                : "var(--color-border)",
                             background: isSelected
-                              ? 'var(--color-primary)'
+                              ? "var(--color-primary)"
                               : isUnavailable
-                              ? 'var(--color-surface-subtle)'
-                              : 'var(--color-surface-white)',
+                                ? "var(--color-surface-subtle)"
+                                : "var(--color-surface-white)",
                             color: isSelected
-                              ? '#FFFFFF'
+                              ? "#FFFFFF"
                               : isUnavailable
-                              ? 'var(--color-text-muted)'
-                              : 'var(--color-text)',
-                            cursor: isUnavailable ? 'not-allowed' : 'pointer',
+                                ? "var(--color-text-muted)"
+                                : "var(--color-text)",
+                            cursor: isUnavailable ? "not-allowed" : "pointer",
                             opacity: isUnavailable ? 0.55 : 1,
-                            textDecoration: isUnavailable ? 'line-through' : 'none',
-                            boxShadow: 'none',
-                            transition: 'all 0.12s ease',
+                            textDecoration: isUnavailable
+                              ? "line-through"
+                              : "none",
+                            boxShadow: "none",
+                            transition: "all 0.12s ease",
                           }}
-                          title={isBooked ? 'Slot already booked' : isPast ? 'Past time' : `Book ${slot.label}`}
+                          title={
+                            isBooked
+                              ? "Slot already booked"
+                              : isPast
+                                ? "Past time"
+                                : `Book ${slot.label}`
+                          }
                         >
-                          {slot.label} {isBooked ? '(Booked)' : ''}
+                          {slot.label} {isBooked ? "(Booked)" : ""}
                         </button>
                       );
                     })}
@@ -580,31 +978,50 @@ export const SpecialistFinder = () => {
               </div>
 
               {selectedSlotDef ? (
-                <p className="caption" style={{ marginTop: '10px', color: 'var(--color-primary)', fontWeight: 600 }}>
+                <p
+                  className="caption"
+                  style={{
+                    marginTop: "10px",
+                    color: "var(--color-primary)",
+                    fontWeight: 600,
+                  }}
+                >
                   Selected: {selectedDate} at {selectedSlotDef.label}
                 </p>
               ) : (
-                <p className="caption" style={{ marginTop: '10px' }}>
+                <p className="caption" style={{ marginTop: "10px" }}>
                   Please click an available 30-minute consultation slot above.
                 </p>
               )}
 
               {requestError && (
-                <ValidationMessage message={requestError} type="error" style={{ marginTop: '8px' }} />
+                <ValidationMessage
+                  message={requestError}
+                  type="error"
+                  style={{ marginTop: "8px" }}
+                />
               )}
             </div>
 
             <div className="discovery-request-field discovery-appointment-reason">
-              <label className="discovery-filter-label" htmlFor="appointment-reason">Reason for this appointment</label>
+              <label
+                className="discovery-filter-label"
+                htmlFor="appointment-reason"
+              >
+                Reason for this appointment
+              </label>
               <textarea
                 id="appointment-reason"
                 value={appointmentReason}
-                onChange={(event) => setAppointmentReason(event.target.value)}
+                onChange={event => setAppointmentReason(event.target.value)}
                 maxLength={1000}
                 rows={4}
                 placeholder="Briefly describe what you would like the specialist to review."
               />
-              <p className="caption">This reason is visible only to you and the assigned clinician workspace.</p>
+              <p className="caption">
+                This reason is visible only to you and the assigned clinician
+                workspace.
+              </p>
             </div>
           </div>
         </div>
@@ -617,7 +1034,26 @@ export const SpecialistFinder = () => {
           <Card variant="default" className="directory-map-card">
             <div className="flex items-center gap-2 mb-3">
               <Route size={20} color="var(--color-accent)" />
-              <div><h2 style={{ margin: 0, fontSize: '1.2rem', fontWeight: 700, letterSpacing: '-0.02em', color: 'var(--color-text)' }}>Mumbai Specialists Live Map</h2><p className="caption" style={{ color: 'var(--color-text-muted)' }}>Geographically locked to Mumbai Metropolitan Region (MMR). High-speed live clinic locations.</p></div>
+              <div>
+                <h2
+                  style={{
+                    margin: 0,
+                    fontSize: "1.2rem",
+                    fontWeight: 700,
+                    letterSpacing: "-0.02em",
+                    color: "var(--color-text)",
+                  }}
+                >
+                  Mumbai Specialists Live Map
+                </h2>
+                <p
+                  className="caption"
+                  style={{ color: "var(--color-text-muted)" }}
+                >
+                  Geographically locked to Mumbai Metropolitan Region (MMR).
+                  High-speed live clinic locations.
+                </p>
+              </div>
             </div>
             <MumbaiDoctorMap
               doctors={displayedDoctors}
@@ -631,8 +1067,22 @@ export const SpecialistFinder = () => {
         {/* Directory heading below map */}
         <div className="discovery-results-heading">
           <div>
-            <h2 style={{ fontSize: '1.4rem', margin: 0, fontWeight: 700, letterSpacing: '-0.02em', color: 'var(--color-text)' }}>Mumbai Specialist Directory</h2>
-            <p className="caption" style={{ color: 'var(--color-text-muted)' }}>{displayedDoctors.length} {displayedDoctors.length === 1 ? 'specialist' : 'specialists'} available in Mumbai.</p>
+            <h2
+              style={{
+                fontSize: "1.4rem",
+                margin: 0,
+                fontWeight: 700,
+                letterSpacing: "-0.02em",
+                color: "var(--color-text)",
+              }}
+            >
+              Mumbai Specialist Directory
+            </h2>
+            <p className="caption" style={{ color: "var(--color-text-muted)" }}>
+              {displayedDoctors.length}{" "}
+              {displayedDoctors.length === 1 ? "specialist" : "specialists"}{" "}
+              available in Mumbai.
+            </p>
           </div>
           <Badge status="neutral">Live Directory</Badge>
         </div>
@@ -640,60 +1090,164 @@ export const SpecialistFinder = () => {
         {/* Full-width doctor card grid */}
         <section className="discovery-cards-section">
           <div className="responsive-list-grid discovery-full-grid">
-            {displayedDoctors.map((doctor) => {
+            {displayedDoctors.map(doctor => {
               const isSelected = selectedDocId === doctor.id;
               return (
-                  <Card key={doctor.id} variant="default" interactive selected={isSelected} className="h-full flex-col justify-between" style={{ padding: '24px 26px', borderRadius: 'var(--border-radius-card)' }} onClick={() => selectDoctor(doctor.id)}>
-                    <div>
-                      <div className="flex justify-between items-start mb-2">
-                        <div>
-                          <h3 style={{ margin: 0, color: 'var(--color-text)', fontWeight: 700, letterSpacing: '-0.02em', fontSize: '1.1rem' }}>{doctor.name}</h3>
-                          <p style={{ color: 'var(--color-primary)', fontWeight: 700, margin: '2px 0 0 0', fontSize: '0.9rem' }}>{doctor.specialty}</p>
-                        </div>
-                        <Badge status="neutral">Controlled directory</Badge>
-                      </div>
-                      <div className="flex-col gap-1 mt-2">
-                        <div className="caption flex items-center gap-1" style={{ color: 'var(--color-text-muted)' }}><Building size={14} /> {doctor.hospital}</div>
-                        <div className="caption flex items-center gap-1" style={{ color: 'var(--color-text-muted)' }}><MapPin size={14} /> {doctor.locality}, {doctor.city}</div>
-                        <div className="caption flex items-center gap-1" style={{ color: 'var(--color-text-muted)' }}><Clock size={14} /> OPD Hours: 10:00 AM – 7:00 PM • Mon – Sat</div>
-                      </div>
-                    </div>
-                    <div style={{ marginTop: 'var(--spacing-4)', paddingTop: 'var(--spacing-3)', borderTop: '1px solid var(--color-border)' }}>
-                      {requestedDocId === doctor.id ? (
-                        <Button variant="secondary" className="w-full" disabled>Requested!</Button>
-                      ) : (
-                        <Button
-                          variant="primary"
-                          className="w-full"
-                          onClick={(event) => handleRequest(doctor.id, event)}
-                          disabled={processingId === doctor.id}
-                          aria-label={`Request appointment with ${doctor.name}`}
+                <Card
+                  key={doctor.id}
+                  variant="default"
+                  interactive
+                  selected={isSelected}
+                  className="h-full flex-col justify-between"
+                  style={{
+                    padding: "24px 26px",
+                    borderRadius: "var(--border-radius-card)",
+                  }}
+                  onClick={() => selectDoctor(doctor.id)}
+                >
+                  <div>
+                    <div className="flex justify-between items-start mb-2">
+                      <div>
+                        <h3
+                          style={{
+                            margin: 0,
+                            color: "var(--color-text)",
+                            fontWeight: 700,
+                            letterSpacing: "-0.02em",
+                            fontSize: "1.1rem",
+                          }}
                         >
-                          {processingId === doctor.id ? 'Requesting Appointment…' : 'Request Appointment'}
-                        </Button>
-                      )}
+                          {doctor.name}
+                        </h3>
+                        <p
+                          style={{
+                            color: "var(--color-primary)",
+                            fontWeight: 700,
+                            margin: "2px 0 0 0",
+                            fontSize: "0.9rem",
+                          }}
+                        >
+                          {doctor.specialty}
+                        </p>
+                      </div>
+                      <Badge status="neutral">Controlled directory</Badge>
                     </div>
-                  </Card>
+                    <div className="flex-col gap-1 mt-2">
+                      <div
+                        className="caption flex items-center gap-1"
+                        style={{ color: "var(--color-text-muted)" }}
+                      >
+                        <Building size={14} /> {doctor.hospital}
+                      </div>
+                      <div
+                        className="caption flex items-center gap-1"
+                        style={{ color: "var(--color-text-muted)" }}
+                      >
+                        <MapPin size={14} /> {doctor.locality}, {doctor.city}
+                      </div>
+                      <div
+                        className="caption flex items-center gap-1"
+                        style={{ color: "var(--color-text-muted)" }}
+                      >
+                        <Clock size={14} /> OPD Hours: 10:00 AM – 7:00 PM • Mon
+                        – Sat
+                      </div>
+                    </div>
+                  </div>
+                  <div
+                    style={{
+                      marginTop: "var(--spacing-4)",
+                      paddingTop: "var(--spacing-3)",
+                      borderTop: "1px solid var(--color-border)",
+                    }}
+                  >
+                    {requestedDocId === doctor.id ? (
+                      <Button variant="secondary" className="w-full" disabled>
+                        Requested!
+                      </Button>
+                    ) : (
+                      <Button
+                        variant="primary"
+                        className="w-full"
+                        onClick={event => handleRequest(doctor.id, event)}
+                        disabled={processingId === doctor.id}
+                        aria-label={`Request appointment with ${doctor.name}`}
+                      >
+                        {processingId === doctor.id
+                          ? "Requesting Appointment…"
+                          : "Request Appointment"}
+                      </Button>
+                    )}
+                  </div>
+                </Card>
               );
             })}
 
             {/* Empty state when 0 doctors match filter */}
             {displayedDoctors.length === 0 && (
-                <Card variant="default" className="discovery-empty-state" style={{ textAlign: 'center', padding: 'var(--spacing-6)' }}><p className="text-muted" style={{ margin: 0 }}>No specialist entries match the selected filter.</p>{activeFilterCount > 0 && <Button type="button" variant="outline" size="sm" onClick={clearFilters}><RotateCcw size={15} aria-hidden="true" /> Reset filters</Button>}</Card>
+              <Card
+                variant="default"
+                className="discovery-empty-state"
+                style={{ textAlign: "center", padding: "var(--spacing-6)" }}
+              >
+                <p className="text-muted" style={{ margin: 0 }}>
+                  No specialist entries match the selected filter.
+                </p>
+                {activeFilterCount > 0 && (
+                  <Button
+                    type="button"
+                    variant="outline"
+                    size="sm"
+                    onClick={clearFilters}
+                  >
+                    <RotateCcw size={15} aria-hidden="true" /> Reset filters
+                  </Button>
+                )}
+              </Card>
             )}
           </div>
         </section>
       </div>
 
       {/* Booking confirmation popup dialog */}
-      <Popup isOpen={showSuccessPopup} onClose={() => navigate('/patient/appointments')} title="Appointment Requested" maxWidth="400px">
-        <div style={{ textAlign: 'center', padding: '16px 0' }}>
-          <CheckCircle size={48} color="var(--color-primary)" style={{ margin: '0 auto 16px' }} />
-          <h3 style={{ margin: '0 0 8px', color: 'var(--color-text)', fontWeight: 700, letterSpacing: '-0.02em', fontSize: '1.2rem' }}>Request Sent</h3>
-          <p style={{ color: 'var(--color-text-muted)', fontSize: '0.9rem', marginBottom: '24px' }}>
-            Your appointment request has been submitted to the assigned specialist workspace successfully.
+      <Popup
+        isOpen={showSuccessPopup}
+        onClose={() => navigate("/patient/appointments")}
+        title="Appointment Requested"
+        maxWidth="400px"
+      >
+        <div style={{ textAlign: "center", padding: "16px 0" }}>
+          <CheckCircle
+            size={48}
+            color="var(--color-primary)"
+            style={{ margin: "0 auto 16px" }}
+          />
+          <h3
+            style={{
+              margin: "0 0 8px",
+              color: "var(--color-text)",
+              fontWeight: 700,
+              letterSpacing: "-0.02em",
+              fontSize: "1.2rem",
+            }}
+          >
+            Request Sent
+          </h3>
+          <p
+            style={{
+              color: "var(--color-text-muted)",
+              fontSize: "0.9rem",
+              marginBottom: "24px",
+            }}
+          >
+            Your appointment request has been submitted to the assigned
+            specialist workspace successfully.
           </p>
-          <Button variant="primary" className="w-full" onClick={() => navigate('/patient/appointments')}>
+          <Button
+            variant="primary"
+            className="w-full"
+            onClick={() => navigate("/patient/appointments")}
+          >
             View My Appointments
           </Button>
         </div>

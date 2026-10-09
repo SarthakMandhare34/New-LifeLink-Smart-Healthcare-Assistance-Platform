@@ -9,44 +9,52 @@
  * the restricted clinician consultation workstation, establishing strict visual
  * and architectural boundaries between patient self-service and medical provider tools.
  */
-import { useState } from "react";                                                         // React state hook for tracking UI transitions
-import { ArrowRight, HeartPulse, LoaderCircle, ShieldCheck, Stethoscope } from "lucide-react"; // Healthcare and action icons
-import { useNavigate } from "react-router-dom";                                            // Programmatic client router navigation hook
-import { EntryThemeToggle } from "../../components/EntryThemeToggle";                      // Theme toggle button for login screens
-import { LifeLinkLogo } from "../../components/brand/LifeLinkLogo";                        // LifeLink branded SVG logo component
-import { Button } from "../../components/ui/Button";                                       // Accessible button component
-import { Card } from "../../components/ui/Card";                                           // Reusable Swiss card container component
+import { useState } from "react"; // React state hook for tracking UI transitions
+import {
+  ArrowRight,
+  HeartPulse,
+  LoaderCircle,
+  ShieldCheck,
+  Stethoscope,
+} from "lucide-react"; // Healthcare and action icons
+import { useNavigate } from "react-router-dom"; // Programmatic client router navigation hook
+import { EntryThemeToggle } from "../../components/EntryThemeToggle"; // Theme toggle button for login screens
+import { LifeLinkLogo } from "../../components/brand/LifeLinkLogo"; // LifeLink branded SVG logo component
+import { Button } from "../../components/ui/Button"; // Accessible button component
+import { Card } from "../../components/ui/Card"; // Reusable Swiss card container component
 
 // Feature highlights displayed on the patient portal card
 const patientHighlights = [
-  "Manage your own health profile and care records",                                       // Self-owned medical health passport
-  "Request appointments from the controlled Mumbai directory",                             // Specialist scheduling across Mumbai transit lines
-  "Use protected assessment, medicine, and emergency tools",                               // AI triage and SOS quick-dial
+  "Manage your own health profile and care records", // Self-owned medical health passport
+  "Request appointments from the controlled Mumbai directory", // Specialist scheduling across Mumbai transit lines
+  "Use protected assessment, medicine, and emergency tools", // AI triage and SOS quick-dial
 ];
 
 // Feature highlights displayed on the clinician workspace card
 const doctorHighlights = [
-  "Open the protected clinician workspace",                                                // Clinician-authenticated portal
-  "Review only appointments assigned to your account",                                     // Privacy boundary protecting patient records
+  "Open the protected clinician workspace", // Clinician-authenticated portal
+  "Review only appointments assigned to your account", // Privacy boundary protecting patient records
 ];
 
-type Workspace = "patient" | "clinician";                                                  // Available portal destinations
+type Workspace = "patient" | "clinician"; // Available portal destinations
 
 // Gateway landing component enabling users to route between patient and clinician portals
 export const WorkspaceSelector = () => {
-  const navigate = useNavigate();                                                          // Navigation function
-  const [switchingTo, setSwitchingTo] = useState<Workspace | null>(null);                  // Active transition state ('patient' | 'clinician' | null)
+  const navigate = useNavigate(); // Navigation function
+  const [switchingTo, setSwitchingTo] = useState<Workspace | null>(null); // Active transition state ('patient' | 'clinician' | null)
 
   // Instantly navigates to the chosen portal without artificial timeouts
   const openWorkspace = (workspace: Workspace, path: string) => {
-    if (switchingTo) return;                                                               // Prevent multiple clicks
-    setSwitchingTo(workspace);                                                             // Trigger transition state
-    const reducedMotion = window.matchMedia?.("(prefers-reduced-motion: reduce)").matches; // Check accessibility motion preference
-    navigate(path);                                                                        // Instant navigation without fake delays
+    if (switchingTo) return; // Prevent multiple clicks
+    setSwitchingTo(workspace); // Trigger transition state
+    const reducedMotion = window.matchMedia?.(
+      "(prefers-reduced-motion: reduce)"
+    ).matches; // Check accessibility motion preference
+    navigate(path); // Instant navigation without fake delays
   };
 
-  const openingPatient = switchingTo === "patient";                                        // True while loading patient portal
-  const openingClinician = switchingTo === "clinician";                                    // True while loading clinician portal
+  const openingPatient = switchingTo === "patient"; // True while loading patient portal
+  const openingClinician = switchingTo === "clinician"; // True while loading clinician portal
 
   return (
     <main
@@ -54,10 +62,16 @@ export const WorkspaceSelector = () => {
       aria-labelledby="workspace-entry-heading"
       aria-busy={Boolean(switchingTo)}
     >
-      <header className="workspace-portal-header" aria-label="LifeLink portal header">
+      <header
+        className="workspace-portal-header"
+        aria-label="LifeLink portal header"
+      >
         <div className="workspace-portal-brand">
           <span className="workspace-portal-mark" aria-hidden="true">
-            <LifeLinkLogo variant="symbol" style={{ width: '100%', height: '100%', objectFit: 'contain' }} />
+            <LifeLinkLogo
+              variant="symbol"
+              style={{ width: "100%", height: "100%", objectFit: "contain" }}
+            />
           </span>
           <span>
             <strong>LifeLink</strong>
@@ -76,23 +90,30 @@ export const WorkspaceSelector = () => {
           <div className="workspace-entry-logo-wrap">
             <LifeLinkLogo className="lifelink-logo-auth" />
           </div>
-          <span className="workspace-entry-kicker">LifeLink connected care</span>
+          <span className="workspace-entry-kicker">
+            LifeLink connected care
+          </span>
           <h1 id="workspace-entry-heading">Choose your care workspace</h1>
           <p>Select the secure account space that matches your care task.</p>
         </header>
 
         <div className="workspace-entry-grid">
-          <Card variant="solid" className="workspace-choice-card patient-choice-card">
+          <Card
+            variant="solid"
+            className="workspace-choice-card patient-choice-card"
+          >
             <div className="workspace-choice-topline">
               <span className="workspace-choice-icon patient">
                 <HeartPulse size={22} />
               </span>
-              <span className="workspace-choice-label patient">Patient Portal</span>
+              <span className="workspace-choice-label patient">
+                Patient Portal
+              </span>
             </div>
             <h2>Personal health workspace</h2>
             <p>Manage your health information and care requests.</p>
             <ul className="workspace-choice-list">
-              {patientHighlights.map((item) => (
+              {patientHighlights.map(item => (
                 <li key={item}>
                   <ShieldCheck size={16} aria-hidden="true" />
                   {item}
@@ -108,7 +129,11 @@ export const WorkspaceSelector = () => {
             >
               {openingPatient ? (
                 <>
-                  <LoaderCircle size={18} className="workspace-choice-spinner" /> Opening patient workspace…
+                  <LoaderCircle
+                    size={18}
+                    className="workspace-choice-spinner"
+                  />{" "}
+                  Opening patient workspace…
                 </>
               ) : (
                 <>
@@ -126,17 +151,22 @@ export const WorkspaceSelector = () => {
             </button>
           </Card>
 
-          <Card variant="solid" className="workspace-choice-card doctor-choice-card">
+          <Card
+            variant="solid"
+            className="workspace-choice-card doctor-choice-card"
+          >
             <div className="workspace-choice-topline">
               <span className="workspace-choice-icon doctor">
                 <Stethoscope size={22} />
               </span>
-              <span className="workspace-choice-label doctor">Doctor Workstation</span>
+              <span className="workspace-choice-label doctor">
+                Doctor Workstation
+              </span>
             </div>
             <h2>Clinician workspace</h2>
             <p>Review assigned appointments and patient context.</p>
             <ul className="workspace-choice-list">
-              {doctorHighlights.map((item) => (
+              {doctorHighlights.map(item => (
                 <li key={item}>
                   <ShieldCheck size={16} aria-hidden="true" />
                   {item}
@@ -152,7 +182,11 @@ export const WorkspaceSelector = () => {
             >
               {openingClinician ? (
                 <>
-                  <LoaderCircle size={18} className="workspace-choice-spinner" /> Opening clinician workspace…
+                  <LoaderCircle
+                    size={18}
+                    className="workspace-choice-spinner"
+                  />{" "}
+                  Opening clinician workspace…
                 </>
               ) : (
                 <>
@@ -166,14 +200,21 @@ export const WorkspaceSelector = () => {
         <aside className="workspace-entry-note">
           <ShieldCheck size={18} aria-hidden="true" />
           <p>
-            <strong>Privacy boundary:</strong> patient records remain patient-owned. The controlled clinician workspace can access only server-authorized, assigned appointment information.
+            <strong>Privacy boundary:</strong> patient records remain
+            patient-owned. The controlled clinician workspace can access only
+            server-authorized, assigned appointment information.
           </p>
         </aside>
       </section>
 
       {switchingTo ? (
-        <div className="workspace-switch-status" role="status" aria-live="polite">
-          <LoaderCircle size={20} className="workspace-choice-spinner" /> Opening{" "}
+        <div
+          className="workspace-switch-status"
+          role="status"
+          aria-live="polite"
+        >
+          <LoaderCircle size={20} className="workspace-choice-spinner" />{" "}
+          Opening{" "}
           {switchingTo === "patient" ? "Patient Portal" : "Doctor Workstation"}…
         </div>
       ) : null}

@@ -17,7 +17,14 @@ import { Input } from "../../components/ui/Input";
 import { LifeLinkLogo } from "../../components/brand/LifeLinkLogo";
 import { EntryThemeToggle } from "../../components/EntryThemeToggle";
 import { trpc } from "../../lib/trpc";
-import { Lock, Mail, Eye, EyeOff, Stethoscope, ShieldCheck } from 'lucide-react';
+import {
+  Lock,
+  Mail,
+  Eye,
+  EyeOff,
+  Stethoscope,
+  ShieldCheck,
+} from "lucide-react";
 
 // =========================================================================================
 // CLINICIAN WORKSTATION AUTHENTICATION MODULE (DoctorLogin)
@@ -34,37 +41,46 @@ import { Lock, Mail, Eye, EyeOff, Stethoscope, ShieldCheck } from 'lucide-react'
 //    - Deep ocean teal radial ambient background (`radial-gradient` at 30% 20%).
 // =========================================================================================
 export const DoctorLogin = () => {
-  const navigate = useNavigate();                                                          // Programmatic page navigation hook
-  const utils = trpc.useUtils();                                                           // tRPC cache utilities
-  const [email, setEmail] = useState("");                                                  // Clinician work email state
-  const [password, setPassword] = useState("");                                            // Clinician password state
-  const [showPassword, setShowPassword] = useState(false);                                 // Password visibility toggle
-  const [error, setError] = useState("");                                                  // Authentication error message
+  const navigate = useNavigate(); // Programmatic page navigation hook
+  const utils = trpc.useUtils(); // tRPC cache utilities
+  const [email, setEmail] = useState(""); // Clinician work email state
+  const [password, setPassword] = useState(""); // Clinician password state
+  const [showPassword, setShowPassword] = useState(false); // Password visibility toggle
+  const [error, setError] = useState(""); // Authentication error message
 
   // tRPC mutation for doctor authentication and session cookie establishment
   const login = trpc.doctorAuth.login.useMutation({
-    onSuccess: async (doctor) => {
-      sessionStorage.setItem('lifelink_doctor_session', 'active');                         // Establish isolated doctor session for current browser tab
-      utils.doctorAuth.me.setData(undefined, doctor);                                      // Seed active doctor profile into cache
-      await utils.auth.me.invalidate();                                                    // Invalidate stale user context
-      navigate("/doctor/dashboard", { replace: true });                                    // Navigate to clinician dashboard
+    onSuccess: async doctor => {
+      sessionStorage.setItem("lifelink_doctor_session", "active"); // Establish isolated doctor session for current browser tab
+      utils.doctorAuth.me.setData(undefined, doctor); // Seed active doctor profile into cache
+      await utils.auth.me.invalidate(); // Invalidate stale user context
+      navigate("/doctor/dashboard", { replace: true }); // Navigate to clinician dashboard
     },
-    onError: () => setError("Invalid email or Password"),                                  // Display error message
+    onError: () => setError("Invalid email or Password"), // Display error message
   });
 
   // Form submission handler
   const handleLogin = (event: React.FormEvent) => {
-    event.preventDefault();                                                                // Prevent browser form reload
-    setError("");                                                                          // Clear previous error message
-    login.mutate({ email, password });                                                     // Dispatch login credentials
+    event.preventDefault(); // Prevent browser form reload
+    setError(""); // Clear previous error message
+    login.mutate({ email, password }); // Dispatch login credentials
   };
 
   return (
-    <main className="auth-page doctor-auth-page" aria-labelledby="doctor-login-heading">
-      <header className="workspace-portal-header doctor-portal-header" aria-label="LifeLink portal header">
+    <main
+      className="auth-page doctor-auth-page"
+      aria-labelledby="doctor-login-heading"
+    >
+      <header
+        className="workspace-portal-header doctor-portal-header"
+        aria-label="LifeLink portal header"
+      >
         <div className="workspace-portal-brand">
           <span className="workspace-portal-mark" aria-hidden="true">
-            <LifeLinkLogo variant="symbol" style={{ width: '100%', height: '100%', objectFit: 'contain' }} />
+            <LifeLinkLogo
+              variant="symbol"
+              style={{ width: "100%", height: "100%", objectFit: "contain" }}
+            />
           </span>
           <span>
             <strong>LifeLink</strong>
@@ -79,70 +95,138 @@ export const DoctorLogin = () => {
       </header>
 
       <div className="doctor-setup-layout auth-split-layout">
-
         {/* Branding Panel (Left Column): Clean Nordic Clinical Identity */}
         <div className="auth-branding-panel">
-          <div style={{ textAlign: 'center', maxWidth: '440px', display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
-
+          <div
+            style={{
+              textAlign: "center",
+              maxWidth: "440px",
+              display: "flex",
+              flexDirection: "column",
+              alignItems: "center",
+            }}
+          >
             {/* Proportional Brand Treatment (Section 11) */}
-            <div style={{ marginBottom: '24px', display: 'flex', alignItems: 'center', justifyContent: 'center', width: '100%' }}>
+            <div
+              style={{
+                marginBottom: "24px",
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "center",
+                width: "100%",
+              }}
+            >
               <LifeLinkLogo className="lifelink-logo-auth" />
             </div>
 
             {/* Institutional Clinician Subtitle & Motto */}
-            <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '14px' }}>
+            <div
+              style={{
+                display: "flex",
+                flexDirection: "column",
+                alignItems: "center",
+                gap: "14px",
+              }}
+            >
               <span
                 style={{
-                  background: 'var(--swiss-blue-soft)',
-                  color: 'var(--color-doctor-primary)',
-                  fontSize: '0.74rem',
+                  background: "var(--swiss-blue-soft)",
+                  color: "var(--color-doctor-primary)",
+                  fontSize: "0.74rem",
                   fontWeight: 600,
-                  letterSpacing: '0.06em',
-                  textTransform: 'uppercase',
-                  padding: '5px 14px',
-                  borderRadius: 'var(--border-radius-badge)',
-                  border: '1px solid #BFDBFE'
+                  letterSpacing: "0.06em",
+                  textTransform: "uppercase",
+                  padding: "5px 14px",
+                  borderRadius: "var(--border-radius-badge)",
+                  border: "1px solid #BFDBFE",
                 }}
               >
                 Healthcare Provider Suite
               </span>
 
-              <h2 style={{ fontSize: '1.6rem', fontWeight: 700, margin: '6px 0 0', color: 'var(--color-doctor-text)', letterSpacing: '-0.02em' }}>
+              <h2
+                style={{
+                  fontSize: "1.6rem",
+                  fontWeight: 700,
+                  margin: "6px 0 0",
+                  color: "var(--color-doctor-text)",
+                  letterSpacing: "-0.02em",
+                }}
+              >
                 Care. Connect. Cure.
               </h2>
-              <p style={{ fontSize: '0.92rem', color: 'var(--color-text-muted)', margin: 0, lineHeight: 1.5, maxWidth: '380px' }}>
-                Streamlined clinical platform for patient appointments, intelligent triage insights, and digital prescriptions.
+              <p
+                style={{
+                  fontSize: "0.92rem",
+                  color: "var(--color-text-muted)",
+                  margin: 0,
+                  lineHeight: 1.5,
+                  maxWidth: "380px",
+                }}
+              >
+                Streamlined clinical platform for patient appointments,
+                intelligent triage insights, and digital prescriptions.
               </p>
             </div>
           </div>
         </div>
 
         {/* Form Container (Right Column): Solid Clinical Card */}
-        <div className="auth-card-column" style={{ flex: 1.1, display: 'flex', justifyContent: 'center', alignItems: 'center', padding: 'clamp(8px, 1.5vw, 20px)', zIndex: 1, width: '100%' }}>
+        <div
+          className="auth-card-column"
+          style={{
+            flex: 1.1,
+            display: "flex",
+            justifyContent: "center",
+            alignItems: "center",
+            padding: "clamp(8px, 1.5vw, 20px)",
+            zIndex: 1,
+            width: "100%",
+          }}
+        >
           <Card
             className="card auth-card"
             style={{
-              width: '100%',
-              maxWidth: '480px',
-              padding: 'clamp(20px, 3.2vw, 32px)',
-              background: 'var(--color-surface-white)',
-              border: '1px solid var(--color-border)',
-              borderRadius: 'var(--border-radius-card)',
-              boxShadow: 'none',
-              boxSizing: 'border-box'
+              width: "100%",
+              maxWidth: "480px",
+              padding: "clamp(20px, 3.2vw, 32px)",
+              background: "var(--color-surface-white)",
+              border: "1px solid var(--color-border)",
+              borderRadius: "var(--border-radius-card)",
+              boxShadow: "none",
+              boxSizing: "border-box",
             }}
           >
             {/* Form Card Header */}
-            <header className="auth-card-header" style={{ textAlign: 'center', marginBottom: '20px' }}>
+            <header
+              className="auth-card-header"
+              style={{ textAlign: "center", marginBottom: "20px" }}
+            >
               {/* Responsive Mobile Logo Showcase: Guarantees full brand visibility on mobile devices where left branding column is hidden */}
               <div className="auth-card-mobile-logo-wrap">
                 <LifeLinkLogo className="lifelink-logo-auth auth-card-mobile-logo" />
               </div>
 
-              <h1 id="doctor-login-heading" className="font-display" style={{ fontSize: '1.65rem', fontWeight: 700, marginBottom: '8px', color: 'var(--color-doctor-text)', letterSpacing: '-0.02em' }}>
+              <h1
+                id="doctor-login-heading"
+                className="font-display"
+                style={{
+                  fontSize: "1.65rem",
+                  fontWeight: 700,
+                  marginBottom: "8px",
+                  color: "var(--color-doctor-text)",
+                  letterSpacing: "-0.02em",
+                }}
+              >
                 Doctor Sign In
               </h1>
-              <p style={{ color: 'var(--color-text-muted)', fontSize: '0.90rem', margin: 0 }}>
+              <p
+                style={{
+                  color: "var(--color-text-muted)",
+                  fontSize: "0.90rem",
+                  margin: 0,
+                }}
+              >
                 Review assigned appointments and clinical patient context
               </p>
             </header>
@@ -153,14 +237,14 @@ export const DoctorLogin = () => {
                 className="alert-panel auth-message"
                 role="alert"
                 style={{
-                  marginBottom: '20px',
-                  color: 'var(--color-semantic-emergency)',
-                  textAlign: 'center',
-                  background: 'var(--lifelink-red-soft)',
-                  border: '1px solid var(--lifelink-red-border)',
-                  borderRadius: 'var(--border-radius-badge)',
-                  padding: '12px 16px',
-                  fontSize: '0.88rem'
+                  marginBottom: "20px",
+                  color: "var(--color-semantic-emergency)",
+                  textAlign: "center",
+                  background: "var(--lifelink-red-soft)",
+                  border: "1px solid var(--lifelink-red-border)",
+                  borderRadius: "var(--border-radius-badge)",
+                  padding: "12px 16px",
+                  fontSize: "0.88rem",
                 }}
               >
                 {error}
@@ -168,69 +252,138 @@ export const DoctorLogin = () => {
             )}
 
             {/* Doctor Login form */}
-            <form onSubmit={handleLogin} className="auth-form" style={{ display: 'grid', gap: '20px' }}>
+            <form
+              onSubmit={handleLogin}
+              className="auth-form"
+              style={{ display: "grid", gap: "20px" }}
+            >
               {/* Doctor Work Email Field */}
-              <div style={{ display: 'flex', flexDirection: 'column', gap: '6px' }}>
-                <label htmlFor="doctor-email" style={{ fontWeight: 600, fontSize: '0.86rem', color: 'var(--color-doctor-text)' }}>
+              <div
+                style={{ display: "flex", flexDirection: "column", gap: "6px" }}
+              >
+                <label
+                  htmlFor="doctor-email"
+                  style={{
+                    fontWeight: 600,
+                    fontSize: "0.86rem",
+                    color: "var(--color-doctor-text)",
+                  }}
+                >
                   Doctor Work Email
                 </label>
-                <div style={{ position: 'relative', display: 'flex', alignItems: 'center' }}>
-                  <Mail size={18} style={{ position: 'absolute', left: '14px', color: 'var(--color-doctor-primary)', pointerEvents: 'none' }} />
+                <div
+                  style={{
+                    position: "relative",
+                    display: "flex",
+                    alignItems: "center",
+                  }}
+                >
+                  <Mail
+                    size={18}
+                    style={{
+                      position: "absolute",
+                      left: "14px",
+                      color: "var(--color-doctor-primary)",
+                      pointerEvents: "none",
+                    }}
+                  />
                   <Input
                     id="doctor-email"
                     type="email"
                     placeholder="Enter email"
                     value={email}
-                    onChange={(event) => setEmail(event.target.value)}
+                    onChange={event => setEmail(event.target.value)}
                     autoComplete="email"
                     required
                     style={{
-                      width: '100%',
-                      paddingLeft: '42px',
-                      borderRadius: 'var(--border-radius-input)',
-                      minHeight: '48px',
-                      fontSize: '0.90rem',
-                      border: '1px solid var(--color-doctor-input-border, var(--color-doctor-border))',
-                      background: 'var(--color-surface-white)',
-                      color: 'var(--color-doctor-text)'
+                      width: "100%",
+                      paddingLeft: "42px",
+                      borderRadius: "var(--border-radius-input)",
+                      minHeight: "48px",
+                      fontSize: "0.90rem",
+                      border:
+                        "1px solid var(--color-doctor-input-border, var(--color-doctor-border))",
+                      background: "var(--color-surface-white)",
+                      color: "var(--color-doctor-text)",
                     }}
                   />
                 </div>
-                <small style={{ fontSize: '0.74rem', color: 'var(--color-text-muted)' }}>Use your @lifelink.com work email.</small>
+                <small
+                  style={{
+                    fontSize: "0.74rem",
+                    color: "var(--color-text-muted)",
+                  }}
+                >
+                  Use your @lifelink.com work email.
+                </small>
               </div>
 
               {/* Password Field */}
-              <div style={{ display: 'flex', flexDirection: 'column', gap: '6px' }}>
-                <label htmlFor="doctor-password" style={{ fontWeight: 600, fontSize: '0.86rem', color: 'var(--color-doctor-text)' }}>
+              <div
+                style={{ display: "flex", flexDirection: "column", gap: "6px" }}
+              >
+                <label
+                  htmlFor="doctor-password"
+                  style={{
+                    fontWeight: 600,
+                    fontSize: "0.86rem",
+                    color: "var(--color-doctor-text)",
+                  }}
+                >
                   Password
                 </label>
-                <div style={{ position: 'relative', display: 'flex', alignItems: 'center' }}>
-                  <Lock size={18} style={{ position: 'absolute', left: '14px', color: 'var(--color-doctor-primary)', pointerEvents: 'none' }} />
+                <div
+                  style={{
+                    position: "relative",
+                    display: "flex",
+                    alignItems: "center",
+                  }}
+                >
+                  <Lock
+                    size={18}
+                    style={{
+                      position: "absolute",
+                      left: "14px",
+                      color: "var(--color-doctor-primary)",
+                      pointerEvents: "none",
+                    }}
+                  />
                   <Input
                     id="doctor-password"
-                    type={showPassword ? 'text' : 'password'}
+                    type={showPassword ? "text" : "password"}
                     placeholder="Enter password"
                     value={password}
-                    onChange={(event) => setPassword(event.target.value)}
+                    onChange={event => setPassword(event.target.value)}
                     autoComplete="current-password"
                     required
                     style={{
-                      width: '100%',
-                      paddingLeft: '42px',
-                      paddingRight: '42px',
-                      borderRadius: 'var(--border-radius-input)',
-                      minHeight: '46px',
-                      fontSize: '0.90rem',
-                      border: '1px solid var(--color-doctor-input-border, var(--color-doctor-border))',
-                      background: 'var(--color-surface-white)',
-                      color: 'var(--color-doctor-text)'
+                      width: "100%",
+                      paddingLeft: "42px",
+                      paddingRight: "42px",
+                      borderRadius: "var(--border-radius-input)",
+                      minHeight: "46px",
+                      fontSize: "0.90rem",
+                      border:
+                        "1px solid var(--color-doctor-input-border, var(--color-doctor-border))",
+                      background: "var(--color-surface-white)",
+                      color: "var(--color-doctor-text)",
                     }}
                   />
                   <button
                     type="button"
                     onClick={() => setShowPassword(!showPassword)}
-                    style={{ position: 'absolute', right: '14px', background: 'none', border: 'none', color: 'var(--color-doctor-primary)', cursor: 'pointer', padding: 0 }}
-                    aria-label={showPassword ? 'Hide password' : 'Show password'}
+                    style={{
+                      position: "absolute",
+                      right: "14px",
+                      background: "none",
+                      border: "none",
+                      color: "var(--color-doctor-primary)",
+                      cursor: "pointer",
+                      padding: 0,
+                    }}
+                    aria-label={
+                      showPassword ? "Hide password" : "Show password"
+                    }
                   >
                     {showPassword ? <EyeOff size={18} /> : <Eye size={18} />}
                   </button>
@@ -242,44 +395,74 @@ export const DoctorLogin = () => {
                 type="submit"
                 disabled={login.isPending}
                 style={{
-                  width: '100%',
-                  minHeight: '46px',
-                  background: 'var(--color-doctor-primary)',
-                  border: '1px solid var(--color-doctor-accent)',
-                  color: '#FFFFFF',
+                  width: "100%",
+                  minHeight: "46px",
+                  background: "var(--color-doctor-primary)",
+                  border: "1px solid var(--color-doctor-accent)",
+                  color: "#FFFFFF",
                   fontWeight: 700,
-                  borderRadius: 'var(--border-radius-btn)',
-                  cursor: 'pointer',
-                  marginTop: '8px'
+                  borderRadius: "var(--border-radius-btn)",
+                  cursor: "pointer",
+                  marginTop: "8px",
                 }}
               >
-                {login.isPending ? 'Signing In…' : 'Sign In'}
+                {login.isPending ? "Signing In…" : "Sign In"}
               </Button>
             </form>
 
             {/* Password recovery & Patient navigation */}
-            <div style={{ textAlign: 'center', marginTop: '24px', fontSize: '0.86rem', display: 'flex', flexDirection: 'column', gap: '10px' }}>
-              <div style={{ display: 'flex', justifyContent: 'center', gap: '16px' }}>
+            <div
+              style={{
+                textAlign: "center",
+                marginTop: "24px",
+                fontSize: "0.86rem",
+                display: "flex",
+                flexDirection: "column",
+                gap: "10px",
+              }}
+            >
+              <div
+                style={{
+                  display: "flex",
+                  justifyContent: "center",
+                  gap: "16px",
+                }}
+              >
                 <button
                   type="button"
-                  onClick={() => navigate('/doctor/reset')}
-                  style={{ background: 'none', border: 'none', color: 'var(--color-doctor-accent)', fontWeight: 700, cursor: 'pointer', padding: 0 }}
+                  onClick={() => navigate("/doctor/reset")}
+                  style={{
+                    background: "none",
+                    border: "none",
+                    color: "var(--color-doctor-accent)",
+                    fontWeight: 700,
+                    cursor: "pointer",
+                    padding: 0,
+                  }}
                 >
                   Reset password
                 </button>
               </div>
-              <div style={{ marginTop: '4px' }}>
-                <span style={{ color: 'var(--color-text-muted)' }}>Are you a patient? </span>
+              <div style={{ marginTop: "4px" }}>
+                <span style={{ color: "var(--color-text-muted)" }}>
+                  Are you a patient?{" "}
+                </span>
                 <button
                   type="button"
-                  onClick={() => navigate('/login')}
-                  style={{ background: 'none', border: 'none', color: 'var(--color-doctor-primary)', fontWeight: 700, cursor: 'pointer', padding: 0 }}
+                  onClick={() => navigate("/login")}
+                  style={{
+                    background: "none",
+                    border: "none",
+                    color: "var(--color-doctor-primary)",
+                    fontWeight: 700,
+                    cursor: "pointer",
+                    padding: 0,
+                  }}
                 >
                   Patient sign in
                 </button>
               </div>
             </div>
-
           </Card>
         </div>
       </div>

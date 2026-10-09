@@ -9,11 +9,17 @@
  * session isolation safeguards (secure cookie attributes, inactivity auto-logout,
  * and zero cross-patient data exposure).
  */
-import React, { useState } from 'react';
-import { Card } from '../../../components/ui/Card';
-import { Button } from '../../../components/ui/Button';
-import { trpc } from '../../../lib/trpc';
-import { Settings as SettingsIcon, Bell, Shield, CheckCircle2, UserCheck } from 'lucide-react';
+import React, { useState } from "react";
+import { Card } from "../../../components/ui/Card";
+import { Button } from "../../../components/ui/Button";
+import { trpc } from "../../../lib/trpc";
+import {
+  Settings as SettingsIcon,
+  Bell,
+  Shield,
+  CheckCircle2,
+  UserCheck,
+} from "lucide-react";
 
 // =========================================================================================
 // PATIENT WORKSPACE PREFERENCES & SETTINGS (Settings)
@@ -37,108 +43,197 @@ export const Settings = () => {
   const [medAlerts, setMedAlerts] = useState(true);
 
   // Local state for password change
-  const [currentPassword, setCurrentPassword] = useState('');
-  const [newPassword, setNewPassword] = useState('');
-  const [passwordMsg, setPasswordMsg] = useState('');
+  const [currentPassword, setCurrentPassword] = useState("");
+  const [newPassword, setNewPassword] = useState("");
+  const [passwordMsg, setPasswordMsg] = useState("");
 
   const changePassword = trpc.patientAuth.changePassword.useMutation({
     onSuccess: () => {
-      setPasswordMsg('Password changed successfully.');
-      setCurrentPassword('');
-      setNewPassword('');
+      setPasswordMsg("Password changed successfully.");
+      setCurrentPassword("");
+      setNewPassword("");
     },
-    onError: (err) => setPasswordMsg(err.message),
+    onError: err => setPasswordMsg(err.message),
   });
 
   const deleteAccount = trpc.patientAuth.deleteAccount.useMutation({
     onSuccess: () => {
-      if (typeof window !== 'undefined') {
-        sessionStorage.removeItem('lifelink_patient_session');
+      if (typeof window !== "undefined") {
+        sessionStorage.removeItem("lifelink_patient_session");
       }
-      window.location.href = '/';
+      window.location.href = "/";
     },
   });
 
   return (
-    <div style={{ display: 'flex', flexDirection: 'column', gap: '36px', width: '100%', maxWidth: '1400px', margin: '0 auto' }}>
-
+    <div
+      style={{
+        display: "flex",
+        flexDirection: "column",
+        gap: "36px",
+        width: "100%",
+        maxWidth: "1400px",
+        margin: "0 auto",
+      }}
+    >
       {/* Workspace Header Banner */}
       <section
         style={{
-          display: 'flex',
-          alignItems: 'center',
-          gap: '24px',
-          padding: '28px 32px',
-          background: 'var(--color-surface-white)',
-          border: '1px solid var(--color-border)',
-          borderLeft: '4px solid var(--color-primary)',
-          borderRadius: 'var(--border-radius-card)',
-          boxShadow: 'none',
+          display: "flex",
+          alignItems: "center",
+          gap: "24px",
+          padding: "28px 32px",
+          background: "var(--color-surface-white)",
+          border: "1px solid var(--color-border)",
+          borderLeft: "4px solid var(--color-primary)",
+          borderRadius: "var(--border-radius-card)",
+          boxShadow: "none",
         }}
       >
         <div
           style={{
-            width: '48px',
-            height: '48px',
-            borderRadius: 'var(--border-radius-sm)',
-            background: 'var(--color-primary-muted)',
-            border: '1px solid var(--color-primary)',
-            display: 'grid',
-            placeItems: 'center',
-            color: 'var(--color-primary)',
+            width: "48px",
+            height: "48px",
+            borderRadius: "var(--border-radius-sm)",
+            background: "var(--color-primary-muted)",
+            border: "1px solid var(--color-primary)",
+            display: "grid",
+            placeItems: "center",
+            color: "var(--color-primary)",
             flexShrink: 0,
           }}
         >
           <SettingsIcon size={26} />
         </div>
         <div>
-          <h1 style={{ margin: 0, fontSize: '1.65rem', fontWeight: 700, color: 'var(--color-text)', letterSpacing: '-0.02em', fontFamily: 'Inter, sans-serif' }}>
+          <h1
+            style={{
+              margin: 0,
+              fontSize: "1.65rem",
+              fontWeight: 700,
+              color: "var(--color-text)",
+              letterSpacing: "-0.02em",
+              fontFamily: "Inter, sans-serif",
+            }}
+          >
             Workspace Preferences
           </h1>
-          <p style={{ margin: '6px 0 0', color: 'var(--color-text-muted)', fontSize: '0.92rem' }}>
-            Manage notification alerts, session preferences, and security options for your health portal.
+          <p
+            style={{
+              margin: "6px 0 0",
+              color: "var(--color-text-muted)",
+              fontSize: "0.92rem",
+            }}
+          >
+            Manage notification alerts, session preferences, and security
+            options for your health portal.
           </p>
         </div>
       </section>
 
       {/* Main Grid: 2-column layout */}
-      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(min(100%, 480px), 1fr))', gap: '28px' }}>
-
+      <div
+        style={{
+          display: "grid",
+          gridTemplateColumns:
+            "repeat(auto-fit, minmax(min(100%, 480px), 1fr))",
+          gap: "28px",
+        }}
+      >
         {/* Notification Preferences Card */}
         <Card
           variant="default"
           style={{
-            padding: 'clamp(28px, 3.5vw, 36px)',
-            background: 'var(--color-surface-white)',
-            border: '1px solid var(--color-border)',
-            borderRadius: 'var(--border-radius-card)',
-            boxShadow: 'none',
-            display: 'flex',
-            flexDirection: 'column',
-            justifyContent: 'space-between',
-            gap: '28px',
+            padding: "clamp(28px, 3.5vw, 36px)",
+            background: "var(--color-surface-white)",
+            border: "1px solid var(--color-border)",
+            borderRadius: "var(--border-radius-card)",
+            boxShadow: "none",
+            display: "flex",
+            flexDirection: "column",
+            justifyContent: "space-between",
+            gap: "28px",
           }}
         >
           <div>
-            <div style={{ display: 'flex', alignItems: 'center', gap: '14px', marginBottom: '28px', paddingBottom: '18px', borderBottom: '1px solid var(--color-border)' }}>
-              <div style={{ width: '40px', height: '40px', borderRadius: 'var(--border-radius-sm)', background: 'var(--color-primary-muted)', display: 'grid', placeItems: 'center', color: 'var(--color-primary)' }}>
+            <div
+              style={{
+                display: "flex",
+                alignItems: "center",
+                gap: "14px",
+                marginBottom: "28px",
+                paddingBottom: "18px",
+                borderBottom: "1px solid var(--color-border)",
+              }}
+            >
+              <div
+                style={{
+                  width: "40px",
+                  height: "40px",
+                  borderRadius: "var(--border-radius-sm)",
+                  background: "var(--color-primary-muted)",
+                  display: "grid",
+                  placeItems: "center",
+                  color: "var(--color-primary)",
+                }}
+              >
                 <Bell size={20} />
               </div>
-              <h2 style={{ margin: 0, fontSize: '1.25rem', fontWeight: 700, color: 'var(--color-text)', fontFamily: 'Inter, sans-serif', letterSpacing: '-0.02em' }}>
+              <h2
+                style={{
+                  margin: 0,
+                  fontSize: "1.25rem",
+                  fontWeight: 700,
+                  color: "var(--color-text)",
+                  fontFamily: "Inter, sans-serif",
+                  letterSpacing: "-0.02em",
+                }}
+              >
                 Notification Preferences
               </h2>
             </div>
 
-            <div style={{ display: 'flex', flexDirection: 'column', gap: '18px' }}>
-
+            <div
+              style={{ display: "flex", flexDirection: "column", gap: "18px" }}
+            >
               {/* Appointment Reminder Toggle Option */}
-              <div style={{ padding: '18px 22px', background: 'var(--color-surface-subtle)', borderRadius: 'var(--border-radius-sm)', border: '1px solid var(--color-border)', display: 'flex', alignItems: 'flex-start', justifyContent: 'space-between', gap: '18px' }}>
+              <div
+                style={{
+                  padding: "18px 22px",
+                  background: "var(--color-surface-subtle)",
+                  borderRadius: "var(--border-radius-sm)",
+                  border: "1px solid var(--color-border)",
+                  display: "flex",
+                  alignItems: "flex-start",
+                  justifyContent: "space-between",
+                  gap: "18px",
+                }}
+              >
                 <div style={{ flex: 1 }}>
-                  <label htmlFor="pref-apt-reminders" style={{ margin: 0, fontWeight: 700, fontSize: '0.95rem', color: 'var(--color-text)', display: 'block', cursor: 'pointer' }}>
+                  <label
+                    htmlFor="pref-apt-reminders"
+                    style={{
+                      margin: 0,
+                      fontWeight: 700,
+                      fontSize: "0.95rem",
+                      color: "var(--color-text)",
+                      display: "block",
+                      cursor: "pointer",
+                    }}
+                  >
                     Appointment reminder preference
                   </label>
-                  <span className="caption" style={{ display: 'block', marginTop: '6px', color: 'var(--color-text-muted)', lineHeight: 1.5 }}>
-                    Reminder delivery is not active yet. This preference is saved only for the current workspace session.
+                  <span
+                    className="caption"
+                    style={{
+                      display: "block",
+                      marginTop: "6px",
+                      color: "var(--color-text-muted)",
+                      lineHeight: 1.5,
+                    }}
+                  >
+                    Reminder delivery is not active yet. This preference is
+                    saved only for the current workspace session.
                   </span>
                 </div>
                 <input
@@ -146,19 +241,54 @@ export const Settings = () => {
                   type="checkbox"
                   aria-label="Appointment reminder preference"
                   checked={aptReminders}
-                  onChange={(e) => setAptReminders(e.target.checked)}
-                  style={{ accentColor: 'var(--color-primary)', transform: 'scale(1.25)', cursor: 'pointer', marginTop: '4px' }}
+                  onChange={e => setAptReminders(e.target.checked)}
+                  style={{
+                    accentColor: "var(--color-primary)",
+                    transform: "scale(1.25)",
+                    cursor: "pointer",
+                    marginTop: "4px",
+                  }}
                 />
               </div>
 
               {/* Medicine Alert Toggle Option */}
-              <div style={{ padding: '18px 22px', background: 'var(--color-surface-interactive)', borderRadius: 'var(--border-radius-sm)', border: '1px solid var(--color-border)', display: 'flex', alignItems: 'flex-start', justifyContent: 'space-between', gap: '18px' }}>
+              <div
+                style={{
+                  padding: "18px 22px",
+                  background: "var(--color-surface-interactive)",
+                  borderRadius: "var(--border-radius-sm)",
+                  border: "1px solid var(--color-border)",
+                  display: "flex",
+                  alignItems: "flex-start",
+                  justifyContent: "space-between",
+                  gap: "18px",
+                }}
+              >
                 <div style={{ flex: 1 }}>
-                  <label htmlFor="pref-med-alerts" style={{ margin: 0, fontWeight: 700, fontSize: '0.95rem', color: 'var(--color-text)', display: 'block', cursor: 'pointer' }}>
+                  <label
+                    htmlFor="pref-med-alerts"
+                    style={{
+                      margin: 0,
+                      fontWeight: 700,
+                      fontSize: "0.95rem",
+                      color: "var(--color-text)",
+                      display: "block",
+                      cursor: "pointer",
+                    }}
+                  >
                     Medicine inventory preference
                   </label>
-                  <span className="caption" style={{ display: 'block', marginTop: '6px', color: 'var(--color-text-muted)', lineHeight: 1.5 }}>
-                    Inventory alerts are not active yet. This preference is saved only for the current workspace session.
+                  <span
+                    className="caption"
+                    style={{
+                      display: "block",
+                      marginTop: "6px",
+                      color: "var(--color-text-muted)",
+                      lineHeight: 1.5,
+                    }}
+                  >
+                    Inventory alerts are not active yet. This preference is
+                    saved only for the current workspace session.
                   </span>
                 </div>
                 <input
@@ -166,17 +296,34 @@ export const Settings = () => {
                   type="checkbox"
                   aria-label="Medicine inventory preference"
                   checked={medAlerts}
-                  onChange={(e) => setMedAlerts(e.target.checked)}
-                  style={{ accentColor: 'var(--color-primary)', transform: 'scale(1.25)', cursor: 'pointer', marginTop: '4px' }}
+                  onChange={e => setMedAlerts(e.target.checked)}
+                  style={{
+                    accentColor: "var(--color-primary)",
+                    transform: "scale(1.25)",
+                    cursor: "pointer",
+                    marginTop: "4px",
+                  }}
                 />
               </div>
-
             </div>
           </div>
 
-          <div style={{ display: 'flex', alignItems: 'center', gap: '10px', paddingTop: '18px', borderTop: '1px solid var(--color-border)' }}>
+          <div
+            style={{
+              display: "flex",
+              alignItems: "center",
+              gap: "10px",
+              paddingTop: "18px",
+              borderTop: "1px solid var(--color-border)",
+            }}
+          >
             <CheckCircle2 size={16} color="var(--color-primary)" />
-            <span className="caption" style={{ color: 'var(--color-text-muted)', fontWeight: 500 }}>Preferences are read-only in this workspace.</span>
+            <span
+              className="caption"
+              style={{ color: "var(--color-text-muted)", fontWeight: 500 }}
+            >
+              Preferences are read-only in this workspace.
+            </span>
           </div>
         </Card>
 
@@ -184,75 +331,249 @@ export const Settings = () => {
         <Card
           variant="default"
           style={{
-            padding: 'clamp(28px, 3.5vw, 36px)',
-            background: 'var(--color-surface-white)',
-            border: '1px solid var(--color-border)',
-            borderRadius: 'var(--border-radius-card)',
-            boxShadow: 'none',
-            display: 'flex',
-            flexDirection: 'column',
-            justifyContent: 'space-between',
-            gap: '28px',
+            padding: "clamp(28px, 3.5vw, 36px)",
+            background: "var(--color-surface-white)",
+            border: "1px solid var(--color-border)",
+            borderRadius: "var(--border-radius-card)",
+            boxShadow: "none",
+            display: "flex",
+            flexDirection: "column",
+            justifyContent: "space-between",
+            gap: "28px",
           }}
         >
           <div>
-            <div style={{ display: 'flex', alignItems: 'center', gap: '14px', marginBottom: '28px', paddingBottom: '18px', borderBottom: '1px solid var(--color-border)' }}>
-              <div style={{ width: '40px', height: '40px', borderRadius: 'var(--border-radius-sm)', background: 'var(--color-primary-muted)', display: 'grid', placeItems: 'center', color: 'var(--color-primary)' }}>
+            <div
+              style={{
+                display: "flex",
+                alignItems: "center",
+                gap: "14px",
+                marginBottom: "28px",
+                paddingBottom: "18px",
+                borderBottom: "1px solid var(--color-border)",
+              }}
+            >
+              <div
+                style={{
+                  width: "40px",
+                  height: "40px",
+                  borderRadius: "var(--border-radius-sm)",
+                  background: "var(--color-primary-muted)",
+                  display: "grid",
+                  placeItems: "center",
+                  color: "var(--color-primary)",
+                }}
+              >
                 <Shield size={20} />
               </div>
-              <h2 style={{ margin: 0, fontSize: '1.25rem', fontWeight: 700, color: 'var(--color-text)', fontFamily: 'Inter, sans-serif', letterSpacing: '-0.02em' }}>
+              <h2
+                style={{
+                  margin: 0,
+                  fontSize: "1.25rem",
+                  fontWeight: 700,
+                  color: "var(--color-text)",
+                  fontFamily: "Inter, sans-serif",
+                  letterSpacing: "-0.02em",
+                }}
+              >
                 Account Options
               </h2>
             </div>
 
-            <div style={{ display: 'flex', flexDirection: 'column', gap: '18px' }}>
-
+            <div
+              style={{ display: "flex", flexDirection: "column", gap: "18px" }}
+            >
               {/* Password Option */}
-              <div style={{ padding: '18px 22px', background: 'var(--color-surface-subtle)', borderRadius: 'var(--border-radius-sm)', border: '1px solid var(--color-border)', display: 'flex', flexDirection: 'column', gap: '14px' }}>
-                <p style={{ margin: 0, fontWeight: 700, fontSize: '0.95rem', color: 'var(--color-text)' }}>Patient password changes</p>
-                {patient?.loginMethod === 'native-patient' ? (
+              <div
+                style={{
+                  padding: "18px 22px",
+                  background: "var(--color-surface-subtle)",
+                  borderRadius: "var(--border-radius-sm)",
+                  border: "1px solid var(--color-border)",
+                  display: "flex",
+                  flexDirection: "column",
+                  gap: "14px",
+                }}
+              >
+                <p
+                  style={{
+                    margin: 0,
+                    fontWeight: 700,
+                    fontSize: "0.95rem",
+                    color: "var(--color-text)",
+                  }}
+                >
+                  Patient password changes
+                </p>
+                {patient?.loginMethod === "native-patient" ? (
                   <>
-                    <input type="password" placeholder="Current Password" value={currentPassword} onChange={e => setCurrentPassword(e.target.value)} style={{ padding: '8px 12px', borderRadius: '4px', border: '1px solid var(--color-border)', fontSize: '14px', width: '100%', maxWidth: '300px' }} />
-                    <input type="password" placeholder="New Password (min 8 characters)" value={newPassword} onChange={e => setNewPassword(e.target.value)} style={{ padding: '8px 12px', borderRadius: '4px', border: '1px solid var(--color-border)', fontSize: '14px', width: '100%', maxWidth: '300px' }} />
-                    <Button variant="primary" size="sm" onClick={() => changePassword.mutate({ currentPassword, newPassword })} disabled={changePassword.isPending || !currentPassword || newPassword.length < 8} style={{ width: 'fit-content' }}>
-                      {changePassword.isPending ? 'Updating...' : 'Update Password'}
+                    <input
+                      type="password"
+                      placeholder="Current Password"
+                      value={currentPassword}
+                      onChange={e => setCurrentPassword(e.target.value)}
+                      style={{
+                        padding: "8px 12px",
+                        borderRadius: "4px",
+                        border: "1px solid var(--color-border)",
+                        fontSize: "14px",
+                        width: "100%",
+                        maxWidth: "300px",
+                      }}
+                    />
+                    <input
+                      type="password"
+                      placeholder="New Password (min 8 characters)"
+                      value={newPassword}
+                      onChange={e => setNewPassword(e.target.value)}
+                      style={{
+                        padding: "8px 12px",
+                        borderRadius: "4px",
+                        border: "1px solid var(--color-border)",
+                        fontSize: "14px",
+                        width: "100%",
+                        maxWidth: "300px",
+                      }}
+                    />
+                    <Button
+                      variant="primary"
+                      size="sm"
+                      onClick={() =>
+                        changePassword.mutate({ currentPassword, newPassword })
+                      }
+                      disabled={
+                        changePassword.isPending ||
+                        !currentPassword ||
+                        newPassword.length < 8
+                      }
+                      style={{ width: "fit-content" }}
+                    >
+                      {changePassword.isPending
+                        ? "Updating..."
+                        : "Update Password"}
                     </Button>
                     {passwordMsg && (
-                      <span style={{ color: changePassword.isError ? 'var(--color-danger)' : 'var(--color-primary)', fontSize: '0.85rem' }}>{passwordMsg}</span>
+                      <span
+                        style={{
+                          color: changePassword.isError
+                            ? "var(--color-danger)"
+                            : "var(--color-primary)",
+                          fontSize: "0.85rem",
+                        }}
+                      >
+                        {passwordMsg}
+                      </span>
                     )}
                   </>
                 ) : (
-                  <span className="caption" style={{ display: 'block', marginTop: '6px', color: 'var(--color-text-muted)', lineHeight: 1.5 }}>
-                    Password changes are not available for Google OAuth accounts.
+                  <span
+                    className="caption"
+                    style={{
+                      display: "block",
+                      marginTop: "6px",
+                      color: "var(--color-text-muted)",
+                      lineHeight: 1.5,
+                    }}
+                  >
+                    Password changes are not available for Google OAuth
+                    accounts.
                   </span>
                 )}
               </div>
 
               {/* Deletion Option */}
-              <div style={{ padding: '18px 22px', background: 'var(--color-surface-subtle)', borderRadius: 'var(--border-radius-sm)', border: '1px solid var(--color-border)', display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: '18px', flexWrap: 'wrap' }}>
-                <div style={{ flex: 1, minWidth: '220px' }}>
-                  <p style={{ margin: 0, fontWeight: 700, fontSize: '0.95rem', color: 'var(--color-text)' }}>Delete Account</p>
-                  <span className="caption" style={{ display: 'block', marginTop: '6px', color: 'var(--color-text-muted)', lineHeight: 1.5 }}>
-                    Permanently delete your account, health records, and all associated data. This action cannot be undone.
+              <div
+                style={{
+                  padding: "18px 22px",
+                  background: "var(--color-surface-subtle)",
+                  borderRadius: "var(--border-radius-sm)",
+                  border: "1px solid var(--color-border)",
+                  display: "flex",
+                  alignItems: "center",
+                  justifyContent: "space-between",
+                  gap: "18px",
+                  flexWrap: "wrap",
+                }}
+              >
+                <div style={{ flex: 1, minWidth: "220px" }}>
+                  <p
+                    style={{
+                      margin: 0,
+                      fontWeight: 700,
+                      fontSize: "0.95rem",
+                      color: "var(--color-text)",
+                    }}
+                  >
+                    Delete Account
+                  </p>
+                  <span
+                    className="caption"
+                    style={{
+                      display: "block",
+                      marginTop: "6px",
+                      color: "var(--color-text-muted)",
+                      lineHeight: 1.5,
+                    }}
+                  >
+                    Permanently delete your account, health records, and all
+                    associated data. This action cannot be undone.
                   </span>
                 </div>
-                <Button variant="danger" size="sm" onClick={() => { if (window.confirm('Are you absolutely sure you want to delete your account? This action cannot be undone.')) { deleteAccount.mutate(); } }} disabled={deleteAccount.isPending} style={{ whiteSpace: 'nowrap', borderRadius: 'var(--border-radius-btn)' }}>
-                  {deleteAccount.isPending ? 'Deleting...' : 'Delete Account'}
+                <Button
+                  variant="danger"
+                  size="sm"
+                  onClick={() => {
+                    if (
+                      window.confirm(
+                        "Are you absolutely sure you want to delete your account? This action cannot be undone."
+                      )
+                    ) {
+                      deleteAccount.mutate();
+                    }
+                  }}
+                  disabled={deleteAccount.isPending}
+                  style={{
+                    whiteSpace: "nowrap",
+                    borderRadius: "var(--border-radius-btn)",
+                  }}
+                >
+                  {deleteAccount.isPending ? "Deleting..." : "Delete Account"}
                 </Button>
               </div>
 
               {/* Patient Ownership Badge Note */}
-              <div style={{ padding: '18px 22px', background: 'var(--color-primary-muted)', borderRadius: 'var(--border-radius-sm)', border: '1px solid var(--color-primary)', display: 'flex', alignItems: 'center', gap: '14px' }}>
-                <UserCheck size={22} color="var(--color-primary)" style={{ flexShrink: 0 }} />
-                <span style={{ fontSize: '0.88rem', color: 'var(--color-text)', lineHeight: 1.5, fontWeight: 500 }}>
-                  Logged in as <strong>{patient?.name || 'Authorized Patient'}</strong>. Your medical records remain patient-owned and protected.
+              <div
+                style={{
+                  padding: "18px 22px",
+                  background: "var(--color-primary-muted)",
+                  borderRadius: "var(--border-radius-sm)",
+                  border: "1px solid var(--color-primary)",
+                  display: "flex",
+                  alignItems: "center",
+                  gap: "14px",
+                }}
+              >
+                <UserCheck
+                  size={22}
+                  color="var(--color-primary)"
+                  style={{ flexShrink: 0 }}
+                />
+                <span
+                  style={{
+                    fontSize: "0.88rem",
+                    color: "var(--color-text)",
+                    lineHeight: 1.5,
+                    fontWeight: 500,
+                  }}
+                >
+                  Logged in as{" "}
+                  <strong>{patient?.name || "Authorized Patient"}</strong>. Your
+                  medical records remain patient-owned and protected.
                 </span>
               </div>
-
             </div>
           </div>
         </Card>
-
       </div>
     </div>
   );

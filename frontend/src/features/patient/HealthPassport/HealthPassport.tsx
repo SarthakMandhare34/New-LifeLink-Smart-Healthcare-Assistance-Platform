@@ -9,12 +9,12 @@
  * allergies, chronic conditions), emergency contacts with one-touch calling, and
  * historical AI triage summaries, ensuring life-saving facts are immediately accessible.
  */
-import React, { useEffect, useState } from 'react';                                        // Core React hooks for component state & side effects
-import { Card } from '../../../components/ui/Card';                                            // Reusable glassmorphic UI card container
-import { Badge } from '../../../components/ui/Badge';                                          // Small indicator badge component
-import { Button } from '../../../components/ui/Button';                                        // Interactive styled button component
-import { Input } from '../../../components/ui/Input';                                          // Styled text input field
-import { Popup } from '../../../components/ui/Popup';                                          // Accessible modal dialog popup
+import React, { useEffect, useState } from "react"; // Core React hooks for component state & side effects
+import { Card } from "../../../components/ui/Card"; // Reusable glassmorphic UI card container
+import { Badge } from "../../../components/ui/Badge"; // Small indicator badge component
+import { Button } from "../../../components/ui/Button"; // Interactive styled button component
+import { Input } from "../../../components/ui/Input"; // Styled text input field
+import { Popup } from "../../../components/ui/Popup"; // Accessible modal dialog popup
 import {
   FileHeart,
   ShieldAlert,
@@ -29,43 +29,68 @@ import {
   Clock,
   AlertCircle,
   Phone,
-  UserCheck
-} from 'lucide-react';                                                                          // Comprehensive healthcare and navigation icons
-import { trpc } from '../../../lib/trpc';                                                       // Type-safe client RPC gateway
-import { ValidationMessage } from '../../../components/ui/ValidationMessage';
-import { formatUserFriendlyError } from '../../../lib/errorFormatting';
+  UserCheck,
+} from "lucide-react"; // Comprehensive healthcare and navigation icons
+import { trpc } from "../../../lib/trpc"; // Type-safe client RPC gateway
+import { ValidationMessage } from "../../../components/ui/ValidationMessage";
+import { formatUserFriendlyError } from "../../../lib/errorFormatting";
 
 // Clinically permissible blood group enumerations recognized by the emergency triage engine
-const VALID_BLOOD_GROUPS = ['A+', 'A-', 'B+', 'B-', 'AB+', 'AB-', 'O+', 'O-'] as const;        // Standard ABO/Rh blood groups
+const VALID_BLOOD_GROUPS = [
+  "A+",
+  "A-",
+  "B+",
+  "B-",
+  "AB+",
+  "AB-",
+  "O+",
+  "O-",
+] as const; // Standard ABO/Rh blood groups
 
 // Data shape for drafting a new or updated emergency contact
 type EmergencyContactDraft = {
-  id?: string;                                                                                  // Optional identifier present only during updates
-  name: string;                                                                                 // Full legal name of the emergency contact
-  relationship: string;                                                                         // Familial or personal bond (e.g. Spouse, Parent)
-  phone: string;                                                                                // Verified telephone number with country prefix
+  id?: string; // Optional identifier present only during updates
+  name: string; // Full legal name of the emergency contact
+  relationship: string; // Familial or personal bond (e.g. Spouse, Parent)
+  phone: string; // Verified telephone number with country prefix
 };
 
 // Data shape for an emergency contact returned by the backend database
 type EmergencyContactItem = {
-  id: string;                                                                                  // Database unique primary key
-  name: string;                                                                                 // Contact's name
-  relationship: string;                                                                         // Relationship string
-  phone: string;                                                                                // Contact telephone string
+  id: string; // Database unique primary key
+  name: string; // Contact's name
+  relationship: string; // Relationship string
+  phone: string; // Contact telephone string
 };
 
 // Helper returning dynamic CSS color styles based on clinical triage urgency level
 function urgencyBadgeStyle(urgency: string) {
-  if (urgency === 'EMERGENCY') {
-    return { bg: 'var(--swiss-red-soft)', color: 'var(--swiss-red)', border: '1px solid var(--swiss-red-border)' };
+  if (urgency === "EMERGENCY") {
+    return {
+      bg: "var(--swiss-red-soft)",
+      color: "var(--swiss-red)",
+      border: "1px solid var(--swiss-red-border)",
+    };
   }
-  if (urgency === 'MODERATE') {
-    return { bg: 'var(--swiss-amber-bg)', color: 'var(--swiss-amber-text)', border: '1px solid var(--swiss-amber-border)' };
+  if (urgency === "MODERATE") {
+    return {
+      bg: "var(--swiss-amber-bg)",
+      color: "var(--swiss-amber-text)",
+      border: "1px solid var(--swiss-amber-border)",
+    };
   }
-  if (urgency === 'ERROR') {
-    return { bg: 'var(--swiss-red-soft)', color: 'var(--swiss-red)', border: '1px solid var(--swiss-red-border)' };
+  if (urgency === "ERROR") {
+    return {
+      bg: "var(--swiss-red-soft)",
+      color: "var(--swiss-red)",
+      border: "1px solid var(--swiss-red-border)",
+    };
   }
-  return { bg: 'var(--swiss-blue-soft)', color: 'var(--swiss-blue)', border: '1px solid var(--swiss-blue-border)' };
+  return {
+    bg: "var(--swiss-blue-soft)",
+    color: "var(--swiss-blue)",
+    border: "1px solid var(--swiss-blue-border)",
+  };
 }
 
 // =========================================================================================
@@ -75,31 +100,47 @@ function urgencyBadgeStyle(urgency: string) {
 // emergency contact roster, and past AI diagnostic assessments.
 // =========================================================================================
 export const HealthPassport = () => {
-  const trpcUtils = trpc.useUtils();                                                            // Client query cache invalidation utility
-  const profileQuery = trpc.patientProfile.get.useQuery();                                      // Retrieves patient profile, medical info & contacts
-  const assessmentsQuery = trpc.assessment.list.useQuery();                                     // Retrieves historical symptom assessments
+  const trpcUtils = trpc.useUtils(); // Client query cache invalidation utility
+  const profileQuery = trpc.patientProfile.get.useQuery(); // Retrieves patient profile, medical info & contacts
+  const assessmentsQuery = trpc.assessment.list.useQuery(); // Retrieves historical symptom assessments
 
   // Server-side mutation hooks for updating records
-  const updateMutation = trpc.patientProfile.update.useMutation();                             // Updates blood group, allergies, conditions
-  const createEmergencyContactMutation = trpc.patientProfile.emergencyContacts.create.useMutation(); // Adds new contact to DB
-  const updateEmergencyContactMutation = trpc.patientProfile.emergencyContacts.update.useMutation(); // Edits existing contact in DB
-  const removeEmergencyContactMutation = trpc.patientProfile.emergencyContacts.remove.useMutation(); // Deletes contact from DB
+  const updateMutation = trpc.patientProfile.update.useMutation(); // Updates blood group, allergies, conditions
+  const createEmergencyContactMutation =
+    trpc.patientProfile.emergencyContacts.create.useMutation(); // Adds new contact to DB
+  const updateEmergencyContactMutation =
+    trpc.patientProfile.emergencyContacts.update.useMutation(); // Edits existing contact in DB
+  const removeEmergencyContactMutation =
+    trpc.patientProfile.emergencyContacts.remove.useMutation(); // Deletes contact from DB
 
   // Health Passport Clinical Baseline Edit state
-  const [isEditing, setIsEditing] = useState(false);                                            // Controls edit mode toggle for baseline data
-  const [isSaving, setIsSaving] = useState(false);                                              // Loading spinner state while saving changes
-  const [passportError, setPassportError] = useState('');                                       // Error message banner for passport modifications
-  const [bloodGroup, setBloodGroup] = useState('');                                             // Controlled input state for selected blood group
-  const [allergies, setAllergies] = useState('');                                               // Comma-separated allergies input string
-  const [conditions, setConditions] = useState('');                                             // Comma-separated pre-existing conditions input string
+  const [isEditing, setIsEditing] = useState(false); // Controls edit mode toggle for baseline data
+  const [isSaving, setIsSaving] = useState(false); // Loading spinner state while saving changes
+  const [passportError, setPassportError] = useState(""); // Error message banner for passport modifications
+  const [bloodGroup, setBloodGroup] = useState(""); // Controlled input state for selected blood group
+  const [allergies, setAllergies] = useState(""); // Comma-separated allergies input string
+  const [conditions, setConditions] = useState(""); // Comma-separated pre-existing conditions input string
 
   // Validation predicates for Health Passport baseline (Req 8 & 9)
-  const isBloodGroupValid = Boolean(bloodGroup && VALID_BLOOD_GROUPS.includes(bloodGroup as any));
-  const parsedAllergies = allergies.split(',').map(s => s.trim()).filter(Boolean);
-  const areAllergiesValid = parsedAllergies.every(a => a.length >= 1 && a.length <= 160) && parsedAllergies.length <= 50;
-  const parsedConditions = conditions.split(',').map(s => s.trim()).filter(Boolean);
-  const areConditionsValid = parsedConditions.every(c => c.length >= 1 && c.length <= 160) && parsedConditions.length <= 50;
-  const isPassportValid = isBloodGroupValid && areAllergiesValid && areConditionsValid;
+  const isBloodGroupValid = Boolean(
+    bloodGroup && VALID_BLOOD_GROUPS.includes(bloodGroup as any)
+  );
+  const parsedAllergies = allergies
+    .split(",")
+    .map(s => s.trim())
+    .filter(Boolean);
+  const areAllergiesValid =
+    parsedAllergies.every(a => a.length >= 1 && a.length <= 160) &&
+    parsedAllergies.length <= 50;
+  const parsedConditions = conditions
+    .split(",")
+    .map(s => s.trim())
+    .filter(Boolean);
+  const areConditionsValid =
+    parsedConditions.every(c => c.length >= 1 && c.length <= 160) &&
+    parsedConditions.length <= 50;
+  const isPassportValid =
+    isBloodGroupValid && areAllergiesValid && areConditionsValid;
 
   // Requirement 7: Filter Health Passport history to display only valid and active records
   const validAssessments = React.useMemo(() => {
@@ -107,232 +148,350 @@ export const HealthPassport = () => {
     return assessmentsQuery.data.filter((item: any) => {
       if (!item) return false;
       // Exclude failed/error triage states
-      if (item.urgency === 'ERROR' || !item.urgency) return false;
+      if (item.urgency === "ERROR" || !item.urgency) return false;
       // Exclude records with missing or empty symptoms
-      if (!item.symptoms || typeof item.symptoms !== 'string' || !item.symptoms.trim()) return false;
+      if (
+        !item.symptoms ||
+        typeof item.symptoms !== "string" ||
+        !item.symptoms.trim()
+      )
+        return false;
       // Exclude records with missing or unrecognized specialty
-      if (!item.specialty || typeof item.specialty !== 'string' || !item.specialty.trim() || item.specialty.toLowerCase() === 'unknown') return false;
+      if (
+        !item.specialty ||
+        typeof item.specialty !== "string" ||
+        !item.specialty.trim() ||
+        item.specialty.toLowerCase() === "unknown"
+      )
+        return false;
       // Exclude inactive records if flagged
-      if (item.status && item.status !== 'active') return false;
+      if (item.status && item.status !== "active") return false;
       if (item.isActive === false) return false;
       // Exclude invalid timestamps
-      if (!item.createdAt || isNaN(new Date(item.createdAt).getTime())) return false;
+      if (!item.createdAt || isNaN(new Date(item.createdAt).getTime()))
+        return false;
       return true;
     });
   }, [assessmentsQuery.data]);
 
   // Emergency Contact Modal state
-  const [isContactModalOpen, setIsContactModalOpen] = useState(false);                          // Modal visibility toggle
-  const [contactDraft, setContactDraft] = useState<EmergencyContactDraft>({ name: '', relationship: '', phone: '' }); // Form draft state
-  const [contactError, setContactError] = useState('');                                         // Modal validation error text
-  const [isSavingContact, setIsSavingContact] = useState(false);                                // Spinner state while creating/editing contact
+  const [isContactModalOpen, setIsContactModalOpen] = useState(false); // Modal visibility toggle
+  const [contactDraft, setContactDraft] = useState<EmergencyContactDraft>({
+    name: "",
+    relationship: "",
+    phone: "",
+  }); // Form draft state
+  const [contactError, setContactError] = useState(""); // Modal validation error text
+  const [isSavingContact, setIsSavingContact] = useState(false); // Spinner state while creating/editing contact
 
   // Validation predicates for Emergency Contact modal
   const PHONE_REGEX = /^\+?[0-9][0-9\s().-]{6,31}$/;
-  const isContactNameValid = contactDraft.name.trim().length >= 2 && contactDraft.name.trim().length <= 160;
-  const isContactRelationshipValid = contactDraft.relationship.trim().length >= 2 && contactDraft.relationship.trim().length <= 80;
+  const isContactNameValid =
+    contactDraft.name.trim().length >= 2 &&
+    contactDraft.name.trim().length <= 160;
+  const isContactRelationshipValid =
+    contactDraft.relationship.trim().length >= 2 &&
+    contactDraft.relationship.trim().length <= 80;
   const isContactPhoneValid = PHONE_REGEX.test(contactDraft.phone.trim());
-  const isContactValid = isContactNameValid && isContactRelationshipValid && isContactPhoneValid;
+  const isContactValid =
+    isContactNameValid && isContactRelationshipValid && isContactPhoneValid;
 
   // Delete Contact confirmation state
-  const [contactToDelete, setContactToDelete] = useState<EmergencyContactItem | null>(null);   // Contact currently targeted for deletion
-  const [isDeletingContact, setIsDeletingContact] = useState(false);                            // Deletion in-flight status flag
-  const [deleteError, setDeleteError] = useState('');                                           // Error banner for failed contact deletion
+  const [contactToDelete, setContactToDelete] =
+    useState<EmergencyContactItem | null>(null); // Contact currently targeted for deletion
+  const [isDeletingContact, setIsDeletingContact] = useState(false); // Deletion in-flight status flag
+  const [deleteError, setDeleteError] = useState(""); // Error banner for failed contact deletion
 
   // Synchronize local form inputs whenever backend profile query refreshes
   useEffect(() => {
-    if (!profileQuery.data) return;                                                             // Wait until profile query resolves
-    setBloodGroup(profileQuery.data.bloodGroup || '');                                          // Set current blood group
-    setAllergies(profileQuery.data.allergies.join(', '));                                       // Format allergies array into readable string
-    setConditions(profileQuery.data.conditions.join(', '));                                     // Format conditions array into readable string
+    if (!profileQuery.data) return; // Wait until profile query resolves
+    setBloodGroup(profileQuery.data.bloodGroup || ""); // Set current blood group
+    setAllergies(profileQuery.data.allergies.join(", ")); // Format allergies array into readable string
+    setConditions(profileQuery.data.conditions.join(", ")); // Format conditions array into readable string
   }, [profileQuery.data]);
 
   // Loading skeleton state
-  if (profileQuery.isLoading) {                                                                 // Show spinner while fetching profile
+  if (profileQuery.isLoading) {
+    // Show spinner while fetching profile
     return (
-      <div className="flex items-center justify-center" style={{ minHeight: '50vh' }}>
-        <p className="caption" style={{ color: 'var(--color-text-muted)' }}>Loading Health Passport…</p>
+      <div
+        className="flex items-center justify-center"
+        style={{ minHeight: "50vh" }}
+      >
+        <p className="caption" style={{ color: "var(--color-text-muted)" }}>
+          Loading Health Passport…
+        </p>
       </div>
     );
   }
 
   // Error boundary state if profile cannot be retrieved
-  if (!profileQuery.data) {                                                                     // Handle unauthorized or missing profile
+  if (!profileQuery.data) {
+    // Handle unauthorized or missing profile
     return (
-      <div className="flex items-center justify-center" style={{ minHeight: '50vh' }}>
-        <p className="caption" style={{ color: 'var(--color-semantic-emergency)' }}>
+      <div
+        className="flex items-center justify-center"
+        style={{ minHeight: "50vh" }}
+      >
+        <p
+          className="caption"
+          style={{ color: "var(--color-semantic-emergency)" }}
+        >
           Health Passport could not be loaded. Please refresh your browser.
         </p>
       </div>
     );
   }
 
-  const patient = profileQuery.data;                                                            // Active patient data record
+  const patient = profileQuery.data; // Active patient data record
 
   // Passport Edit Handlers: open form
   const handleEditClick = () => {
-    setPassportError('');                                                                       // Clear past error alerts
-    setBloodGroup(patient.bloodGroup || '');                                                    // Seed blood group
-    setAllergies(patient.allergies.join(', '));                                                 // Seed allergies
-    setConditions(patient.conditions.join(', '));                                               // Seed conditions
-    setIsEditing(true);                                                                         // Turn on edit mode
+    setPassportError(""); // Clear past error alerts
+    setBloodGroup(patient.bloodGroup || ""); // Seed blood group
+    setAllergies(patient.allergies.join(", ")); // Seed allergies
+    setConditions(patient.conditions.join(", ")); // Seed conditions
+    setIsEditing(true); // Turn on edit mode
   };
 
   // Passport Edit Handlers: cancel changes and revert to original values
   const handleCancelPassportEdit = () => {
-    setPassportError('');                                                                       // Reset error
-    setBloodGroup(patient.bloodGroup || '');                                                    // Restore blood group
-    setAllergies(patient.allergies.join(', '));                                                 // Restore allergies
-    setConditions(patient.conditions.join(', '));                                               // Restore conditions
-    setIsEditing(false);                                                                        // Turn off edit mode
+    setPassportError(""); // Reset error
+    setBloodGroup(patient.bloodGroup || ""); // Restore blood group
+    setAllergies(patient.allergies.join(", ")); // Restore allergies
+    setConditions(patient.conditions.join(", ")); // Restore conditions
+    setIsEditing(false); // Turn off edit mode
   };
 
   // Passport Edit Handlers: commit changes to server
   const handleSavePassport = async () => {
     if (!isPassportValid) {
-      setPassportError('Please complete all required fields and resolve validation errors before saving.');
+      setPassportError(
+        "Please complete all required fields and resolve validation errors before saving."
+      );
       return;
     }
-    setIsSaving(true);                                                                          // Engage button spinner
-    setPassportError('');                                                                       // Clear errors
+    setIsSaving(true); // Engage button spinner
+    setPassportError(""); // Clear errors
     try {
       await updateMutation.mutateAsync({
-        bloodGroup: bloodGroup.trim() || undefined,                                             // Send cleaned blood group
-        allergies: parsedAllergies,                                                             // Validated allergies array
-        conditions: parsedConditions,                                                           // Validated conditions array
+        bloodGroup: bloodGroup.trim() || undefined, // Send cleaned blood group
+        allergies: parsedAllergies, // Validated allergies array
+        conditions: parsedConditions, // Validated conditions array
       });
-      await trpcUtils.patientProfile.get.invalidate();                                          // Force refresh of profile queries
-      await trpcUtils.patientDashboard.summary.invalidate();                                     // Force refresh of dashboard health counters
-      setIsEditing(false);                                                                      // Exit edit mode on success
+      await trpcUtils.patientProfile.get.invalidate(); // Force refresh of profile queries
+      await trpcUtils.patientDashboard.summary.invalidate(); // Force refresh of dashboard health counters
+      setIsEditing(false); // Exit edit mode on success
     } catch (e: any) {
-      setPassportError(formatUserFriendlyError(e, 'Failed to update Health Passport. Please try again.')); // Display user-friendly error message
+      setPassportError(
+        formatUserFriendlyError(
+          e,
+          "Failed to update Health Passport. Please try again."
+        )
+      ); // Display user-friendly error message
     } finally {
-      setIsSaving(false);                                                                       // Release saving indicator
+      setIsSaving(false); // Release saving indicator
     }
   };
 
   // Contact Modal Handlers: open blank modal
   const openAddContact = () => {
-    setContactError('');                                                                        // Clear errors
-    setContactDraft({ name: '', relationship: '', phone: '' });                                 // Reset modal form
-    setIsContactModalOpen(true);                                                                // Display modal
+    setContactError(""); // Clear errors
+    setContactDraft({ name: "", relationship: "", phone: "" }); // Reset modal form
+    setIsContactModalOpen(true); // Display modal
   };
 
   // Contact Modal Handlers: open modal with existing contact details
   const openEditContact = (contact: EmergencyContactItem) => {
-    setContactError('');                                                                        // Clear errors
+    setContactError(""); // Clear errors
     setContactDraft({
-      id: contact.id,                                                                           // Track editing contact's DB id
-      name: contact.name,                                                                       // Populate name
-      relationship: contact.relationship,                                                       // Populate relationship
-      phone: contact.phone,                                                                     // Populate telephone
+      id: contact.id, // Track editing contact's DB id
+      name: contact.name, // Populate name
+      relationship: contact.relationship, // Populate relationship
+      phone: contact.phone, // Populate telephone
     });
-    setIsContactModalOpen(true);                                                                // Open modal
+    setIsContactModalOpen(true); // Open modal
   };
 
   // Contact Modal Handlers: close modal
   const closeContactModal = () => {
-    setIsContactModalOpen(false);                                                               // Hide modal
-    setContactDraft({ name: '', relationship: '', phone: '' });                                 // Wipe draft fields
-    setContactError('');                                                                        // Clear errors
+    setIsContactModalOpen(false); // Hide modal
+    setContactDraft({ name: "", relationship: "", phone: "" }); // Wipe draft fields
+    setContactError(""); // Clear errors
   };
 
   // Contact Modal Handlers: save contact to backend
   const handleSaveContact = async (e: React.FormEvent) => {
-    e.preventDefault();                                                                         // Prevent form submission refresh
-    const name = contactDraft.name.trim();                                                      // Clean name
-    const relationship = contactDraft.relationship.trim();                                      // Clean relationship
-    const phone = contactDraft.phone.trim();                                                    // Clean phone number
+    e.preventDefault(); // Prevent form submission refresh
+    const name = contactDraft.name.trim(); // Clean name
+    const relationship = contactDraft.relationship.trim(); // Clean relationship
+    const phone = contactDraft.phone.trim(); // Clean phone number
 
-    if (!name || !relationship || !phone) {                                                     // Validate required inputs
-      setContactError('Please fill out the contact name, relationship, and phone number.');
+    if (!name || !relationship || !phone) {
+      // Validate required inputs
+      setContactError(
+        "Please fill out the contact name, relationship, and phone number."
+      );
       return;
     }
 
     if (!isContactValid) {
-      setContactError('Please resolve all validation errors before saving this contact.');
+      setContactError(
+        "Please resolve all validation errors before saving this contact."
+      );
       return;
     }
 
-    setIsSavingContact(true);                                                                   // Turn on saving state
-    setContactError('');                                                                        // Clear errors
+    setIsSavingContact(true); // Turn on saving state
+    setContactError(""); // Clear errors
     try {
       if (contactDraft.id) {
         await updateEmergencyContactMutation.mutateAsync({
-          id: Number(contactDraft.id),                                                          // Target existing contact ID
-          values: { name, relationship, phone },                                                // New contact details
+          id: Number(contactDraft.id), // Target existing contact ID
+          values: { name, relationship, phone }, // New contact details
         });
       } else {
-        await createEmergencyContactMutation.mutateAsync({ name, relationship, phone });        // Create new contact record
+        await createEmergencyContactMutation.mutateAsync({
+          name,
+          relationship,
+          phone,
+        }); // Create new contact record
       }
-      await trpcUtils.patientProfile.get.invalidate();                                          // Re-fetch patient contacts
-      await trpcUtils.patientDashboard.summary.invalidate();                                     // Re-fetch dashboard overview
-      closeContactModal();                                                                      // Close dialog on success
+      await trpcUtils.patientProfile.get.invalidate(); // Re-fetch patient contacts
+      await trpcUtils.patientDashboard.summary.invalidate(); // Re-fetch dashboard overview
+      closeContactModal(); // Close dialog on success
     } catch (error: any) {
-      setContactError(formatUserFriendlyError(error, 'The emergency contact could not be saved. Please check details and try again.'));
+      setContactError(
+        formatUserFriendlyError(
+          error,
+          "The emergency contact could not be saved. Please check details and try again."
+        )
+      );
     } finally {
-      setIsSavingContact(false);                                                                // Release saving state
+      setIsSavingContact(false); // Release saving state
     }
   };
 
   // Contact Delete Handlers: confirm and delete from database
   const confirmDeleteContact = async () => {
-    if (!contactToDelete) return;                                                               // Guard against empty state
-    setIsDeletingContact(true);                                                                 // Turn on deleting flag
-    setDeleteError('');                                                                         // Clear errors
+    if (!contactToDelete) return; // Guard against empty state
+    setIsDeletingContact(true); // Turn on deleting flag
+    setDeleteError(""); // Clear errors
     try {
-      await removeEmergencyContactMutation.mutateAsync({ id: Number(contactToDelete.id) });      // Send deletion request to backend
-      await trpcUtils.patientProfile.get.invalidate();                                          // Update local cache
-      await trpcUtils.patientDashboard.summary.invalidate();                                     // Refresh summary cards
-      setContactToDelete(null);                                                                 // Dismiss confirmation modal
+      await removeEmergencyContactMutation.mutateAsync({
+        id: Number(contactToDelete.id),
+      }); // Send deletion request to backend
+      await trpcUtils.patientProfile.get.invalidate(); // Update local cache
+      await trpcUtils.patientDashboard.summary.invalidate(); // Refresh summary cards
+      setContactToDelete(null); // Dismiss confirmation modal
     } catch (err: any) {
-      setDeleteError(formatUserFriendlyError(err, 'Failed to remove contact. Please try again.')); // Display error
+      setDeleteError(
+        formatUserFriendlyError(
+          err,
+          "Failed to remove contact. Please try again."
+        )
+      ); // Display error
     } finally {
-      setIsDeletingContact(false);                                                              // Clear deleting flag
+      setIsDeletingContact(false); // Clear deleting flag
     }
   };
 
   // Uniform glassmorphic card styling configuration
   const cardStyle = {
-    padding: 'clamp(24px, 3.2vw, 32px)',
-    display: 'flex',
-    flexDirection: 'column' as const,
-    minHeight: '210px',
-    background: 'var(--color-surface-white)',
-    border: '1px solid var(--color-border)',
-    borderRadius: 'var(--border-radius-md)',
-    boxShadow: 'none',
+    padding: "clamp(24px, 3.2vw, 32px)",
+    display: "flex",
+    flexDirection: "column" as const,
+    minHeight: "210px",
+    background: "var(--color-surface-white)",
+    border: "1px solid var(--color-border)",
+    borderRadius: "var(--border-radius-md)",
+    boxShadow: "none",
   };
 
   const iconCircleStyle = {
-    width: '36px',
-    height: '36px',
-    borderRadius: 'var(--border-radius-sm)',
-    background: 'var(--color-primary-muted)',
-    display: 'grid',
-    placeItems: 'center',
-    color: 'var(--color-primary)',
+    width: "36px",
+    height: "36px",
+    borderRadius: "var(--border-radius-sm)",
+    background: "var(--color-primary-muted)",
+    display: "grid",
+    placeItems: "center",
+    color: "var(--color-primary)",
     flexShrink: 0,
   };
 
   return (
-    <div style={{ display: 'flex', flexDirection: 'column', gap: '36px' }}>
-
+    <div style={{ display: "flex", flexDirection: "column", gap: "36px" }}>
       {/* Header with Title and Edit Toggle */}
-      <header style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', flexWrap: 'wrap', gap: '16px', borderBottom: '2px solid var(--color-border)', paddingBottom: '24px', width: '100%', minWidth: 0 }}>
-        <div style={{ display: 'flex', alignItems: 'center', gap: '16px', minWidth: 0, flex: '1 1 min(280px, 100%)' }}>
-          <div style={{ width: '44px', height: '44px', borderRadius: 'var(--border-radius-sm)', background: 'var(--color-primary-muted)', display: 'grid', placeItems: 'center', color: 'var(--color-primary)', flexShrink: 0 }}>
+      <header
+        style={{
+          display: "flex",
+          justifyContent: "space-between",
+          alignItems: "flex-start",
+          flexWrap: "wrap",
+          gap: "16px",
+          borderBottom: "2px solid var(--color-border)",
+          paddingBottom: "24px",
+          width: "100%",
+          minWidth: 0,
+        }}
+      >
+        <div
+          style={{
+            display: "flex",
+            alignItems: "center",
+            gap: "16px",
+            minWidth: 0,
+            flex: "1 1 min(280px, 100%)",
+          }}
+        >
+          <div
+            style={{
+              width: "44px",
+              height: "44px",
+              borderRadius: "var(--border-radius-sm)",
+              background: "var(--color-primary-muted)",
+              display: "grid",
+              placeItems: "center",
+              color: "var(--color-primary)",
+              flexShrink: 0,
+            }}
+          >
             <FileHeart size={24} />
           </div>
-          <div style={{ minWidth: 0, flex: '1 1 auto' }}>
-            <span style={{ fontSize: '0.72rem', fontWeight: 700, color: 'var(--color-primary)', textTransform: 'uppercase', letterSpacing: '0.06em', display: 'block' }}>
+          <div style={{ minWidth: 0, flex: "1 1 auto" }}>
+            <span
+              style={{
+                fontSize: "0.72rem",
+                fontWeight: 700,
+                color: "var(--color-primary)",
+                textTransform: "uppercase",
+                letterSpacing: "0.06em",
+                display: "block",
+              }}
+            >
               Official Medical Record
             </span>
-            <h1 style={{ fontSize: 'clamp(1.4rem, 4.5vw, 2rem)', fontWeight: 700, margin: '2px 0 0', color: 'var(--color-text)', letterSpacing: '-0.02em', lineHeight: 1.25 }}>
+            <h1
+              style={{
+                fontSize: "clamp(1.4rem, 4.5vw, 2rem)",
+                fontWeight: 700,
+                margin: "2px 0 0",
+                color: "var(--color-text)",
+                letterSpacing: "-0.02em",
+                lineHeight: 1.25,
+              }}
+            >
               Digital Health Passport
             </h1>
-            <p style={{ color: 'var(--color-text-muted)', fontSize: '0.9rem', margin: '3px 0 0' }}>
-              Patient-controlled clinical baseline data and verified medical history.
+            <p
+              style={{
+                color: "var(--color-text-muted)",
+                fontSize: "0.9rem",
+                margin: "3px 0 0",
+              }}
+            >
+              Patient-controlled clinical baseline data and verified medical
+              history.
             </p>
           </div>
         </div>
@@ -342,17 +501,29 @@ export const HealthPassport = () => {
           <Button
             variant="outline"
             onClick={handleEditClick}
-            style={{ display: 'flex', gap: '8px', alignItems: 'center', fontWeight: 600 }}
+            style={{
+              display: "flex",
+              gap: "8px",
+              alignItems: "center",
+              fontWeight: 600,
+            }}
           >
             <Edit2 size={15} /> Edit Passport
           </Button>
         ) : (
-          <div style={{ display: 'flex', gap: '8px', alignItems: 'center', flexWrap: 'wrap' }}>
+          <div
+            style={{
+              display: "flex",
+              gap: "8px",
+              alignItems: "center",
+              flexWrap: "wrap",
+            }}
+          >
             <Button
               variant="outline"
               onClick={handleCancelPassportEdit}
               disabled={isSaving}
-              style={{ display: 'flex', gap: '6px', alignItems: 'center' }}
+              style={{ display: "flex", gap: "6px", alignItems: "center" }}
             >
               <X size={15} /> Cancel
             </Button>
@@ -360,29 +531,55 @@ export const HealthPassport = () => {
               variant="primary"
               onClick={handleSavePassport}
               disabled={isSaving || !isPassportValid}
-              title={!isPassportValid ? 'Please complete all required fields and resolve validation errors to save.' : 'Save Changes'}
+              title={
+                !isPassportValid
+                  ? "Please complete all required fields and resolve validation errors to save."
+                  : "Save Changes"
+              }
               style={{
-                display: 'flex',
-                gap: '6px',
-                alignItems: 'center',
-                background: !isPassportValid ? 'var(--color-surface-interactive)' : 'var(--color-primary)',
-                borderColor: !isPassportValid ? 'var(--color-border)' : 'var(--color-primary)',
-                color: !isPassportValid ? 'var(--color-text-muted)' : '#FFF',
+                display: "flex",
+                gap: "6px",
+                alignItems: "center",
+                background: !isPassportValid
+                  ? "var(--color-surface-interactive)"
+                  : "var(--color-primary)",
+                borderColor: !isPassportValid
+                  ? "var(--color-border)"
+                  : "var(--color-primary)",
+                color: !isPassportValid ? "var(--color-text-muted)" : "#FFF",
                 fontWeight: 700,
-                cursor: !isPassportValid ? 'not-allowed' : 'pointer',
+                cursor: !isPassportValid ? "not-allowed" : "pointer",
                 opacity: !isPassportValid ? 0.65 : 1,
               }}
             >
-              <Save size={15} /> {isSaving ? 'Saving…' : 'Save Changes'}
+              <Save size={15} /> {isSaving ? "Saving…" : "Save Changes"}
             </Button>
           </div>
         )}
       </header>
 
       {/* SECTION: PATIENT INFORMATION */}
-      <section aria-label="Patient identity summary" style={{ width: '100%', minWidth: 0 }}>
-        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '12px' }}>
-          <span style={{ fontSize: '0.72rem', fontWeight: 700, color: 'var(--color-text-muted)', textTransform: 'uppercase', letterSpacing: '0.06em' }}>
+      <section
+        aria-label="Patient identity summary"
+        style={{ width: "100%", minWidth: 0 }}
+      >
+        <div
+          style={{
+            display: "flex",
+            justifyContent: "space-between",
+            alignItems: "center",
+            marginBottom: "12px",
+          }}
+        >
+          <span
+            style={{
+              fontSize: "0.72rem",
+              fontWeight: 700,
+              color: "var(--color-text-muted)",
+              textTransform: "uppercase",
+              letterSpacing: "0.06em",
+            }}
+          >
             Patient Information
           </span>
           <Badge status="neutral">Verified Passport</Badge>
@@ -390,27 +587,67 @@ export const HealthPassport = () => {
         <div
           className="solid-clinical-surface"
           style={{
-            padding: '22px 28px',
-            borderRadius: 'var(--border-radius-md)',
-            border: '1px solid var(--color-border)',
-            background: 'var(--color-surface-white)',
-            display: 'grid',
-            gridTemplateColumns: 'repeat(auto-fit, minmax(min(100%, 200px), 1fr))',
-            gap: '24px',
-            width: '100%',
+            padding: "22px 28px",
+            borderRadius: "var(--border-radius-md)",
+            border: "1px solid var(--color-border)",
+            background: "var(--color-surface-white)",
+            display: "grid",
+            gridTemplateColumns:
+              "repeat(auto-fit, minmax(min(100%, 200px), 1fr))",
+            gap: "24px",
+            width: "100%",
             minWidth: 0,
-            boxSizing: 'border-box',
+            boxSizing: "border-box",
           }}
         >
           <div>
-            <span className="caption" style={{ textTransform: 'uppercase', fontSize: '10px', fontWeight: 700, color: 'var(--color-text-muted)', letterSpacing: '0.05em' }}>Full Name</span>
-            <div style={{ fontWeight: 700, fontSize: '1rem', color: 'var(--color-text)', marginTop: '2px' }}>{patient.name || 'Verified Patient'}</div>
+            <span
+              className="caption"
+              style={{
+                textTransform: "uppercase",
+                fontSize: "10px",
+                fontWeight: 700,
+                color: "var(--color-text-muted)",
+                letterSpacing: "0.05em",
+              }}
+            >
+              Full Name
+            </span>
+            <div
+              style={{
+                fontWeight: 700,
+                fontSize: "1rem",
+                color: "var(--color-text)",
+                marginTop: "2px",
+              }}
+            >
+              {patient.name || "Verified Patient"}
+            </div>
           </div>
           <div>
-            <span className="caption" style={{ textTransform: 'uppercase', fontSize: '10px', fontWeight: 700, color: 'var(--color-text-muted)', letterSpacing: '0.05em' }}>Registered Contact</span>
-            <div style={{ fontWeight: 600, fontSize: '0.95rem', color: 'var(--color-text)', marginTop: '2px' }}>{patient.phone || patient.email || 'On record'}</div>
+            <span
+              className="caption"
+              style={{
+                textTransform: "uppercase",
+                fontSize: "10px",
+                fontWeight: 700,
+                color: "var(--color-text-muted)",
+                letterSpacing: "0.05em",
+              }}
+            >
+              Registered Contact
+            </span>
+            <div
+              style={{
+                fontWeight: 600,
+                fontSize: "0.95rem",
+                color: "var(--color-text)",
+                marginTop: "2px",
+              }}
+            >
+              {patient.phone || patient.email || "On record"}
+            </div>
           </div>
-
         </div>
       </section>
 
@@ -419,15 +656,15 @@ export const HealthPassport = () => {
         <div
           role="alert"
           style={{
-            display: 'flex',
-            alignItems: 'center',
-            gap: '12px',
-            padding: '14px 18px',
-            background: 'rgba(220, 38, 38, 0.08)',
-            border: '1px solid rgba(220, 38, 38, 0.25)',
-            borderRadius: '4px',
-            color: 'var(--color-semantic-emergency)',
-            fontSize: '0.9rem',
+            display: "flex",
+            alignItems: "center",
+            gap: "12px",
+            padding: "14px 18px",
+            background: "rgba(220, 38, 38, 0.08)",
+            border: "1px solid rgba(220, 38, 38, 0.25)",
+            borderRadius: "4px",
+            color: "var(--color-semantic-emergency)",
+            fontSize: "0.9rem",
           }}
         >
           <AlertCircle size={20} style={{ flexShrink: 0 }} />
@@ -440,28 +677,96 @@ export const HealthPassport = () => {
           ===================================================================================== */}
       <section
         className="health-passport-baseline-grid"
-        style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(min(100%, 280px), 1fr))', gap: '24px', width: '100%', minWidth: 0 }}
+        style={{
+          display: "grid",
+          gridTemplateColumns:
+            "repeat(auto-fit, minmax(min(100%, 280px), 1fr))",
+          gap: "24px",
+          width: "100%",
+          minWidth: 0,
+        }}
         aria-label="Core clinical information"
       >
         {/* Blood Group Card */}
         <Card style={cardStyle}>
-          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '20px' }}>
-            <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
-              <div style={iconCircleStyle}><Droplets size={20} /></div>                         {/* Blood droplet icon */}
-              <h2 style={{ margin: 0, fontSize: '1.1rem', fontWeight: 700, color: 'var(--color-text)' }}>
+          <div
+            style={{
+              display: "flex",
+              justifyContent: "space-between",
+              alignItems: "center",
+              marginBottom: "20px",
+            }}
+          >
+            <div style={{ display: "flex", alignItems: "center", gap: "10px" }}>
+              <div style={iconCircleStyle}>
+                <Droplets size={20} />
+              </div>{" "}
+              {/* Blood droplet icon */}
+              <h2
+                style={{
+                  margin: 0,
+                  fontSize: "1.1rem",
+                  fontWeight: 700,
+                  color: "var(--color-text)",
+                }}
+              >
                 Blood Group
               </h2>
             </div>
-            {isEditing && <span style={{ fontSize: '0.78rem', color: 'var(--color-text-muted)', fontWeight: 600 }}>Editing</span>}
+            {isEditing && (
+              <span
+                style={{
+                  fontSize: "0.78rem",
+                  color: "var(--color-text-muted)",
+                  fontWeight: 600,
+                }}
+              >
+                Editing
+              </span>
+            )}
           </div>
 
-          <div style={{ flex: 1, display: 'flex', flexDirection: 'column', justifyContent: 'center', minHeight: '90px' }}>
+          <div
+            style={{
+              flex: 1,
+              display: "flex",
+              flexDirection: "column",
+              justifyContent: "center",
+              minHeight: "90px",
+            }}
+          >
             {isEditing ? (
-              <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
-                <label htmlFor="health-passport-blood-group" style={{ display: 'flex', flexDirection: 'column', gap: '6px' }}>
-                  <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-                    <span style={{ fontSize: '0.82rem', color: 'var(--color-text-muted)', fontWeight: 600 }}>
-                      Select Blood Group <span style={{ color: 'var(--color-semantic-emergency)' }}>*</span>
+              <div
+                style={{ display: "flex", flexDirection: "column", gap: "8px" }}
+              >
+                <label
+                  htmlFor="health-passport-blood-group"
+                  style={{
+                    display: "flex",
+                    flexDirection: "column",
+                    gap: "6px",
+                  }}
+                >
+                  <div
+                    style={{
+                      display: "flex",
+                      justifyContent: "space-between",
+                      alignItems: "center",
+                    }}
+                  >
+                    <span
+                      style={{
+                        fontSize: "0.82rem",
+                        color: "var(--color-text-muted)",
+                        fontWeight: 600,
+                      }}
+                    >
+                      Select Blood Group{" "}
+                      <span
+                        style={{ color: "var(--color-semantic-emergency)" }}
+                      >
+                        *
+                      </span>
                     </span>
                   </div>
                   <select
@@ -470,22 +775,28 @@ export const HealthPassport = () => {
                     aria-required="true"
                     aria-invalid={!isBloodGroupValid}
                     value={bloodGroup}
-                    onChange={(e) => setBloodGroup(e.target.value)}                               // Update selected blood type
+                    onChange={e => setBloodGroup(e.target.value)} // Update selected blood type
                     style={{
-                      height: '46px',
-                      padding: '0 38px 0 14px',
-                      borderRadius: '8px',
-                      border: !isBloodGroupValid ? '1px solid var(--color-semantic-emergency)' : '1px solid var(--color-border)',
-                      backgroundColor: 'var(--color-background)',
-                      color: 'var(--color-text)',
-                      fontSize: '1.1rem',
+                      height: "46px",
+                      padding: "0 38px 0 14px",
+                      borderRadius: "8px",
+                      border: !isBloodGroupValid
+                        ? "1px solid var(--color-semantic-emergency)"
+                        : "1px solid var(--color-border)",
+                      backgroundColor: "var(--color-background)",
+                      color: "var(--color-text)",
+                      fontSize: "1.1rem",
                       fontWeight: 700,
-                      outline: 'none',
+                      outline: "none",
                     }}
                   >
-                    <option value="">-- Select Blood Group (Required) --</option>
-                    {VALID_BLOOD_GROUPS.map((bg) => (
-                      <option key={bg} value={bg}>{bg}</option>                                   // Standard blood group dropdown choices
+                    <option value="">
+                      -- Select Blood Group (Required) --
+                    </option>
+                    {VALID_BLOOD_GROUPS.map(bg => (
+                      <option key={bg} value={bg}>
+                        {bg}
+                      </option> // Standard blood group dropdown choices
                     ))}
                   </select>
                 </label>
@@ -499,11 +810,27 @@ export const HealthPassport = () => {
             ) : (
               <div>
                 {patient.bloodGroup ? (
-                  <strong style={{ fontSize: '2.6rem', color: 'var(--color-text)', lineHeight: 1, fontWeight: 800, fontVariantNumeric: 'tabular-nums' }}>
-                    {patient.bloodGroup}                                                        {/* Bold high-contrast blood group display */}
+                  <strong
+                    style={{
+                      fontSize: "2.6rem",
+                      color: "var(--color-text)",
+                      lineHeight: 1,
+                      fontWeight: 800,
+                      fontVariantNumeric: "tabular-nums",
+                    }}
+                  >
+                    {patient.bloodGroup}{" "}
+                    {/* Bold high-contrast blood group display */}
                   </strong>
                 ) : (
-                  <span style={{ fontSize: '1.2rem', color: 'var(--color-text-muted)', fontStyle: 'italic', fontWeight: 500 }}>
+                  <span
+                    style={{
+                      fontSize: "1.2rem",
+                      color: "var(--color-text-muted)",
+                      fontStyle: "italic",
+                      fontWeight: 500,
+                    }}
+                  >
                     Not recorded
                   </span>
                 )}
@@ -514,32 +841,85 @@ export const HealthPassport = () => {
 
         {/* Allergies Card */}
         <Card style={cardStyle}>
-          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '20px' }}>
-            <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
-              <div style={iconCircleStyle}><ShieldAlert size={20} /></div>                      {/* Warning shield icon */}
-              <h2 style={{ margin: 0, fontSize: '1.1rem', fontWeight: 700, color: 'var(--color-text)' }}>
+          <div
+            style={{
+              display: "flex",
+              justifyContent: "space-between",
+              alignItems: "center",
+              marginBottom: "20px",
+            }}
+          >
+            <div style={{ display: "flex", alignItems: "center", gap: "10px" }}>
+              <div style={iconCircleStyle}>
+                <ShieldAlert size={20} />
+              </div>{" "}
+              {/* Warning shield icon */}
+              <h2
+                style={{
+                  margin: 0,
+                  fontSize: "1.1rem",
+                  fontWeight: 700,
+                  color: "var(--color-text)",
+                }}
+              >
                 Allergies
               </h2>
             </div>
-            {isEditing && <span style={{ fontSize: '0.78rem', color: 'var(--color-text-muted)', fontWeight: 600 }}>Editing</span>}
+            {isEditing && (
+              <span
+                style={{
+                  fontSize: "0.78rem",
+                  color: "var(--color-text-muted)",
+                  fontWeight: 600,
+                }}
+              >
+                Editing
+              </span>
+            )}
           </div>
 
-          <div style={{ flex: 1, display: 'flex', flexDirection: 'column', justifyContent: 'center' }}>
+          <div
+            style={{
+              flex: 1,
+              display: "flex",
+              flexDirection: "column",
+              justifyContent: "center",
+            }}
+          >
             {isEditing ? (
-              <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
-                <label htmlFor="health-passport-allergies" style={{ display: 'flex', flexDirection: 'column', gap: '6px' }}>
-                  <span style={{ fontSize: '0.82rem', color: 'var(--color-text-muted)', fontWeight: 600 }}>Allergies (comma-separated)</span>
+              <div
+                style={{ display: "flex", flexDirection: "column", gap: "8px" }}
+              >
+                <label
+                  htmlFor="health-passport-allergies"
+                  style={{
+                    display: "flex",
+                    flexDirection: "column",
+                    gap: "6px",
+                  }}
+                >
+                  <span
+                    style={{
+                      fontSize: "0.82rem",
+                      color: "var(--color-text-muted)",
+                      fontWeight: 600,
+                    }}
+                  >
+                    Allergies (comma-separated)
+                  </span>
                   <Input
                     id="health-passport-allergies"
                     type="text"
                     value={allergies}
-                    onChange={(e) => setAllergies(e.target.value)}                                // Input string of allergies
+                    onChange={e => setAllergies(e.target.value)} // Input string of allergies
                     placeholder="e.g. Penicillin, Peanuts, Latex"
                     style={{
-                      background: 'var(--color-background)',
-                      borderColor: !areAllergiesValid ? 'var(--color-semantic-emergency)' : 'var(--color-border)',
-                      color: 'var(--color-text)',
-                      borderRadius: '8px'
+                      background: "var(--color-background)",
+                      borderColor: !areAllergiesValid
+                        ? "var(--color-semantic-emergency)"
+                        : "var(--color-border)",
+                      color: "var(--color-text)",
+                      borderRadius: "8px",
                     }}
                   />
                 </label>
@@ -551,18 +931,19 @@ export const HealthPassport = () => {
                 )}
               </div>
             ) : (
-              <div style={{ display: 'flex', flexWrap: 'wrap', gap: '8px' }}>
+              <div style={{ display: "flex", flexWrap: "wrap", gap: "8px" }}>
                 {patient.allergies && patient.allergies.length > 0 ? (
-                  patient.allergies.map((allergy) => (                                          // Render each allergy as a pill badge
+                  patient.allergies.map(allergy => (
+                    // Render each allergy as a pill badge
                     <span
                       key={allergy}
                       style={{
-                        padding: '6px 12px',
-                        borderRadius: '6px',
-                        background: 'rgba(245, 158, 11, 0.14)',
-                        color: 'var(--color-primary)',
-                        border: '1px solid var(--color-border)',
-                        fontSize: '0.88rem',
+                        padding: "6px 12px",
+                        borderRadius: "6px",
+                        background: "rgba(245, 158, 11, 0.14)",
+                        color: "var(--color-primary)",
+                        border: "1px solid var(--color-border)",
+                        fontSize: "0.88rem",
                         fontWeight: 600,
                       }}
                     >
@@ -570,7 +951,13 @@ export const HealthPassport = () => {
                     </span>
                   ))
                 ) : (
-                  <span style={{ fontSize: '0.9rem', color: 'var(--color-text-muted)', fontStyle: 'italic' }}>
+                  <span
+                    style={{
+                      fontSize: "0.9rem",
+                      color: "var(--color-text-muted)",
+                      fontStyle: "italic",
+                    }}
+                  >
                     No allergies recorded.
                   </span>
                 )}
@@ -581,32 +968,85 @@ export const HealthPassport = () => {
 
         {/* Existing Conditions Card */}
         <Card style={cardStyle}>
-          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '20px' }}>
-            <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
-              <div style={iconCircleStyle}><Activity size={20} /></div>                         {/* Activity/pulse icon */}
-              <h2 style={{ margin: 0, fontSize: '1.1rem', fontWeight: 700, color: 'var(--color-text)' }}>
+          <div
+            style={{
+              display: "flex",
+              justifyContent: "space-between",
+              alignItems: "center",
+              marginBottom: "20px",
+            }}
+          >
+            <div style={{ display: "flex", alignItems: "center", gap: "10px" }}>
+              <div style={iconCircleStyle}>
+                <Activity size={20} />
+              </div>{" "}
+              {/* Activity/pulse icon */}
+              <h2
+                style={{
+                  margin: 0,
+                  fontSize: "1.1rem",
+                  fontWeight: 700,
+                  color: "var(--color-text)",
+                }}
+              >
                 Existing Conditions
               </h2>
             </div>
-            {isEditing && <span style={{ fontSize: '0.78rem', color: 'var(--color-text-muted)', fontWeight: 600 }}>Editing</span>}
+            {isEditing && (
+              <span
+                style={{
+                  fontSize: "0.78rem",
+                  color: "var(--color-text-muted)",
+                  fontWeight: 600,
+                }}
+              >
+                Editing
+              </span>
+            )}
           </div>
 
-          <div style={{ flex: 1, display: 'flex', flexDirection: 'column', justifyContent: 'center' }}>
+          <div
+            style={{
+              flex: 1,
+              display: "flex",
+              flexDirection: "column",
+              justifyContent: "center",
+            }}
+          >
             {isEditing ? (
-              <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
-                <label htmlFor="health-passport-conditions" style={{ display: 'flex', flexDirection: 'column', gap: '6px' }}>
-                  <span style={{ fontSize: '0.82rem', color: 'var(--color-text-muted)', fontWeight: 600 }}>Conditions (comma-separated)</span>
+              <div
+                style={{ display: "flex", flexDirection: "column", gap: "8px" }}
+              >
+                <label
+                  htmlFor="health-passport-conditions"
+                  style={{
+                    display: "flex",
+                    flexDirection: "column",
+                    gap: "6px",
+                  }}
+                >
+                  <span
+                    style={{
+                      fontSize: "0.82rem",
+                      color: "var(--color-text-muted)",
+                      fontWeight: 600,
+                    }}
+                  >
+                    Conditions (comma-separated)
+                  </span>
                   <Input
                     id="health-passport-conditions"
                     type="text"
                     value={conditions}
-                    onChange={(e) => setConditions(e.target.value)}                              // Input string of chronic diseases
+                    onChange={e => setConditions(e.target.value)} // Input string of chronic diseases
                     placeholder="e.g. Asthma, Hypertension"
                     style={{
-                      background: 'var(--color-background)',
-                      borderColor: !areConditionsValid ? 'var(--color-semantic-emergency)' : 'var(--color-border)',
-                      color: 'var(--color-text)',
-                      borderRadius: '8px'
+                      background: "var(--color-background)",
+                      borderColor: !areConditionsValid
+                        ? "var(--color-semantic-emergency)"
+                        : "var(--color-border)",
+                      color: "var(--color-text)",
+                      borderRadius: "8px",
                     }}
                   />
                 </label>
@@ -618,18 +1058,19 @@ export const HealthPassport = () => {
                 )}
               </div>
             ) : (
-              <div style={{ display: 'flex', flexWrap: 'wrap', gap: '8px' }}>
+              <div style={{ display: "flex", flexWrap: "wrap", gap: "8px" }}>
                 {patient.conditions && patient.conditions.length > 0 ? (
-                  patient.conditions.map((condition) => (                                       // Render each chronic disease as a pill badge
+                  patient.conditions.map(condition => (
+                    // Render each chronic disease as a pill badge
                     <span
                       key={condition}
                       style={{
-                        padding: '4px 10px',
-                        borderRadius: 'var(--border-radius-badge)',
-                        background: 'var(--swiss-blue-soft)',
-                        color: 'var(--swiss-blue)',
-                        border: '1px solid var(--swiss-blue-border)',
-                        fontSize: '0.85rem',
+                        padding: "4px 10px",
+                        borderRadius: "var(--border-radius-badge)",
+                        background: "var(--swiss-blue-soft)",
+                        color: "var(--swiss-blue)",
+                        border: "1px solid var(--swiss-blue-border)",
+                        fontSize: "0.85rem",
                         fontWeight: 600,
                       }}
                     >
@@ -637,7 +1078,13 @@ export const HealthPassport = () => {
                     </span>
                   ))
                 ) : (
-                  <span style={{ fontSize: '0.9rem', color: 'var(--color-text-muted)', fontStyle: 'italic' }}>
+                  <span
+                    style={{
+                      fontSize: "0.9rem",
+                      color: "var(--color-text-muted)",
+                      fontStyle: "italic",
+                    }}
+                  >
                     No medical conditions recorded.
                   </span>
                 )}
@@ -650,16 +1097,45 @@ export const HealthPassport = () => {
       {/* =====================================================================================
           EMERGENCY CONTACTS SECTION
           ===================================================================================== */}
-      <section style={{ display: 'flex', flexDirection: 'column', gap: '20px' }} aria-labelledby="emergency-contacts-title">
+      <section
+        style={{ display: "flex", flexDirection: "column", gap: "20px" }}
+        aria-labelledby="emergency-contacts-title"
+      >
         <Card style={cardStyle}>
-          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: '16px', marginBottom: '22px' }}>
-            <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
-              <div style={iconCircleStyle}><Users size={20} /></div>                            {/* Users icon */}
+          <div
+            style={{
+              display: "flex",
+              justifyContent: "space-between",
+              alignItems: "center",
+              flexWrap: "wrap",
+              gap: "16px",
+              marginBottom: "22px",
+            }}
+          >
+            <div style={{ display: "flex", alignItems: "center", gap: "10px" }}>
+              <div style={iconCircleStyle}>
+                <Users size={20} />
+              </div>{" "}
+              {/* Users icon */}
               <div>
-                <h2 id="emergency-contacts-title" style={{ margin: 0, fontSize: '1.25rem', fontWeight: 700, color: 'var(--color-text)' }}>
+                <h2
+                  id="emergency-contacts-title"
+                  style={{
+                    margin: 0,
+                    fontSize: "1.25rem",
+                    fontWeight: 700,
+                    color: "var(--color-text)",
+                  }}
+                >
                   Emergency Contacts
                 </h2>
-                <p style={{ margin: '2px 0 0', color: 'var(--color-text-muted)', fontSize: '0.85rem' }}>
+                <p
+                  style={{
+                    margin: "2px 0 0",
+                    color: "var(--color-text-muted)",
+                    fontSize: "0.85rem",
+                  }}
+                >
                   Trusted individuals who can be contacted during an emergency.
                 </p>
               </div>
@@ -668,17 +1144,17 @@ export const HealthPassport = () => {
             {/* Add contact action button */}
             <Button
               variant="primary"
-              onClick={openAddContact}                                                          // Opens create contact dialog
+              onClick={openAddContact} // Opens create contact dialog
               style={{
-                display: 'flex',
-                alignItems: 'center',
-                gap: '6px',
-                borderRadius: '8px',
-                background: 'var(--color-primary)',
-                borderColor: 'var(--color-primary)',
-                color: '#FFF',
+                display: "flex",
+                alignItems: "center",
+                gap: "6px",
+                borderRadius: "8px",
+                background: "var(--color-primary)",
+                borderColor: "var(--color-primary)",
+                color: "#FFF",
                 fontWeight: 700,
-                fontSize: '0.9rem',
+                fontSize: "0.9rem",
               }}
             >
               <Plus size={16} /> Add Contact
@@ -687,45 +1163,135 @@ export const HealthPassport = () => {
 
           {/* Emergency contacts tabular roster */}
           {patient.emergencyContacts && patient.emergencyContacts.length > 0 ? (
-            <div style={{ width: '100%', overflowX: 'auto' }}>
-              <table style={{ width: '100%', borderCollapse: 'collapse', marginTop: '8px' }}>
+            <div style={{ width: "100%", overflowX: "auto" }}>
+              <table
+                style={{
+                  width: "100%",
+                  borderCollapse: "collapse",
+                  marginTop: "8px",
+                }}
+              >
                 <thead>
-                  <tr style={{ borderBottom: '1px solid var(--color-border)' }}>
-                    <th style={{ textAlign: 'left', padding: '12px', color: 'var(--color-text-muted)', fontWeight: 700, fontSize: '0.85rem', textTransform: 'uppercase' }}>Name</th>
-                    <th style={{ textAlign: 'left', padding: '12px', color: 'var(--color-text-muted)', fontWeight: 700, fontSize: '0.85rem', textTransform: 'uppercase' }}>Relationship</th>
-                    <th style={{ textAlign: 'left', padding: '12px', color: 'var(--color-text-muted)', fontWeight: 700, fontSize: '0.85rem', textTransform: 'uppercase' }}>Phone</th>
-                    <th style={{ textAlign: 'right', padding: '12px', color: 'var(--color-text-muted)', fontWeight: 700, fontSize: '0.85rem', textTransform: 'uppercase' }}>Actions</th>
+                  <tr style={{ borderBottom: "1px solid var(--color-border)" }}>
+                    <th
+                      style={{
+                        textAlign: "left",
+                        padding: "12px",
+                        color: "var(--color-text-muted)",
+                        fontWeight: 700,
+                        fontSize: "0.85rem",
+                        textTransform: "uppercase",
+                      }}
+                    >
+                      Name
+                    </th>
+                    <th
+                      style={{
+                        textAlign: "left",
+                        padding: "12px",
+                        color: "var(--color-text-muted)",
+                        fontWeight: 700,
+                        fontSize: "0.85rem",
+                        textTransform: "uppercase",
+                      }}
+                    >
+                      Relationship
+                    </th>
+                    <th
+                      style={{
+                        textAlign: "left",
+                        padding: "12px",
+                        color: "var(--color-text-muted)",
+                        fontWeight: 700,
+                        fontSize: "0.85rem",
+                        textTransform: "uppercase",
+                      }}
+                    >
+                      Phone
+                    </th>
+                    <th
+                      style={{
+                        textAlign: "right",
+                        padding: "12px",
+                        color: "var(--color-text-muted)",
+                        fontWeight: 700,
+                        fontSize: "0.85rem",
+                        textTransform: "uppercase",
+                      }}
+                    >
+                      Actions
+                    </th>
                   </tr>
                 </thead>
                 <tbody>
-                  {patient.emergencyContacts.map((contact) => (
-                    <tr key={contact.id} style={{ borderBottom: '1px solid var(--color-border)' }}>
-                      <td style={{ padding: '14px 12px', fontWeight: 700, color: 'var(--color-text)', fontSize: '0.95rem' }}>
-                        {contact.name}                                                          {/* Contact full name */}
+                  {patient.emergencyContacts.map(contact => (
+                    <tr
+                      key={contact.id}
+                      style={{ borderBottom: "1px solid var(--color-border)" }}
+                    >
+                      <td
+                        style={{
+                          padding: "14px 12px",
+                          fontWeight: 700,
+                          color: "var(--color-text)",
+                          fontSize: "0.95rem",
+                        }}
+                      >
+                        {contact.name} {/* Contact full name */}
                       </td>
-                      <td style={{ padding: '14px 12px', color: 'var(--color-text-muted)', fontSize: '0.9rem', fontWeight: 500 }}>
-                        {contact.relationship}                                                  {/* Relationship label */}
+                      <td
+                        style={{
+                          padding: "14px 12px",
+                          color: "var(--color-text-muted)",
+                          fontSize: "0.9rem",
+                          fontWeight: 500,
+                        }}
+                      >
+                        {contact.relationship} {/* Relationship label */}
                       </td>
-                      <td style={{ padding: '14px 12px', color: 'var(--color-text)', fontSize: '0.9rem', fontWeight: 600 }}>
-                        {contact.phone}                                                         {/* Telephone number */}
+                      <td
+                        style={{
+                          padding: "14px 12px",
+                          color: "var(--color-text)",
+                          fontSize: "0.9rem",
+                          fontWeight: 600,
+                        }}
+                      >
+                        {contact.phone} {/* Telephone number */}
                       </td>
-                      <td style={{ padding: '14px 12px', textAlign: 'right' }}>
-                        <div style={{ display: 'inline-flex', gap: '8px', justifyContent: 'flex-end' }}>
+                      <td style={{ padding: "14px 12px", textAlign: "right" }}>
+                        <div
+                          style={{
+                            display: "inline-flex",
+                            gap: "8px",
+                            justifyContent: "flex-end",
+                          }}
+                        >
                           <Button
                             variant="outline"
                             size="sm"
-                            onClick={() => openEditContact(contact)}                            // Opens edit modal for this contact
+                            onClick={() => openEditContact(contact)} // Opens edit modal for this contact
                             aria-label={`Edit contact ${contact.name}`}
-                            style={{ padding: '6px 10px', borderRadius: '8px', borderColor: 'var(--color-border)', color: 'var(--color-text)' }}
+                            style={{
+                              padding: "6px 10px",
+                              borderRadius: "8px",
+                              borderColor: "var(--color-border)",
+                              color: "var(--color-text)",
+                            }}
                           >
                             <Edit2 size={14} />
                           </Button>
                           <Button
                             variant="outline"
                             size="sm"
-                            onClick={() => setContactToDelete(contact)}                         // Opens delete confirmation modal
+                            onClick={() => setContactToDelete(contact)} // Opens delete confirmation modal
                             aria-label={`Delete contact ${contact.name}`}
-                            style={{ padding: '6px 10px', borderRadius: '8px', borderColor: 'var(--color-semantic-emergency)', color: 'var(--color-semantic-emergency)' }}
+                            style={{
+                              padding: "6px 10px",
+                              borderRadius: "8px",
+                              borderColor: "var(--color-semantic-emergency)",
+                              color: "var(--color-semantic-emergency)",
+                            }}
                           >
                             <Trash2 size={14} />
                           </Button>
@@ -737,8 +1303,16 @@ export const HealthPassport = () => {
               </table>
             </div>
           ) : (
-            <p style={{ margin: '12px 0 0', color: 'var(--color-text-muted)', fontStyle: 'italic', fontSize: '0.9rem' }}>
-              No emergency contacts recorded. Use the button above to register a contact.
+            <p
+              style={{
+                margin: "12px 0 0",
+                color: "var(--color-text-muted)",
+                fontStyle: "italic",
+                fontSize: "0.9rem",
+              }}
+            >
+              No emergency contacts recorded. Use the button above to register a
+              contact.
             </p>
           )}
         </Card>
@@ -747,71 +1321,154 @@ export const HealthPassport = () => {
       {/* =====================================================================================
           PREVIOUS HEALTH ASSESSMENTS / HISTORY
           ===================================================================================== */}
-      <section style={{ display: 'flex', flexDirection: 'column', gap: '20px' }} aria-labelledby="assessment-history-title">
+      <section
+        style={{ display: "flex", flexDirection: "column", gap: "20px" }}
+        aria-labelledby="assessment-history-title"
+      >
         <Card style={cardStyle}>
-          <div style={{ display: 'flex', alignItems: 'center', gap: '10px', marginBottom: '22px' }}>
-            <div style={iconCircleStyle}><Clock size={20} /></div>                              {/* Clock / history icon */}
+          <div
+            style={{
+              display: "flex",
+              alignItems: "center",
+              gap: "10px",
+              marginBottom: "22px",
+            }}
+          >
+            <div style={iconCircleStyle}>
+              <Clock size={20} />
+            </div>{" "}
+            {/* Clock / history icon */}
             <div>
-              <h2 id="assessment-history-title" style={{ margin: 0, fontSize: '1.25rem', fontWeight: 700, color: 'var(--color-text)' }}>
+              <h2
+                id="assessment-history-title"
+                style={{
+                  margin: 0,
+                  fontSize: "1.25rem",
+                  fontWeight: 700,
+                  color: "var(--color-text)",
+                }}
+              >
                 Health History & Previous Assessments
               </h2>
-              <p style={{ margin: '4px 0 0', color: 'var(--color-text-muted)', fontSize: '0.85rem' }}>
-                Persisted clinical triage records linked to your health passport.
+              <p
+                style={{
+                  margin: "4px 0 0",
+                  color: "var(--color-text-muted)",
+                  fontSize: "0.85rem",
+                }}
+              >
+                Persisted clinical triage records linked to your health
+                passport.
               </p>
             </div>
           </div>
 
           {/* Past assessments grid */}
           {assessmentsQuery.isLoading ? (
-            <p style={{ color: 'var(--color-text-muted)', fontSize: '0.9rem', fontStyle: 'italic' }}>Loading health history…</p>
+            <p
+              style={{
+                color: "var(--color-text-muted)",
+                fontSize: "0.9rem",
+                fontStyle: "italic",
+              }}
+            >
+              Loading health history…
+            </p>
           ) : validAssessments.length > 0 ? (
-            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(min(100%, 260px), 1fr))', gap: '18px' }}>
+            <div
+              style={{
+                display: "grid",
+                gridTemplateColumns:
+                  "repeat(auto-fill, minmax(min(100%, 260px), 1fr))",
+                gap: "18px",
+              }}
+            >
               {validAssessments.map((item: any) => {
-                const badge = urgencyBadgeStyle(item.urgency);                                  // Calculate styling based on urgency tier
+                const badge = urgencyBadgeStyle(item.urgency); // Calculate styling based on urgency tier
                 return (
                   <div
                     key={item.id}
                     style={{
-                      padding: '18px 20px',
-                      borderRadius: '4px',
-                      background: 'var(--color-background)',
-                      border: '1px solid var(--color-border)',
-                      display: 'flex',
-                      flexDirection: 'column',
-                      gap: '10px',
+                      padding: "18px 20px",
+                      borderRadius: "4px",
+                      background: "var(--color-background)",
+                      border: "1px solid var(--color-border)",
+                      display: "flex",
+                      flexDirection: "column",
+                      gap: "10px",
                     }}
                   >
-                    <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-                      <span style={{ fontSize: '0.8rem', color: 'var(--color-text-muted)', fontWeight: 600 }}>
-                        {new Date(item.createdAt).toLocaleDateString(undefined, { month: 'short', day: 'numeric', year: 'numeric' })}
+                    <div
+                      style={{
+                        display: "flex",
+                        justifyContent: "space-between",
+                        alignItems: "center",
+                      }}
+                    >
+                      <span
+                        style={{
+                          fontSize: "0.8rem",
+                          color: "var(--color-text-muted)",
+                          fontWeight: 600,
+                        }}
+                      >
+                        {new Date(item.createdAt).toLocaleDateString(
+                          undefined,
+                          { month: "short", day: "numeric", year: "numeric" }
+                        )}
                       </span>
                       <span
                         style={{
-                          padding: '2px 8px',
-                          borderRadius: '6px',
-                          fontSize: '0.72rem',
+                          padding: "2px 8px",
+                          borderRadius: "6px",
+                          fontSize: "0.72rem",
                           fontWeight: 700,
                           background: badge.bg,
                           color: badge.color,
                           border: badge.border,
                         }}
                       >
-                        {item.urgency}                                                          {/* Urgency indicator tag */}
+                        {item.urgency} {/* Urgency indicator tag */}
                       </span>
                     </div>
-                    <strong style={{ fontSize: '0.92rem', color: 'var(--color-text)', fontWeight: 700 }}>
-                      {item.specialty}                                                          {/* Recommended triage specialty */}
+                    <strong
+                      style={{
+                        fontSize: "0.92rem",
+                        color: "var(--color-text)",
+                        fontWeight: 700,
+                      }}
+                    >
+                      {item.specialty} {/* Recommended triage specialty */}
                     </strong>
-                    <p style={{ margin: 0, fontSize: '0.82rem', color: 'var(--color-text)', opacity: 0.8, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
-                      {item.symptoms}                                                           {/* Patient symptoms description summary */}
+                    <p
+                      style={{
+                        margin: 0,
+                        fontSize: "0.82rem",
+                        color: "var(--color-text)",
+                        opacity: 0.8,
+                        overflow: "hidden",
+                        textOverflow: "ellipsis",
+                        whiteSpace: "nowrap",
+                      }}
+                    >
+                      {item.symptoms}{" "}
+                      {/* Patient symptoms description summary */}
                     </p>
                   </div>
                 );
               })}
             </div>
           ) : (
-            <p style={{ color: 'var(--color-text-muted)', fontSize: '0.9rem', fontStyle: 'italic', margin: 0 }}>
-              No previous health assessments recorded. Completed assessments will automatically link here.
+            <p
+              style={{
+                color: "var(--color-text-muted)",
+                fontSize: "0.9rem",
+                fontStyle: "italic",
+                margin: 0,
+              }}
+            >
+              No previous health assessments recorded. Completed assessments
+              will automatically link here.
             </p>
           )}
         </Card>
@@ -825,39 +1482,64 @@ export const HealthPassport = () => {
         <div
           className="passport-bottom-save-bar"
           style={{
-            marginTop: '28px',
-            padding: '16px 20px',
-            background: 'var(--color-surface-white)',
-            border: '1px solid var(--color-border)',
-            borderRadius: 'var(--border-radius-md)',
-            boxShadow: '0 4px 18px rgba(0, 0, 0, 0.08)',
-            display: 'flex',
-            justifyContent: 'space-between',
-            alignItems: 'center',
-            flexWrap: 'wrap',
-            gap: '12px',
-            position: 'sticky',
-            bottom: '16px',
+            marginTop: "28px",
+            padding: "16px 20px",
+            background: "var(--color-surface-white)",
+            border: "1px solid var(--color-border)",
+            borderRadius: "var(--border-radius-md)",
+            boxShadow: "0 4px 18px rgba(0, 0, 0, 0.08)",
+            display: "flex",
+            justifyContent: "space-between",
+            alignItems: "center",
+            flexWrap: "wrap",
+            gap: "12px",
+            position: "sticky",
+            bottom: "16px",
             zIndex: 30,
           }}
         >
-          <div style={{ flex: '1 1 220px' }}>
-            <strong style={{ fontSize: '0.95rem', color: 'var(--color-text)', display: 'block' }}>
+          <div style={{ flex: "1 1 220px" }}>
+            <strong
+              style={{
+                fontSize: "0.95rem",
+                color: "var(--color-text)",
+                display: "block",
+              }}
+            >
               Finished editing all fields?
             </strong>
-            <span className="caption" style={{ color: !isPassportValid ? 'var(--color-semantic-emergency)' : 'var(--color-text-muted)' }}>
+            <span
+              className="caption"
+              style={{
+                color: !isPassportValid
+                  ? "var(--color-semantic-emergency)"
+                  : "var(--color-text-muted)",
+              }}
+            >
               {!isPassportValid
-                ? 'Blood Group is required. Please select a valid Blood Group above to save.'
-                : 'Save your changes to update your verified medical passport.'}
+                ? "Blood Group is required. Please select a valid Blood Group above to save."
+                : "Save your changes to update your verified medical passport."}
             </span>
           </div>
-          <div style={{ display: 'flex', gap: '8px', alignItems: 'center', flexWrap: 'wrap' }}>
+          <div
+            style={{
+              display: "flex",
+              gap: "8px",
+              alignItems: "center",
+              flexWrap: "wrap",
+            }}
+          >
             <Button
               type="button"
               variant="outline"
               onClick={handleCancelPassportEdit}
               disabled={isSaving}
-              style={{ display: 'flex', gap: '6px', alignItems: 'center', borderRadius: '4px' }}
+              style={{
+                display: "flex",
+                gap: "6px",
+                alignItems: "center",
+                borderRadius: "4px",
+              }}
             >
               <X size={15} /> Cancel
             </Button>
@@ -866,21 +1548,29 @@ export const HealthPassport = () => {
               variant="primary"
               onClick={handleSavePassport}
               disabled={isSaving || !isPassportValid}
-              title={!isPassportValid ? 'Please complete all required fields and resolve validation errors to save.' : 'Save Changes'}
+              title={
+                !isPassportValid
+                  ? "Please complete all required fields and resolve validation errors to save."
+                  : "Save Changes"
+              }
               style={{
-                display: 'flex',
-                gap: '6px',
-                alignItems: 'center',
-                background: !isPassportValid ? 'var(--color-surface-interactive)' : 'var(--color-primary)',
-                borderColor: !isPassportValid ? 'var(--color-border)' : 'var(--color-primary)',
-                color: !isPassportValid ? 'var(--color-text-muted)' : '#FFF',
+                display: "flex",
+                gap: "6px",
+                alignItems: "center",
+                background: !isPassportValid
+                  ? "var(--color-surface-interactive)"
+                  : "var(--color-primary)",
+                borderColor: !isPassportValid
+                  ? "var(--color-border)"
+                  : "var(--color-primary)",
+                color: !isPassportValid ? "var(--color-text-muted)" : "#FFF",
                 fontWeight: 700,
-                borderRadius: '4px',
-                cursor: !isPassportValid ? 'not-allowed' : 'pointer',
+                borderRadius: "4px",
+                cursor: !isPassportValid ? "not-allowed" : "pointer",
                 opacity: !isPassportValid ? 0.65 : 1,
               }}
             >
-              <Save size={15} /> {isSaving ? 'Saving…' : 'Save Changes'}
+              <Save size={15} /> {isSaving ? "Saving…" : "Save Changes"}
             </Button>
           </div>
         </div>
@@ -892,23 +1582,28 @@ export const HealthPassport = () => {
       <Popup
         isOpen={isContactModalOpen}
         onClose={closeContactModal}
-        title={contactDraft.id ? 'Edit Emergency Contact' : 'Add Emergency Contact'}
+        title={
+          contactDraft.id ? "Edit Emergency Contact" : "Add Emergency Contact"
+        }
         maxWidth="500px"
       >
-        <form onSubmit={handleSaveContact} style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
+        <form
+          onSubmit={handleSaveContact}
+          style={{ display: "flex", flexDirection: "column", gap: "16px" }}
+        >
           {contactError && (
             <div
               role="alert"
               style={{
-                display: 'flex',
-                alignItems: 'center',
-                gap: '10px',
-                padding: '10px 14px',
-                background: 'rgba(220, 38, 38, 0.08)',
-                border: '1px solid rgba(220, 38, 38, 0.25)',
-                borderRadius: '10px',
-                color: 'var(--color-semantic-emergency)',
-                fontSize: '0.88rem',
+                display: "flex",
+                alignItems: "center",
+                gap: "10px",
+                padding: "10px 14px",
+                background: "rgba(220, 38, 38, 0.08)",
+                border: "1px solid rgba(220, 38, 38, 0.25)",
+                borderRadius: "10px",
+                color: "var(--color-semantic-emergency)",
+                fontSize: "0.88rem",
               }}
             >
               <AlertCircle size={18} style={{ flexShrink: 0 }} />
@@ -917,91 +1612,164 @@ export const HealthPassport = () => {
           )}
 
           {/* Contact Full Legal Name */}
-          <div style={{ display: 'flex', flexDirection: 'column', gap: '6px' }}>
-            <label htmlFor="emergency-contact-name" style={{ display: 'flex', flexDirection: 'column', gap: '6px' }}>
-              <span style={{ fontSize: '0.9rem', fontWeight: 700, color: 'var(--color-text)' }}>
-                Contact Name <span style={{ color: 'var(--color-semantic-emergency)' }}>*</span>
+          <div style={{ display: "flex", flexDirection: "column", gap: "6px" }}>
+            <label
+              htmlFor="emergency-contact-name"
+              style={{ display: "flex", flexDirection: "column", gap: "6px" }}
+            >
+              <span
+                style={{
+                  fontSize: "0.9rem",
+                  fontWeight: 700,
+                  color: "var(--color-text)",
+                }}
+              >
+                Contact Name{" "}
+                <span style={{ color: "var(--color-semantic-emergency)" }}>
+                  *
+                </span>
               </span>
               <Input
                 id="emergency-contact-name"
                 type="text"
                 required
                 value={contactDraft.name}
-                onChange={(e) => setContactDraft({ ...contactDraft, name: e.target.value })}
+                onChange={e =>
+                  setContactDraft({ ...contactDraft, name: e.target.value })
+                }
                 placeholder="e.g. Sarah Jenkins"
                 style={{
-                  borderRadius: '8px',
-                  borderColor: contactDraft.name.length > 0 && !isContactNameValid ? 'var(--color-semantic-emergency)' : 'var(--color-border)',
-                  background: 'var(--color-background)',
-                  color: 'var(--color-text)'
+                  borderRadius: "8px",
+                  borderColor:
+                    contactDraft.name.length > 0 && !isContactNameValid
+                      ? "var(--color-semantic-emergency)"
+                      : "var(--color-border)",
+                  background: "var(--color-background)",
+                  color: "var(--color-text)",
                 }}
               />
             </label>
             {contactDraft.name.length > 0 && !isContactNameValid && (
-              <ValidationMessage type="error" message="Contact name must be between 2 and 160 characters." />
+              <ValidationMessage
+                type="error"
+                message="Contact name must be between 2 and 160 characters."
+              />
             )}
           </div>
 
           {/* Contact Relationship to Patient */}
-          <div style={{ display: 'flex', flexDirection: 'column', gap: '6px' }}>
-            <label htmlFor="emergency-contact-relationship" style={{ display: 'flex', flexDirection: 'column', gap: '6px' }}>
-              <span style={{ fontSize: '0.9rem', fontWeight: 700, color: 'var(--color-text)' }}>
-                Relationship <span style={{ color: 'var(--color-semantic-emergency)' }}>*</span>
+          <div style={{ display: "flex", flexDirection: "column", gap: "6px" }}>
+            <label
+              htmlFor="emergency-contact-relationship"
+              style={{ display: "flex", flexDirection: "column", gap: "6px" }}
+            >
+              <span
+                style={{
+                  fontSize: "0.9rem",
+                  fontWeight: 700,
+                  color: "var(--color-text)",
+                }}
+              >
+                Relationship{" "}
+                <span style={{ color: "var(--color-semantic-emergency)" }}>
+                  *
+                </span>
               </span>
               <Input
                 id="emergency-contact-relationship"
                 type="text"
                 required
                 value={contactDraft.relationship}
-                onChange={(e) => setContactDraft({ ...contactDraft, relationship: e.target.value })}
+                onChange={e =>
+                  setContactDraft({
+                    ...contactDraft,
+                    relationship: e.target.value,
+                  })
+                }
                 placeholder="e.g. Spouse, Parent, Sibling, Friend"
                 style={{
-                  borderRadius: '8px',
-                  borderColor: contactDraft.relationship.length > 0 && !isContactRelationshipValid ? 'var(--color-semantic-emergency)' : 'var(--color-border)',
-                  background: 'var(--color-background)',
-                  color: 'var(--color-text)'
+                  borderRadius: "8px",
+                  borderColor:
+                    contactDraft.relationship.length > 0 &&
+                    !isContactRelationshipValid
+                      ? "var(--color-semantic-emergency)"
+                      : "var(--color-border)",
+                  background: "var(--color-background)",
+                  color: "var(--color-text)",
                 }}
               />
             </label>
-            {contactDraft.relationship.length > 0 && !isContactRelationshipValid && (
-              <ValidationMessage type="error" message="Relationship must be between 2 and 80 characters." />
-            )}
+            {contactDraft.relationship.length > 0 &&
+              !isContactRelationshipValid && (
+                <ValidationMessage
+                  type="error"
+                  message="Relationship must be between 2 and 80 characters."
+                />
+              )}
           </div>
 
           {/* Contact Verified Telephone */}
-          <div style={{ display: 'flex', flexDirection: 'column', gap: '6px' }}>
-            <label htmlFor="emergency-contact-phone" style={{ display: 'flex', flexDirection: 'column', gap: '6px' }}>
-              <span style={{ fontSize: '0.9rem', fontWeight: 700, color: 'var(--color-text)' }}>
-                Phone Number <span style={{ color: 'var(--color-semantic-emergency)' }}>*</span>
+          <div style={{ display: "flex", flexDirection: "column", gap: "6px" }}>
+            <label
+              htmlFor="emergency-contact-phone"
+              style={{ display: "flex", flexDirection: "column", gap: "6px" }}
+            >
+              <span
+                style={{
+                  fontSize: "0.9rem",
+                  fontWeight: 700,
+                  color: "var(--color-text)",
+                }}
+              >
+                Phone Number{" "}
+                <span style={{ color: "var(--color-semantic-emergency)" }}>
+                  *
+                </span>
               </span>
               <Input
                 id="emergency-contact-phone"
                 type="tel"
                 required
                 value={contactDraft.phone}
-                onChange={(e) => setContactDraft({ ...contactDraft, phone: e.target.value })}
+                onChange={e =>
+                  setContactDraft({ ...contactDraft, phone: e.target.value })
+                }
                 placeholder="e.g. +91 98765 43210"
                 style={{
-                  borderRadius: '8px',
-                  borderColor: contactDraft.phone.length > 0 && !isContactPhoneValid ? 'var(--color-semantic-emergency)' : 'var(--color-border)',
-                  background: 'var(--color-background)',
-                  color: 'var(--color-text)'
+                  borderRadius: "8px",
+                  borderColor:
+                    contactDraft.phone.length > 0 && !isContactPhoneValid
+                      ? "var(--color-semantic-emergency)"
+                      : "var(--color-border)",
+                  background: "var(--color-background)",
+                  color: "var(--color-text)",
                 }}
               />
             </label>
             {contactDraft.phone.length > 0 && !isContactPhoneValid && (
-              <ValidationMessage type="error" message="Please enter a valid telephone number (at least 7 digits)." />
+              <ValidationMessage
+                type="error"
+                message="Please enter a valid telephone number (at least 7 digits)."
+              />
             )}
           </div>
 
           {/* Form action triggers */}
-          <div style={{ display: 'flex', gap: '10px', justifyContent: 'flex-end', marginTop: '8px', flexWrap: 'wrap' }}>
+          <div
+            style={{
+              display: "flex",
+              gap: "10px",
+              justifyContent: "flex-end",
+              marginTop: "8px",
+              flexWrap: "wrap",
+            }}
+          >
             <Button
               type="button"
               variant="outline"
               onClick={closeContactModal}
               disabled={isSavingContact}
-              style={{ borderRadius: '8px' }}
+              style={{ borderRadius: "8px" }}
             >
               Cancel
             </Button>
@@ -1010,16 +1778,24 @@ export const HealthPassport = () => {
               variant="primary"
               disabled={isSavingContact || !isContactValid}
               style={{
-                borderRadius: '8px',
-                background: !isContactValid ? 'var(--color-surface-interactive)' : 'var(--color-primary)',
-                borderColor: !isContactValid ? 'var(--color-border)' : 'var(--color-primary)',
-                color: !isContactValid ? 'var(--color-text-muted)' : '#FFF',
+                borderRadius: "8px",
+                background: !isContactValid
+                  ? "var(--color-surface-interactive)"
+                  : "var(--color-primary)",
+                borderColor: !isContactValid
+                  ? "var(--color-border)"
+                  : "var(--color-primary)",
+                color: !isContactValid ? "var(--color-text-muted)" : "#FFF",
                 fontWeight: 700,
-                cursor: !isContactValid ? 'not-allowed' : 'pointer',
+                cursor: !isContactValid ? "not-allowed" : "pointer",
                 opacity: !isContactValid ? 0.65 : 1,
               }}
             >
-              {isSavingContact ? 'Saving…' : (contactDraft.id ? 'Save Contact' : 'Add Contact')}
+              {isSavingContact
+                ? "Saving…"
+                : contactDraft.id
+                  ? "Save Contact"
+                  : "Add Contact"}
             </Button>
           </div>
         </form>
@@ -1034,20 +1810,20 @@ export const HealthPassport = () => {
         title="Delete Emergency Contact"
         maxWidth="440px"
       >
-        <div style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
+        <div style={{ display: "flex", flexDirection: "column", gap: "16px" }}>
           {deleteError && (
             <div
               role="alert"
               style={{
-                display: 'flex',
-                alignItems: 'center',
-                gap: '10px',
-                padding: '10px 14px',
-                background: 'rgba(220, 38, 38, 0.08)',
-                border: '1px solid rgba(220, 38, 38, 0.25)',
-                borderRadius: '10px',
-                color: 'var(--color-semantic-emergency)',
-                fontSize: '0.88rem',
+                display: "flex",
+                alignItems: "center",
+                gap: "10px",
+                padding: "10px 14px",
+                background: "rgba(220, 38, 38, 0.08)",
+                border: "1px solid rgba(220, 38, 38, 0.25)",
+                borderRadius: "10px",
+                color: "var(--color-semantic-emergency)",
+                fontSize: "0.88rem",
               }}
             >
               <AlertCircle size={18} style={{ flexShrink: 0 }} />
@@ -1055,17 +1831,34 @@ export const HealthPassport = () => {
             </div>
           )}
 
-          <p style={{ margin: 0, fontSize: '0.95rem', color: 'var(--color-text)', lineHeight: 1.5 }}>
-            Are you sure you want to remove <strong>{contactToDelete?.name}</strong> ({contactToDelete?.relationship}) from your emergency contacts?
+          <p
+            style={{
+              margin: 0,
+              fontSize: "0.95rem",
+              color: "var(--color-text)",
+              lineHeight: 1.5,
+            }}
+          >
+            Are you sure you want to remove{" "}
+            <strong>{contactToDelete?.name}</strong> (
+            {contactToDelete?.relationship}) from your emergency contacts?
           </p>
 
-          <div style={{ display: 'flex', gap: '10px', justifyContent: 'flex-end', marginTop: '8px', flexWrap: 'wrap' }}>
+          <div
+            style={{
+              display: "flex",
+              gap: "10px",
+              justifyContent: "flex-end",
+              marginTop: "8px",
+              flexWrap: "wrap",
+            }}
+          >
             <Button
               type="button"
               variant="outline"
               onClick={() => setContactToDelete(null)}
               disabled={isDeletingContact}
-              style={{ borderRadius: '8px' }}
+              style={{ borderRadius: "8px" }}
             >
               Cancel
             </Button>
@@ -1074,14 +1867,13 @@ export const HealthPassport = () => {
               variant="danger"
               onClick={confirmDeleteContact}
               disabled={isDeletingContact}
-              style={{ borderRadius: '8px', fontWeight: 700 }}
+              style={{ borderRadius: "8px", fontWeight: 700 }}
             >
-              {isDeletingContact ? 'Removing…' : 'Remove Contact'}
+              {isDeletingContact ? "Removing…" : "Remove Contact"}
             </Button>
           </div>
         </div>
       </Popup>
-
     </div>
   );
 };
