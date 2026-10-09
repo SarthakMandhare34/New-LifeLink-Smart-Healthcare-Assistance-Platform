@@ -32,6 +32,18 @@ export function LifeLinkLogo({ className = '', variant = 'full', style }: LifeLi
         className="lifelink-logo"
         src={logoSource}                                                                        // Render logo image
         alt={variant === 'full' ? 'LifeLink — Smart Healthcare Assistance Platform' : 'LifeLink'}
+        loading="eager"
+        decoding="async"
+        onError={(e) => {
+          const target = e.currentTarget;
+          if (variant === 'full') {
+            if (target.src.includes('lifelink-logo-lockup.png')) {
+              target.src = '/assets/branding/LifeLinkLogo.png';
+            } else if (target.src.includes('LifeLinkLogo.png')) {
+              target.src = '/assets/branding/lifelink-logo-lockup.png';
+            }
+          }
+        }}
       />
     </span>
   );
