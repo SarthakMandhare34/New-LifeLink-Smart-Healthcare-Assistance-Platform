@@ -44,6 +44,7 @@ export const DoctorLogin = () => {
   // tRPC mutation for doctor authentication and session cookie establishment
   const login = trpc.doctorAuth.login.useMutation({
     onSuccess: async (doctor) => {
+      sessionStorage.setItem('lifelink_doctor_session', 'active');                         // Establish isolated doctor session for current browser tab
       utils.doctorAuth.me.setData(undefined, doctor);                                      // Seed active doctor profile into cache
       await utils.auth.me.invalidate();                                                    // Invalidate stale user context
       navigate("/doctor/dashboard", { replace: true });                                    // Navigate to clinician dashboard
@@ -63,7 +64,7 @@ export const DoctorLogin = () => {
       <header className="workspace-portal-header doctor-portal-header" aria-label="LifeLink portal header">
         <div className="workspace-portal-brand">
           <span className="workspace-portal-mark" aria-hidden="true">
-            <LifeLinkLogo variant="symbol" style={{ width: '32px', height: '32px', objectFit: 'contain' }} />
+            <LifeLinkLogo variant="symbol" style={{ width: '100%', height: '100%', objectFit: 'contain' }} />
           </span>
           <span>
             <strong>LifeLink</strong>
@@ -77,10 +78,10 @@ export const DoctorLogin = () => {
         <EntryThemeToggle />
       </header>
 
-      <div className="doctor-setup-layout auth-split-layout" style={{ flex: 1, display: 'flex', width: '100%', position: 'relative', zIndex: 1 }}>
+      <div className="doctor-setup-layout auth-split-layout">
 
         {/* Branding Panel (Left Column): Clean Nordic Clinical Identity */}
-        <div className="auth-branding-panel" style={{ flex: 1, display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems: 'center', padding: 'var(--spacing-6)', zIndex: 1 }}>
+        <div className="auth-branding-panel">
           <div style={{ textAlign: 'center', maxWidth: '440px', display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
 
             {/* Proportional Brand Treatment (Section 11) */}
@@ -117,23 +118,22 @@ export const DoctorLogin = () => {
         </div>
 
         {/* Form Container (Right Column): Solid Clinical Card */}
-        <div style={{ flex: 1.1, display: 'flex', justifyContent: 'center', alignItems: 'center', padding: 'clamp(24px, 4vw, 40px)', zIndex: 1 }}>
+        <div className="auth-card-column" style={{ flex: 1.1, display: 'flex', justifyContent: 'center', alignItems: 'center', padding: 'clamp(8px, 1.5vw, 20px)', zIndex: 1, width: '100%' }}>
           <Card
-            className="card"
+            className="card auth-card"
             style={{
               width: '100%',
               maxWidth: '480px',
-              maxHeight: '90vh',
-              overflowY: 'auto',
-              padding: 'clamp(30px, 4.5vw, 44px)',
+              padding: 'clamp(20px, 3.2vw, 32px)',
               background: 'var(--color-surface-white)',
               border: '1px solid var(--color-border)',
               borderRadius: 'var(--border-radius-card)',
-              boxShadow: 'none'
+              boxShadow: 'none',
+              boxSizing: 'border-box'
             }}
           >
             {/* Form Card Header */}
-            <header className="auth-card-header" style={{ textAlign: 'center', marginBottom: '28px' }}>
+            <header className="auth-card-header" style={{ textAlign: 'center', marginBottom: '20px' }}>
               {/* Responsive Mobile Logo Showcase: Guarantees full brand visibility on mobile devices where left branding column is hidden */}
               <div className="auth-card-mobile-logo-wrap">
                 <LifeLinkLogo className="lifelink-logo-auth auth-card-mobile-logo" />
