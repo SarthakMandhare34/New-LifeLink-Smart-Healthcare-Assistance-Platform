@@ -57,7 +57,7 @@ export const WorkspaceSelector = () => {
       <header className="workspace-portal-header" aria-label="LifeLink portal header">
         <div className="workspace-portal-brand">
           <span className="workspace-portal-mark" aria-hidden="true">
-            <LifeLinkLogo variant="symbol" style={{ width: '30px', height: '30px', objectFit: 'contain' }} />
+            <LifeLinkLogo variant="symbol" style={{ width: '100%', height: '100%', objectFit: 'contain' }} />
           </span>
           <span>
             <strong>LifeLink</strong>

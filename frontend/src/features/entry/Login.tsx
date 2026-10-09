@@ -16,7 +16,7 @@ import { LifeLinkLogo } from '../../components/brand/LifeLinkLogo';
 import { EntryThemeToggle } from '../../components/EntryThemeToggle';
 import { trpc } from '../../lib/trpc';
 import { formatUserFriendlyError } from '../../lib/errorFormatting';
-import { Lock, Mail, Eye, EyeOff, HeartPulse, ShieldCheck, Shield } from 'lucide-react';
+import { Lock, Mail, Eye, EyeOff, ShieldCheck } from 'lucide-react';
 import { PATIENT_DASHBOARD_PATH } from '../patient/patientAuthRoutes';
 
 const GoogleIcon = () => (
@@ -65,6 +65,7 @@ export const PatientLogin = () => {
     setError('');                                                                          // Clear previous errors
     try {
       await loginMutation.mutateAsync({ email, password });                                // Send credentials to backend
+      sessionStorage.setItem('lifelink_patient_session', 'active');                        // Establish isolated session for current browser tab
       await trpcUtils.auth.me.refetch();                                                   // Re-query current user context
       navigate(PATIENT_DASHBOARD_PATH, { replace: true });                                 // Navigate to patient dashboard
     } catch (err: unknown) {
@@ -75,6 +76,7 @@ export const PatientLogin = () => {
 
   // Redirects user to Google OAuth authorization URL
   const handleGoogleClick = () => {
+    sessionStorage.setItem('lifelink_patient_session', 'active');                          // Flag tab session before OAuth handshake
     const startUrl = providerQuery.data?.googleAuthorizationStartUrl || '/api/auth/google'; // Get configured Google auth endpoint
     window.location.assign(startUrl);                                                      // Navigate browser to Google sign-in
   };
@@ -84,7 +86,7 @@ export const PatientLogin = () => {
       <header className="workspace-portal-header" aria-label="LifeLink portal header">
         <div className="workspace-portal-brand">
           <span className="workspace-portal-mark" aria-hidden="true">
-            <LifeLinkLogo variant="symbol" style={{ width: '32px', height: '32px', objectFit: 'contain' }} />
+            <LifeLinkLogo variant="symbol" style={{ width: '100%', height: '100%', objectFit: 'contain' }} />
           </span>
           <span>
             <strong>LifeLink</strong>
@@ -98,10 +100,10 @@ export const PatientLogin = () => {
         <EntryThemeToggle />
       </header>
 
-      <div className="patient-auth-layout auth-split-layout" style={{ flex: 1, display: 'flex', width: '100%', position: 'relative', zIndex: 1 }}>
+      <div className="patient-auth-layout auth-split-layout">
 
         {/* Branding Panel (Left Column): Clean Nordic Clinical Identity */}
-        <div className="auth-branding-panel" style={{ flex: 1, display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems: 'center', padding: 'var(--spacing-6)', zIndex: 1 }}>
+        <div className="auth-branding-panel">
           <div style={{ textAlign: 'center', maxWidth: '440px', display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
 
             {/* Proportional Brand Treatment (Section 11) */}
@@ -138,23 +140,22 @@ export const PatientLogin = () => {
         </div>
 
         {/* Form Container (Right Column): Solid Clinical Surface */}
-        <div style={{ flex: 1.1, display: 'flex', justifyContent: 'center', alignItems: 'center', padding: 'var(--spacing-5)', zIndex: 1 }}>
+        <div className="auth-card-column" style={{ flex: 1.1, display: 'flex', justifyContent: 'center', alignItems: 'center', padding: 'clamp(8px, 1.5vw, 20px)', zIndex: 1, width: '100%' }}>
           <Card
-            className="card"
+            className="card auth-card"
             style={{
               width: '100%',
               maxWidth: '480px',
-              maxHeight: '90vh',
-              overflowY: 'auto',
-              padding: 'clamp(30px, 4.5vw, 44px)',
+              padding: 'clamp(20px, 3.2vw, 32px)',
               background: 'var(--color-surface-white)',
               border: '1px solid var(--color-border)',
               borderRadius: 'var(--border-radius-card)',
-              boxShadow: 'none'
+              boxShadow: 'none',
+              boxSizing: 'border-box'
             }}
           >
             {/* Form Card Header */}
-            <header className="auth-card-header" style={{ textAlign: 'center', marginBottom: '28px' }}>
+            <header className="auth-card-header" style={{ textAlign: 'center', marginBottom: '20px' }}>
               <div className="auth-card-mobile-logo-wrap">
                 <LifeLinkLogo className="lifelink-logo-auth auth-card-mobile-logo" />
               </div>
