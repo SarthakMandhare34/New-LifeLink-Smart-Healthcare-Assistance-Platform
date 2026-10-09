@@ -10,18 +10,26 @@
  * 3. IDOR Defense: Verifies that Patient 2 cannot update or delete emergency contacts owned by Patient 1.
  * 4. Real-Time Broadcasts: Ensures `PROFILE_UPDATED` SSE events fire upon modifications.
  */
-import { expect, test, describe, beforeAll, afterAll } from "vitest";                           // Vitest test runner
-import { config } from "dotenv";                                                                // Loads environment variables
+import { expect, test, describe, beforeAll, afterAll } from "vitest"; // Vitest test runner
+import { config } from "dotenv"; // Loads environment variables
 config();
-import { getDb, upsertUser } from "./db";                                                       // Database helpers
-import { appRouter } from "./routers";                                                          // Root tRPC router
-import { users, patientProfiles, patientEmergencyContacts } from "../database/schema";          // Schema tables
-import { eq, or } from "drizzle-orm";                                                               // Drizzle SQL operators
+import { getDb, upsertUser } from "./db"; // Database helpers
+import { appRouter } from "./routers"; // Root tRPC router
+import {
+  users,
+  patientProfiles,
+  patientEmergencyContacts,
+} from "../database/schema"; // Schema tables
+import { eq, or } from "drizzle-orm"; // Drizzle SQL operators
 
-let db: NonNullable<Awaited<ReturnType<typeof getDb>>>;                                        // Database handle
+let db: NonNullable<Awaited<ReturnType<typeof getDb>>>; // Database handle
 
 // Helper to create typed mock caller matching trpc context
-function createCaller(user: { id: number; openId: string; role: "user" | "doctor" }) {
+function createCaller(user: {
+  id: number;
+  openId: string;
+  role: "user" | "doctor";
+}) {
   return appRouter.createCaller({
     req: {} as any,
     res: { cookie: () => {}, clearCookie: () => {} } as any,
@@ -33,7 +41,7 @@ function createCaller(user: { id: number; openId: string; role: "user" | "doctor
 
 // Global setup inserting two test patients
 beforeAll(async () => {
-  const maybeDb = await getDb();                                                               // Connect to database
+  const maybeDb = await getDb(); // Connect to database
   if (!maybeDb) throw new Error("Database not available");
   db = maybeDb;
 
@@ -57,37 +65,69 @@ beforeAll(async () => {
 });
 
 describe("Digital Health Passport & Emergency Contacts", () => {
-  let patient1Id: number;                                                                       // ID for Patient 1
-  let patient2Id: number;                                                                       // ID for Patient 2
-  let contact1Id: number;                                                                       // ID of created contact
+  let patient1Id: number; // ID for Patient 1
+  let patient2Id: number; // ID for Patient 2
+  let contact1Id: number; // ID of created contact
 
   beforeAll(async () => {
-    const u1 = await db.select().from(users).where(eq(users.openId, "test:patient-passport-1"));
+    const u1 = await db
+      .select()
+      .from(users)
+      .where(eq(users.openId, "test:patient-passport-1"));
     patient1Id = u1[0].id;
-    const u2 = await db.select().from(users).where(eq(users.openId, "test:patient-passport-2"));
+    const u2 = await db
+      .select()
+      .from(users)
+      .where(eq(users.openId, "test:patient-passport-2"));
     patient2Id = u2[0].id;
 
     // Ensure baseline initial profiles exist in MySQL
-    const p1 = await db.select().from(patientProfiles).where(eq(patientProfiles.userId, patient1Id));
+    const p1 = await db
+      .select()
+      .from(patientProfiles)
+      .where(eq(patientProfiles.userId, patient1Id));
     if (!p1.length) {
-      await db.insert(patientProfiles).values({ userId: patient1Id, allergiesJson: "[]", conditionsJson: "[]" });
+      await db
+        .insert(patientProfiles)
+        .values({
+          userId: patient1Id,
+          allergiesJson: "[]",
+          conditionsJson: "[]",
+        });
     }
-    const p2 = await db.select().from(patientProfiles).where(eq(patientProfiles.userId, patient2Id));
+    const p2 = await db
+      .select()
+      .from(patientProfiles)
+      .where(eq(patientProfiles.userId, patient2Id));
     if (!p2.length) {
-      await db.insert(patientProfiles).values({ userId: patient2Id, allergiesJson: "[]", conditionsJson: "[]" });
+      await db
+        .insert(patientProfiles)
+        .values({
+          userId: patient2Id,
+          allergiesJson: "[]",
+          conditionsJson: "[]",
+        });
     }
   });
 
   // Cleanup created contacts after test completion
   afterAll(async () => {
-    await db.delete(patientEmergencyContacts).where(eq(patientEmergencyContacts.userId, patient1Id));
-    await db.delete(patientEmergencyContacts).where(eq(patientEmergencyContacts.userId, patient2Id));
+    await db
+      .delete(patientEmergencyContacts)
+      .where(eq(patientEmergencyContacts.userId, patient1Id));
+    await db
+      .delete(patientEmergencyContacts)
+      .where(eq(patientEmergencyContacts.userId, patient2Id));
   });
 
   // HEALTH PASSPORT TESTS
   describe("Health Passport", () => {
     test("1. Authenticated read: Patient 1 reads own passport", async () => {
-      const caller1 = createCaller({ id: patient1Id, openId: "test:patient-passport-1", role: "user" });
+      const caller1 = createCaller({
+        id: patient1Id,
+        openId: "test:patient-passport-1",
+        role: "user",
+      });
       const passport = await caller1.patientProfile.get();
 
       expect(passport).toBeDefined();
@@ -98,7 +138,11 @@ describe("Digital Health Passport & Emergency Contacts", () => {
     });
 
     test("2. Update: Patient 1 updates blood group, allergies, and conditions", async () => {
-      const caller1 = createCaller({ id: patient1Id, openId: "test:patient-passport-1", role: "user" });
+      const caller1 = createCaller({
+        id: patient1Id,
+        openId: "test:patient-passport-1",
+        role: "user",
+      });
       const updated = await caller1.patientProfile.update({
         bloodGroup: "O+",
         allergies: ["Penicillin", "Peanuts"],
@@ -111,23 +155,39 @@ describe("Digital Health Passport & Emergency Contacts", () => {
     });
 
     test("3. Persistence: Verify updated passport persists in DB", async () => {
-      const rows = await db.select().from(patientProfiles).where(eq(patientProfiles.userId, patient1Id));
+      const rows = await db
+        .select()
+        .from(patientProfiles)
+        .where(eq(patientProfiles.userId, patient1Id));
       expect(rows.length).toBe(1);
       expect(rows[0].bloodGroup).toBe("O+");
-      expect(JSON.parse(rows[0].allergiesJson)).toEqual(["Penicillin", "Peanuts"]);
+      expect(JSON.parse(rows[0].allergiesJson)).toEqual([
+        "Penicillin",
+        "Peanuts",
+      ]);
       expect(JSON.parse(rows[0].conditionsJson)).toEqual(["Asthma"]);
     });
 
     test("4. Validation: Rejects invalid passport inputs", async () => {
-      const caller1 = createCaller({ id: patient1Id, openId: "test:patient-passport-1", role: "user" });
+      const caller1 = createCaller({
+        id: patient1Id,
+        openId: "test:patient-passport-1",
+        role: "user",
+      });
       // bloodGroup exceeds max 12 chars
-      await expect(caller1.patientProfile.update({
-        bloodGroup: "VERY_LONG_INVALID_BLOOD_GROUP",
-      })).rejects.toThrow();
+      await expect(
+        caller1.patientProfile.update({
+          bloodGroup: "VERY_LONG_INVALID_BLOOD_GROUP",
+        })
+      ).rejects.toThrow();
     });
 
     test("5. Patient isolation / IDOR: Patient 2 cannot alter Patient 1 passport", async () => {
-      const caller2 = createCaller({ id: patient2Id, openId: "test:patient-passport-2", role: "user" });
+      const caller2 = createCaller({
+        id: patient2Id,
+        openId: "test:patient-passport-2",
+        role: "user",
+      });
 
       // Patient 2 updates their own profile
       await caller2.patientProfile.update({
@@ -137,12 +197,21 @@ describe("Digital Health Passport & Emergency Contacts", () => {
       });
 
       // Verify Patient 1's data in DB is unchanged
-      const rows = await db.select().from(patientProfiles).where(eq(patientProfiles.userId, patient1Id));
+      const rows = await db
+        .select()
+        .from(patientProfiles)
+        .where(eq(patientProfiles.userId, patient1Id));
       expect(rows[0].bloodGroup).toBe("O+");
-      expect(JSON.parse(rows[0].allergiesJson)).toEqual(["Penicillin", "Peanuts"]);
+      expect(JSON.parse(rows[0].allergiesJson)).toEqual([
+        "Penicillin",
+        "Peanuts",
+      ]);
 
       // Verify Patient 2's data in DB is separate
-      const p2Rows = await db.select().from(patientProfiles).where(eq(patientProfiles.userId, patient2Id));
+      const p2Rows = await db
+        .select()
+        .from(patientProfiles)
+        .where(eq(patientProfiles.userId, patient2Id));
       expect(p2Rows[0].bloodGroup).toBe("AB-");
       expect(JSON.parse(p2Rows[0].allergiesJson)).toEqual(["Latex"]);
     });
@@ -151,7 +220,11 @@ describe("Digital Health Passport & Emergency Contacts", () => {
   // EMERGENCY CONTACTS TESTS
   describe("Emergency Contacts", () => {
     test("6. Create contact: Patient 1 creates an emergency contact", async () => {
-      const caller1 = createCaller({ id: patient1Id, openId: "test:patient-passport-1", role: "user" });
+      const caller1 = createCaller({
+        id: patient1Id,
+        openId: "test:patient-passport-1",
+        role: "user",
+      });
       const result = await caller1.patientProfile.emergencyContacts.create({
         name: "Jane Doe",
         relationship: "Spouse",
@@ -161,7 +234,10 @@ describe("Digital Health Passport & Emergency Contacts", () => {
       expect(result.id).toBeGreaterThan(0);
       contact1Id = result.id;
 
-      const inDb = await db.select().from(patientEmergencyContacts).where(eq(patientEmergencyContacts.id, contact1Id));
+      const inDb = await db
+        .select()
+        .from(patientEmergencyContacts)
+        .where(eq(patientEmergencyContacts.id, contact1Id));
       expect(inDb.length).toBe(1);
       expect(inDb[0].userId).toBe(patient1Id);
       expect(inDb[0].name).toBe("Jane Doe");
@@ -170,10 +246,16 @@ describe("Digital Health Passport & Emergency Contacts", () => {
     });
 
     test("7. Read contacts: Patient 1 reads emergency contacts in passport", async () => {
-      const caller1 = createCaller({ id: patient1Id, openId: "test:patient-passport-1", role: "user" });
+      const caller1 = createCaller({
+        id: patient1Id,
+        openId: "test:patient-passport-1",
+        role: "user",
+      });
       const passport = await caller1.patientProfile.get();
 
-      const contact = passport?.emergencyContacts.find((c) => c.id === String(contact1Id));
+      const contact = passport?.emergencyContacts.find(
+        c => c.id === String(contact1Id)
+      );
       expect(contact).toBeDefined();
       expect(contact?.name).toBe("Jane Doe");
       expect(contact?.relationship).toBe("Spouse");
@@ -181,7 +263,11 @@ describe("Digital Health Passport & Emergency Contacts", () => {
     });
 
     test("8. Update contact: Patient 1 updates own emergency contact", async () => {
-      const caller1 = createCaller({ id: patient1Id, openId: "test:patient-passport-1", role: "user" });
+      const caller1 = createCaller({
+        id: patient1Id,
+        openId: "test:patient-passport-1",
+        role: "user",
+      });
       const result = await caller1.patientProfile.emergencyContacts.update({
         id: contact1Id,
         values: {
@@ -193,78 +279,120 @@ describe("Digital Health Passport & Emergency Contacts", () => {
 
       expect(result.success).toBe(true);
 
-      const inDb = await db.select().from(patientEmergencyContacts).where(eq(patientEmergencyContacts.id, contact1Id));
+      const inDb = await db
+        .select()
+        .from(patientEmergencyContacts)
+        .where(eq(patientEmergencyContacts.id, contact1Id));
       expect(inDb[0].name).toBe("Jane Doe-Smith");
       expect(inDb[0].relationship).toBe("Partner");
       expect(inDb[0].phone).toBe("+91 98765 43211");
     });
 
     test("9. Ownership / IDOR: Patient 2 cannot update or delete Patient 1's contact", async () => {
-      const caller2 = createCaller({ id: patient2Id, openId: "test:patient-passport-2", role: "user" });
+      const caller2 = createCaller({
+        id: patient2Id,
+        openId: "test:patient-passport-2",
+        role: "user",
+      });
 
       // Patient 2 attempts to update Patient 1's contact
-      await expect(caller2.patientProfile.emergencyContacts.update({
-        id: contact1Id,
-        values: {
-          name: "Attacker",
-          relationship: "None",
-          phone: "+91 00000 00000",
-        },
-      })).rejects.toThrow(/Emergency contact not found/);
+      await expect(
+        caller2.patientProfile.emergencyContacts.update({
+          id: contact1Id,
+          values: {
+            name: "Attacker",
+            relationship: "None",
+            phone: "+91 00000 00000",
+          },
+        })
+      ).rejects.toThrow(/Emergency contact not found/);
 
       // Patient 2 attempts to delete Patient 1's contact
-      await expect(caller2.patientProfile.emergencyContacts.remove({
-        id: contact1Id,
-      })).rejects.toThrow(/Emergency contact not found/);
+      await expect(
+        caller2.patientProfile.emergencyContacts.remove({
+          id: contact1Id,
+        })
+      ).rejects.toThrow(/Emergency contact not found/);
 
       // Verify contact was not changed or deleted in DB
-      const inDb = await db.select().from(patientEmergencyContacts).where(eq(patientEmergencyContacts.id, contact1Id));
+      const inDb = await db
+        .select()
+        .from(patientEmergencyContacts)
+        .where(eq(patientEmergencyContacts.id, contact1Id));
       expect(inDb.length).toBe(1);
       expect(inDb[0].name).toBe("Jane Doe-Smith");
     });
 
     test("10. Validation: Emergency contact inputs are validated", async () => {
-      const caller1 = createCaller({ id: patient1Id, openId: "test:patient-passport-1", role: "user" });
+      const caller1 = createCaller({
+        id: patient1Id,
+        openId: "test:patient-passport-1",
+        role: "user",
+      });
 
       // Invalid phone
-      await expect(caller1.patientProfile.emergencyContacts.create({
-        name: "Test Contact",
-        relationship: "Friend",
-        phone: "short",
-      })).rejects.toThrow();
+      await expect(
+        caller1.patientProfile.emergencyContacts.create({
+          name: "Test Contact",
+          relationship: "Friend",
+          phone: "short",
+        })
+      ).rejects.toThrow();
 
       // Empty name
-      await expect(caller1.patientProfile.emergencyContacts.create({
-        name: "",
-        relationship: "Friend",
-        phone: "+91 98765 43210",
-      })).rejects.toThrow();
+      await expect(
+        caller1.patientProfile.emergencyContacts.create({
+          name: "",
+          relationship: "Friend",
+          phone: "+91 98765 43210",
+        })
+      ).rejects.toThrow();
     });
 
     test("11. Delete contact: Patient 1 deletes own emergency contact", async () => {
-      const caller1 = createCaller({ id: patient1Id, openId: "test:patient-passport-1", role: "user" });
+      const caller1 = createCaller({
+        id: patient1Id,
+        openId: "test:patient-passport-1",
+        role: "user",
+      });
       const result = await caller1.patientProfile.emergencyContacts.remove({
         id: contact1Id,
       });
 
       expect(result.success).toBe(true);
 
-      const inDb = await db.select().from(patientEmergencyContacts).where(eq(patientEmergencyContacts.id, contact1Id));
+      const inDb = await db
+        .select()
+        .from(patientEmergencyContacts)
+        .where(eq(patientEmergencyContacts.id, contact1Id));
       expect(inDb.length).toBe(0);
     });
 
     test("12. Persistence after deletion: Contact remains absent on read", async () => {
-      const caller1 = createCaller({ id: patient1Id, openId: "test:patient-passport-1", role: "user" });
+      const caller1 = createCaller({
+        id: patient1Id,
+        openId: "test:patient-passport-1",
+        role: "user",
+      });
       const passport = await caller1.patientProfile.get();
 
-      const contact = passport?.emergencyContacts.find((c) => c.id === String(contact1Id));
+      const contact = passport?.emergencyContacts.find(
+        c => c.id === String(contact1Id)
+      );
       expect(contact).toBeUndefined();
     });
   });
 
   afterAll(async () => {
     if (db) {
-      await db.delete(users).where(or(eq(users.openId, "test:patient-passport-1"), eq(users.openId, "test:patient-passport-2")));
+      await db
+        .delete(users)
+        .where(
+          or(
+            eq(users.openId, "test:patient-passport-1"),
+            eq(users.openId, "test:patient-passport-2")
+          )
+        );
     }
   });
 });

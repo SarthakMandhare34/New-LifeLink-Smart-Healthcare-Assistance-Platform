@@ -13,19 +13,29 @@
  * 4. IDOR Protection: Patients and doctors can ONLY view prescriptions within their clinical context.
  * 5. Real-Time Push Events: Confirms `PRESCRIPTION_CREATED` events are broadcast to the SSE pipeline.
  */
-import { expect, test, describe, beforeAll, afterAll } from "vitest";                           // Vitest test runner
-import { config } from "dotenv";                                                                // Loads environment variables
+import { expect, test, describe, beforeAll, afterAll } from "vitest"; // Vitest test runner
+import { config } from "dotenv"; // Loads environment variables
 config();
-import { createHash } from "node:crypto";                                                       // Node built-in cryptographic hash engine
-import { getDb, upsertUser } from "./db";                                                       // Database access helpers
-import { appRouter } from "./routers";                                                          // Root tRPC router
-import { users, patientAppointments, patientPrescriptions, patientPrescriptionItems, patientEvents } from "../database/schema"; // Schema tables
-import { eq, and, or } from "drizzle-orm";                                                           // SQL filter operators
+import { createHash } from "node:crypto"; // Node built-in cryptographic hash engine
+import { getDb, upsertUser } from "./db"; // Database access helpers
+import { appRouter } from "./routers"; // Root tRPC router
+import {
+  users,
+  patientAppointments,
+  patientPrescriptions,
+  patientPrescriptionItems,
+  patientEvents,
+} from "../database/schema"; // Schema tables
+import { eq, and, or } from "drizzle-orm"; // SQL filter operators
 
-let db: NonNullable<Awaited<ReturnType<typeof getDb>>>;                                        // Database handle
+let db: NonNullable<Awaited<ReturnType<typeof getDb>>>; // Database handle
 
 // Helper to create typed mock caller matching trpc context
-function createCaller(user: { id: number; openId: string; role: "user" | "doctor" }) {
+function createCaller(user: {
+  id: number;
+  openId: string;
+  role: "user" | "doctor";
+}) {
   return appRouter.createCaller({
     req: {} as any,
     res: { cookie: () => {}, clearCookie: () => {} } as any,
@@ -36,15 +46,15 @@ function createCaller(user: { id: number; openId: string; role: "user" | "doctor
 }
 
 // Test doctor constants
-const DOCTOR_1_ID = "mock-central-cardiology-csmt";                                            // Doctor 1 ID
-const DOCTOR_2_ID = "mock-western-general-practice-churchgate";                                // Doctor 2 ID
+const DOCTOR_1_ID = "mock-central-cardiology-csmt"; // Doctor 1 ID
+const DOCTOR_2_ID = "mock-western-general-practice-churchgate"; // Doctor 2 ID
 
-const DOCTOR_1_OPENID = `synthetic-doctor:${DOCTOR_1_ID}`;                                     // Doctor 1 session openId
-const DOCTOR_2_OPENID = `synthetic-doctor:${DOCTOR_2_ID}`;                                     // Doctor 2 session openId
+const DOCTOR_1_OPENID = `synthetic-doctor:${DOCTOR_1_ID}`; // Doctor 1 session openId
+const DOCTOR_2_OPENID = `synthetic-doctor:${DOCTOR_2_ID}`; // Doctor 2 session openId
 
 // Setup test database fixtures
 beforeAll(async () => {
-  const maybeDb = await getDb();                                                               // Connect to database
+  const maybeDb = await getDb(); // Connect to database
   if (!maybeDb) throw new Error("Database not available");
   db = maybeDb;
 
@@ -94,14 +104,26 @@ describe("Prescription Workflow & Integrity", () => {
   let prescription2Id: number;
 
   beforeAll(async () => {
-    const u1 = await db.select().from(users).where(eq(users.openId, "test:patient-rx-1"));
+    const u1 = await db
+      .select()
+      .from(users)
+      .where(eq(users.openId, "test:patient-rx-1"));
     patient1Id = u1[0].id;
-    const u2 = await db.select().from(users).where(eq(users.openId, "test:patient-rx-2"));
+    const u2 = await db
+      .select()
+      .from(users)
+      .where(eq(users.openId, "test:patient-rx-2"));
     patient2Id = u2[0].id;
 
-    const d1 = await db.select().from(users).where(eq(users.openId, DOCTOR_1_OPENID));
+    const d1 = await db
+      .select()
+      .from(users)
+      .where(eq(users.openId, DOCTOR_1_OPENID));
     doctor1UserId = d1[0].id;
-    const d2 = await db.select().from(users).where(eq(users.openId, DOCTOR_2_OPENID));
+    const d2 = await db
+      .select()
+      .from(users)
+      .where(eq(users.openId, DOCTOR_2_OPENID));
     doctor2UserId = d2[0].id;
 
     // Create confirmed appointment relationship between Doctor 1 and Patient 1
@@ -124,22 +146,43 @@ describe("Prescription Workflow & Integrity", () => {
   });
 
   afterAll(async () => {
-    await db.delete(patientPrescriptions).where(eq(patientPrescriptions.userId, patient1Id));
-    await db.delete(patientPrescriptions).where(eq(patientPrescriptions.userId, patient2Id));
-    await db.delete(patientAppointments).where(eq(patientAppointments.userId, patient1Id));
-    await db.delete(patientAppointments).where(eq(patientAppointments.userId, patient2Id));
+    await db
+      .delete(patientPrescriptions)
+      .where(eq(patientPrescriptions.userId, patient1Id));
+    await db
+      .delete(patientPrescriptions)
+      .where(eq(patientPrescriptions.userId, patient2Id));
+    await db
+      .delete(patientAppointments)
+      .where(eq(patientAppointments.userId, patient1Id));
+    await db
+      .delete(patientAppointments)
+      .where(eq(patientAppointments.userId, patient2Id));
   });
 
   // Step 1: Authorized clinician writes a multi-item prescription
   test("1. Authorized doctor creates prescription: Doctor 1 creates prescription for Patient 1", async () => {
-    const doctorCaller = createCaller({ id: doctor1UserId, openId: DOCTOR_1_OPENID, role: "doctor" });
+    const doctorCaller = createCaller({
+      id: doctor1UserId,
+      openId: DOCTOR_1_OPENID,
+      role: "doctor",
+    });
 
     const result = await doctorCaller.doctorWorkspace.prescriptions.create({
       patientId: patient1Id,
-      clinicalNotes: "Patient presents with mild arrhythmia. Monitor blood pressure.",
+      clinicalNotes:
+        "Patient presents with mild arrhythmia. Monitor blood pressure.",
       items: [
-        { name: "Metoprolol", dosage: "25mg", instructions: "Take once daily in the morning" },
-        { name: "Aspirin", dosage: "81mg", instructions: "Take once daily with food" },
+        {
+          name: "Metoprolol",
+          dosage: "25mg",
+          instructions: "Take once daily in the morning",
+        },
+        {
+          name: "Aspirin",
+          dosage: "81mg",
+          instructions: "Take once daily with food",
+        },
       ],
     });
 
@@ -150,7 +193,10 @@ describe("Prescription Workflow & Integrity", () => {
 
   // Step 2: Verify initial prescription state is strictly UNSIGNED with no cryptographic seal
   test("2. Prescription persistence: Verifies initial unsigned draft in DB", async () => {
-    const rows = await db.select().from(patientPrescriptions).where(eq(patientPrescriptions.id, prescription1Id));
+    const rows = await db
+      .select()
+      .from(patientPrescriptions)
+      .where(eq(patientPrescriptions.id, prescription1Id));
     expect(rows.length).toBe(1);
     expect(rows[0].userId).toBe(patient1Id);
     expect(rows[0].doctorId).toBe(DOCTOR_1_ID);
@@ -167,30 +213,44 @@ describe("Prescription Workflow & Integrity", () => {
       .where(eq(patientPrescriptionItems.prescriptionId, prescription1Id));
 
     expect(items.length).toBe(2);
-    expect(items.map((i) => i.name).sort()).toEqual(["Aspirin", "Metoprolol"]);
-    expect(items.find((i) => i.name === "Metoprolol")?.dosage).toBe("25mg");
-    expect(items.find((i) => i.name === "Aspirin")?.dosage).toBe("81mg");
+    expect(items.map(i => i.name).sort()).toEqual(["Aspirin", "Metoprolol"]);
+    expect(items.find(i => i.name === "Metoprolol")?.dosage).toBe("25mg");
+    expect(items.find(i => i.name === "Aspirin")?.dosage).toBe("81mg");
   });
 
   // Step 4: Security test - Doctor without an active appointment cannot prescribe to stranger
   test("4. Unauthorized doctor cannot create prescription: Doctor 1 cannot prescribe to Patient 2", async () => {
-    const doctorCaller = createCaller({ id: doctor1UserId, openId: DOCTOR_1_OPENID, role: "doctor" });
+    const doctorCaller = createCaller({
+      id: doctor1UserId,
+      openId: DOCTOR_1_OPENID,
+      role: "doctor",
+    });
 
     // Doctor 1 has no confirmed appointment with Patient 2 -> Must reject with FORBIDDEN
     await expect(
       doctorCaller.doctorWorkspace.prescriptions.create({
         patientId: patient2Id,
-        items: [{ name: "Antibiotic", dosage: "500mg", instructions: "Take twice daily" }],
-      }),
+        items: [
+          {
+            name: "Antibiotic",
+            dosage: "500mg",
+            instructions: "Take twice daily",
+          },
+        ],
+      })
     ).rejects.toMatchObject({ code: "FORBIDDEN" });
   });
 
   // Step 5: Patient queries their own prescription vault
   test("5. Patient can read own prescription list", async () => {
-    const patient1Caller = createCaller({ id: patient1Id, openId: "test:patient-rx-1", role: "user" });
+    const patient1Caller = createCaller({
+      id: patient1Id,
+      openId: "test:patient-rx-1",
+      role: "user",
+    });
 
     const prescriptions = await patient1Caller.patientPrescription.list();
-    const found = prescriptions.find((p) => p.id === prescription1Id);
+    const found = prescriptions.find(p => p.id === prescription1Id);
 
     expect(found).toBeDefined();
     expect(found?.items.length).toBe(2);
@@ -199,64 +259,104 @@ describe("Prescription Workflow & Integrity", () => {
 
   // Step 6: IDOR Protection - Patient 2 cannot see Patient 1's prescription
   test("6. Patient cannot read another patient's prescription list", async () => {
-    const patient2Caller = createCaller({ id: patient2Id, openId: "test:patient-rx-2", role: "user" });
+    const patient2Caller = createCaller({
+      id: patient2Id,
+      openId: "test:patient-rx-2",
+      role: "user",
+    });
 
     const prescriptions = await patient2Caller.patientPrescription.list();
-    const found = prescriptions.find((p) => p.id === prescription1Id);
+    const found = prescriptions.find(p => p.id === prescription1Id);
     expect(found).toBeUndefined();
   });
 
   // Step 7: Clinician Isolation - Doctor 2 cannot inspect Doctor 1's prescription
   test("7. Doctor cannot read unrelated prescriptions: Doctor 2 cannot see Doctor 1's prescription", async () => {
     // Create Doctor 2's prescription for Patient 2 first
-    const doctor2Caller = createCaller({ id: doctor2UserId, openId: DOCTOR_2_OPENID, role: "doctor" });
+    const doctor2Caller = createCaller({
+      id: doctor2UserId,
+      openId: DOCTOR_2_OPENID,
+      role: "doctor",
+    });
     const result2 = await doctor2Caller.doctorWorkspace.prescriptions.create({
       patientId: patient2Id,
       clinicalNotes: "Topical treatment.",
-      items: [{ name: "Hydrocortisone", dosage: "1% cream", instructions: "Apply twice daily" }],
+      items: [
+        {
+          name: "Hydrocortisone",
+          dosage: "1% cream",
+          instructions: "Apply twice daily",
+        },
+      ],
     });
     prescription2Id = result2.id;
 
     // Doctor 1 lists their own prescriptions
-    const doctor1Caller = createCaller({ id: doctor1UserId, openId: DOCTOR_1_OPENID, role: "doctor" });
-    const doctor1List = await doctor1Caller.doctorWorkspace.prescriptions.list();
+    const doctor1Caller = createCaller({
+      id: doctor1UserId,
+      openId: DOCTOR_1_OPENID,
+      role: "doctor",
+    });
+    const doctor1List =
+      await doctor1Caller.doctorWorkspace.prescriptions.list();
 
-    expect(doctor1List.some((p) => p.id === prescription1Id)).toBe(true);
-    expect(doctor1List.some((p) => p.id === prescription2Id)).toBe(false);
+    expect(doctor1List.some(p => p.id === prescription1Id)).toBe(true);
+    expect(doctor1List.some(p => p.id === prescription2Id)).toBe(false);
 
     // Doctor 1 cannot getById Doctor 2's prescription
     await expect(
-      doctor1Caller.doctorWorkspace.prescriptions.getById({ id: prescription2Id }),
+      doctor1Caller.doctorWorkspace.prescriptions.getById({
+        id: prescription2Id,
+      })
     ).rejects.toMatchObject({ code: "NOT_FOUND" });
   });
 
   // Step 8: Detail Endpoint IDOR Protection
   test("8. Prescription detail ownership: Patient A cannot getById Patient B's prescription", async () => {
-    const patient1Caller = createCaller({ id: patient1Id, openId: "test:patient-rx-1", role: "user" });
-    const patient2Caller = createCaller({ id: patient2Id, openId: "test:patient-rx-2", role: "user" });
+    const patient1Caller = createCaller({
+      id: patient1Id,
+      openId: "test:patient-rx-1",
+      role: "user",
+    });
+    const patient2Caller = createCaller({
+      id: patient2Id,
+      openId: "test:patient-rx-2",
+      role: "user",
+    });
 
     // Patient 1 reads own prescription detail -> SUCCESS
-    const detail = await patient1Caller.patientPrescription.getById({ id: prescription1Id });
+    const detail = await patient1Caller.patientPrescription.getById({
+      id: prescription1Id,
+    });
     expect(detail.id).toBe(prescription1Id);
     expect(detail.items.length).toBe(2);
 
     // Patient 2 attempts to read Patient 1's prescription detail -> NOT_FOUND
     await expect(
-      patient2Caller.patientPrescription.getById({ id: prescription1Id }),
+      patient2Caller.patientPrescription.getById({ id: prescription1Id })
     ).rejects.toMatchObject({ code: "NOT_FOUND" });
   });
 
   // Step 9: Explicit Signing Mutation: Doctor 1 explicitly transitions prescription from UNSIGNED to SIGNED
   test("9. Explicit signing mutation transitions status from UNSIGNED to SIGNED and generates cryptographic seal", async () => {
-    const doctorCaller = createCaller({ id: doctor1UserId, openId: DOCTOR_1_OPENID, role: "doctor" });
+    const doctorCaller = createCaller({
+      id: doctor1UserId,
+      openId: DOCTOR_1_OPENID,
+      role: "doctor",
+    });
 
     // Verify initial status is strictly UNSIGNED with no integrity reference
-    const beforeRows = await db.select().from(patientPrescriptions).where(eq(patientPrescriptions.id, prescription1Id));
+    const beforeRows = await db
+      .select()
+      .from(patientPrescriptions)
+      .where(eq(patientPrescriptions.id, prescription1Id));
     expect(beforeRows[0].status).toBe("UNSIGNED / CONTROLLED WORKSPACE");
     expect(beforeRows[0].integrityReference).toBeNull();
 
     // Execute dedicated signing mutation
-    const signResult = await doctorCaller.doctorWorkspace.prescriptions.sign({ id: prescription1Id });
+    const signResult = await doctorCaller.doctorWorkspace.prescriptions.sign({
+      id: prescription1Id,
+    });
 
     expect(signResult.id).toBe(prescription1Id);
     expect(signResult.status).toBe("SIGNED — CONTROLLED STATE");
@@ -264,7 +364,10 @@ describe("Prescription Workflow & Integrity", () => {
     expect(signResult.issuedAt).toBeDefined();
 
     // Verify atomic state update in MySQL database
-    const afterRows = await db.select().from(patientPrescriptions).where(eq(patientPrescriptions.id, prescription1Id));
+    const afterRows = await db
+      .select()
+      .from(patientPrescriptions)
+      .where(eq(patientPrescriptions.id, prescription1Id));
     expect(afterRows[0].status).toBe("SIGNED — CONTROLLED STATE");
     expect(afterRows[0].integrityReference).toBe(signResult.integrityReference);
     expect(afterRows[0].issuedAt).not.toBeNull();
@@ -272,14 +375,26 @@ describe("Prescription Workflow & Integrity", () => {
 
   // Step 10: Mathematical Verification - Canonical SHA-256 seal calculation
   test("10. Deterministic SHA-256 integrity reference: exact match with expected canonical calculation", async () => {
-    const rows = await db.select().from(patientPrescriptions).where(eq(patientPrescriptions.id, prescription1Id));
+    const rows = await db
+      .select()
+      .from(patientPrescriptions)
+      .where(eq(patientPrescriptions.id, prescription1Id));
     const expectedCanonical = JSON.stringify({
       doctorId: DOCTOR_1_ID,
       patientUserId: patient1Id,
-      clinicalNotes: "Patient presents with mild arrhythmia. Monitor blood pressure.",
+      clinicalNotes:
+        "Patient presents with mild arrhythmia. Monitor blood pressure.",
       items: [
-        { name: "Metoprolol", dosage: "25mg", instructions: "Take once daily in the morning" },
-        { name: "Aspirin", dosage: "81mg", instructions: "Take once daily with food" },
+        {
+          name: "Metoprolol",
+          dosage: "25mg",
+          instructions: "Take once daily in the morning",
+        },
+        {
+          name: "Aspirin",
+          dosage: "81mg",
+          instructions: "Take once daily with food",
+        },
       ],
     });
     const expectedHash = `sha256:${createHash("sha256").update(expectedCanonical).digest("hex")}`;
@@ -293,19 +408,37 @@ describe("Prescription Workflow & Integrity", () => {
     const originalCanonical = JSON.stringify({
       doctorId: DOCTOR_1_ID,
       patientUserId: patient1Id,
-      clinicalNotes: "Patient presents with mild arrhythmia. Monitor blood pressure.",
+      clinicalNotes:
+        "Patient presents with mild arrhythmia. Monitor blood pressure.",
       items: [
-        { name: "Metoprolol", dosage: "25mg", instructions: "Take once daily in the morning" },
-        { name: "Aspirin", dosage: "81mg", instructions: "Take once daily with food" },
+        {
+          name: "Metoprolol",
+          dosage: "25mg",
+          instructions: "Take once daily in the morning",
+        },
+        {
+          name: "Aspirin",
+          dosage: "81mg",
+          instructions: "Take once daily with food",
+        },
       ],
     });
     const modifiedCanonical = JSON.stringify({
       doctorId: DOCTOR_1_ID,
       patientUserId: patient1Id,
-      clinicalNotes: "Patient presents with mild arrhythmia. Monitor blood pressure.",
+      clinicalNotes:
+        "Patient presents with mild arrhythmia. Monitor blood pressure.",
       items: [
-        { name: "Metoprolol", dosage: "50mg", instructions: "Take once daily in the morning" }, // Attacker alters 25mg to 50mg
-        { name: "Aspirin", dosage: "81mg", instructions: "Take once daily with food" },
+        {
+          name: "Metoprolol",
+          dosage: "50mg",
+          instructions: "Take once daily in the morning",
+        }, // Attacker alters 25mg to 50mg
+        {
+          name: "Aspirin",
+          dosage: "81mg",
+          instructions: "Take once daily with food",
+        },
       ],
     });
 
@@ -318,10 +451,14 @@ describe("Prescription Workflow & Integrity", () => {
 
   // Step 12: Duplicate Signing Prevention: Prevents signing an already signed prescription
   test("12. Duplicate signing prevention: rejects second signing attempt on already signed record", async () => {
-    const doctorCaller = createCaller({ id: doctor1UserId, openId: DOCTOR_1_OPENID, role: "doctor" });
+    const doctorCaller = createCaller({
+      id: doctor1UserId,
+      openId: DOCTOR_1_OPENID,
+      role: "doctor",
+    });
 
     await expect(
-      doctorCaller.doctorWorkspace.prescriptions.sign({ id: prescription1Id }),
+      doctorCaller.doctorWorkspace.prescriptions.sign({ id: prescription1Id })
     ).rejects.toMatchObject({
       code: "BAD_REQUEST",
       message: "This prescription is already signed and sealed.",
@@ -330,25 +467,34 @@ describe("Prescription Workflow & Integrity", () => {
 
   // Step 13: Authorization check: Doctor 2 cannot sign Doctor 1's prescription
   test("13. Clinician isolation: Doctor 2 cannot sign Doctor 1's prescription", async () => {
-    const doctor2Caller = createCaller({ id: doctor2UserId, openId: DOCTOR_2_OPENID, role: "doctor" });
+    const doctor2Caller = createCaller({
+      id: doctor2UserId,
+      openId: DOCTOR_2_OPENID,
+      role: "doctor",
+    });
 
     await expect(
-      doctor2Caller.doctorWorkspace.prescriptions.sign({ id: prescription1Id }),
+      doctor2Caller.doctorWorkspace.prescriptions.sign({ id: prescription1Id })
     ).rejects.toMatchObject({
       code: "NOT_FOUND",
-      message: "Prescription record not found or not assigned to your clinician account.",
+      message:
+        "Prescription record not found or not assigned to your clinician account.",
     });
   });
 
   test("14. Invalid prescription input rejected: empty items or missing fields", async () => {
-    const doctorCaller = createCaller({ id: doctor1UserId, openId: DOCTOR_1_OPENID, role: "doctor" });
+    const doctorCaller = createCaller({
+      id: doctor1UserId,
+      openId: DOCTOR_1_OPENID,
+      role: "doctor",
+    });
 
     // Empty items array
     await expect(
       doctorCaller.doctorWorkspace.prescriptions.create({
         patientId: patient1Id,
         items: [],
-      }),
+      })
     ).rejects.toThrow();
 
     // Item with empty name
@@ -356,7 +502,7 @@ describe("Prescription Workflow & Integrity", () => {
       doctorCaller.doctorWorkspace.prescriptions.create({
         patientId: patient1Id,
         items: [{ name: "", dosage: "10mg", instructions: "Daily" }],
-      }),
+      })
     ).rejects.toThrow();
 
     // Item with empty dosage
@@ -364,7 +510,7 @@ describe("Prescription Workflow & Integrity", () => {
       doctorCaller.doctorWorkspace.prescriptions.create({
         patientId: patient1Id,
         items: [{ name: "Medicine", dosage: "", instructions: "Daily" }],
-      }),
+      })
     ).rejects.toThrow();
   });
 
@@ -372,7 +518,12 @@ describe("Prescription Workflow & Integrity", () => {
     const events = await db
       .select()
       .from(patientEvents)
-      .where(and(eq(patientEvents.userId, patient1Id), eq(patientEvents.type, "PRESCRIPTION_CREATED")));
+      .where(
+        and(
+          eq(patientEvents.userId, patient1Id),
+          eq(patientEvents.type, "PRESCRIPTION_CREATED")
+        )
+      );
 
     expect(events.length).toBeGreaterThan(0);
     const latest = events[events.length - 1];
@@ -381,7 +532,14 @@ describe("Prescription Workflow & Integrity", () => {
 
   afterAll(async () => {
     if (db) {
-      await db.delete(users).where(or(eq(users.openId, "test:patient-rx-1"), eq(users.openId, "test:patient-rx-2")));
+      await db
+        .delete(users)
+        .where(
+          or(
+            eq(users.openId, "test:patient-rx-1"),
+            eq(users.openId, "test:patient-rx-2")
+          )
+        );
     }
   });
 });
