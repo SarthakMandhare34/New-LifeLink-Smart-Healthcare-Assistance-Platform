@@ -343,6 +343,15 @@
   box-shadow: 0 4px 18px rgba(0, 0, 0, 0.45) !important;
 }
 
+:root[data-theme="dark"] .lifelink-logo-symbol,
+:root.dark .lifelink-logo-symbol,
+:root[data-theme="dark"] .app-mobile-brand-symbol,
+:root.dark .app-mobile-brand-symbol {
+  background: transparent !important;
+  border: none !important;
+  box-shadow: none !important;
+}
+
 /* Dark mode typography — comprehensive high-contrast visibility */
 :root[data-theme="dark"] h1,
 :root[data-theme="dark"] h2,
@@ -1219,25 +1228,48 @@ select:focus {
   border: 1px solid var(--swiss-gray-300);
   padding: 6px 14px;
   box-shadow: none;
+  box-sizing: border-box;
 }
 
 .lifelink-logo {
   display: block;
   width: auto;
   max-width: 100%;
-  height: 40px;
+  height: auto;
+  max-height: 54px;
   object-fit: contain;
 }
 
 .lifelink-logo-full { display: inline-flex; align-items: center; }
-.lifelink-logo-symbol { aspect-ratio: 1 / 1; padding: 4px; }
-.lifelink-logo-symbol .lifelink-logo { height: 32px; }
+
+/* Dedicated Symbol Monogram — unpadded and transparent to prevent squashing */
+.lifelink-logo-symbol {
+  aspect-ratio: 1 / 1;
+  padding: 0 !important;
+  background: transparent !important;
+  border: none !important;
+  box-shadow: none !important;
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  flex-shrink: 0 !important;
+  overflow: visible !important;
+}
+.lifelink-logo-symbol .lifelink-logo {
+  width: 100% !important;
+  height: 100% !important;
+  max-width: 100% !important;
+  max-height: 100% !important;
+  object-fit: contain !important;
+  display: block !important;
+}
 
 .lifelink-logo-auth {
   width: 100%;
-  max-width: min(420px, 94vw);
+  max-width: min(480px, 94vw);
+  min-height: 116px;
   margin: 0 auto var(--spacing-4);
-  padding: 16px 28px;
+  padding: 18px 26px;
   background: #FFFFFF !important;
   border: 1px solid var(--swiss-gray-300);
   border-radius: var(--border-radius-card);
@@ -1245,29 +1277,50 @@ select:focus {
   display: inline-flex;
   align-items: center;
   justify-content: center;
+  box-sizing: border-box;
 }
 
 .lifelink-logo-auth .lifelink-logo {
-  height: clamp(58px, 7vw, 76px);
-  width: auto;
+  height: auto;
+  max-height: clamp(86px, 10.5vw, 122px);
+  min-height: 76px;
+  width: 100%;
   max-width: 100%;
   object-fit: contain;
+  display: block;
 }
 
 .lifelink-logo-sidebar {
-  width: auto;
+  width: 100%;
   max-width: 220px;
+  min-height: 58px;
   background: #FFFFFF !important;
-  padding: 6px 14px;
-  border-radius: var(--border-radius-sm);
+  padding: 8px 12px;
+  border-radius: var(--border-radius-md);
   border: 1px solid var(--swiss-gray-300);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  box-sizing: border-box;
+  transition: border-color var(--transition-fast), box-shadow var(--transition-fast);
 }
-.lifelink-logo-sidebar .lifelink-logo { height: 42px; }
+.lifelink-logo-sidebar:hover {
+  border-color: var(--lifelink-blue);
+  box-shadow: 0 2px 8px rgba(11, 79, 138, 0.08);
+}
+.lifelink-logo-sidebar .lifelink-logo {
+  width: 100%;
+  height: auto;
+  max-height: 52px;
+  min-height: 44px;
+  object-fit: contain;
+  display: block;
+}
 .lifelink-logo-sidebar-symbol { display: none; width: 32px; height: 32px; }
 
-/* Mobile Auth Logo */
+/* Mobile Auth Logo Showcase: Only visible on mobile/tablets where left branding column is hidden */
 .auth-card-mobile-logo-wrap {
-  display: flex !important;
+  display: none !important;
   justify-content: center;
   align-items: center;
   width: 100%;
@@ -1281,23 +1334,29 @@ select:focus {
   background: #FFFFFF !important;
   border: 1px solid var(--swiss-gray-300);
   border-radius: var(--border-radius-card);
-  padding: 12px 24px;
+  padding: 12px 20px;
   box-shadow: 0 4px 14px rgba(0, 0, 0, 0.08);
-  max-width: min(360px, 92vw);
+  width: 100%;
+  max-width: min(340px, 92vw);
+  min-height: 82px;
   margin: 0 auto;
+  box-sizing: border-box;
 }
 
 .auth-card-mobile-logo .lifelink-logo {
-  height: clamp(50px, 6vw, 66px);
-  width: auto;
-  max-width: 100%;
+  width: 100%;
+  height: auto;
+  max-height: 64px;
+  min-height: 52px;
   object-fit: contain;
+  display: block;
 }
 
 /* Mobile Brand Link */
 .app-mobile-brand { display: none; align-items: center; gap: 7px; min-width: 0; color: var(--color-text); font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif; font-size: 14px; font-weight: 800; letter-spacing: -.035em; text-decoration: none; }
 .app-mobile-brand:hover { color: var(--lifelink-blue); text-decoration: none; }
-.app-mobile-brand-symbol { width: 32px; height: 32px; flex: 0 0 auto; }
+.app-mobile-brand-symbol { width: 32px; height: 32px; flex: 0 0 32px; display: inline-flex; align-items: center; justify-content: center; padding: 0 !important; border: none !important; background: transparent !important; }
+.app-mobile-brand-symbol .lifelink-logo { width: 100% !important; height: 100% !important; object-fit: contain !important; display: block !important; }
 .app-mobile-menu-button { display: none; align-items: center; justify-content: center; width: 44px; height: 44px; border: 0; background: transparent; cursor: pointer; color: var(--color-text); border-radius: var(--border-radius-btn); }
 .app-sidebar-backdrop { display: none; }
 
@@ -1414,7 +1473,7 @@ select:focus {
 .workspace-portal-header {
   width: min(100%, 1280px);
   min-height: 54px;
-  margin: 0 auto clamp(1.25rem, 2.5vw, 2.5rem);
+  margin: 0 auto clamp(0.6rem, 1.5vw, 1.25rem);
   padding: 0.6rem 1.25rem;
   display: flex;
   align-items: center;
@@ -1434,15 +1493,19 @@ select:focus {
 }
 
 .workspace-portal-mark {
-  display: grid;
-  place-items: center;
-  width: 32px;
-  height: 32px;
-  flex: 0 0 auto;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 38px;
+  height: 38px;
+  min-width: 38px;
+  flex: 0 0 38px;
   overflow: hidden;
   border-radius: var(--border-radius-sm);
-  background: var(--color-surface-white);
-  border: 1px solid var(--color-border);
+  background: var(--swiss-white);
+  border: 1px solid var(--swiss-gray-300);
+  padding: 3px;
+  box-sizing: border-box;
 }
 
 .workspace-portal-brand > span { display: grid; gap: 0.05rem; min-width: 0; }
@@ -1677,17 +1740,20 @@ select:focus {
   flex-direction: column;
   background: var(--color-background);
   color: var(--color-text);
-  padding: var(--spacing-4);
+  padding: clamp(10px, 1.8vw, 20px);
+  box-sizing: border-box;
 }
 
 .auth-split-layout {
-  width: min(100%, 1080px);
-  margin: auto;
+  width: min(100%, 1120px);
+  margin: 0 auto;
   display: flex;
   align-items: center;
   justify-content: center;
-  gap: var(--spacing-6);
-  padding: var(--spacing-4) 0;
+  gap: clamp(24px, 4vw, 48px);
+  padding: clamp(8px, 1.5vh, 20px) 0;
+  flex: 1 1 auto;
+  box-sizing: border-box;
 }
 
 .auth-branding-panel {
@@ -1699,12 +1765,46 @@ select:focus {
 }
 
 .auth-card {
-  width: min(100%, 420px);
+  width: min(100%, 480px);
   padding: clamp(24px, 4vw, 36px);
   background: var(--color-surface-white);
   border: 1px solid var(--color-border);
   border-radius: var(--border-radius-md);
   box-shadow: none;
+  box-sizing: border-box;
+}
+
+/* 13. Notification System */
+.notification-panel {
+  position: absolute;
+  top: calc(100% + 8px);
+  right: 0;
+  width: min(90vw, 360px);
+  background: var(--color-surface-white);
+  border: 1px solid var(--color-border);
+  border-radius: var(--border-radius-dialog);
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.16), 0 2px 8px rgba(0, 0, 0, 0.08);
+  z-index: 1000;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  font-family: inherit;
+  animation: notificationPanelFadeIn 160ms cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+@keyframes notificationPanelFadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(-6px) scale(0.98);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+.notification-backdrop {
+  display: none;
 }
 
 .auth-card-header {
@@ -2207,11 +2307,17 @@ div[tabindex="0"]:focus-visible {
 @media (max-width: 900px) {
   .doctor-setup-layout,
   .auth-split-layout {
-    flex-direction: column;
+    flex-direction: column !important;
+    width: 100% !important;
+    padding: var(--spacing-2) 0 !important;
   }
   .doctor-setup-layout .auth-branding-panel,
-  .auth-split-layout .auth-branding-panel {
-    display: none;
+  .auth-split-layout .auth-branding-panel,
+  .auth-branding-panel {
+    display: none !important;
+  }
+  .auth-card-mobile-logo-wrap {
+    display: flex !important;
   }
 }
 
@@ -2261,9 +2367,23 @@ div[tabindex="0"]:focus-visible {
   }
 
   .app-sidebar-header .lifelink-logo-sidebar {
-    display: block;
-    width: min(168px, 100%);
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: min(210px, 100%);
+    min-height: 54px;
+    max-height: 56px;
+    padding: 6px 12px;
+    background: #FFFFFF !important;
+    box-sizing: border-box;
+  }
+  .app-sidebar-header .lifelink-logo-sidebar .lifelink-logo {
+    width: 100%;
+    height: auto;
     max-height: 48px;
+    min-height: 40px;
+    object-fit: contain;
+    display: block;
   }
 
   .app-sidebar-nav {
@@ -2307,7 +2427,10 @@ div[tabindex="0"]:focus-visible {
     max-width: 100% !important;
     min-width: 0 !important;
     box-sizing: border-box !important;
-    overflow: hidden !important;
+    overflow: visible !important;
+    position: sticky !important;
+    top: 0 !important;
+    z-index: 50 !important;
   }
 
   .app-header-context {
@@ -2333,28 +2456,42 @@ div[tabindex="0"]:focus-visible {
   .app-mobile-brand {
     display: inline-flex !important;
     align-items: center !important;
-    gap: 6px !important;
+    gap: 8px !important;
     min-width: 0 !important;
     flex-shrink: 1 !important;
-    overflow: hidden !important;
-    text-overflow: ellipsis !important;
-    white-space: nowrap !important;
+    text-decoration: none !important;
   }
 
-  .app-mobile-brand span {
+  .app-mobile-brand > span:not(.app-mobile-brand-symbol),
+  .app-mobile-brand-text {
     overflow: hidden !important;
     text-overflow: ellipsis !important;
     white-space: nowrap !important;
     font-size: 0.95rem !important;
     font-weight: 700 !important;
+    max-width: 140px !important;
+    display: inline-block !important;
   }
 
   .app-mobile-brand-symbol {
-    width: 28px !important;
-    height: 28px !important;
-    min-width: 28px !important;
-    padding: 2px 4px !important;
+    width: 36px !important;
+    height: 36px !important;
+    min-width: 36px !important;
+    padding: 0 !important;
+    background: transparent !important;
+    border: none !important;
+    box-shadow: none !important;
     flex-shrink: 0 !important;
+    display: inline-flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+  }
+
+  .app-mobile-brand-symbol .lifelink-logo {
+    width: 100% !important;
+    height: 100% !important;
+    object-fit: contain !important;
+    display: block !important;
   }
 
   .app-header-controls {
@@ -2362,6 +2499,41 @@ div[tabindex="0"]:focus-visible {
     align-items: center !important;
     gap: 6px !important;
     flex-shrink: 0 !important;
+  }
+
+  /* Mobile notification panel: Full visibility & accessibility centered within phone viewport */
+  .notification-panel,
+  [role="region"][aria-label*="Notification"] {
+    position: fixed !important;
+    top: 60px !important;
+    left: 50% !important;
+    transform: translateX(-50%) !important;
+    right: auto !important;
+    bottom: auto !important;
+    width: min(94vw, 360px) !important;
+    max-width: calc(100vw - 16px) !important;
+    max-height: calc(100dvh - 76px) !important;
+    border-radius: var(--border-radius-md) !important;
+    box-shadow: 0 16px 40px rgba(0, 0, 0, 0.24), 0 4px 14px rgba(0, 0, 0, 0.12) !important;
+    z-index: 99999 !important;
+    overflow: hidden !important;
+  }
+
+  .notification-panel .notification-list,
+  [role="region"][aria-label*="Notification"] > div:nth-child(2) {
+    max-height: calc(100dvh - 140px) !important;
+    overflow-y: auto !important;
+    -webkit-overflow-scrolling: touch !important;
+  }
+
+  .notification-backdrop {
+    display: block !important;
+    position: fixed !important;
+    inset: 0 !important;
+    background: rgba(15, 23, 42, 0.4) !important;
+    backdrop-filter: blur(2px) !important;
+    -webkit-backdrop-filter: blur(2px) !important;
+    z-index: 99998 !important;
   }
 
   /* Profile badge collapses completely to compact avatar button on all mobile screens <= 768px */
@@ -2618,37 +2790,46 @@ div[tabindex="0"]:focus-visible {
 @media (max-width: 430px) {
   .auth-card { padding: 20px 16px; }
   .dashboard-health-grid { gap: 10px; }
-  .auth-card-mobile-logo { max-width: min(260px, 90vw); }
+  .auth-card-mobile-logo { max-width: min(310px, 92vw); padding: 10px 16px; min-height: 72px; }
+  .auth-card-mobile-logo .lifelink-logo { height: auto; max-height: 56px; min-height: 46px; }
   .app-header-controls { gap: 6px; }
   .dashboard-card { gap: 8px; }
 }
 
 /* <= 390px → Modern Phones */
 @media (max-width: 390px) {
-  .app-mobile-brand span { display: none !important; }
+  .app-mobile-brand { gap: 6px !important; }
+  .app-mobile-brand-symbol { width: 34px !important; height: 34px !important; min-width: 34px !important; }
+  .app-mobile-brand > span:not(.app-mobile-brand-symbol),
+  .app-mobile-brand-text { max-width: 95px !important; font-size: 0.85rem !important; }
   .app-header-controls { gap: 4px !important; }
   .dashboard-health-grid { gap: 8px; }
   .auth-card { padding: 18px 14px; }
-  .auth-card-mobile-logo { max-width: 240px; padding: 7px 14px; }
-  .auth-card-mobile-logo .lifelink-logo { height: 36px; }
+  .auth-card-mobile-logo { max-width: min(280px, 92vw); padding: 9px 14px; min-height: 66px; }
+  .auth-card-mobile-logo .lifelink-logo { height: auto; max-height: 52px; min-height: 42px; }
   .dashboard-card { padding: 12px 10px; }
   .dashboard-header-box { padding: 12px 12px; }
   .dashboard-emergency-section { padding: 12px 10px; }
   .notification-panel,
   [role="region"][aria-label*="Notification"] {
-    width: min(88vw, 320px) !important;
-    right: 0 !important;
-    left: auto !important;
+    width: min(94vw, 350px) !important;
+    max-width: calc(100vw - 16px) !important;
+    top: 58px !important;
   }
 }
 
 /* <= 360px → Android Standard */
 @media (max-width: 360px) {
+  .app-mobile-brand-symbol { width: 32px !important; height: 32px !important; min-width: 32px !important; }
+  .app-mobile-brand > span:not(.app-mobile-brand-symbol),
+  .app-mobile-brand-text { max-width: 78px !important; font-size: 0.80rem !important; }
   .dashboard-health-grid { grid-template-columns: 1fr; display: flex; flex-direction: column; }
   .dashboard-quick-actions-grid { grid-template-columns: 1fr !important; display: flex !important; flex-direction: column !important; }
   .doctor-stats-grid { grid-template-columns: 1fr !important; display: flex !important; flex-direction: column !important; }
   .app-content, .doctor-content { padding: 10px 8px; }
   .auth-card { padding: 16px 12px; }
+  .auth-card-mobile-logo { max-width: min(250px, 92vw); padding: 8px 12px; min-height: 60px; }
+  .auth-card-mobile-logo .lifelink-logo { height: auto; max-height: 48px; min-height: 38px; }
   .dashboard-emergency-section {
     flex-direction: column;
     align-items: stretch;
@@ -2664,13 +2845,21 @@ div[tabindex="0"]:focus-visible {
 @media (max-width: 320px) {
   .app-header, .doctor-header { padding-inline: 6px; height: 52px; }
   .app-content, .doctor-content { padding: 8px 6px; }
+  .app-mobile-brand > span:not(.app-mobile-brand-symbol),
+  .app-mobile-brand-text { display: none !important; }
+  .app-mobile-brand-symbol { width: 28px !important; height: 28px !important; min-width: 28px !important; }
   .auth-card { padding: 14px 8px; }
-  .auth-card-mobile-logo { max-width: 200px; padding: 6px 10px; }
-  .auth-card-mobile-logo .lifelink-logo { height: 28px; }
+  .auth-card-mobile-logo { max-width: 220px; padding: 6px 10px; min-height: 54px; }
+  .auth-card-mobile-logo .lifelink-logo { height: auto; max-height: 42px; min-height: 34px; }
   .btn, .btn-primary, .btn-secondary { padding: 8px 10px; font-size: 0.82rem; }
   .dashboard-card { padding: 10px 8px; gap: 8px; }
   .dashboard-header-box { padding: 10px 8px; }
   .dashboard-emergency-section { padding: 10px 8px; }
+  .notification-panel,
+  [role="region"][aria-label*="Notification"] {
+    width: calc(100vw - 12px) !important;
+    top: 54px !important;
+  }
   .icon-btn { width: 36px; height: 36px; min-width: 36px; }
   .app-mobile-menu-button { width: 36px; height: 36px; min-width: 36px; }
 }
