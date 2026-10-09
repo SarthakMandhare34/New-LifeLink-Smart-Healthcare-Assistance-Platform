@@ -2,6 +2,8 @@
 
 > **[PROTOTYPE]** A prototype healthcare platform demonstrating secure patient records, AI triage, and dedicated clinical workspaces. Uses Server-Sent Events (SSE) to simulate real-time doctor appointment scheduling for testing purposes (No real doctors involved).
 
+**🌟 [Live Demo Available Here](https://new-lifelink-smart-healthcare-assistance.onrender.com/)**
+
 [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg?style=for-the-badge)](LICENSE)
 [![Node.js](https://img.shields.io/badge/Node.js-v22%2B-339933?style=for-the-badge&logo=node.js&logoColor=white)](https://nodejs.org/)
 [![React 19](https://img.shields.io/badge/React-19.2.1-61dafb?style=for-the-badge&logo=react&logoColor=black)](https://react.dev/)
