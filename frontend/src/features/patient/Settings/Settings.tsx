@@ -52,6 +52,9 @@ export const Settings = () => {
 
   const deleteAccount = trpc.patientAuth.deleteAccount.useMutation({
     onSuccess: () => {
+      if (typeof window !== 'undefined') {
+        sessionStorage.removeItem('lifelink_patient_session');
+      }
       window.location.href = '/';
     },
   });

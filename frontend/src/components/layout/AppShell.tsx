@@ -103,15 +103,19 @@ export const AppShell = () => {
   };
 
   useEffect(() => {
-    const handleClickOutside = (e: MouseEvent) => {
+    const handleClickOutside = (e: MouseEvent | TouchEvent) => {
       if (notificationRef.current && !notificationRef.current.contains(e.target as Node)) {
         setIsNotificationOpen(false);
       }
     };
     if (isNotificationOpen) {
       document.addEventListener('mousedown', handleClickOutside);
+      document.addEventListener('touchstart', handleClickOutside);
     }
-    return () => document.removeEventListener('mousedown', handleClickOutside);
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutside);
+      document.removeEventListener('touchstart', handleClickOutside);
+    };
   }, [isNotificationOpen]);
 
   const closeMobileNavigation = () => setIsMobileNavigationOpen(false);                         // Close drawer helper
@@ -164,6 +168,9 @@ export const AppShell = () => {
   // User logout click handler
   const handleLogout = async (e: React.MouseEvent) => {
     e.preventDefault();
+    if (typeof window !== 'undefined') {
+      sessionStorage.removeItem('lifelink_patient_session');
+    }
     await logout();
     navigate('/login');
   };
@@ -307,7 +314,7 @@ export const AppShell = () => {
             {/* Mobile compact brand emblem */}
             <NavLink to="/patient/dashboard" className="app-mobile-brand" aria-label={PATIENT_SIDEBAR_BRAND_LABEL}>
               <LifeLinkLogo variant="symbol" className="app-mobile-brand-symbol" />
-              <span>LifeLink</span>
+              <span className="app-mobile-brand-text">LifeLink</span>
             </NavLink>
           </div>
 
@@ -368,10 +375,20 @@ export const AppShell = () => {
                 )}
               </button>
 
+              {/* Mobile notification touch backdrop */}
+              {isNotificationOpen && (
+                <div
+                  className="notification-backdrop"
+                  onClick={() => setIsNotificationOpen(false)}
+                  aria-hidden="true"
+                />
+              )}
+
               {/* Centralized Notification Dropdown Panel */}
               {isNotificationOpen && (
                 <div
                   role="region"
+                  className="notification-panel"
                   aria-label="Notifications Panel"
                   style={{
                     position: 'absolute',
@@ -432,7 +449,7 @@ export const AppShell = () => {
                     )}
                   </div>
 
-                  <div style={{ maxHeight: '360px', overflowY: 'auto' }}>
+                  <div className="notification-list" style={{ maxHeight: '360px', overflowY: 'auto' }}>
                     {notifications.length === 0 ? (
                       <div style={{ padding: '24px 16px', textAlign: 'center', color: 'var(--color-text-muted)' }}>
                         <Bell size={24} style={{ opacity: 0.3, margin: '0 auto 8px', display: 'block' }} />

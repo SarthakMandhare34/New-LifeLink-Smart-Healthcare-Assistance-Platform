@@ -66,20 +66,27 @@ export const DoctorAppShell = () => {
 
   // Dismiss notification popover when clicking outside
   useEffect(() => {
-    function handleClickOutside(event: MouseEvent) {
+    function handleClickOutside(event: MouseEvent | TouchEvent) {
       if (notificationRef.current && !notificationRef.current.contains(event.target as Node)) {
         setIsNotificationOpen(false);
       }
     }
     if (isNotificationOpen) {
       document.addEventListener('mousedown', handleClickOutside);
+      document.addEventListener('touchstart', handleClickOutside);
     }
-    return () => document.removeEventListener('mousedown', handleClickOutside);
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutside);
+      document.removeEventListener('touchstart', handleClickOutside);
+    };
   }, [isNotificationOpen]);
 
   // Clinician logout mutation
   const logoutMutation = trpc.doctorAuth.logout.useMutation({
     onSuccess: async () => {
+      if (typeof window !== 'undefined') {
+        sessionStorage.removeItem('lifelink_doctor_session');                                   // Clear tab doctor session
+      }
       utils.doctorAuth.me.setData(undefined, null);                                             // Clear auth cache
       await utils.doctorWorkspace.invalidate();                                                 // Invalidate workspace cache
       navigate("/doctor/login", { replace: true });                                             // Redirect to doctor login
@@ -91,6 +98,9 @@ export const DoctorAppShell = () => {
   // Handle logout action
   const handleLogout = async (e: React.MouseEvent) => {
     e.preventDefault();
+    if (typeof window !== 'undefined') {
+      sessionStorage.removeItem('lifelink_doctor_session');
+    }
     await logoutMutation.mutateAsync();
   };
 
@@ -116,6 +126,9 @@ export const DoctorAppShell = () => {
       hasExpired = true;
       void (async () => {
         try {
+          if (typeof window !== 'undefined') {
+            sessionStorage.removeItem('lifelink_doctor_session');
+          }
           await logoutMutation.mutateAsync();
         } finally {
           toast.error('You have been signed out after five minutes of inactivity.');
@@ -132,8 +145,11 @@ export const DoctorAppShell = () => {
     </main>
   );
 
-  // Redirect to login if doctor session is absent
-  if (!session.data) return <Navigate to="/doctor/login" replace />;
+  // Check tab-isolated clinician session
+  const hasDoctorTabSession = typeof window !== 'undefined' && sessionStorage.getItem('lifelink_doctor_session') === 'active';
+
+  // Redirect to login if doctor session is absent or current tab is unauthenticated
+  if (!session.data || !hasDoctorTabSession) return <Navigate to="/doctor/login" replace />;
 
   // Calculate doctor initials for avatar display
   const initials = (session.data?.displayName?.trim() || 'Doctor')
@@ -283,7 +299,7 @@ export const DoctorAppShell = () => {
             {/* Mobile brand symbol */}
             <NavLink to="/doctor/dashboard" className="app-mobile-brand" aria-label="LifeLink clinician home">
               <LifeLinkLogo variant="symbol" className="app-mobile-brand-symbol" />
-              <span>LifeLink</span>
+              <span className="app-mobile-brand-text">LifeLink</span>
             </NavLink>
           </div>
 
@@ -336,9 +352,19 @@ export const DoctorAppShell = () => {
                 )}
               </button>
 
+              {/* Mobile notification touch backdrop */}
+              {isNotificationOpen && (
+                <div
+                  className="notification-backdrop"
+                  onClick={() => setIsNotificationOpen(false)}
+                  aria-hidden="true"
+                />
+              )}
+
               {isNotificationOpen && (
                 <div
                   role="region"
+                  className="notification-panel"
                   aria-label="Clinician Notifications Panel"
                   style={{
                     position: 'absolute',
@@ -382,7 +408,7 @@ export const DoctorAppShell = () => {
                     </div>
                   </div>
 
-                  <div style={{ maxHeight: '340px', overflowY: 'auto' }}>
+                  <div className="notification-list" style={{ maxHeight: '340px', overflowY: 'auto' }}>
                     {appointments.length === 0 ? (
                       <div style={{ padding: '24px 16px', textAlign: 'center', color: 'var(--color-text-muted)' }}>
                         <Bell size={24} style={{ opacity: 0.3, margin: '0 auto 8px', display: 'block' }} />

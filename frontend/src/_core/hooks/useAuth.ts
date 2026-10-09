@@ -43,6 +43,9 @@ export function useAuth(options?: UseAuthOptions) {
   // Memoized logout callback function
   const logout = useCallback(async () => {
     try {
+      if (typeof window !== "undefined") {
+        sessionStorage.removeItem("lifelink_patient_session");                                  // Clear tab-isolated patient session
+      }
       await logoutMutation.mutateAsync();                                                       // Tell server to delete auth session cookie
     } catch (error: unknown) {
       if (
@@ -53,18 +56,23 @@ export function useAuth(options?: UseAuthOptions) {
       }
       throw error;
     } finally {
+      if (typeof window !== "undefined") {
+        sessionStorage.removeItem("lifelink_patient_session");
+      }
       utils.auth.me.setData(undefined, null);                                                   // Clear cache
       await utils.auth.me.invalidate();                                                         // Force re-evaluation
     }
   }, [logoutMutation, utils]);
 
-  // Derived user state
+  // Derived user state — scoped strictly to current browser tab session
   const state = useMemo(() => {
+    const hasTabSession = typeof window !== "undefined" && sessionStorage.getItem("lifelink_patient_session") === "active";
+    const activeUser = hasTabSession ? (meQuery.data ?? null) : null;
     return {
-      user: meQuery.data ?? null,                                                               // User object or null
-      loading: meQuery.isLoading || logoutMutation.isPending || (meQuery.isFetching && !meQuery.data), // Loading indicator
+      user: activeUser,                                                                         // User object or null
+      loading: meQuery.isLoading || logoutMutation.isPending || (meQuery.isFetching && !meQuery.data && hasTabSession), // Loading indicator
       error: meQuery.error ?? logoutMutation.error ?? null,                                     // Error state
-      isAuthenticated: Boolean(meQuery.data),                                                   // True if user is logged in
+      isAuthenticated: Boolean(activeUser),                                                     // True only if current tab is authenticated
     };
   }, [
     meQuery.data,
