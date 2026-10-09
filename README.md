@@ -2,7 +2,8 @@
 
 > **[PROTOTYPE]** A prototype healthcare platform demonstrating secure patient records, AI triage, and dedicated clinical workspaces. Uses Server-Sent Events (SSE) to simulate real-time doctor appointment scheduling for testing purposes (No real doctors involved).
 
-**🌟 [Live Demo Available Here](https://new-lifelink-smart-healthcare-assistance.onrender.com/)**
+🌍 **Live Demo:** [https://new-lifelink-smart-healthcare-assistance.onrender.com/](https://new-lifelink-smart-healthcare-assistance.onrender.com/)
+
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg?style=for-the-badge)](LICENSE)
 [![Node.js](https://img.shields.io/badge/Node.js-v22%2B-339933?style=for-the-badge&logo=node.js&logoColor=white)](https://nodejs.org/)
@@ -54,6 +55,14 @@
 ---
 
 ## 1. Project Overview
+
+### 🚀 2026 Latest Updates: Production Architecture & Deployment
+This project has undergone a complete architectural upgrade to support production-level deployment:
+- **Cloud Infrastructure:** Successfully deployed as a live full-stack application on **Render.com**.
+- **Serverless Database:** Migrated from a local MySQL instance to **TiDB Serverless Cloud** for 24/7 high-availability and zero-downtime scaling.
+- **Single-Page Application (SPA):** Completely refactored the frontend routing to support isolated, concurrent session states for Patient and Doctor workspaces without requiring tab isolation.
+- **Google OAuth 2.0:** Hardened authentication with strict URI callbacks matching the production environment.
+- **Database Synchronization:** Securely seeded 52 Doctor workstation accounts into the live production database while preserving patient privacy constraints.
 
 **LifeLink** is a full-stack smart healthcare assistance platform whose initial operational range and live coverage are centered on the **Mumbai Metropolitan Region (MMR)**. In Mumbai, the platform uses major suburban railway stations as practical local landmarks, connecting daily train commuters and residents with fast health guidance and verified medical specialists near their transit stops. While current operational coverage is focused on Mumbai, the platform architecture has been deliberately designed to be location-agnostic, enabling seamless future expansion to a **Pan-India** healthcare network across cities, districts, and rural regions.
 

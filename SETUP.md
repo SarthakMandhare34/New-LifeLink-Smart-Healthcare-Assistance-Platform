@@ -1,6 +1,6 @@
-# 🚀 LifeLink — Complete Local Development & Installation Guide
+# 🚀 LifeLink — Complete Local Development & Production Setup Guide
 
-This guide provides step-by-step instructions for setting up, configuring, running, and troubleshooting the **LifeLink Smart Healthcare Assistance Platform** on your local machine.
+This guide provides step-by-step instructions for setting up, configuring, running, and troubleshooting the **LifeLink Smart Healthcare Assistance Platform** on your local machine, as well as pushing to the live TiDB/Render production environment.
 
 ---
 
