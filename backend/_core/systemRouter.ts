@@ -16,7 +16,10 @@ export const systemRouter = router({
     .input(
       z
         .object({
-          timestamp: z.number().min(0, "timestamp cannot be negative").optional(),
+          timestamp: z
+            .number()
+            .min(0, "timestamp cannot be negative")
+            .optional(),
         })
         .optional()
     )

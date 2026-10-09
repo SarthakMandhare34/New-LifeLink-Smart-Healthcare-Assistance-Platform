@@ -38,9 +38,14 @@ import {
 } from "../database/schema";
 import type { MockDoctorDirectoryEntry } from "./discovery/mockDoctorDirectory";
 import { doctorDisplayName } from "./syntheticDoctor";
-import { ENV } from './_core/env';
+import { ENV } from "./_core/env";
 import { randomUUID, createHash } from "node:crypto";
-import { publishDoctorEvent, publishPatientEvent, type DoctorEventType, type PatientEventType } from "./realtime/eventBus";
+import {
+  publishDoctorEvent,
+  publishPatientEvent,
+  type DoctorEventType,
+  type PatientEventType,
+} from "./realtime/eventBus";
 import { storageGet } from "./storage";
 import {
   CLINIC_APPOINTMENT_SLOTS,
@@ -50,30 +55,31 @@ import {
 } from "../shared/const";
 
 /** Singleton instance of Drizzle ORM */
-let _db: ReturnType<typeof drizzle> | null = null;                // Cached MySQL database client instance
+let _db: ReturnType<typeof drizzle> | null = null; // Cached MySQL database client instance
 
 // --- Cluster: Database Connection Manager ---
 // Lazily creates and returns the Drizzle database instance when needed.
 export async function getDb() {
-  if (!_db && process.env.DATABASE_URL) {                        // Only initialize if not already connected
+  if (!_db && process.env.DATABASE_URL) {
+    // Only initialize if not already connected
     try {
-      _db = drizzle(process.env.DATABASE_URL);                   // Establish connection pool using DATABASE_URL
+      _db = drizzle(process.env.DATABASE_URL); // Establish connection pool using DATABASE_URL
     } catch (error) {
-      console.warn("[Database] Failed to connect:", error);      // Log friendly warning if MySQL is unreachable
+      console.warn("[Database] Failed to connect:", error); // Log friendly warning if MySQL is unreachable
       _db = null;
     }
   }
-  return _db;                                                    // Returns Drizzle client or null if offline
+  return _db; // Returns Drizzle client or null if offline
 }
 
 // --- Cluster: User Upsert (Create or Update) ---
 // Inserts a new user record or updates existing fields (e.g. lastSignedIn) on duplicate openId
 export async function upsertUser(user: InsertUser): Promise<void> {
   if (!user.openId) {
-    throw new Error("User openId is required for upsert");        // openId is mandatory for every user account
+    throw new Error("User openId is required for upsert"); // openId is mandatory for every user account
   }
 
-  const db = await getDb();                                      // Fetch active database client
+  const db = await getDb(); // Fetch active database client
   if (!db) {
     console.warn("[Database] Cannot upsert user: database not available");
     return;
@@ -81,9 +87,9 @@ export async function upsertUser(user: InsertUser): Promise<void> {
 
   try {
     const values: InsertUser = {
-      openId: user.openId,                                       // Primary identity key
+      openId: user.openId, // Primary identity key
     };
-    const updateSet: Record<string, unknown> = {};               // Fields to update if user already exists
+    const updateSet: Record<string, unknown> = {}; // Fields to update if user already exists
 
     const textFields = ["name", "email", "loginMethod"] as const; // Standard user metadata fields
     type TextField = (typeof textFields)[number];
@@ -91,16 +97,16 @@ export async function upsertUser(user: InsertUser): Promise<void> {
     const assignNullable = (field: TextField) => {
       const value = user[field];
       if (value === undefined) return;
-      const normalized = value ?? null;                          // Convert undefined to SQL-safe null
+      const normalized = value ?? null; // Convert undefined to SQL-safe null
       values[field] = normalized;
-      updateSet[field] = normalized;                             // Update field on duplicate
+      updateSet[field] = normalized; // Update field on duplicate
     };
 
     textFields.forEach(assignNullable);
 
     if (user.lastSignedIn !== undefined) {
       values.lastSignedIn = user.lastSignedIn;
-      updateSet.lastSignedIn = user.lastSignedIn;                // Update sign-in timestamp
+      updateSet.lastSignedIn = user.lastSignedIn; // Update sign-in timestamp
     }
     if (user.role !== undefined) {
       values.role = user.role;
@@ -108,11 +114,11 @@ export async function upsertUser(user: InsertUser): Promise<void> {
     }
 
     if (!values.lastSignedIn) {
-      values.lastSignedIn = new Date();                          // Default to current timestamp if missing
+      values.lastSignedIn = new Date(); // Default to current timestamp if missing
     }
 
     if (Object.keys(updateSet).length === 0) {
-      updateSet.lastSignedIn = new Date();                       // Always touch lastSignedIn on update
+      updateSet.lastSignedIn = new Date(); // Always touch lastSignedIn on update
     }
 
     // Executes MySQL INSERT ... ON DUPLICATE KEY UPDATE query
@@ -133,7 +139,11 @@ export async function getUserByOpenId(openId: string) {
     return undefined;
   }
 
-  const result = await db.select().from(users).where(eq(users.openId, openId)).limit(1); // SELECT * FROM users WHERE openId = ? LIMIT 1
+  const result = await db
+    .select()
+    .from(users)
+    .where(eq(users.openId, openId))
+    .limit(1); // SELECT * FROM users WHERE openId = ? LIMIT 1
 
   return result.length > 0 ? result[0] : undefined;
 }
@@ -154,14 +164,18 @@ export type ExternalAuthProvider = "google";
 
 export class ProviderAccountConflictError extends Error {
   constructor() {
-    super("An account with this verified email already exists. Sign in with your existing method before linking a new provider.");
+    super(
+      "An account with this verified email already exists. Sign in with your existing method before linking a new provider."
+    );
     this.name = "ProviderAccountConflictError";
   }
 }
 
 export class ProviderRegistrationRequiredError extends Error {
   constructor() {
-    super("No LifeLink account is linked to this Google account. Please register first.");
+    super(
+      "No LifeLink account is linked to this Google account. Please register first."
+    );
     this.name = "ProviderRegistrationRequiredError";
   }
 }
@@ -170,14 +184,22 @@ function normalizeProviderEmail(email: string) {
   return email.trim().toLowerCase();
 }
 
-export async function getUserByProviderIdentity(provider: ExternalAuthProvider, subject: string) {
+export async function getUserByProviderIdentity(
+  provider: ExternalAuthProvider,
+  subject: string
+) {
   const db = await getDb();
   if (!db) throw new Error("Database is not available");
   const rows = await db
     .select({ user: users })
     .from(patientProviderIdentities)
     .innerJoin(users, eq(patientProviderIdentities.userId, users.id))
-    .where(and(eq(patientProviderIdentities.provider, provider), eq(patientProviderIdentities.subject, subject)))
+    .where(
+      and(
+        eq(patientProviderIdentities.provider, provider),
+        eq(patientProviderIdentities.subject, subject)
+      )
+    )
     .limit(1);
   return rows[0]?.user ?? null;
 }
@@ -185,27 +207,41 @@ export async function getUserByProviderIdentity(provider: ExternalAuthProvider, 
 export async function findUserByEmail(email: string) {
   const db = await getDb();
   if (!db) throw new Error("Database is not available");
-  const rows = await db.select().from(users).where(eq(users.email, normalizeProviderEmail(email))).limit(1);
+  const rows = await db
+    .select()
+    .from(users)
+    .where(eq(users.email, normalizeProviderEmail(email)))
+    .limit(1);
   return rows[0] ?? null;
 }
 
-export async function resolveProviderPatient(input: {
-  provider: ExternalAuthProvider;
-  subject: string;
-  email: string;
-  name: string | null;
-}, options: { allowNewProviderAccount: boolean }) {
-  const existingIdentityUser = await getUserByProviderIdentity(input.provider, input.subject);
+export async function resolveProviderPatient(
+  input: {
+    provider: ExternalAuthProvider;
+    subject: string;
+    email: string;
+    name: string | null;
+  },
+  options: { allowNewProviderAccount: boolean }
+) {
+  const existingIdentityUser = await getUserByProviderIdentity(
+    input.provider,
+    input.subject
+  );
   const db = await getDb();
   if (!db) throw new Error("Database is not available");
   if (existingIdentityUser) {
-    await db.update(users).set({ lastSignedIn: new Date() }).where(eq(users.id, existingIdentityUser.id));
+    await db
+      .update(users)
+      .set({ lastSignedIn: new Date() })
+      .where(eq(users.id, existingIdentityUser.id));
     return existingIdentityUser;
   }
 
   const email = normalizeProviderEmail(input.email);
   if (await findUserByEmail(email)) throw new ProviderAccountConflictError();
-  if (!options.allowNewProviderAccount) throw new ProviderRegistrationRequiredError();
+  if (!options.allowNewProviderAccount)
+    throw new ProviderRegistrationRequiredError();
   const openId = `provider:${randomUUID()}`;
   await db.insert(users).values({
     openId,
@@ -217,27 +253,45 @@ export async function resolveProviderPatient(input: {
   });
   const user = await getUserByOpenId(openId);
   if (!user) throw new Error("Provider patient account could not be created");
-  await db.insert(patientProviderIdentities).values({ userId: user.id, provider: input.provider, subject: input.subject, email });
-  await db.insert(patientProfiles).values({ userId: user.id, allergiesJson: "[]", conditionsJson: "[]" });
+  await db
+    .insert(patientProviderIdentities)
+    .values({
+      userId: user.id,
+      provider: input.provider,
+      subject: input.subject,
+      email,
+    });
+  await db
+    .insert(patientProfiles)
+    .values({ userId: user.id, allergiesJson: "[]", conditionsJson: "[]" });
   return user;
 }
 
-export async function createPatientAssessment(assessment: InsertPatientAssessment) {
+export async function createPatientAssessment(
+  assessment: InsertPatientAssessment
+) {
   const db = await getDb();
   if (!db) throw new Error("Database is not available");
 
   // Safeguard: verify patient user exists in users table before attempting insert
   const existingUser = await getUserById(assessment.userId);
   if (!existingUser) {
-    throw new Error(`PATIENT_USER_NOT_FOUND: User ID ${assessment.userId} does not exist in database.`);
+    throw new Error(
+      `PATIENT_USER_NOT_FOUND: User ID ${assessment.userId} does not exist in database.`
+    );
   }
 
   try {
     const result = await db.insert(patientAssessments).values(assessment);
     return Number(result[0].insertId);
   } catch (error: any) {
-    if (error?.code === "ER_NO_REFERENCED_ROW_2" || error?.message?.includes("foreign key")) {
-      throw new Error(`PATIENT_USER_NOT_FOUND: User ID ${assessment.userId} does not exist in database.`);
+    if (
+      error?.code === "ER_NO_REFERENCED_ROW_2" ||
+      error?.message?.includes("foreign key")
+    ) {
+      throw new Error(
+        `PATIENT_USER_NOT_FOUND: User ID ${assessment.userId} does not exist in database.`
+      );
     }
     throw error;
   }
@@ -250,52 +304,71 @@ export async function getPatientAssessments(userId: number) {
   return db
     .select()
     .from(patientAssessments)
-    .where(and(eq(patientAssessments.userId, userId), ne(patientAssessments.urgency, "ERROR")))
+    .where(
+      and(
+        eq(patientAssessments.userId, userId),
+        ne(patientAssessments.urgency, "ERROR")
+      )
+    )
     .orderBy(desc(patientAssessments.createdAt));
 }
 
 // --- Cluster: Native Patient Registration ---
 // Registers a new patient with email & password, creates initial health passport profile
-export async function createNativePatient(input: { name: string; email: string; passwordHash: string }) {
-  const db = await getDb();                                      // Obtain active database connection
+export async function createNativePatient(input: {
+  name: string;
+  email: string;
+  passwordHash: string;
+}) {
+  const db = await getDb(); // Obtain active database connection
   if (!db) throw new Error("Database is not available");
 
-  const existingUsers = await db.select().from(users).where(eq(users.email, input.email)).limit(1); // Prevent duplicate registration with same email across all providers
-  if (existingUsers.length > 0) return null;                     // Email already registered, abort safely
+  const existingUsers = await db
+    .select()
+    .from(users)
+    .where(eq(users.email, input.email))
+    .limit(1); // Prevent duplicate registration with same email across all providers
+  if (existingUsers.length > 0) return null; // Email already registered, abort safely
 
-  const openId = `native:${randomUUID()}`;                       // Generate unique UUID-based openId for native patient
+  const openId = `native:${randomUUID()}`; // Generate unique UUID-based openId for native patient
   // 1. Create user account record
   await db.insert(users).values({
     openId,
     name: input.name,
     email: input.email,
-    loginMethod: "native-patient",                               // Mark identity as native password-authenticated
-    role: "user",                                                // Standard patient role
-    lastSignedIn: new Date(),                                    // Record registration timestamp
+    loginMethod: "native-patient", // Mark identity as native password-authenticated
+    role: "user", // Standard patient role
+    lastSignedIn: new Date(), // Record registration timestamp
   });
 
-  const user = await getUserByOpenId(openId);                    // Retrieve newly created user from database
+  const user = await getUserByOpenId(openId); // Retrieve newly created user from database
   if (!user) throw new Error("Patient account could not be created");
 
   // 2. Insert secure credential row (storing salted password hash, NEVER plain text!)
   await db.insert(patientCredentials).values({
-    userId: user.id,                                             // Link to user account
+    userId: user.id, // Link to user account
     email: input.email,
-    passwordHash: input.passwordHash,                            // Salted hash
+    passwordHash: input.passwordHash, // Salted hash
   });
   // 3. Initialize empty Health Passport profile for the patient
   await db.insert(patientProfiles).values({
     userId: user.id,
-    allergiesJson: "[]",                                         // Empty initial allergy list
-    conditionsJson: "[]",                                        // Empty initial preexisting conditions list
+    allergiesJson: "[]", // Empty initial allergy list
+    conditionsJson: "[]", // Empty initial preexisting conditions list
   });
-  return user;                                                   // Return fully provisioned patient user object
+  return user; // Return fully provisioned patient user object
 }
 
-export async function updatePatientPassword(userId: number, passwordHash: string) {
+export async function updatePatientPassword(
+  userId: number,
+  passwordHash: string
+) {
   const db = await getDb();
   if (!db) throw new Error("Database is not available");
-  await db.update(patientCredentials).set({ passwordHash }).where(eq(patientCredentials.userId, userId));
+  await db
+    .update(patientCredentials)
+    .set({ passwordHash })
+    .where(eq(patientCredentials.userId, userId));
 }
 
 export async function deletePatientAccount(userId: number) {
@@ -310,39 +383,56 @@ export async function getNativePatientByEmail(identifier: string) {
   const db = await getDb();
   if (!db) throw new Error("Database is not available");
 
-  const normalized = identifier.trim().toLowerCase();            // Normalize input for case-insensitive lookup
+  const normalized = identifier.trim().toLowerCase(); // Normalize input for case-insensitive lookup
 
   const rows = await db
-    .select({ user: users, credential: patientCredentials })     // Join users with their credentials
+    .select({ user: users, credential: patientCredentials }) // Join users with their credentials
     .from(patientCredentials)
     .innerJoin(users, eq(patientCredentials.userId, users.id))
     .where(
       or(
-        eq(patientCredentials.email, normalized),                // Exact email match
-        eq(users.name, normalized),                              // Username match
+        eq(patientCredentials.email, normalized), // Exact email match
+        eq(users.name, normalized), // Username match
         eq(patientCredentials.email, `${normalized}@lifelink.com`) // Convenience suffix match
       )
     )
     .limit(1);
-  return rows[0] ?? null;                                        // Return matched user + credential or null
+  return rows[0] ?? null; // Return matched user + credential or null
 }
 
 // --- Cluster: Clinician User Provisioning ---
 // Ensures a controlled Mumbai specialist doctor exists as a verified "doctor" user in the MySQL database
-export async function findOrCreateSyntheticDoctorUser(doctor: MockDoctorDirectoryEntry, email?: string) {
+export async function findOrCreateSyntheticDoctorUser(
+  doctor: MockDoctorDirectoryEntry,
+  email?: string
+) {
   const db = await getDb();
   if (!db) throw new Error("Database is not available");
-  const openId = `synthetic-doctor:${doctor.id}`;                // Stable openId prefix for doctors (e.g. synthetic-doctor:doctor-cardio-1)
-  const displayName = doctorDisplayName(doctor);                 // Human-readable clinician title (e.g. "Controlled Cardiology Specialist")
-  const existing = await getUserByOpenId(openId);                // Check if doctor user record already exists
+  const openId = `synthetic-doctor:${doctor.id}`; // Stable openId prefix for doctors (e.g. synthetic-doctor:doctor-cardio-1)
+  const displayName = doctorDisplayName(doctor); // Human-readable clinician title (e.g. "Controlled Cardiology Specialist")
+  const existing = await getUserByOpenId(openId); // Check if doctor user record already exists
   if (existing) {
-    if (existing.role !== "doctor" || existing.name !== displayName || (email && existing.email !== email)) {
+    if (
+      existing.role !== "doctor" ||
+      existing.name !== displayName ||
+      (email && existing.email !== email)
+    ) {
       await db
         .update(users)
-        .set({ role: "doctor", name: displayName, email: email ?? existing.email, lastSignedIn: new Date() })
-        .where(eq(users.id, existing.id));                       // Keep doctor details synchronized with mock directory
+        .set({
+          role: "doctor",
+          name: displayName,
+          email: email ?? existing.email,
+          lastSignedIn: new Date(),
+        })
+        .where(eq(users.id, existing.id)); // Keep doctor details synchronized with mock directory
     }
-    return { ...existing, name: displayName, role: "doctor" as const, email: email ?? existing.email };
+    return {
+      ...existing,
+      name: displayName,
+      role: "doctor" as const,
+      email: email ?? existing.email,
+    };
   }
 
   // Insert new doctor user record if not yet created
@@ -350,8 +440,8 @@ export async function findOrCreateSyntheticDoctorUser(doctor: MockDoctorDirector
     openId,
     name: displayName,
     email: email ?? null,
-    loginMethod: "synthetic-clinician",                           // Internal clinician workstation auth method
-    role: "doctor",                                              // Elevated clinician permissions
+    loginMethod: "synthetic-clinician", // Internal clinician workstation auth method
+    role: "doctor", // Elevated clinician permissions
     lastSignedIn: new Date(),
   });
   const user = await getUserByOpenId(openId);
@@ -363,42 +453,42 @@ export async function findOrCreateSyntheticDoctorUser(doctor: MockDoctorDirector
 // Maps informal shorthand emails (like "cardio@lifelink.com" or "derma@lifelink.com")
 // to their official department names so doctor sign-in is intuitive and flexible.
 const SPECIALTY_ROLE_ALIASES: Record<string, string> = {
-  cardio: "cardiology",                                          // Cardiology alias
+  cardio: "cardiology", // Cardiology alias
   cardiologist: "cardiology",
   cardiology: "cardiology",
-  derma: "dermatology",                                          // Dermatology alias
+  derma: "dermatology", // Dermatology alias
   dermatologist: "dermatology",
   dermatology: "dermatology",
-  ortho: "orthopedics",                                          // Orthopedics alias
+  ortho: "orthopedics", // Orthopedics alias
   orthopedist: "orthopedics",
   orthopedics: "orthopedics",
-  neuro: "neurology",                                            // Neurology alias
+  neuro: "neurology", // Neurology alias
   neurologist: "neurology",
   neurology: "neurology",
-  pedia: "pediatrics",                                           // Pediatrics alias
+  pedia: "pediatrics", // Pediatrics alias
   pediatrician: "pediatrics",
   pediatrics: "pediatrics",
-  gp: "generalpractice",                                         // General Practice alias
+  gp: "generalpractice", // General Practice alias
   general: "generalpractice",
   generalpractitioner: "generalpractice",
   generalphysician: "generalpractice",
   generalpractice: "generalpractice",
-  ophthal: "ophthalmology",                                      // Ophthalmology alias
+  ophthal: "ophthalmology", // Ophthalmology alias
   ophthalmologist: "ophthalmology",
   ophthalmology: "ophthalmology",
-  gastro: "gastroenterology",                                    // Gastroenterology alias
+  gastro: "gastroenterology", // Gastroenterology alias
   gastroenterologist: "gastroenterology",
   gastroenterology: "gastroenterology",
-  psych: "psychiatry",                                           // Psychiatry alias
+  psych: "psychiatry", // Psychiatry alias
   psychiatrist: "psychiatry",
   psychiatry: "psychiatry",
-  endo: "endocrinology",                                         // Endocrinology alias
+  endo: "endocrinology", // Endocrinology alias
   endocrinologist: "endocrinology",
   endocrinology: "endocrinology",
-  pulmo: "pulmonology",                                          // Pulmonology alias
+  pulmo: "pulmonology", // Pulmonology alias
   pulmonologist: "pulmonology",
   pulmonology: "pulmonology",
-  gynae: "gynecology",                                           // Gynecology alias
+  gynae: "gynecology", // Gynecology alias
   gynecologist: "gynecology",
   gynecology: "gynecology",
 };
@@ -456,11 +546,17 @@ export async function listSyntheticDoctorCredentialAccounts() {
   const db = await getDb();
   if (!db) throw new Error("Database is not available");
   return db
-    .select({ doctorId: syntheticDoctorCredentials.doctorId, email: syntheticDoctorCredentials.email })
+    .select({
+      doctorId: syntheticDoctorCredentials.doctorId,
+      email: syntheticDoctorCredentials.email,
+    })
     .from(syntheticDoctorCredentials);
 }
 
-export async function updateSyntheticDoctorPasswordByEmail(email: string, passwordHash: string) {
+export async function updateSyntheticDoctorPasswordByEmail(
+  email: string,
+  passwordHash: string
+) {
   const db = await getDb();
   if (!db) throw new Error("Database is not available");
   const result = await db
@@ -471,7 +567,11 @@ export async function updateSyntheticDoctorPasswordByEmail(email: string, passwo
 }
 
 /** Owner-authorized account rotation changes only the login address and hash for one stable controlled doctor identity. */
-export async function refreshSyntheticDoctorCredentialByDoctorId(input: { doctorId: string; email: string; passwordHash: string }) {
+export async function refreshSyntheticDoctorCredentialByDoctorId(input: {
+  doctorId: string;
+  email: string;
+  passwordHash: string;
+}) {
   const db = await getDb();
   if (!db) throw new Error("Database is not available");
   const emailOwner = await db
@@ -479,15 +579,21 @@ export async function refreshSyntheticDoctorCredentialByDoctorId(input: { doctor
     .from(syntheticDoctorCredentials)
     .where(eq(syntheticDoctorCredentials.email, input.email))
     .limit(1);
-  if (emailOwner[0] && emailOwner[0].doctorId !== input.doctorId) return "email-conflict" as const;
+  if (emailOwner[0] && emailOwner[0].doctorId !== input.doctorId)
+    return "email-conflict" as const;
   const result = await db
     .update(syntheticDoctorCredentials)
     .set({ email: input.email, passwordHash: input.passwordHash })
     .where(eq(syntheticDoctorCredentials.doctorId, input.doctorId));
-  return Number(result[0].affectedRows) > 0 ? "updated" as const : "not-found" as const;
+  return Number(result[0].affectedRows) > 0
+    ? ("updated" as const)
+    : ("not-found" as const);
 }
 
-export async function updateSyntheticDoctorPasswordByUserId(userId: number, passwordHash: string) {
+export async function updateSyntheticDoctorPasswordByUserId(
+  userId: number,
+  passwordHash: string
+) {
   const db = await getDb();
   if (!db) throw new Error("Database is not available");
   const result = await db
@@ -504,7 +610,9 @@ export async function createSyntheticDoctorCredential(input: {
 }) {
   const db = await getDb();
   if (!db) throw new Error("Database is not available");
-  const existingByEmail = await getSyntheticDoctorCredentialByEmail(input.email);
+  const existingByEmail = await getSyntheticDoctorCredentialByEmail(
+    input.email
+  );
   if (existingByEmail) return null;
   const user = await findOrCreateSyntheticDoctorUser(input.doctor, input.email);
   const existingByDoctor = await db
@@ -526,7 +634,9 @@ function parseList(value: string | null | undefined) {
   if (!value) return [] as string[];
   try {
     const parsed = JSON.parse(value);
-    return Array.isArray(parsed) ? parsed.filter((item): item is string => typeof item === "string") : [];
+    return Array.isArray(parsed)
+      ? parsed.filter((item): item is string => typeof item === "string")
+      : [];
   } catch {
     return [] as string[];
   }
@@ -551,7 +661,9 @@ export async function getPatientProfile(userId: number) {
     .where(eq(patientEmergencyContacts.userId, userId))
     .orderBy(desc(patientEmergencyContacts.createdAt));
 
-  const avatar = row.profile?.avatarKey ? await storageGet(row.profile.avatarKey) : null;
+  const avatar = row.profile?.avatarKey
+    ? await storageGet(row.profile.avatarKey)
+    : null;
 
   return {
     id: row.user.id,
@@ -562,7 +674,7 @@ export async function getPatientProfile(userId: number) {
     avatarUrl: avatar?.url ?? null,
     allergies: parseList(row.profile?.allergiesJson),
     conditions: parseList(row.profile?.conditionsJson),
-    emergencyContacts: contacts.map((contact) => ({
+    emergencyContacts: contacts.map(contact => ({
       id: String(contact.id),
       name: contact.name,
       relationship: contact.relationship,
@@ -573,31 +685,52 @@ export async function getPatientProfile(userId: number) {
 
 export async function updatePatientProfile(
   userId: number,
-  input: { name?: string; bloodGroup?: string; phone?: string; allergies?: string[]; conditions?: string[] }
+  input: {
+    name?: string;
+    bloodGroup?: string;
+    phone?: string;
+    allergies?: string[];
+    conditions?: string[];
+  }
 ) {
   const db = await getDb();
   if (!db) throw new Error("Database is not available");
 
   if (input.name !== undefined) {
-    await db.update(users).set({ name: input.name }).where(eq(users.id, userId));
+    await db
+      .update(users)
+      .set({ name: input.name })
+      .where(eq(users.id, userId));
   }
 
   const values: Record<string, string | null> = {};
-  if (input.bloodGroup !== undefined) values.bloodGroup = input.bloodGroup || null;
+  if (input.bloodGroup !== undefined)
+    values.bloodGroup = input.bloodGroup || null;
   if (input.phone !== undefined) values.phone = input.phone || null;
-  if (input.allergies !== undefined) values.allergiesJson = JSON.stringify(input.allergies);
-  if (input.conditions !== undefined) values.conditionsJson = JSON.stringify(input.conditions);
+  if (input.allergies !== undefined)
+    values.allergiesJson = JSON.stringify(input.allergies);
+  if (input.conditions !== undefined)
+    values.conditionsJson = JSON.stringify(input.conditions);
   if (Object.keys(values).length > 0) {
-    await db.update(patientProfiles).set(values).where(eq(patientProfiles.userId, userId));
+    await db
+      .update(patientProfiles)
+      .set(values)
+      .where(eq(patientProfiles.userId, userId));
   }
 
   return getPatientProfile(userId);
 }
 
-export async function updatePatientAvatarKey(userId: number, avatarKey: string) {
+export async function updatePatientAvatarKey(
+  userId: number,
+  avatarKey: string
+) {
   const db = await getDb();
   if (!db) throw new Error("Database is not available");
-  await db.update(patientProfiles).set({ avatarKey }).where(eq(patientProfiles.userId, userId));
+  await db
+    .update(patientProfiles)
+    .set({ avatarKey })
+    .where(eq(patientProfiles.userId, userId));
   return getPatientProfile(userId);
 }
 
@@ -607,10 +740,15 @@ export type PatientEmergencyContactInput = {
   phone: string;
 };
 
-export async function createPatientEmergencyContact(userId: number, input: PatientEmergencyContactInput) {
+export async function createPatientEmergencyContact(
+  userId: number,
+  input: PatientEmergencyContactInput
+) {
   const db = await getDb();
   if (!db) throw new Error("Database is not available");
-  const result = await db.insert(patientEmergencyContacts).values({ userId, ...input });
+  const result = await db
+    .insert(patientEmergencyContacts)
+    .values({ userId, ...input });
   return Number(result[0].insertId);
 }
 
@@ -624,16 +762,29 @@ export async function updateOwnedPatientEmergencyContact(
   const result = await db
     .update(patientEmergencyContacts)
     .set(input)
-    .where(and(eq(patientEmergencyContacts.id, contactId), eq(patientEmergencyContacts.userId, userId)));
+    .where(
+      and(
+        eq(patientEmergencyContacts.id, contactId),
+        eq(patientEmergencyContacts.userId, userId)
+      )
+    );
   return Number(result[0].affectedRows) > 0;
 }
 
-export async function removeOwnedPatientEmergencyContact(userId: number, contactId: number) {
+export async function removeOwnedPatientEmergencyContact(
+  userId: number,
+  contactId: number
+) {
   const db = await getDb();
   if (!db) throw new Error("Database is not available");
   const result = await db
     .delete(patientEmergencyContacts)
-    .where(and(eq(patientEmergencyContacts.id, contactId), eq(patientEmergencyContacts.userId, userId)));
+    .where(
+      and(
+        eq(patientEmergencyContacts.id, contactId),
+        eq(patientEmergencyContacts.userId, userId)
+      )
+    );
   return Number(result[0].affectedRows) > 0;
 }
 
@@ -641,13 +792,31 @@ export async function getPatientDashboard(userId: number) {
   const db = await getDb();
   if (!db) throw new Error("Database is not available");
 
-  const [profile, assessments, medicines, appointments, prescriptions] = await Promise.all([
-    getPatientProfile(userId),
-    db.select().from(patientAssessments).where(eq(patientAssessments.userId, userId)).orderBy(desc(patientAssessments.createdAt)).limit(1),
-    db.select().from(patientMedicines).where(eq(patientMedicines.userId, userId)).orderBy(desc(patientMedicines.updatedAt)),
-    db.select().from(patientAppointments).where(eq(patientAppointments.userId, userId)).orderBy(desc(patientAppointments.scheduledAt)),
-    db.select().from(patientPrescriptions).where(eq(patientPrescriptions.userId, userId)).orderBy(desc(patientPrescriptions.issuedAt)),
-  ]);
+  const [profile, assessments, medicines, appointments, prescriptions] =
+    await Promise.all([
+      getPatientProfile(userId),
+      db
+        .select()
+        .from(patientAssessments)
+        .where(eq(patientAssessments.userId, userId))
+        .orderBy(desc(patientAssessments.createdAt))
+        .limit(1),
+      db
+        .select()
+        .from(patientMedicines)
+        .where(eq(patientMedicines.userId, userId))
+        .orderBy(desc(patientMedicines.updatedAt)),
+      db
+        .select()
+        .from(patientAppointments)
+        .where(eq(patientAppointments.userId, userId))
+        .orderBy(desc(patientAppointments.scheduledAt)),
+      db
+        .select()
+        .from(patientPrescriptions)
+        .where(eq(patientPrescriptions.userId, userId))
+        .orderBy(desc(patientPrescriptions.issuedAt)),
+    ]);
 
   return {
     profile,
@@ -665,7 +834,9 @@ export async function createPatientEvent(
 ) {
   const db = await getDb();
   if (!db) throw new Error("Database is not available");
-  const result = await db.insert(patientEvents).values({ userId, type, entityId: entityId ?? null });
+  const result = await db
+    .insert(patientEvents)
+    .values({ userId, type, entityId: entityId ?? null });
   const event = {
     id: Number(result[0].insertId),
     userId,
@@ -677,7 +848,10 @@ export async function createPatientEvent(
   return event;
 }
 
-export async function getPatientEventsSince(userId: number, lastEventId?: number) {
+export async function getPatientEventsSince(
+  userId: number,
+  lastEventId?: number
+) {
   const db = await getDb();
   if (!db) throw new Error("Database is not available");
   const where = lastEventId
@@ -690,11 +864,13 @@ export async function createDoctorEvent(
   doctorId: string,
   patientUserId: number,
   type: DoctorEventType,
-  entityId?: string,
+  entityId?: string
 ) {
   const db = await getDb();
   if (!db) throw new Error("Database is not available");
-  const result = await db.insert(doctorEvents).values({ doctorId, patientUserId, type, entityId: entityId ?? null });
+  const result = await db
+    .insert(doctorEvents)
+    .values({ doctorId, patientUserId, type, entityId: entityId ?? null });
   const event = {
     id: Number(result[0].insertId),
     doctorId,
@@ -707,7 +883,10 @@ export async function createDoctorEvent(
   return event;
 }
 
-export async function getDoctorEventsSince(doctorId: string, lastEventId?: number) {
+export async function getDoctorEventsSince(
+  doctorId: string,
+  lastEventId?: number
+) {
   const db = await getDb();
   if (!db) throw new Error("Database is not available");
   const where = lastEventId
@@ -719,12 +898,19 @@ export async function getDoctorEventsSince(doctorId: string, lastEventId?: numbe
 export async function listPatientMedicines(userId: number) {
   const db = await getDb();
   if (!db) throw new Error("Database is not available");
-  return db.select().from(patientMedicines).where(eq(patientMedicines.userId, userId)).orderBy(desc(patientMedicines.updatedAt));
+  return db
+    .select()
+    .from(patientMedicines)
+    .where(eq(patientMedicines.userId, userId))
+    .orderBy(desc(patientMedicines.updatedAt));
 }
 
 export async function createPatientMedicine(
   userId: number,
-  input: Omit<typeof patientMedicines.$inferInsert, "id" | "userId" | "createdAt" | "updatedAt">
+  input: Omit<
+    typeof patientMedicines.$inferInsert,
+    "id" | "userId" | "createdAt" | "updatedAt"
+  >
 ) {
   const db = await getDb();
   if (!db) throw new Error("Database is not available");
@@ -735,25 +921,52 @@ export async function createPatientMedicine(
 export async function updateOwnedPatientMedicine(
   userId: number,
   medicineId: number,
-  input: Partial<Omit<typeof patientMedicines.$inferInsert, "id" | "userId" | "createdAt" | "updatedAt">>
+  input: Partial<
+    Omit<
+      typeof patientMedicines.$inferInsert,
+      "id" | "userId" | "createdAt" | "updatedAt"
+    >
+  >
 ) {
   const db = await getDb();
   if (!db) throw new Error("Database is not available");
-  const result = await db.update(patientMedicines).set(input).where(and(eq(patientMedicines.id, medicineId), eq(patientMedicines.userId, userId)));
+  const result = await db
+    .update(patientMedicines)
+    .set(input)
+    .where(
+      and(
+        eq(patientMedicines.id, medicineId),
+        eq(patientMedicines.userId, userId)
+      )
+    );
   return Number(result[0].affectedRows) > 0;
 }
 
-export async function removeOwnedPatientMedicine(userId: number, medicineId: number) {
+export async function removeOwnedPatientMedicine(
+  userId: number,
+  medicineId: number
+) {
   const db = await getDb();
   if (!db) throw new Error("Database is not available");
-  const result = await db.delete(patientMedicines).where(and(eq(patientMedicines.id, medicineId), eq(patientMedicines.userId, userId)));
+  const result = await db
+    .delete(patientMedicines)
+    .where(
+      and(
+        eq(patientMedicines.id, medicineId),
+        eq(patientMedicines.userId, userId)
+      )
+    );
   return Number(result[0].affectedRows) > 0;
 }
 
 export async function listPatientAppointments(userId: number) {
   const db = await getDb();
   if (!db) throw new Error("Database is not available");
-  return db.select().from(patientAppointments).where(eq(patientAppointments.userId, userId)).orderBy(desc(patientAppointments.scheduledAt));
+  return db
+    .select()
+    .from(patientAppointments)
+    .where(eq(patientAppointments.userId, userId))
+    .orderBy(desc(patientAppointments.scheduledAt));
 }
 
 export async function createPatientAppointment(
@@ -792,7 +1005,7 @@ export async function createPatientAppointment(
   };
 
   try {
-    return await db.transaction(async (tx) => {
+    return await db.transaction(async tx => {
       // 1. Transactional check with row-level locking strictly scoped to this doctor and time window
       const windowStart = new Date(scheduledAt.getTime() - 29 * 60 * 1000);
       const windowEnd = new Date(scheduledAt.getTime() + 29 * 60 * 1000);
@@ -807,7 +1020,9 @@ export async function createPatientAppointment(
       )) as unknown as [Array<{ id: number }>];
 
       if (existing && existing.length > 0) {
-        const conflictErr = new Error("This appointment time slot is no longer available. Please select another time slot.");
+        const conflictErr = new Error(
+          "This appointment time slot is no longer available. Please select another time slot."
+        );
         (conflictErr as any).code = "SLOT_CONFLICT";
         throw conflictErr;
       }
@@ -823,7 +1038,9 @@ export async function createPatientAppointment(
         return Number(result[0].insertId);
       } catch (insertErr: any) {
         if (isConflictError(insertErr)) {
-          const conflictErr = new Error("This appointment time slot is no longer available. Please select another time slot.");
+          const conflictErr = new Error(
+            "This appointment time slot is no longer available. Please select another time slot."
+          );
           (conflictErr as any).code = "SLOT_CONFLICT";
           throw conflictErr;
         }
@@ -832,7 +1049,9 @@ export async function createPatientAppointment(
     });
   } catch (txErr: any) {
     if (isConflictError(txErr)) {
-      const conflictErr = new Error("This appointment time slot is no longer available. Please select another time slot.");
+      const conflictErr = new Error(
+        "This appointment time slot is no longer available. Please select another time slot."
+      );
       (conflictErr as any).code = "SLOT_CONFLICT";
       throw conflictErr;
     }
@@ -847,9 +1066,12 @@ export async function ensureAppointmentConstraints(): Promise<void> {
   const db = await getDb();
   if (!db) return;
   try {
-    const [cols] = await db.execute(sql.raw("SHOW COLUMNS FROM `patientAppointments` LIKE 'activeSlotKey'"));
+    const [cols] = await db.execute(
+      sql.raw("SHOW COLUMNS FROM `patientAppointments` LIKE 'activeSlotKey'")
+    );
     if (Array.isArray(cols) && cols.length === 0) {
-      await db.execute(sql.raw(`
+      await db.execute(
+        sql.raw(`
         ALTER TABLE \`patientAppointments\`
         ADD COLUMN \`activeSlotKey\` VARCHAR(160) GENERATED ALWAYS AS (
           CASE 
@@ -858,10 +1080,12 @@ export async function ensureAppointmentConstraints(): Promise<void> {
             ELSE NULL 
           END
         ) VIRTUAL
-      `));
+      `)
+      );
     } else {
       try {
-        await db.execute(sql.raw(`
+        await db.execute(
+          sql.raw(`
           ALTER TABLE \`patientAppointments\`
           MODIFY COLUMN \`activeSlotKey\` VARCHAR(160) GENERATED ALWAYS AS (
             CASE 
@@ -870,26 +1094,39 @@ export async function ensureAppointmentConstraints(): Promise<void> {
               ELSE NULL 
             END
           ) VIRTUAL
-        `));
+        `)
+        );
       } catch (_) {
         // Safe fallback if column is already identical or database engine prevents in-place modify
       }
     }
 
-    const [indexes] = await db.execute(sql.raw("SHOW INDEX FROM `patientAppointments` WHERE Key_name = 'patientAppointments_active_slot_unique'"));
+    const [indexes] = await db.execute(
+      sql.raw(
+        "SHOW INDEX FROM `patientAppointments` WHERE Key_name = 'patientAppointments_active_slot_unique'"
+      )
+    );
     if (Array.isArray(indexes) && indexes.length === 0) {
-      await db.execute(sql.raw(`
+      await db.execute(
+        sql.raw(`
         ALTER TABLE \`patientAppointments\`
         ADD UNIQUE INDEX \`patientAppointments_active_slot_unique\` (\`activeSlotKey\`)
-      `));
+      `)
+      );
     }
 
-    const [compIndexes] = await db.execute(sql.raw("SHOW INDEX FROM `patientAppointments` WHERE Key_name = 'patientAppointments_doc_sched_idx'"));
+    const [compIndexes] = await db.execute(
+      sql.raw(
+        "SHOW INDEX FROM `patientAppointments` WHERE Key_name = 'patientAppointments_doc_sched_idx'"
+      )
+    );
     if (Array.isArray(compIndexes) && compIndexes.length === 0) {
-      await db.execute(sql.raw(`
+      await db.execute(
+        sql.raw(`
         ALTER TABLE \`patientAppointments\`
         ADD INDEX \`patientAppointments_doc_sched_idx\` (\`doctorId\`, \`scheduledAt\`, \`status\`)
-      `));
+      `)
+      );
     }
     hasEnsuredAppointmentConstraints = true;
   } catch (err) {
@@ -904,7 +1141,8 @@ export async function ensureBookingErrorsTable(): Promise<void> {
   const db = await getDb();
   if (!db) return;
   try {
-    await db.execute(sql.raw(`
+    await db.execute(
+      sql.raw(`
       CREATE TABLE IF NOT EXISTS \`bookingErrors\` (
         \`id\` int NOT NULL AUTO_INCREMENT,
         \`userId\` int DEFAULT NULL,
@@ -917,7 +1155,8 @@ export async function ensureBookingErrorsTable(): Promise<void> {
         KEY \`bookingErrors_userId_users_id_fk\` (\`userId\`),
         CONSTRAINT \`bookingErrors_userId_users_id_fk\` FOREIGN KEY (\`userId\`) REFERENCES \`users\` (\`id\`) ON DELETE CASCADE
       ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
-    `));
+    `)
+    );
     hasCreatedBookingErrorsTable = true;
   } catch (err) {
     console.warn("[Database] Could not auto-create bookingErrors table:", err);
@@ -947,7 +1186,10 @@ export async function recordBookingError(
   }
 }
 
-export async function checkDoctorSlotConflict(doctorId: string, scheduledAt: Date): Promise<boolean> {
+export async function checkDoctorSlotConflict(
+  doctorId: string,
+  scheduledAt: Date
+): Promise<boolean> {
   const db = await getDb();
   if (!db) return false;
 
@@ -960,7 +1202,12 @@ export async function checkDoctorSlotConflict(doctorId: string, scheduledAt: Dat
     .where(
       and(
         eq(patientAppointments.doctorId, doctorId),
-        inArray(patientAppointments.status, ["Requested", "Pending", "Confirmed", "Completed"]),
+        inArray(patientAppointments.status, [
+          "Requested",
+          "Pending",
+          "Confirmed",
+          "Completed",
+        ]),
         gte(patientAppointments.scheduledAt, windowStart),
         lte(patientAppointments.scheduledAt, windowEnd)
       )
@@ -970,7 +1217,10 @@ export async function checkDoctorSlotConflict(doctorId: string, scheduledAt: Dat
   return conflicts.length > 0;
 }
 
-export async function getDoctorBookedSlots(doctorId: string, dateStr: string): Promise<string[]> {
+export async function getDoctorBookedSlots(
+  doctorId: string,
+  dateStr: string
+): Promise<string[]> {
   const db = await getDb();
   if (!db) return [];
 
@@ -982,13 +1232,18 @@ export async function getDoctorBookedSlots(doctorId: string, dateStr: string): P
     .where(
       and(
         eq(patientAppointments.doctorId, doctorId),
-        inArray(patientAppointments.status, ["Requested", "Pending", "Confirmed", "Completed"]),
+        inArray(patientAppointments.status, [
+          "Requested",
+          "Pending",
+          "Confirmed",
+          "Completed",
+        ]),
         gte(patientAppointments.scheduledAt, startOfDay),
         lte(patientAppointments.scheduledAt, endOfDay)
       )
     );
 
-  return slots.map((s) => s.scheduledAt.toISOString());
+  return slots.map(s => s.scheduledAt.toISOString());
 }
 
 export async function getDoctorSlotAvailability(
@@ -1007,7 +1262,7 @@ export async function getDoctorSlotAvailability(
       doctorId,
       date: dateStr,
       bookedSlots: [],
-      slots: CLINIC_APPOINTMENT_SLOTS.map((s) => ({
+      slots: CLINIC_APPOINTMENT_SLOTS.map(s => ({
         ...s,
         status: "UNAVAILABLE" as const,
         isAvailable: false,
@@ -1017,32 +1272,37 @@ export async function getDoctorSlotAvailability(
 
   // Occupied appointments strictly for this doctor and date
   const bookedIsoStrings = await getDoctorBookedSlots(doctorId, dateStr);
-  const bookedTimestamps = bookedIsoStrings.map((iso) => new Date(iso).getTime());
+  const bookedTimestamps = bookedIsoStrings.map(iso => new Date(iso).getTime());
 
   // Generate availability status for each structured 30-minute slot
-  const slots: DoctorSlotAvailability[] = CLINIC_APPOINTMENT_SLOTS.map((slotDef) => {
-    const slotDate = new Date(`${dateStr}T${slotDef.startTime}:00`);
-    const slotTimeMs = slotDate.getTime();
+  const slots: DoctorSlotAvailability[] = CLINIC_APPOINTMENT_SLOTS.map(
+    slotDef => {
+      const slotDate = new Date(`${dateStr}T${slotDef.startTime}:00`);
+      const slotTimeMs = slotDate.getTime();
 
-    // Slot in the past
-    const isPast = !isNaN(slotTimeMs) && slotTimeMs <= referenceTime.getTime();
+      // Slot in the past
+      const isPast =
+        !isNaN(slotTimeMs) && slotTimeMs <= referenceTime.getTime();
 
-    // Slot occupied by this specific doctor
-    const isBooked = bookedTimestamps.some((bookedMs) => Math.abs(bookedMs - slotTimeMs) < 29 * 60 * 1000);
+      // Slot occupied by this specific doctor
+      const isBooked = bookedTimestamps.some(
+        bookedMs => Math.abs(bookedMs - slotTimeMs) < 29 * 60 * 1000
+      );
 
-    let status: ClinicSlotStatus = "AVAILABLE";
-    if (isPast) {
-      status = "PAST";
-    } else if (isBooked) {
-      status = "BOOKED";
+      let status: ClinicSlotStatus = "AVAILABLE";
+      if (isPast) {
+        status = "PAST";
+      } else if (isBooked) {
+        status = "BOOKED";
+      }
+
+      return {
+        ...slotDef,
+        status,
+        isAvailable: status === "AVAILABLE",
+      };
     }
-
-    return {
-      ...slotDef,
-      status,
-      isAvailable: status === "AVAILABLE",
-    };
-  });
+  );
 
   return {
     doctorId,
@@ -1052,21 +1312,40 @@ export async function getDoctorSlotAvailability(
   };
 }
 
-export async function cancelOwnedPatientAppointment(userId: number, appointmentId: number) {
+export async function cancelOwnedPatientAppointment(
+  userId: number,
+  appointmentId: number
+) {
   const db = await getDb();
   if (!db) throw new Error("Database is not available");
   const appointment = await db
-    .select({ doctorId: patientAppointments.doctorId, scheduledAt: patientAppointments.scheduledAt })
+    .select({
+      doctorId: patientAppointments.doctorId,
+      scheduledAt: patientAppointments.scheduledAt,
+    })
     .from(patientAppointments)
-    .where(and(eq(patientAppointments.id, appointmentId), eq(patientAppointments.userId, userId)))
+    .where(
+      and(
+        eq(patientAppointments.id, appointmentId),
+        eq(patientAppointments.userId, userId)
+      )
+    )
     .limit(1);
   if (!appointment[0]) return null;
 
   await db
     .update(patientAppointments)
     .set({ status: "Cancelled" })
-    .where(and(eq(patientAppointments.id, appointmentId), eq(patientAppointments.userId, userId)));
-  return { doctorId: appointment[0].doctorId, scheduledAt: appointment[0].scheduledAt };
+    .where(
+      and(
+        eq(patientAppointments.id, appointmentId),
+        eq(patientAppointments.userId, userId)
+      )
+    );
+  return {
+    doctorId: appointment[0].doctorId,
+    scheduledAt: appointment[0].scheduledAt,
+  };
 }
 
 export async function listDoctorAppointments(doctorId: string) {
@@ -1091,14 +1370,22 @@ export async function listDoctorAppointments(doctorId: string) {
 export async function updateDoctorAppointmentStatus(
   doctorId: string,
   appointmentId: number,
-  status: "Confirmed" | "Cancelled" | "Completed",
+  status: "Confirmed" | "Cancelled" | "Completed"
 ) {
   const db = await getDb();
   if (!db) throw new Error("Database is not available");
   const rows = await db
-    .select({ userId: patientAppointments.userId, status: patientAppointments.status })
+    .select({
+      userId: patientAppointments.userId,
+      status: patientAppointments.status,
+    })
     .from(patientAppointments)
-    .where(and(eq(patientAppointments.id, appointmentId), eq(patientAppointments.doctorId, doctorId)))
+    .where(
+      and(
+        eq(patientAppointments.id, appointmentId),
+        eq(patientAppointments.doctorId, doctorId)
+      )
+    )
     .limit(1);
   const appointment = rows[0];
   if (!appointment) return null;
@@ -1107,7 +1394,11 @@ export async function updateDoctorAppointmentStatus(
   if (status === "Completed") {
     if (appointment.status !== "Confirmed") return null;
   } else if (status === "Confirmed" || status === "Cancelled") {
-    if (appointment.status !== "Requested" && appointment.status !== "Pending" && appointment.status !== "Confirmed") {
+    if (
+      appointment.status !== "Requested" &&
+      appointment.status !== "Pending" &&
+      appointment.status !== "Confirmed"
+    ) {
       return null;
     }
   }
@@ -1115,18 +1406,28 @@ export async function updateDoctorAppointmentStatus(
   await db
     .update(patientAppointments)
     .set({ status })
-    .where(and(eq(patientAppointments.id, appointmentId), eq(patientAppointments.doctorId, doctorId)));
+    .where(
+      and(
+        eq(patientAppointments.id, appointmentId),
+        eq(patientAppointments.doctorId, doctorId)
+      )
+    );
   return { userId: appointment.userId, status };
 }
 
-export async function listDoctorAuthorizedAssessments(doctorId: string, limit = 5) {
+export async function listDoctorAuthorizedAssessments(
+  doctorId: string,
+  limit = 5
+) {
   const db = await getDb();
   if (!db) throw new Error("Database is not available");
   const authorizedAppointments = await db
     .select({ userId: patientAppointments.userId })
     .from(patientAppointments)
     .where(eq(patientAppointments.doctorId, doctorId));
-  const userIds = Array.from(new Set(authorizedAppointments.map((r) => r.userId)));
+  const userIds = Array.from(
+    new Set(authorizedAppointments.map(r => r.userId))
+  );
   if (userIds.length === 0) return [];
   return db
     .select({
@@ -1148,40 +1449,92 @@ export async function listDoctorAuthorizedAssessments(doctorId: string, limit = 
 }
 
 /** Returns only the minimum clinical profile and medicine data for a patient with an appointment assigned to this doctor. */
-export async function getDoctorAuthorizedPatientDetail(doctorId: string, patientUserId: number) {
+export async function getDoctorAuthorizedPatientDetail(
+  doctorId: string,
+  patientUserId: number
+) {
   const db = await getDb();
   if (!db) throw new Error("Database is not available");
   const appointments = await db
-    .select({ id: patientAppointments.id, scheduledAt: patientAppointments.scheduledAt, status: patientAppointments.status, reason: patientAppointments.reason })
+    .select({
+      id: patientAppointments.id,
+      scheduledAt: patientAppointments.scheduledAt,
+      status: patientAppointments.status,
+      reason: patientAppointments.reason,
+    })
     .from(patientAppointments)
-    .where(and(eq(patientAppointments.doctorId, doctorId), eq(patientAppointments.userId, patientUserId)))
+    .where(
+      and(
+        eq(patientAppointments.doctorId, doctorId),
+        eq(patientAppointments.userId, patientUserId)
+      )
+    )
     .orderBy(desc(patientAppointments.scheduledAt));
   if (!appointments.length) return null;
-  const [patientRows, medicines, assessments, prescriptionRows] = await Promise.all([
-    db.select().from(patientProfiles).innerJoin(users, eq(patientProfiles.userId, users.id)).where(eq(users.id, patientUserId)).limit(1),
-    db.select({ id: patientMedicines.id, name: patientMedicines.name, dosage: patientMedicines.dosage, frequency: patientMedicines.frequency, schedule: patientMedicines.schedule }).from(patientMedicines).where(eq(patientMedicines.userId, patientUserId)),
-    db
-      .select({ id: patientAssessments.id, symptoms: patientAssessments.symptoms, duration: patientAssessments.duration, urgency: patientAssessments.urgency, reason: patientAssessments.reason, specialty: patientAssessments.specialty, guidance: patientAssessments.guidance, createdAt: patientAssessments.createdAt })
-      .from(patientAssessments)
-      .where(eq(patientAssessments.userId, patientUserId))
-      .orderBy(desc(patientAssessments.createdAt)),
-    db
-      .select({ id: patientPrescriptions.id, status: patientPrescriptions.status, clinicalNotes: patientPrescriptions.clinicalNotes, integrityReference: patientPrescriptions.integrityReference, issuedAt: patientPrescriptions.issuedAt, createdAt: patientPrescriptions.createdAt })
-      .from(patientPrescriptions)
-      .where(and(eq(patientPrescriptions.doctorId, doctorId), eq(patientPrescriptions.userId, patientUserId)))
-      .orderBy(desc(patientPrescriptions.createdAt)),
-  ]);
+  const [patientRows, medicines, assessments, prescriptionRows] =
+    await Promise.all([
+      db
+        .select()
+        .from(patientProfiles)
+        .innerJoin(users, eq(patientProfiles.userId, users.id))
+        .where(eq(users.id, patientUserId))
+        .limit(1),
+      db
+        .select({
+          id: patientMedicines.id,
+          name: patientMedicines.name,
+          dosage: patientMedicines.dosage,
+          frequency: patientMedicines.frequency,
+          schedule: patientMedicines.schedule,
+        })
+        .from(patientMedicines)
+        .where(eq(patientMedicines.userId, patientUserId)),
+      db
+        .select({
+          id: patientAssessments.id,
+          symptoms: patientAssessments.symptoms,
+          duration: patientAssessments.duration,
+          urgency: patientAssessments.urgency,
+          reason: patientAssessments.reason,
+          specialty: patientAssessments.specialty,
+          guidance: patientAssessments.guidance,
+          createdAt: patientAssessments.createdAt,
+        })
+        .from(patientAssessments)
+        .where(eq(patientAssessments.userId, patientUserId))
+        .orderBy(desc(patientAssessments.createdAt)),
+      db
+        .select({
+          id: patientPrescriptions.id,
+          status: patientPrescriptions.status,
+          clinicalNotes: patientPrescriptions.clinicalNotes,
+          integrityReference: patientPrescriptions.integrityReference,
+          issuedAt: patientPrescriptions.issuedAt,
+          createdAt: patientPrescriptions.createdAt,
+        })
+        .from(patientPrescriptions)
+        .where(
+          and(
+            eq(patientPrescriptions.doctorId, doctorId),
+            eq(patientPrescriptions.userId, patientUserId)
+          )
+        )
+        .orderBy(desc(patientPrescriptions.createdAt)),
+    ]);
   const patient = patientRows[0];
   if (!patient) return null;
 
-  const rxIds = prescriptionRows.map((p) => p.id);
+  const rxIds = prescriptionRows.map(p => p.id);
   const rxItems = rxIds.length
-    ? await db.select().from(patientPrescriptionItems).where(inArray(patientPrescriptionItems.prescriptionId, rxIds))
+    ? await db
+        .select()
+        .from(patientPrescriptionItems)
+        .where(inArray(patientPrescriptionItems.prescriptionId, rxIds))
     : [];
 
-  const prescriptions = prescriptionRows.map((p) => ({
+  const prescriptions = prescriptionRows.map(p => ({
     ...p,
-    items: rxItems.filter((i) => i.prescriptionId === p.id),
+    items: rxItems.filter(i => i.prescriptionId === p.id),
   }));
 
   return {
@@ -1214,8 +1567,8 @@ export async function createDoctorAuthorizedPrescription(input: {
       and(
         eq(patientAppointments.doctorId, input.doctorId),
         eq(patientAppointments.userId, input.patientUserId),
-        inArray(patientAppointments.status, ["Confirmed", "Completed"]),
-      ),
+        inArray(patientAppointments.status, ["Confirmed", "Completed"])
+      )
     )
     .limit(1);
   if (!assignment[0]) return null;
@@ -1228,12 +1581,17 @@ export async function createDoctorAuthorizedPrescription(input: {
     integrityReference: null, // Cryptographic SHA-256 seal is generated only upon explicit signing
   });
   const prescriptionId = Number(result[0].insertId);
-  await db.insert(patientPrescriptionItems).values(input.items.map((item) => ({ prescriptionId, ...item })));
+  await db
+    .insert(patientPrescriptionItems)
+    .values(input.items.map(item => ({ prescriptionId, ...item })));
   return prescriptionId;
 }
 
 /** Atomically transition prescription status from UNSIGNED to SIGNED with cryptographic verification */
-export async function signDoctorAuthorizedPrescription(doctorId: string, prescriptionId: number) {
+export async function signDoctorAuthorizedPrescription(
+  doctorId: string,
+  prescriptionId: number
+) {
   const db = await getDb();
   if (!db) throw new Error("Database is not available");
 
@@ -1241,7 +1599,12 @@ export async function signDoctorAuthorizedPrescription(doctorId: string, prescri
   const rows = await db
     .select()
     .from(patientPrescriptions)
-    .where(and(eq(patientPrescriptions.id, prescriptionId), eq(patientPrescriptions.doctorId, doctorId)))
+    .where(
+      and(
+        eq(patientPrescriptions.id, prescriptionId),
+        eq(patientPrescriptions.doctorId, doctorId)
+      )
+    )
     .limit(1);
 
   const prescription = rows[0];
@@ -1269,7 +1632,11 @@ export async function signDoctorAuthorizedPrescription(doctorId: string, prescri
     doctorId: prescription.doctorId,
     patientUserId: prescription.userId,
     clinicalNotes: prescription.clinicalNotes,
-    items: items.map(i => ({ name: i.name, dosage: i.dosage, instructions: i.instructions }))
+    items: items.map(i => ({
+      name: i.name,
+      dosage: i.dosage,
+      instructions: i.instructions,
+    })),
   });
   const hash = createHash("sha256").update(canonicalData).digest("hex");
   const integrityReference = `sha256:${hash}`;
@@ -1287,8 +1654,8 @@ export async function signDoctorAuthorizedPrescription(doctorId: string, prescri
       and(
         eq(patientPrescriptions.id, prescriptionId),
         eq(patientPrescriptions.doctorId, doctorId),
-        eq(patientPrescriptions.status, "UNSIGNED / CONTROLLED WORKSPACE"),
-      ),
+        eq(patientPrescriptions.status, "UNSIGNED / CONTROLLED WORKSPACE")
+      )
     );
 
   const affected = (updateResult as any)[0]?.affectedRows ?? 1;
@@ -1316,24 +1683,35 @@ export async function listPatientPrescriptions(userId: number) {
     .from(patientPrescriptions)
     .where(eq(patientPrescriptions.userId, userId))
     .orderBy(desc(patientPrescriptions.issuedAt));
-  const ids = prescriptions.map((prescription) => prescription.id);
+  const ids = prescriptions.map(prescription => prescription.id);
   const items = ids.length
-    ? await db.select().from(patientPrescriptionItems).where(inArray(patientPrescriptionItems.prescriptionId, ids))
+    ? await db
+        .select()
+        .from(patientPrescriptionItems)
+        .where(inArray(patientPrescriptionItems.prescriptionId, ids))
     : [];
 
-  return prescriptions.map((prescription) => ({
+  return prescriptions.map(prescription => ({
     ...prescription,
-    items: items.filter((item) => item.prescriptionId === prescription.id),
+    items: items.filter(item => item.prescriptionId === prescription.id),
   }));
 }
 
-export async function getOwnedPatientPrescription(userId: number, prescriptionId: number) {
+export async function getOwnedPatientPrescription(
+  userId: number,
+  prescriptionId: number
+) {
   const db = await getDb();
   if (!db) throw new Error("Database is not available");
   const rows = await db
     .select()
     .from(patientPrescriptions)
-    .where(and(eq(patientPrescriptions.id, prescriptionId), eq(patientPrescriptions.userId, userId)))
+    .where(
+      and(
+        eq(patientPrescriptions.id, prescriptionId),
+        eq(patientPrescriptions.userId, userId)
+      )
+    )
     .limit(1);
   const prescription = rows[0];
   if (!prescription) return null;
@@ -1370,18 +1748,24 @@ export async function listDoctorPrescriptions(doctorId: string) {
     .where(eq(patientPrescriptions.doctorId, doctorId))
     .orderBy(desc(patientPrescriptions.issuedAt));
 
-  const ids = prescriptions.map((prescription) => prescription.id);
+  const ids = prescriptions.map(prescription => prescription.id);
   const items = ids.length
-    ? await db.select().from(patientPrescriptionItems).where(inArray(patientPrescriptionItems.prescriptionId, ids))
+    ? await db
+        .select()
+        .from(patientPrescriptionItems)
+        .where(inArray(patientPrescriptionItems.prescriptionId, ids))
     : [];
 
-  return prescriptions.map((prescription) => ({
+  return prescriptions.map(prescription => ({
     ...prescription,
-    items: items.filter((item) => item.prescriptionId === prescription.id),
+    items: items.filter(item => item.prescriptionId === prescription.id),
   }));
 }
 
-export async function getDoctorAuthorizedPrescriptionDetail(doctorId: string, prescriptionId: number) {
+export async function getDoctorAuthorizedPrescriptionDetail(
+  doctorId: string,
+  prescriptionId: number
+) {
   const db = await getDb();
   if (!db) throw new Error("Database is not available");
   const rows = await db
@@ -1399,7 +1783,12 @@ export async function getDoctorAuthorizedPrescriptionDetail(doctorId: string, pr
     })
     .from(patientPrescriptions)
     .innerJoin(users, eq(patientPrescriptions.userId, users.id))
-    .where(and(eq(patientPrescriptions.id, prescriptionId), eq(patientPrescriptions.doctorId, doctorId)))
+    .where(
+      and(
+        eq(patientPrescriptions.id, prescriptionId),
+        eq(patientPrescriptions.doctorId, doctorId)
+      )
+    )
     .limit(1);
 
   const prescription = rows[0];
@@ -1422,13 +1811,23 @@ export async function getAdminDashboardMetrics(params?: any) {
   if (!db) throw new Error("Database is not available");
   const [allUsers, allAppointments, allPrescriptions] = await Promise.all([
     db.select({ id: users.id, role: users.role }).from(users),
-    db.select({ id: patientAppointments.id, status: patientAppointments.status }).from(patientAppointments),
-    db.select({ id: patientPrescriptions.id, status: patientPrescriptions.status }).from(patientPrescriptions),
+    db
+      .select({
+        id: patientAppointments.id,
+        status: patientAppointments.status,
+      })
+      .from(patientAppointments),
+    db
+      .select({
+        id: patientPrescriptions.id,
+        status: patientPrescriptions.status,
+      })
+      .from(patientPrescriptions),
   ]);
 
   return {
-    patientCount: allUsers.filter((u) => u.role === "user").length,
-    doctorCount: allUsers.filter((u) => u.role === "doctor").length,
+    patientCount: allUsers.filter(u => u.role === "user").length,
+    doctorCount: allUsers.filter(u => u.role === "doctor").length,
     appointmentCount: allAppointments.length,
     prescriptionCount: allPrescriptions.length,
     totalUsers: allUsers.length,
@@ -1452,7 +1851,11 @@ export async function getAdminUsersList(params?: any) {
     .from(users)
     .orderBy(desc(users.createdAt));
 
-  if (params && typeof params === "object" && typeof params.limit === "number") {
+  if (
+    params &&
+    typeof params === "object" &&
+    typeof params.limit === "number"
+  ) {
     return results.slice(0, params.limit);
   }
   return results;
@@ -1462,7 +1865,10 @@ export async function getAdminUsersList(params?: any) {
 export async function deleteUserById(input: any) {
   const db = await getDb();
   if (!db) throw new Error("Database is not available");
-  const id = typeof input === "object" && input !== null ? Number(input.userId ?? input.id) : Number(input);
+  const id =
+    typeof input === "object" && input !== null
+      ? Number(input.userId ?? input.id)
+      : Number(input);
   if (Number.isInteger(id) && id > 0) {
     await db.delete(users).where(eq(users.id, id));
   }

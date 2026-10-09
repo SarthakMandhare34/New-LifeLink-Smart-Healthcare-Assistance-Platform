@@ -12,17 +12,20 @@
  * - Vite Production Asset Serving & Dynamic Port Scanning
  * ============================================================================
  */
-import "dotenv/config";                                          // Load secret environment variables from .env into process.env
-import express from "express";                                   // Express web framework for routing and middleware
-import path from "node:path";                                    // Node.js path utility for cross-platform directory paths
-import { createServer } from "http";                             // Node.js built-in HTTP server module
-import net from "net";                                           // Node.js network module for socket probing
+import "dotenv/config"; // Load secret environment variables from .env into process.env
+import express from "express"; // Express web framework for routing and middleware
+import path from "node:path"; // Node.js path utility for cross-platform directory paths
+import { createServer } from "http"; // Node.js built-in HTTP server module
+import net from "net"; // Node.js network module for socket probing
 import { createExpressMiddleware } from "@trpc/server/adapters/express"; // Bridge connecting tRPC router to Express HTTP pipeline
 
-import { appRouter } from "../routers";                           // Master tRPC API router containing all procedures
-import { createContext } from "./context";                       // Request context extractor (reads cookies and auth sessions)
-import { serveStatic, setupVite } from "./vite";                 // Helpers for serving frontend assets
-import { registerDoctorRealtimeRoute, registerPatientRealtimeRoute } from "../realtime/patientRealtime"; // Server-Sent Events (SSE) live updates
+import { appRouter } from "../routers"; // Master tRPC API router containing all procedures
+import { createContext } from "./context"; // Request context extractor (reads cookies and auth sessions)
+import { serveStatic, setupVite } from "./vite"; // Helpers for serving frontend assets
+import {
+  registerDoctorRealtimeRoute,
+  registerPatientRealtimeRoute,
+} from "../realtime/patientRealtime"; // Server-Sent Events (SSE) live updates
 import { registerProviderAuthRoutes } from "../auth/providerAuth"; // Google OAuth login callback routes
 import { registerPatientProfilePhotoRoute } from "../profilePhoto"; // Multer file upload endpoint for user avatar photos
 
@@ -30,11 +33,11 @@ import { registerPatientProfilePhotoRoute } from "../profilePhoto"; // Multer fi
 // Checks if a specific network port is free or currently in use by another program
 function isPortAvailable(port: number): Promise<boolean> {
   return new Promise(resolve => {
-    const server = net.createServer();                           // Create a test socket server
+    const server = net.createServer(); // Create a test socket server
     server.listen(port, "0.0.0.0", () => {
-      server.close(() => resolve(true));                         // Port is free and available!
+      server.close(() => resolve(true)); // Port is free and available!
     });
-    server.on("error", () => resolve(false));                    // Port is busy / occupied
+    server.on("error", () => resolve(false)); // Port is busy / occupied
   });
 }
 
@@ -42,7 +45,7 @@ function isPortAvailable(port: number): Promise<boolean> {
 async function findAvailablePort(startPort: number = 4000): Promise<number> {
   for (let port = startPort; port < startPort + 5; port++) {
     if (await isPortAvailable(port)) {
-      return port;                                               // Return the first available open port
+      return port; // Return the first available open port
     }
   }
   throw new Error(`No available port found starting from ${startPort}`);
@@ -50,21 +53,21 @@ async function findAvailablePort(startPort: number = 4000): Promise<number> {
 
 // --- Cluster: Master Server Bootstrap ---
 async function startServer() {
-  const app = express();                                         // 1. Initialize Express application instance
-  const server = createServer(app);                              // 2. Wrap Express in Node's HTTP server
+  const app = express(); // 1. Initialize Express application instance
+  const server = createServer(app); // 2. Wrap Express in Node's HTTP server
 
   // Configure body parsers with a generous 50MB limit for medical reports, scans, and photos
-  app.use(express.json({ limit: "50mb" }));                      // Parse incoming JSON request bodies
-  app.use(express.urlencoded({ limit: "50mb", extended: true }));// Parse URL-encoded form submissions
+  app.use(express.json({ limit: "50mb" })); // Parse incoming JSON request bodies
+  app.use(express.urlencoded({ limit: "50mb", extended: true })); // Parse URL-encoded form submissions
 
   // Register dedicated REST and real-time streaming routes outside of tRPC
-  registerProviderAuthRoutes(app);                               // Mounts /api/auth/google OAuth endpoints
-  registerPatientRealtimeRoute(app);                             // Mounts /api/realtime/patient Server-Sent Events stream
-  registerDoctorRealtimeRoute(app);                              // Mounts /api/realtime/doctor Server-Sent Events stream
-  registerPatientProfilePhotoRoute(app);                         // Mounts /api/patient/profile/photo upload handler
+  registerProviderAuthRoutes(app); // Mounts /api/auth/google OAuth endpoints
+  registerPatientRealtimeRoute(app); // Mounts /api/realtime/patient Server-Sent Events stream
+  registerDoctorRealtimeRoute(app); // Mounts /api/realtime/doctor Server-Sent Events stream
+  registerPatientProfilePhotoRoute(app); // Mounts /api/patient/profile/photo upload handler
 
   // Serve uploaded profile pictures and files statically from the local /uploads directory
-  app.use("/uploads", express.static(path.resolve(process.cwd(), 'uploads')));
+  app.use("/uploads", express.static(path.resolve(process.cwd(), "uploads")));
 
   // Direct health check endpoint for cloud load balancers and Render health checks
   app.get(["/health", "/api/health"], (_req, res) => {
@@ -76,16 +79,19 @@ async function startServer() {
   app.use(
     "/api/trpc",
     createExpressMiddleware({
-      router: appRouter,                                         // Connect the master tRPC procedure router
-      createContext,                                             // Injects user and doctor session cookies into each request
+      router: appRouter, // Connect the master tRPC procedure router
+      createContext, // Injects user and doctor session cookies into each request
     })
   );
 
   // In development mode, Vite runs alongside Express; in production, Express serves compiled HTML/JS
-  if (process.env.NODE_ENV === "development" && process.env.EMBED_VITE === "true") {
-    await setupVite(app, server);                                // Connects Vite development server middleware
+  if (
+    process.env.NODE_ENV === "development" &&
+    process.env.EMBED_VITE === "true"
+  ) {
+    await setupVite(app, server); // Connects Vite development server middleware
   } else if (process.env.NODE_ENV === "production" || !process.env.NODE_ENV) {
-    serveStatic(app);                                            // Serves optimized production build from dist/public
+    serveStatic(app); // Serves optimized production build from dist/public
   } else {
     // Helpful landing page when visiting the backend port directly in a browser
     app.get("/", (_req, res) => {
@@ -109,12 +115,16 @@ async function startServer() {
   // Gracefully handle any unexpected socket error during listen
   server.on("error", (err: any) => {
     if (err.code === "EADDRINUSE") {
-      console.warn(`[Backend] Port ${currentPort} is busy (EADDRINUSE), retrying on port ${currentPort + 1}...`);
+      console.warn(
+        `[Backend] Port ${currentPort} is busy (EADDRINUSE), retrying on port ${currentPort + 1}...`
+      );
       currentPort++;
       if (currentPort <= preferredPort + 5) {
         server.listen(currentPort, "0.0.0.0");
       } else {
-        console.error(`[Backend Fatal] Exhausted port range ${preferredPort}–${preferredPort + 5}.`);
+        console.error(
+          `[Backend Fatal] Exhausted port range ${preferredPort}–${preferredPort + 5}.`
+        );
       }
     } else {
       console.error("[Backend Server Error]", err);
@@ -123,8 +133,8 @@ async function startServer() {
 
   // Begin listening for incoming HTTP connections
   server.listen(preferredPort, "0.0.0.0", () => {
-    console.log(`Server running on http://localhost:${currentPort}/`);  // Confirmation log when server is ready
+    console.log(`Server running on http://localhost:${currentPort}/`); // Confirmation log when server is ready
   });
 }
 
-startServer().catch(console.error);                               // Start server and catch any fatal startup errors
+startServer().catch(console.error); // Start server and catch any fatal startup errors

@@ -8,33 +8,36 @@
  * It sets up the Express framework, cookie parsing, and environment variables.
  * Without this core infrastructure, the application cannot boot or talk to the internet securely.
  */
-import { UNAUTHED_ERR_MSG } from '@shared/const';                    // Standard error message for unauthorized responses
-import { initTRPC, TRPCError } from "@trpc/server";                                        // Core tRPC initialization and typed error constructors
-import superjson from "superjson";                                                         // Serializer/deserializer preserving Dates, Maps, Sets over JSON
-import type { TrpcContext } from "./context";                                              // Context type containing Express req, res, and authenticated user
+import { UNAUTHED_ERR_MSG } from "@shared/const"; // Standard error message for unauthorized responses
+import { initTRPC, TRPCError } from "@trpc/server"; // Core tRPC initialization and typed error constructors
+import superjson from "superjson"; // Serializer/deserializer preserving Dates, Maps, Sets over JSON
+import type { TrpcContext } from "./context"; // Context type containing Express req, res, and authenticated user
 
 // Initialize tRPC instance bound to our typed request context
 const t = initTRPC.context<TrpcContext>().create({
-  transformer: superjson,                                                                  // Use superjson so client/server can exchange native Date objects seamlessly
+  transformer: superjson, // Use superjson so client/server can exchange native Date objects seamlessly
 });
 
 // Export foundational tRPC router builder and open public procedure constructor
-export const router = t.router;                                                            // Function to create tRPC router branches
-export const publicProcedure = t.procedure;                                                // Procedure that any caller can invoke without signing in
+export const router = t.router; // Function to create tRPC router branches
+export const publicProcedure = t.procedure; // Procedure that any caller can invoke without signing in
 
 // Middleware that ensures the request belongs to an authenticated user (patient, doctor, or admin)
 const requireUser = t.middleware(async opts => {
-  const { ctx, next } = opts;                                                              // Extract request context and the next pipeline step
-  const user = ctx.patientUser || (ctx.user?.role !== "doctor" ? ctx.user : ctx.user);     // Prioritize patientUser or general user identity
+  const { ctx, next } = opts; // Extract request context and the next pipeline step
+  const user =
+    ctx.patientUser || (ctx.user?.role !== "doctor" ? ctx.user : ctx.user); // Prioritize patientUser or general user identity
 
-  if (!user) {                                                                             // If no user found in cookie/token
-    throw new TRPCError({ code: "UNAUTHORIZED", message: UNAUTHED_ERR_MSG });              // Reject with 401 Unauthorized status
+  if (!user) {
+    // If no user found in cookie/token
+    throw new TRPCError({ code: "UNAUTHORIZED", message: UNAUTHED_ERR_MSG }); // Reject with 401 Unauthorized status
   }
 
-  return next({                                                                            // Continue to next middleware or route handler
+  return next({
+    // Continue to next middleware or route handler
     ctx: {
-      ...ctx,                                                                              // Preserve existing context
-      user,                                                                                // Guaranteed non-null authenticated user object
+      ...ctx, // Preserve existing context
+      user, // Guaranteed non-null authenticated user object
     },
   });
 });
@@ -45,17 +48,21 @@ export const protectedProcedure = t.procedure.use(requireUser);
 // Doctor-only procedure: strictly requires a doctor session with role === 'doctor'
 export const doctorProcedure = t.procedure.use(
   t.middleware(async opts => {
-    const { ctx, next } = opts;                                                            // Unpack request context and next handler
-    const user = ctx.doctorUser || (ctx.user?.role === "doctor" ? ctx.user : null);        // Locate active clinician session
+    const { ctx, next } = opts; // Unpack request context and next handler
+    const user =
+      ctx.doctorUser || (ctx.user?.role === "doctor" ? ctx.user : null); // Locate active clinician session
 
-    if (!user || user.role !== "doctor") {                                                 // Reject if not logged in or role is not clinician
-      throw new TRPCError({ code: "FORBIDDEN", message: "A synthetic doctor session is required." }); // Return 403 Forbidden
+    if (!user || user.role !== "doctor") {
+      // Reject if not logged in or role is not clinician
+      throw new TRPCError({
+        code: "FORBIDDEN",
+        message: "A synthetic doctor session is required.",
+      }); // Return 403 Forbidden
     }
 
-    return next({ ctx: { ...ctx, user } });                                                // Pass clinician user down to the handler
-  }),
+    return next({ ctx: { ...ctx, user } }); // Pass clinician user down to the handler
+  })
 );
 
 // Admin-procedure export for backward-compatibility with standalone tooling
 export const adminProcedure = protectedProcedure;
-

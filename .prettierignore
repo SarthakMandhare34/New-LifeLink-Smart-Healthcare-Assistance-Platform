@@ -37,3 +37,8 @@ pnpm-lock.yaml
 # OS files
 .DS_Store
 Thumbs.db
+
+# Preserved Swiss design stylesheets for exact test string assertions
+frontend/src/index.css
+frontend/src/features/patient/Specialists/specialistFinder.css
+
