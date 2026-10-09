@@ -8,17 +8,17 @@
  * This ensures the entire application looks perfectly consistent (using Tailwind CSS)
  * and guarantees every component is accessible to screen readers for visually impaired users.
  */
-import { cn } from "@/lib/utils";                                                              // Classname merger
-import { AlertTriangle, RotateCcw } from "lucide-react";                                        // Warning and reload icons
-import { Component, ReactNode } from "react";                                                   // React class component types
+import { cn } from "@/lib/utils"; // Classname merger
+import { AlertTriangle, RotateCcw } from "lucide-react"; // Warning and reload icons
+import { Component, ReactNode } from "react"; // React class component types
 
 interface Props {
-  children: ReactNode;                                                                          // Wrapped tree
+  children: ReactNode; // Wrapped tree
 }
 
 interface State {
-  hasError: boolean;                                                                            // Error presence flag
-  error: Error | null;                                                                          // Caught error object
+  hasError: boolean; // Error presence flag
+  error: Error | null; // Caught error object
 }
 
 // =========================================================================================
@@ -29,12 +29,12 @@ interface State {
 class ErrorBoundary extends Component<Props, State> {
   constructor(props: Props) {
     super(props);
-    this.state = { hasError: false, error: null };                                              // Initial healthy state
+    this.state = { hasError: false, error: null }; // Initial healthy state
   }
 
   // Lifecycle invoked when child component throws error
   static getDerivedStateFromError(error: Error): State {
-    return { hasError: true, error };                                                           // Update state to render fallback UI
+    return { hasError: true, error }; // Update state to render fallback UI
   }
 
   render() {
@@ -51,7 +51,7 @@ class ErrorBoundary extends Component<Props, State> {
 
             <div className="p-4 w-full rounded bg-muted overflow-auto mb-6">
               <pre className="text-sm text-muted-foreground whitespace-break-spaces">
-                {this.state.error?.stack}                                                       {/* Debug stack trace */}
+                {this.state.error?.stack} {/* Debug stack trace */}
               </pre>
             </div>
 
@@ -72,7 +72,7 @@ class ErrorBoundary extends Component<Props, State> {
       );
     }
 
-    return this.props.children;                                                                 // Healthy render pass-through
+    return this.props.children; // Healthy render pass-through
   }
 }
 

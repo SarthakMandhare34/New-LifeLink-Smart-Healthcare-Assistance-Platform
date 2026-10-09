@@ -8,7 +8,7 @@
  * This ensures the entire application looks perfectly consistent (using Tailwind CSS)
  * and guarantees every component is accessible to screen readers for visually impaired users.
  */
-import React from 'react';
+import React from "react";
 
 export const RouteLoader: React.FC = () => {
   return (
@@ -22,24 +22,24 @@ export const RouteLoader: React.FC = () => {
       <div
         className="flex flex-col items-center gap-3.5 p-6 border shadow-xs"
         style={{
-          backgroundColor: 'var(--color-surface-white)',
-          borderColor: 'var(--color-border)',
-          borderRadius: 'var(--border-radius-card)',
+          backgroundColor: "var(--color-surface-white)",
+          borderColor: "var(--color-border)",
+          borderRadius: "var(--border-radius-card)",
         }}
       >
         {/* Circular spinning activity indicator */}
         <div
           className="w-8 h-8 rounded-full border-2 animate-spin"
           style={{
-            borderColor: 'var(--swiss-gray-300, #E2E8F0)',
-            borderTopColor: 'var(--swiss-blue, #0057B8)',
+            borderColor: "var(--swiss-gray-300, #E2E8F0)",
+            borderTopColor: "var(--swiss-blue, #0057B8)",
           }}
           aria-hidden="true"
         />
         {/* User-friendly status message */}
         <span
           className="text-xs font-medium tracking-wide"
-          style={{ color: 'var(--color-text-muted)' }}
+          style={{ color: "var(--color-text-muted)" }}
         >
           Loading workspace...
         </span>
