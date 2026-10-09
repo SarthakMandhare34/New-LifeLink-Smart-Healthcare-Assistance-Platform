@@ -19,8 +19,14 @@ import { appRouter } from "../routers";
 describe("Simultaneous Doctor and Patient Sessions", () => {
   it("resolves both patient and doctor sessions concurrently without collision", async () => {
     // Generate valid tokens for both a patient and a doctor
-    const patientToken = await authSession.createSessionToken("patient-open-id-123", { name: "Test Patient" });
-    const doctorToken = await authSession.createSessionToken("synthetic-doctor:mock-central-cardiology-csmt", { name: "Dr. Central" });
+    const patientToken = await authSession.createSessionToken(
+      "patient-open-id-123",
+      { name: "Test Patient" }
+    );
+    const doctorToken = await authSession.createSessionToken(
+      "synthetic-doctor:mock-central-cardiology-csmt",
+      { name: "Dr. Central" }
+    );
 
     // Mock incoming request with BOTH cookies present simultaneously
     const req = {

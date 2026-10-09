@@ -86,11 +86,14 @@ describe("BATCH 13: Authentication, Security, and IDOR Deep Audit", () => {
       expiry: null,
     });
 
-    patientAEmergencyContactId = await createPatientEmergencyContact(patientA.id, {
-      name: "Contact A",
-      relationship: "Brother",
-      phone: "+1234567890",
-    });
+    patientAEmergencyContactId = await createPatientEmergencyContact(
+      patientA.id,
+      {
+        name: "Contact A",
+        relationship: "Brother",
+        phone: "+1234567890",
+      }
+    );
 
     patientAAppointmentId = await createPatientAppointment(
       patientA.id,
@@ -100,7 +103,11 @@ describe("BATCH 13: Authentication, Security, and IDOR Deep Audit", () => {
     );
 
     // Doctor A confirms appointment
-    await updateDoctorAppointmentStatus(mockDocA.id, patientAAppointmentId, "Confirmed");
+    await updateDoctorAppointmentStatus(
+      mockDocA.id,
+      patientAAppointmentId,
+      "Confirmed"
+    );
 
     // Doctor A creates a prescription for Patient A
     const prescriptionId = await createDoctorAuthorizedPrescription({
@@ -168,7 +175,11 @@ describe("BATCH 13: Authentication, Security, and IDOR Deep Audit", () => {
       await expect(
         callerB.patientProfile.emergencyContacts.update({
           id: patientAEmergencyContactId,
-          values: { name: "Hacked", relationship: "Hacked", phone: "+000000000" },
+          values: {
+            name: "Hacked",
+            relationship: "Hacked",
+            phone: "+000000000",
+          },
         })
       ).rejects.toThrow(/Emergency contact not found/);
     });
@@ -192,7 +203,9 @@ describe("BATCH 13: Authentication, Security, and IDOR Deep Audit", () => {
       expect(prescriptions).toHaveLength(0);
 
       await expect(
-        callerB.doctorWorkspace.prescriptions.getById({ id: patientAPrescriptionId })
+        callerB.doctorWorkspace.prescriptions.getById({
+          id: patientAPrescriptionId,
+        })
       ).rejects.toThrow(/Prescription record not found/);
     });
 
@@ -232,26 +245,34 @@ describe("BATCH 13: Authentication, Security, and IDOR Deep Audit", () => {
           patientId: patientB.id,
           items: [{ name: "Med", dosage: "10mg", instructions: "Take daily" }],
         })
-      ).rejects.toThrow(/FORBIDDEN|appointment assigned to this doctor is required/i);
+      ).rejects.toThrow(
+        /FORBIDDEN|appointment assigned to this doctor is required/i
+      );
     });
   });
 
   describe("UNAUTHENTICATED (Role Boundaries)", () => {
     it("16. Unauthenticated access is rejected for Patient endpoints", async () => {
       const unauthCaller = createCaller(null);
-      await expect(unauthCaller.patientProfile.get()).rejects.toThrow(/Please login|UNAUTHORIZED/);
+      await expect(unauthCaller.patientProfile.get()).rejects.toThrow(
+        /Please login|UNAUTHORIZED/
+      );
     });
 
     it("17. Unauthenticated access is rejected for Doctor endpoints", async () => {
       const unauthCaller = createCaller(null);
-      await expect(unauthCaller.doctorWorkspace.dashboard()).rejects.toThrow(/Please login|UNAUTHORIZED|synthetic doctor session is required/i);
+      await expect(unauthCaller.doctorWorkspace.dashboard()).rejects.toThrow(
+        /Please login|UNAUTHORIZED|synthetic doctor session is required/i
+      );
     });
   });
 
   afterAll(async () => {
     const db = await getDb();
     if (db && patientA && patientB) {
-      await db.delete(users).where(or(eq(users.id, patientA.id), eq(users.id, patientB.id)));
+      await db
+        .delete(users)
+        .where(or(eq(users.id, patientA.id), eq(users.id, patientB.id)));
     }
   });
 });
