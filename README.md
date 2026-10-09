@@ -934,6 +934,16 @@ http://localhost:5173
 - Choose **Patient Portal** to register a new patient account.
 - Choose **Doctor Workspace** to sign in as a clinician (e.g. `cardiology.csmt@lifelink.com` or consult `scripts/list-doctor-credentials.ts`).
 
+#### 🌐 Local Port & Network Architecture Summary
+
+| Service / Subsystem | Local Address & Port | Port Discovery & Fallback | Operational Role |
+|:---|:---|:---:|:---|
+| **Vite Frontend Dev Server** | `http://localhost:5173` | Scans `5173` – `5177` | Serves React 19 UI, hot module reloading (HMR), proxies `/api` and `/uploads` to backend. |
+| **Express Backend API** | `http://localhost:4000` | Scans `4000` – `4004` | Serves REST endpoints, tRPC router (`/api/trpc`), SSE streams (`/api/realtime/*`), and `/api/health`. |
+| **Local MySQL Database** | `127.0.0.1:3306` | Default MySQL port | Relational data persistence for all 14 tables via Drizzle ORM (`DATABASE_URL`). |
+| **Google OAuth Redirect** | `http://localhost:5173/api/auth/google/callback` | Fixed in Google Cloud | OAuth authorization callback endpoint for patient Google Sign-In (`AUTH_PUBLIC_BASE_URL`). |
+| **Drizzle Studio (Optional GUI)** | `https://local.drizzle.studio` (or dynamic) | Dynamic CLI port | Interactive database GUI launched via `npm run db:studio`. |
+
 ---
 
 ## 24. Environment Variables Reference

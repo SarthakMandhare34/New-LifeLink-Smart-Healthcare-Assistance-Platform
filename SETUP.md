@@ -144,7 +144,7 @@ npm run verify
 
 This sequentially executes:
 1. `npm run check` — TypeScript type-checking (`tsc --noEmit`). Must report 0 errors.
-2. `npm test` — Vitest automated test suite (`vitest run`). Must report 241 passed tests.
+2. `npm test` — Vitest automated test suite (`vitest run`). Must report 247 passed tests (1 skipped across 33 test files).
 3. `npm run build` — Production bundling (`vite build && esbuild`). Verifies that the client and server compile into `dist/`.
 
 ---
