@@ -997,14 +997,14 @@ LifeLink is engineered as a unified, production-ready cloud application deployed
 The production deployment leverages a modern cloud stack decoupling stateless web computation from distributed, auto-scaling relational persistence:
 
 ```text
-[ Patient Web Browser ]                   [ Clinician Workstation ]
-        │                                             │
-        │ HTTPS (TLS 1.3 / Port 443)                  │ HTTPS (TLS 1.3 / Port 443)
-        └──────────────────────┬──────────────────────┘
-                               │
-                               ▼
+[ Patient Web Browser ]                               [ Clinician Workstation ]
+        │                                                         │
+        │ HTTPS (TLS 1.3 / Port 443)                              │ HTTPS (TLS 1.3 / Port 443)
+        └────────────────────────────┬────────────────────────────┘
+                                     │
+                                     ▼
 ┌─────────────────────────────────────────────────────────────────────────────┐
-│                       RENDER.COM CLOUD EDGE LAYER                           │
+│                         RENDER.COM CLOUD EDGE LAYER                         │
 │   • Global Anycast Ingress & Cloudflare-backed DDoS Mitigation              │
 │   • Managed Automatic TLS/SSL Termination (Let's Encrypt Wildcard)          │
 │   • HTTP/2 Multiplexing & Reverse Proxy Gateway Routing                     │
@@ -1026,32 +1026,89 @@ The production deployment leverages a modern cloud stack decoupling stateless we
 │   │   • SSE Real-Time Channel: /sse/patient & /sse/doctor broadcast     │   │
 │   │   • Health Monitor Probe: GET /api/health                           │   │
 │   │   • Google OAuth Handshake: /api/auth/google & /api/auth/callback   │   │
-│   └──────────────────┬───────────────────────────────┬──────────────────┘   │
-│                      │                               │                      │
-└──────────────────────┼───────────────────────────────┼──────────────────────┘
-                       │                               │
-       ┌───────────────┴───────────────┐               │ HTTPS API Outbound
-       │ TLS 1.3 Encrypted Wire Tunnel │               ▼
-       │ Port: 4000 (rejectUnauth=true)│    ┌─────────────────────────────────┐
-       ▼                               │    │     GOOGLE CLOUD PLATFORM       │
-┌─────────────────────────────────┐    │    │                                 │
-│      TiDB SERVERLESS CLUSTER    │    │    │  • Gemini 1.5/2.0 Flash AI API  │
-│  (AWS ap-southeast-1 Singapore) │    │    │  • Google Cloud OAuth 2.0 Auth  │
-│                                 │    │    │    (Strict production callback) │
-│   ┌─────────────────────────┐   │    │    └─────────────────────────────────┘
-│   │   TiDB SQL Parser Node  │   │    │
-│   │   • MySQL 8.0 Protocol  │   │    │
-│   │   • Distributed Planner │   │    │
-│   └────────────┬────────────┘   │    │
-│                ▼                │    │
-│   ┌─────────────────────────┐   │    │
-│   │  TiKV Storage Engines   │   │    │
-│   │  • Multi-Raft Consensus │   │    │
-│   │  • 14 Relational Tables │   │    │
-│   │  • 52 Doctor Accounts   │   │    │
-│   │  • Serverless RU Scaling│   │    │
-│   └─────────────────────────┘   │    │
-└─────────────────────────────────┘    ┘
+│   └───────────────────┬─────────────────────────────────┬───────────────┘   │
+│                       │                                 │                   │
+└───────────────────────┼─────────────────────────────────┼───────────────────┘
+                        │                                 │
+                        │ TLS 1.3 Encrypted Wire Tunnel   │ HTTPS API Outbound
+                        │ Port 4000 (rejectUnauth=true)   │ OAuth & Gemini AI
+                        ▼                                 ▼
+┌───────────────────────────────────────────┐   ┌─────────────────────────────┐
+│          TiDB SERVERLESS CLUSTER          │   │    GOOGLE CLOUD PLATFORM    │
+│      (AWS ap-southeast-1 Singapore)       │   │                             │
+│                                           │   │  • Gemini 1.5/2.0 Flash AI  │
+│   ┌───────────────────────────────────┐   │   │    (Symptom Triage Pipeline)│
+│   │       TiDB SQL Parser Layer       │   │   │                             │
+│   │   • MySQL 8.0 Protocol Parser     │   │   │  • Google Cloud OAuth 2.0   │
+│   │   • Distributed Query Planner     │   │   │    (Strict Production URL)  │
+│   └─────────────────┬─────────────────┘   │   │                             │
+│                     ▼                     │   │  • Secure Token Validation  │
+│   ┌───────────────────────────────────┐   │   │    (Identity Federation)    │
+│   │       TiKV Storage Engines        │   │   └─────────────────────────────┘
+│   │   • Multi-Raft Replication        │   │
+│   │   • 14 Relational Health Tables   │   │
+│   │   • 52 Doctor Workstation Rows    │   │
+│   │   • Serverless Auto-Scale (RU)    │   │
+│   └───────────────────────────────────┘   │
+└───────────────────────────────────────────┘
+```
+
+#### Interactive Cloud Infrastructure Flow Diagram
+
+```mermaid
+graph TB
+    subgraph Clients["Patient & Clinician Endpoints"]
+        PatBrowser["Patient Browser (/patient/*)"]
+        DocBrowser["Doctor Workstation (/doctor/*)"]
+    end
+
+    subgraph RenderEdge["Render.com Global Cloud Edge"]
+        Anycast["Anycast DNS & DDoS Protection"]
+        TLS["TLS 1.3 Termination (Let's Encrypt Wildcard)"]
+        RevProxy["HTTP/2 Reverse Proxy Router"]
+    end
+
+    subgraph RenderContainer["Render Web Service (Linux Node.js v22 LTS Container)"]
+        Express["Express HTTP Server ($PORT = 10000)"]
+        StaticVite["Static Assets (/dist/public React 19 SPA)"]
+        tRPCRouter["tRPC v11 JSON-RPC Router (/trpc)"]
+        SSEBus["EventBus Real-Time Stream (/sse/*)"]
+        AuthHandler["Dual-Cookie & Google OAuth Handlers"]
+    end
+
+    subgraph TiDBCloud["TiDB Serverless Cloud (AWS ap-southeast-1 Singapore)"]
+        TiDBGate["TiDB Gateway Proxy (Port 4000 / TLS 1.3)"]
+        TiDBSQL["Stateless TiDB SQL Parsing & Execution Nodes"]
+        TiKVStorage["Distributed TiKV Storage Engines (Multi-Raft Consensus)"]
+    end
+
+    subgraph GoogleCloud["External Google Cloud Services"]
+        GeminiAI["Google Gemini 1.5/2.0 Flash AI API"]
+        GoogleOAuth["Google Cloud OAuth 2.0 Auth Server"]
+    end
+
+    PatBrowser -->|HTTPS 443| Anycast
+    DocBrowser -->|HTTPS 443| Anycast
+    Anycast --> TLS
+    TLS --> RevProxy
+    RevProxy -->|Internal Proxy| Express
+
+    Express --> StaticVite
+    Express --> tRPCRouter
+    Express --> SSEBus
+    Express --> AuthHandler
+
+    tRPCRouter -->|Encrypted TLS 1.3 Tunnel| TiDBGate
+    AuthHandler -->|Encrypted TLS 1.3 Tunnel| TiDBGate
+    TiDBGate --> TiDBSQL
+    TiDBSQL --> TiKVStorage
+
+    tRPCRouter -->|HTTPS POST| GeminiAI
+    AuthHandler -->|HTTPS OAuth Code Exchange| GoogleOAuth
+
+    SSEBus -.->|Streaming SSE + 25s Keepalive| RevProxy
+    RevProxy -.->|Immediate Flush (X-Accel-Buffering: no)| PatBrowser
+    RevProxy -.->|Immediate Flush (X-Accel-Buffering: no)| DocBrowser
 ```
 
 ---
