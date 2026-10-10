@@ -153,21 +153,32 @@ This sequentially executes:
 
 ### Patient Access
 - Navigate to `http://localhost:5173/login` or `http://localhost:5173/register`.
-- You can create any new patient account using your own email and password.
+- You can create any new patient account using your own email and password, or use Google Sign-In.
 
 ### Doctor Workstation Access
 - Navigate to `http://localhost:5173/doctor/login`.
-- Use any of the 52 synchronized doctor work credentials. Examples:
+- Use any of the 52 synchronized doctor work credentials.
 
-| Medical Specialty | Railway Station | Transit Line | Clinician Work Email | Default Password |
+#### 🔑 Credential Generation Pattern
+Clinician accounts are generated deterministically from the Mumbai Medical Specialist Directory:
+- **Workstation Email**: `<corridor>-<specialty-slug>-<station-slug>@lifelink.com`
+- **Workstation Password**: `<specialty-slug>.<station-slug>@lifelink`
+- **Master Admin Reset Code**: `lifelink-controlled-clinician-secret-key-2026` (via `/doctor/reset`)
+
+#### Verified Quick-Test Accounts
+
+| Medical Specialty | Railway Station | Transit Corridor | Clinician Work Email | Default Password |
 |:---|:---|:---:|:---|:---|
-| **Cardiology** | CSMT | Central | `central-cardiology-csmt@accounts.lifelink.test` | `Doctor@123` |
-| **General Practice** | Dadar | Western / Central | `western-generalpractice-dadar@accounts.lifelink.test` | `Doctor@123` |
-| **Pediatrics** | Andheri | Western | `western-pediatrics-andheri@accounts.lifelink.test` | `Doctor@123` |
-| **Dermatology** | Ghatkopar | Central | `central-dermatology-ghatkopar@accounts.lifelink.test` | `Doctor@123` |
-| **Orthopedics** | Vashi | Harbour | `harbour-orthopedics-vashi@accounts.lifelink.test` | `Doctor@123` |
+| **Cardiology** | CSMT | Central | `central-cardiology-csmt@lifelink.com` | `cardiology.csmt@lifelink` |
+| **General Practice** | Dadar | Western | `western-general-practice-dadar@lifelink.com` | `generalpractice.dadar@lifelink` |
+| **Pediatrics** | Andheri | Western | `western-pediatrics-andheri@lifelink.com` | `pediatrics.andheri@lifelink` |
+| **Dermatology** | Ghatkopar | Central | `central-dermatology-ghatkopar@lifelink.com` | `dermatology.ghatkopar@lifelink` |
+| **Orthopedics** | Panvel | Harbour | `harbour-orthopedics-panvel@lifelink.com` | `orthopedics.panvel@lifelink` |
+| **Neurology** | Thane | Central | `central-neurology-thane@lifelink.com` | `neurology.thane@lifelink` |
+| **Ophthalmology** | Goregaon | Western | `western-ophthalmology-goregaon@lifelink.com` | `ophthalmology.goregaon@lifelink` |
+| **Pulmonology** | Vashi | Harbour | `harbour-pulmonology-vashi@lifelink.com` | `pulmonology.vashi@lifelink` |
 
-*To inspect all 52 doctor credentials, run `npx tsx scripts/list-doctor-credentials.ts`.*
+*To inspect all 52 doctor credentials across all 19 stations, run `npm run db:sync:doctors` or refer to [README.md Section 14.1](README.md#141-clinician-workstation-login-credentials-mumbai-medical-directory).*
 
 ---
 
@@ -332,8 +343,8 @@ Once Render displays **Deploy live** with a green status indicator, verify core 
 3. **Doctor Workstation Authentication**:
    - Visit `https://new-lifelink-smart-healthcare-assistance.onrender.com/doctor/login`.
    - Sign in using:
-     - Email: `central-cardiology-csmt@accounts.lifelink.test`
-     - Password: `Doctor@123`
+     - Email: `central-cardiology-csmt@lifelink.com`
+     - Password: `cardiology.csmt@lifelink`
    - Verify that the clinician dashboard displays consultation queue metrics.
 4. **Real-Time Push Verification**:
    - Open browser Developer Tools $\rightarrow$ **Network** tab $\rightarrow$ filter by `EventStream` or `Fetch/XHR`.

@@ -33,6 +33,7 @@
 12. [Frontend Architecture & UI Design System](#12-frontend-architecture--ui-design-system)
 13. [Patient Portal Walkthrough](#13-patient-portal-walkthrough)
 14. [Doctor Workspace Walkthrough](#14-doctor-workspace-walkthrough)
+   - [14.1 Clinician Workstation Login Credentials (Mumbai Medical Directory)](#141-clinician-workstation-login-credentials-mumbai-medical-directory)
 15. [Appointment System & Doctor-Specific Availability](#15-appointment-system--doctor-specific-availability)
 16. [Relational Database Schema (14 Tables)](#16-relational-database-schema-14-tables)
 17. [Backend Server & tRPC API Architecture](#17-backend-server--trpc-api-architecture)
@@ -537,6 +538,116 @@ The Doctor Workspace is a focused clinical environment designed for healthcare p
 7. **Digital Prescription Lifecycle & Sealing (`/doctor/prescriptions`)**: Clinicians author multi-item prescriptions by specifying medication names, dosages, and administration instructions. Saving as a draft invokes `prescriptions.create`, maintaining the record in `UNSIGNED / CONTROLLED WORKSPACE` with a clear status indicator. Choosing **Sign & Seal** triggers the explicit `prescriptions.sign` mutation, which verifies clinician authorization, transitions the status to `SIGNED — CONTROLLED STATE`, generates a canonical SHA-256 integrity seal, and emits an instant Server-Sent Event (SSE) to the patient's portal.
 8. **Credential Setup & Reset (`/doctor/reset`)**: Administrative tool allowing clinicians to reset workstation passwords using the administrative master secret code (`LIFELINK_DEMO_DOCTOR_ACCESS_CODE`).
 
+### 14.1 Clinician Workstation Login Credentials (Mumbai Medical Directory)
+
+LifeLink seeds **52 verified clinician workstations** across the Western, Central, and Harbour railway corridors of the Mumbai Metropolitan Region (MMR). These accounts are permanently synchronized in the database (via `scripts/sync-doctors.ts` and `database/seed_doctors.sql`) to enable comprehensive clinical testing without requiring external healthcare infrastructure.
+
+#### 🔑 Deterministic Credential Formula
+To make local evaluation and grading seamless, all clinician logins follow an institutional pattern:
+- **Workstation Login URL**: `http://localhost:5173/doctor/login` (or `/doctor/login` in production)
+- **Institutional Email**: `<corridor>-<specialty-slug>-<station-slug>@lifelink.com`
+- **Workstation Password**: `<specialty-slug>.<station-slug>@lifelink`
+- **Master Admin Reset Code**: `lifelink-controlled-clinician-secret-key-2026` (used on `/doctor/reset`)
+
+> [!NOTE]
+> The backend authentication resolver (`backend/db.ts:getSyntheticDoctorCredentialByEmail`) accepts institutional emails (`@lifelink.com`), test domain aliases (`@accounts.lifelink.test`), and short usernames (e.g. `central-cardiology-csmt`), automatically mapping them to the clinician's secure Scrypt hash.
+
+#### 📋 Quick-Start Clinician Credentials (All 12 Medical Specialties)
+
+The following table provides verified, ready-to-test logins representing every medical specialty and transit corridor:
+
+| Medical Specialty | Clinician Name | Transit Corridor | Station Anchor | Affiliated Medical Facility | Workstation Email | Primary Password |
+|:---|:---|:---:|:---:|:---|:---|:---|
+| **Cardiology** | Dr. Rajesh V. Varma, MD, DM | Central | CSMT | Aura Heart & Vascular Pavilion | `central-cardiology-csmt@lifelink.com` | `cardiology.csmt@lifelink` |
+| **Cardiology** | Dr. Jayant V. Bhatt, MD, DM | Western | Andheri | Veritas Cardiac & Rhythm Institute | `western-cardiology-andheri@lifelink.com` | `cardiology.andheri@lifelink` |
+| **General Practice** | Dr. Shalini K. Pillai, MBBS | Western | Dadar | Zenith Clinical Hub | `western-general-practice-dadar@lifelink.com` | `generalpractice.dadar@lifelink` |
+| **General Practice** | Dr. Aarav N. Kulkarni, MBBS | Central | CSMT | Fort Heritage Health Pavilion | `central-general-practice-csmt@lifelink.com` | `generalpractice.csmt@lifelink` |
+| **Pediatrics** | Dr. Deepa V. Nair, MD, DCH | Western | Andheri | Veritas Child Health & Neonatal Care | `western-pediatrics-andheri@lifelink.com` | `pediatrics.andheri@lifelink` |
+| **Dermatology** | Dr. Rahul E. Tambe, MD, DNB | Central | Ghatkopar | MetroHealth Derma & Skin Pavilion | `central-dermatology-ghatkopar@lifelink.com` | `dermatology.ghatkopar@lifelink` |
+| **Orthopedics** | Dr. Sunita K. Jagtap, MS, MCh | Western | Dadar | Zenith Orthopedic & Trauma Centre | `western-orthopedics-dadar@lifelink.com` | `orthopedics.dadar@lifelink` |
+| **Orthopedics** | Dr. Shrikant R. Gokhale, MS | Harbour | Panvel | Pioneer Bone & Joint Pavilion | `harbour-orthopedics-panvel@lifelink.com` | `orthopedics.panvel@lifelink` |
+| **Neurology** | Dr. Rameshwar T. Gaikwad, MD, DM | Central | Thane | Apex Horizon Neuro-Care Institute | `central-neurology-thane@lifelink.com` | `neurology.thane@lifelink` |
+| **Ophthalmology** | Dr. Milind S. Chitnis, MS, FICO | Western | Goregaon | PulsePoint Eye Care Institute | `western-ophthalmology-goregaon@lifelink.com` | `ophthalmology.goregaon@lifelink` |
+| **Gastroenterology** | Dr. Anil M. Kumar, MD, DM | Western | Borivali | Trinity Digestive Health Centre | `western-gastroenterology-borivali@lifelink.com` | `gastroenterology.borivali@lifelink` |
+| **Psychiatry** | Dr. Siddharth P. Merchant, MD | Harbour | Sewri | Solace Mind Wellness Institute | `harbour-psychiatry-sewri@lifelink.com` | `psychiatry.sewri@lifelink` |
+| **Endocrinology** | Dr. Pooja S. Chawla, MD, DM | Harbour | Chembur | PrimeCare Diabetes & Hormone Institute | `harbour-endocrinology-chembur@lifelink.com` | `endocrinology.chembur@lifelink` |
+| **Pulmonology** | Dr. Sameer K. Merchant, MD, DM | Harbour | Vashi | Oasis Respiratory & Chest Institute | `harbour-pulmonology-vashi@lifelink.com` | `pulmonology.vashi@lifelink` |
+| **Gynecology** | Dr. Priya R. Nadkarni, MD, DGO | Central | Dombivli | Summit Care Women & Child Hospital | `central-gynecology-dombivli@lifelink.com` | `gynecology.dombivli@lifelink` |
+
+#### 📂 Complete Directory of All 52 Seeded Clinicians
+<details>
+<summary><strong>Click to expand full 52-Clinician Roster across all Mumbai Suburban Stations</strong></summary>
+
+| # | Clinician Name | Specialty | Station | Corridor | Hospital / Facility (Locality) | Workstation Email | Password |
+|:---:|:---|:---|:---:|:---:|:---|:---|:---|
+| 1 | Dr. Aarav N. Kulkarni, MBBS | General Practice | CSMT | Central | Fort Heritage Health Pavilion (Fort Medical Enclave) | `central-general-practice-csmt@lifelink.com` | `generalpractice.csmt@lifelink` |
+| 2 | Dr. Ishaan M. Deshmukh, MBBS | General Practice | Ghatkopar | Central | MetroHealth Family Centre (Ghatkopar East Health District) | `central-general-practice-ghatkopar@lifelink.com` | `generalpractice.ghatkopar@lifelink` |
+| 3 | Dr. Ananya P. Joshi, MBBS | General Practice | Bhandup | Central | Silverline Community Medical Hub (Bhandup West Medical Park) | `central-general-practice-bhandup@lifelink.com` | `generalpractice.bhandup@lifelink` |
+| 4 | Dr. Rohan K. Sengupta, MBBS, MD | General Practice | Thane | Central | Apex Horizon Polyclinic (Thane West Civic Medical Hub) | `central-general-practice-thane@lifelink.com` | `generalpractice.thane@lifelink` |
+| 5 | Dr. Tanvi R. Kirloskar, MBBS | General Practice | Mulund | Central | Starlight Clinical Centre (Mulund West Wellness Corridor) | `central-general-practice-mulund@lifelink.com` | `generalpractice.mulund@lifelink` |
+| 6 | Dr. Neil P. Somaiya, MBBS | General Practice | Diva Junction | Central | Beacon Hill Community Care (Diva Central Health Enclave) | `central-general-practice-diva@lifelink.com` | `generalpractice.divajunction@lifelink` |
+| 7 | Dr. Avantika B. Deshmukh, MBBS | General Practice | Kopar | Central | Novis Suburban Health Sanctuary (Kopar Civic Care District) | `central-general-practice-kopar@lifelink.com` | `generalpractice.kopar@lifelink` |
+| 8 | Dr. Kabir A. Mahajan, MBBS | General Practice | Dombivli | Central | Summit Care Medical Centre (Dombivli East Healthcare Hub) | `central-general-practice-dombivli@lifelink.com` | `generalpractice.dombivli@lifelink` |
+| 9 | Dr. Meera K. Nambiar, MBBS | General Practice | Thakurli | Central | Crestview Family Health Clinic (Thakurli Township Medical Center) | `central-general-practice-thakurli@lifelink.com` | `generalpractice.thakurli@lifelink` |
+| 10 | Dr. Devendra C. Sawant, MBBS, MD | General Practice | Churchgate | Western | Meridian Clinical Pavilion (Marine Lines & Churchgate Boulevard) | `western-general-practice-churchgate@lifelink.com` | `generalpractice.churchgate@lifelink` |
+| 11 | Dr. Shalini K. Pillai, MBBS | General Practice | Dadar | Western | Zenith Clinical Hub (Dadar West Medical Square) | `western-general-practice-dadar@lifelink.com` | `generalpractice.dadar@lifelink` |
+| 12 | Dr. Prakash J. Menon, MBBS | General Practice | Andheri | Western | Veritas Primary Care Centre (Andheri West Healthcare Hub) | `western-general-practice-andheri@lifelink.com` | `generalpractice.andheri@lifelink` |
+| 13 | Dr. Chetan R. Varma, MBBS | General Practice | Goregaon | Western | PulsePoint Health Clinic (Goregaon West Medical Enclave) | `western-general-practice-goregaon@lifelink.com` | `generalpractice.goregaon@lifelink` |
+| 14 | Dr. Sneha R. Kulkarni, MBBS | General Practice | Borivali | Western | Trinity Medical Care Pavilion (Borivali West Health Corridor) | `western-general-practice-borivali@lifelink.com` | `generalpractice.borivali@lifelink` |
+| 15 | Dr. Pankaj D. Shah, MBBS | General Practice | Sewri | Harbour | Solace Primary Health Institute (Sewri Coastal Medical District) | `harbour-general-practice-sewri@lifelink.com` | `generalpractice.sewri@lifelink` |
+| 16 | Dr. Vivek N. Deshpande, MBBS | General Practice | Chembur | Harbour | PrimeCare Medical Institute (Chembur Diamond Garden Sector) | `harbour-general-practice-chembur@lifelink.com` | `generalpractice.chembur@lifelink` |
+| 17 | Dr. Rohan T. Bapat, MBBS | General Practice | Vashi | Harbour | Oasis Clinical Pavilion (Vashi Sector 15 Medical Park) | `harbour-general-practice-vashi@lifelink.com` | `generalpractice.vashi@lifelink` |
+| 18 | Dr. Preeti S. Saxena, MBBS | General Practice | Nerul | Harbour | Asteria Community Health Center (Nerul Palm Beach Healthcare Zone) | `harbour-general-practice-nerul@lifelink.com` | `generalpractice.nerul@lifelink` |
+| 19 | Dr. Alok M. Pandey, MBBS | General Practice | Panvel | Harbour | Pioneer Civic Care Pavilion (Panvel City Wellness Hub) | `harbour-general-practice-panvel@lifelink.com` | `generalpractice.panvel@lifelink` |
+| 20 | Dr. Rajesh V. Varma, MD, DM | Cardiology | CSMT | Central | Aura Heart & Vascular Pavilion (Fort Medical Enclave) | `central-cardiology-csmt@lifelink.com` | `cardiology.csmt@lifelink` |
+| 21 | Dr. Jayant V. Bhatt, MD, DM | Cardiology | Andheri | Western | Veritas Cardiac & Rhythm Institute (Andheri West Healthcare Hub) | `western-cardiology-andheri@lifelink.com` | `cardiology.andheri@lifelink` |
+| 22 | Dr. Reema N. Shetty, MD, DM | Cardiology | Vashi | Harbour | Oasis Advanced Heart Center (Vashi Sector 15 Medical Park) | `harbour-cardiology-vashi@lifelink.com` | `cardiology.vashi@lifelink` |
+| 23 | Dr. Rahul E. Tambe, MD, DNB | Dermatology | Ghatkopar | Central | MetroHealth Derma & Skin Pavilion (Ghatkopar East Health District) | `central-dermatology-ghatkopar@lifelink.com` | `dermatology.ghatkopar@lifelink` |
+| 24 | Dr. Veena M. Shinde, MD | Dermatology | Churchgate | Western | Meridian Aesthetic & Skin Institute (Marine Lines & Churchgate) | `western-dermatology-churchgate@lifelink.com` | `dermatology.churchgate@lifelink` |
+| 25 | Dr. Smita K. Patil, MD | Dermatology | Chembur | Harbour | PrimeCare Cutaneous Care Clinic (Chembur Diamond Garden Sector) | `harbour-dermatology-chembur@lifelink.com` | `dermatology.chembur@lifelink` |
+| 26 | Dr. Arvind N. Shenoy, MS | Orthopedics | Bhandup | Central | Silverline Joint & Spine Institute (Bhandup West Medical Park) | `central-orthopedics-bhandup@lifelink.com` | `orthopedics.bhandup@lifelink` |
+| 27 | Dr. Sunita K. Jagtap, MS, MCh | Orthopedics | Dadar | Western | Zenith Orthopedic & Trauma Centre (Dadar West Medical Square) | `western-orthopedics-dadar@lifelink.com` | `orthopedics.dadar@lifelink` |
+| 28 | Dr. Shrikant R. Gokhale, MS | Orthopedics | Panvel | Harbour | Pioneer Bone & Joint Pavilion (Panvel City Wellness Hub) | `harbour-orthopedics-panvel@lifelink.com` | `orthopedics.panvel@lifelink` |
+| 29 | Dr. Rameshwar T. Gaikwad, MD, DM | Neurology | Thane | Central | Apex Horizon Neuro-Care Institute (Thane West Civic Medical Hub) | `central-neurology-thane@lifelink.com` | `neurology.thane@lifelink` |
+| 30 | Dr. Kavita M. Joshi, MD, DM | Neurology | Borivali | Western | Trinity Brain & Spine Center (Borivali West Health Corridor) | `western-neurology-borivali@lifelink.com` | `neurology.borivali@lifelink` |
+| 31 | Dr. Nitin H. Agrawal, MD, DM | Neurology | Nerul | Harbour | Asteria Neuro-Sciences Pavilion (Nerul Palm Beach Healthcare Zone) | `harbour-neurology-nerul@lifelink.com` | `neurology.nerul@lifelink` |
+| 32 | Dr. Deepa V. Nair, MD, DCH | Pediatrics | Andheri | Western | Veritas Child Health & Neonatal Care (Andheri West Healthcare Hub) | `western-pediatrics-andheri@lifelink.com` | `pediatrics.andheri@lifelink` |
+| 33 | Dr. Farhan K. Mehta, MD | Pediatrics | Mulund | Central | Starlight Pediatric Specialty Center (Mulund West Wellness Corridor) | `central-pediatrics-mulund@lifelink.com` | `pediatrics.mulund@lifelink` |
+| 34 | Dr. Swati P. Bhosale, MD | Pediatrics | Vashi | Harbour | Oasis Children's Healthcare Pavilion (Vashi Sector 15 Medical Park) | `harbour-pediatrics-vashi@lifelink.com` | `pediatrics.vashi@lifelink` |
+| 35 | Dr. Milind S. Chitnis, MS, FICO | Ophthalmology | Goregaon | Western | PulsePoint Eye Care Institute (Goregaon West Medical Enclave) | `western-ophthalmology-goregaon@lifelink.com` | `ophthalmology.goregaon@lifelink` |
+| 36 | Dr. Harish D. Salunkhe, MS | Ophthalmology | CSMT | Central | Fort Heritage Vision & Eye Centre (Fort Medical Enclave) | `central-ophthalmology-csmt@lifelink.com` | `ophthalmology.csmt@lifelink` |
+| 37 | Dr. Vandana S. Rao, MS | Ophthalmology | Chembur | Harbour | PrimeCare Advanced Eye Center (Chembur Diamond Garden Sector) | `harbour-ophthalmology-chembur@lifelink.com` | `ophthalmology.chembur@lifelink` |
+| 38 | Dr. Anil M. Kumar, MD, DM | Gastroenterology | Borivali | Western | Trinity Digestive Health Centre (Borivali West Health Corridor) | `western-gastroenterology-borivali@lifelink.com` | `gastroenterology.borivali@lifelink` |
+| 39 | Dr. Sanjeev B. Kulkarni, MD, DM | Gastroenterology | Thane | Central | Apex Horizon Gastro & Liver Care (Thane West Civic Medical Hub) | `central-gastroenterology-thane@lifelink.com` | `gastroenterology.thane@lifelink` |
+| 40 | Dr. Ritu G. Kapoor, MD, DM | Gastroenterology | Sewri | Harbour | Solace Digestive Diseases Pavilion (Sewri Coastal Medical District) | `harbour-gastroenterology-sewri@lifelink.com` | `gastroenterology.sewri@lifelink` |
+| 41 | Dr. Siddharth P. Merchant, MD | Psychiatry | Sewri | Harbour | Solace Mind Wellness Institute (Sewri Coastal Medical District) | `harbour-psychiatry-sewri@lifelink.com` | `psychiatry.sewri@lifelink` |
+| 42 | Dr. Mahesh A. Bhide, MD | Psychiatry | Dadar | Western | Zenith Behavioral Health Center (Dadar West Medical Square) | `western-psychiatry-dadar@lifelink.com` | `psychiatry.dadar@lifelink` |
+| 43 | Dr. Sanjay D. Varma, MD | Psychiatry | Ghatkopar | Central | MetroHealth Mind & Wellbeing Pavilion (Ghatkopar East Health District) | `central-psychiatry-ghatkopar@lifelink.com` | `psychiatry.ghatkopar@lifelink` |
+| 44 | Dr. Pooja S. Chawla, MD, DM | Endocrinology | Chembur | Harbour | PrimeCare Diabetes & Hormone Institute (Chembur Diamond Garden) | `harbour-endocrinology-chembur@lifelink.com` | `endocrinology.chembur@lifelink` |
+| 45 | Dr. Rohan M. Kirloskar, MD, DM | Endocrinology | Churchgate | Western | Meridian Metabolic Health Center (Marine Lines & Churchgate) | `western-endocrinology-churchgate@lifelink.com` | `endocrinology.churchgate@lifelink` |
+| 46 | Dr. Neha V. Paranjpe, MD, DM | Endocrinology | Bhandup | Central | Silverline Endocrine & Thyroid Pavilion (Bhandup West Medical Park) | `central-endocrinology-bhandup@lifelink.com` | `endocrinology.bhandup@lifelink` |
+| 47 | Dr. Sameer K. Merchant, MD, DM | Pulmonology | Vashi | Harbour | Oasis Respiratory & Chest Institute (Vashi Sector 15 Medical Park) | `harbour-pulmonology-vashi@lifelink.com` | `pulmonology.vashi@lifelink` |
+| 48 | Dr. Malini S. Iyer, MD, DM | Pulmonology | Thane | Central | Apex Horizon Pulmonary Care Centre (Thane West Civic Medical Hub) | `central-pulmonology-thane@lifelink.com` | `pulmonology.thane@lifelink` |
+| 49 | Dr. Vikramaditya S. Sengupta, MD | Pulmonology | Andheri | Western | Veritas Chest & Lung Sanctuary (Andheri West Healthcare Hub) | `western-pulmonology-andheri@lifelink.com` | `pulmonology.andheri@lifelink` |
+| 50 | Dr. Tarun K. Bansal, MD, DGO | Gynecology | Panvel | Harbour | Pioneer Women Health & Maternity Hospital (Panvel City Wellness Hub) | `harbour-gynecology-panvel@lifelink.com` | `gynecology.panvel@lifelink` |
+| 51 | Dr. Gauri N. Tendulkar, MD, DGO | Gynecology | Goregaon | Western | PulsePoint Women's Health Pavilion (Goregaon West Medical Enclave) | `western-gynecology-goregaon@lifelink.com` | `gynecology.goregaon@lifelink` |
+| 52 | Dr. Priya R. Nadkarni, MD, DGO | Gynecology | Dombivli | Central | Summit Care Women & Child Hospital (Dombivli East Healthcare Hub) | `central-gynecology-dombivli@lifelink.com` | `gynecology.dombivli@lifelink` |
+
+</details>
+
+#### 🧪 Clinical Evaluation & Testing Scenarios
+1. **Testing Consultation Management**:
+   - Log into `/doctor/login` using `central-cardiology-csmt@lifelink.com` / `cardiology.csmt@lifelink`.
+   - In another browser profile/window, sign in as a patient and book an appointment with **Dr. Rajesh V. Varma** at CSMT.
+   - Observe the live appointment queue update instantaneously via SSE (`/api/realtime/doctor`).
+2. **Testing Digital Prescription Sealing**:
+   - Navigate to `/doctor/prescriptions` while logged in as a clinician.
+   - Author prescription items (e.g., *Atorvastatin 20mg* once daily).
+   - Click **Sign & Seal Prescriptions** to trigger cryptographic SHA-256 seal generation and transition the status badge to `SIGNED — CONTROLLED STATE`.
+3. **Testing IDOR (Insecure Direct Object Reference) Protection**:
+   - As a logged-in doctor, attempt to access `/doctor/patients/:id` for a patient ID who does **not** have an active booking with your clinic.
+   - The platform strictly enforces authorization boundaries and rejects the request with `403 FORBIDDEN`.
+
 ---
 
 ## 15. Appointment System & Doctor-Specific Availability
@@ -931,8 +1042,13 @@ Open your web browser and navigate to:
 ```text
 http://localhost:5173
 ```
-- Choose **Patient Portal** to register a new patient account.
-- Choose **Doctor Workspace** to sign in as a clinician (e.g. `cardiology.csmt@lifelink.com` or consult `scripts/list-doctor-credentials.ts`).
+- Choose **Patient Portal** (`/login` or `/register`) to create a test patient account or test Google Sign-In.
+- Choose **Doctor Workspace** (`/doctor/login`) to sign in as a clinician. Use any of the 52 seeded doctor credentials:
+  - **Cardiology (CSMT)**: Email `central-cardiology-csmt@lifelink.com` | Password `cardiology.csmt@lifelink`
+  - **General Practice (Dadar)**: Email `western-general-practice-dadar@lifelink.com` | Password `generalpractice.dadar@lifelink`
+  - **Pediatrics (Andheri)**: Email `western-pediatrics-andheri@lifelink.com` | Password `pediatrics.andheri@lifelink`
+  - **Orthopedics (Panvel)**: Email `harbour-orthopedics-panvel@lifelink.com` | Password `orthopedics.panvel@lifelink`
+  *(See [Section 14.1](#141-clinician-workstation-login-credentials-mumbai-medical-directory) for the full 52-doctor directory covering all 12 specialties and 19 railway stations).*
 
 #### 🌐 Local Port & Network Architecture Summary
 
