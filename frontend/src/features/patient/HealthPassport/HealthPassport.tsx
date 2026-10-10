@@ -490,8 +490,7 @@ export const HealthPassport = () => {
                 margin: "3px 0 0",
               }}
             >
-              Patient-controlled clinical baseline data and verified medical
-              history.
+              Your emergency medical details, allergies, and health history.
             </p>
           </div>
         </div>
@@ -1357,8 +1356,8 @@ export const HealthPassport = () => {
                   fontSize: "0.85rem",
                 }}
               >
-                Persisted clinical triage records linked to your health
-                passport.
+                Past health assessments and doctor guidance linked to your
+                profile.
               </p>
             </div>
           </div>

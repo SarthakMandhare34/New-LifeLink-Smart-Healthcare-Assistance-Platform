@@ -35,14 +35,14 @@ export const Patients = () => {
           className="workspace-choice-spinner"
           style={{ animation: "spin 1s linear infinite" }}
         />
-        <p className="caption">Loading authorized patients…</p>
+        <p className="caption">Loading assigned patients…</p>
       </div>
     );
 
   // Error boundary state
   if (patients.isError)
     return (
-      <p role="alert">Unable to load authorized patients. Please try again.</p>
+      <p role="alert">Unable to load assigned patients. Please try again.</p>
     );
 
   return (
@@ -68,9 +68,9 @@ export const Patients = () => {
           <Users size={24} style={{ color: "var(--color-doctor-primary)" }} />
         </div>
         <div>
-          <h1 style={{ margin: 0 }}>Patient Roster</h1>
+          <h1 style={{ margin: 0 }}>My Patients</h1>
           <p className="caption" style={{ margin: "4px 0 0" }}>
-            Patients authorized via assigned appointments
+            Patients with scheduled appointments
           </p>
         </div>
         <div style={{ marginLeft: "auto" }}>
@@ -85,7 +85,9 @@ export const Patients = () => {
               fontWeight: 700,
             }}
           >
-            {patients.data?.length ?? 0} Patients
+            {(patients.data?.length ?? 0) === 1
+              ? "1 Patient"
+              : `${patients.data?.length ?? 0} Patients`}
           </Badge>
         </div>
       </header>

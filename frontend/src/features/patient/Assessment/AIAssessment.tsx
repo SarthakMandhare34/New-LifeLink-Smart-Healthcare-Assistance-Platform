@@ -702,7 +702,7 @@ export const AIAssessment = () => {
               margin: "2px 0 0",
             }}
           >
-            Persisted triage records from your previous health assessments.
+            Saved records from your previous health assessments.
           </p>
         </div>
 
@@ -808,7 +808,7 @@ export const AIAssessment = () => {
                       setSelectedHistoryItem(item);
                       setIsResultModalOpen(true);
                     }}
-                    aria-label={`View triage details for assessment from ${new Date(item.createdAt).toLocaleDateString()}`}
+                    aria-label={`View assessment details from ${new Date(item.createdAt).toLocaleDateString()}`}
                     style={{
                       fontSize: "0.82rem",
                       fontWeight: 700,
@@ -847,7 +847,7 @@ export const AIAssessment = () => {
       <Popup
         isOpen={isResultModalOpen && Boolean(activeModalItem)}
         onClose={handleCloseResult}
-        title="AI Assessment Triage Result"
+        title="AI Assessment Result"
         maxWidth="600px"
       >
         {activeModalItem && (
@@ -925,7 +925,7 @@ export const AIAssessment = () => {
                     letterSpacing: "0.06em",
                   }}
                 >
-                  Triage Urgency
+                  Urgency Level
                 </span>
                 <span
                   style={{
@@ -1074,7 +1074,7 @@ export const AIAssessment = () => {
                       marginBottom: "4px",
                     }}
                   >
-                    Non-Diagnostic Guidance
+                    Health Guidance &amp; Next Steps
                   </span>
                   <p
                     style={{

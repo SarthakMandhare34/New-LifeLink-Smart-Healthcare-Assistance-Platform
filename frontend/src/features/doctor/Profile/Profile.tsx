@@ -270,9 +270,8 @@ export const DoctorProfile = () => {
               Directory status
             </h3>
             <p className="caption" style={{ lineHeight: 1.6 }}>
-              This is a controlled LifeLink directory account. Specialist
-              records are not verified clinician credentials or medical
-              registrations.
+              This is an active LifeLink doctor account. It allows you to review
+              appointments, access patient charts, and issue prescriptions.
             </p>
           </div>
           <div
@@ -292,7 +291,7 @@ export const DoctorProfile = () => {
                 fontSize: "14px",
               }}
             >
-              Account type: Controlled directory specialist
+              Account type: Doctor Directory Specialist
             </p>
           </div>
         </Card>

@@ -48,14 +48,14 @@ export const DoctorPrescriptions = () => {
     onSuccess: async data => {
       setActionFeedback({
         type: "success",
-        message: `Prescription #${data.id} successfully signed and cryptographically sealed with SHA-256 seal.`,
+        message: `Prescription #${data.id} successfully signed and verified.`,
       });
       await utils.doctorWorkspace.prescriptions.list.invalidate();
     },
     onError: error => {
       setActionFeedback({
         type: "error",
-        message: `Failed to sign prescription: ${formatUserFriendlyError(error, "Prescription could not be signed and sealed.")}`,
+        message: `Failed to sign prescription: ${formatUserFriendlyError(error, "Prescription could not be signed.")}`,
       });
     },
   });
@@ -172,7 +172,7 @@ export const DoctorPrescriptions = () => {
                 fontSize: "0.85rem",
               }}
             >
-              Records created and verified by your clinician session.
+              Prescriptions created and issued for your patients.
             </p>
           </div>
           <span
@@ -401,7 +401,7 @@ export const DoctorPrescriptions = () => {
                         color: "var(--color-text)",
                       }}
                     >
-                      Digitally Signed &amp; Sealed
+                      Signed &amp; Verified
                     </span>
                   </div>
                 ) : (
@@ -446,8 +446,8 @@ export const DoctorPrescriptions = () => {
                     <FileCheck size={14} />
                     {signPrescription.isPending &&
                     signPrescription.variables?.id === rx.id
-                      ? "Signing & Sealing…"
-                      : "Sign & Seal Prescription"}
+                      ? "Signing…"
+                      : "Sign Prescription"}
                   </Button>
                 )}
               </Card>

@@ -356,8 +356,7 @@ export const Prescriptions = () => {
                       color: "var(--color-text)",
                     }}
                   >
-                    Digitally Signed &amp; Sealed · Tamper-Evident Verification
-                    Active
+                    Digitally Signed &amp; Verified by Doctor
                   </span>
                 </div>
               ) : (
@@ -377,7 +376,7 @@ export const Prescriptions = () => {
                       fontStyle: "italic",
                     }}
                   >
-                    Unsigned Draft · Awaiting clinician signature
+                    Draft · Awaiting doctor signature
                   </span>
                 </div>
               )}
@@ -410,7 +409,7 @@ export const Prescriptions = () => {
                     fontWeight: 700,
                   }}
                 >
-                  Prescribed Regimen
+                  Prescribed Medicines
                 </h3>
               </div>
 

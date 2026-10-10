@@ -117,7 +117,7 @@ export const DoctorSettings = () => {
               fontFamily: "Inter, sans-serif",
             }}
           >
-            Workspace Settings
+            Settings
           </h1>
           <p
             style={{
@@ -126,8 +126,7 @@ export const DoctorSettings = () => {
               fontSize: "0.92rem",
             }}
           >
-            Security controls, credential status, and privacy boundary
-            declarations for your doctor account.
+            Manage your account security, password, and privacy preferences.
           </p>
         </div>
       </section>
@@ -202,9 +201,8 @@ export const DoctorSettings = () => {
                 lineHeight: 1.5,
               }}
             >
-              Update this doctor account's password. The owner-controlled reset
-              path is available from Doctor sign in if your current password is
-              unavailable.
+              Update your doctor account password. If you forgot your current
+              password, you can reset it from the doctor sign-in page.
             </p>
 
             {/* Feedback banner */}
@@ -370,7 +368,7 @@ export const DoctorSettings = () => {
                   letterSpacing: "-0.02em",
                 }}
               >
-                Account Information & Privacy Boundary
+                Account & Privacy Details
               </h2>
             </div>
 
@@ -400,7 +398,7 @@ export const DoctorSettings = () => {
                 <strong
                   style={{ fontSize: "1rem", color: "var(--color-text)" }}
                 >
-                  Controlled Directory Doctor
+                  Doctor Directory Account
                 </strong>
               </div>
 
@@ -427,7 +425,7 @@ export const DoctorSettings = () => {
                 <strong
                   style={{ fontSize: "1rem", color: "var(--color-text)" }}
                 >
-                  Appointment-restricted patient context
+                  Assigned patients only
                 </strong>
               </div>
 
@@ -455,9 +453,8 @@ export const DoctorSettings = () => {
                     lineHeight: 1.6,
                   }}
                 >
-                  <strong>Note:</strong> This is a controlled LifeLink directory
-                  account. Records here are not verified doctor identities,
-                  credentials, or medical registrations.
+                  <strong>Note:</strong> This doctor account is part of the
+                  LifeLink healthcare directory for clinical consultations.
                 </p>
               </div>
             </div>

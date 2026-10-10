@@ -130,7 +130,7 @@ export const PatientView = () => {
     onSuccess: async data => {
       setFeedback({
         type: "success",
-        message: `Prescription #${data.id} successfully signed and cryptographically sealed with SHA-256 seal.`,
+        message: `Prescription #${data.id} successfully signed and verified.`,
       });
       await Promise.all([
         utils.doctorWorkspace.patientDetail.invalidate({
@@ -198,10 +198,10 @@ export const PatientView = () => {
           }}
         >
           <Lock size={40} color="var(--color-text-muted)" />
-          <h2>Not authorized</h2>
+          <h2>Patient Not Assigned</h2>
           <p>
-            This patient is not linked to an appointment assigned to the signed
-            synthetic doctor.
+            This patient is not linked to an appointment assigned to your doctor
+            account.
           </p>
         </Card>
       </div>
@@ -354,7 +354,7 @@ export const PatientView = () => {
           Patient Record
         </h1>
         <p className="caption" style={{ margin: "6px 0 0" }}>
-          {patient.name} · Appointment-authorized summary
+          {patient.name} · Patient Health Summary
         </p>
       </header>
 
@@ -426,8 +426,8 @@ export const PatientView = () => {
           </div>
         </div>
         <p className="caption" style={{ marginTop: "20px" }}>
-          Email, phone, emergency contacts, and unrelated patient records are
-          intentionally not exposed to this doctor workspace.
+          To protect patient privacy, personal contact details are kept
+          confidential.
         </p>
       </Card>
 
@@ -788,7 +788,7 @@ export const PatientView = () => {
                       color="var(--color-semantic-success, #16a34a)"
                     />
                     <span>
-                      Cryptographically verified &amp; sealed in database
+                      Verified and officially signed
                     </span>
                   </div>
                 ) : null}
@@ -797,7 +797,7 @@ export const PatientView = () => {
           </div>
         ) : (
           <p className="caption" style={{ margin: 0 }}>
-            No prescriptions have been authored for this patient yet.
+            No prescriptions have been issued for this patient yet.
           </p>
         )}
       </Card>
@@ -1139,24 +1139,12 @@ export const PatientView = () => {
                     color: "var(--color-doctor-text)",
                   }}
                 >
-                  Prescription Governance &amp; Signing Lifecycle
+                  Prescription Signing
                 </strong>
                 <span>
-                  Saving as <strong>Draft</strong> keeps the record in{" "}
-                  <code
-                    style={{
-                      padding: "2px 6px",
-                      borderRadius: "4px",
-                      background: "var(--color-surface-subtle)",
-                      fontSize: "0.8rem",
-                      border: "1px solid var(--color-border)",
-                    }}
-                  >
-                    UNSIGNED / CONTROLLED WORKSPACE
-                  </code>
-                  . Choosing <strong>Sign &amp; Seal</strong> executes the
-                  explicit signing mutation to generate the immutable
-                  cryptographic SHA-256 seal.
+                  Saving as <strong>Draft</strong> keeps the prescription saved
+                  as an editable draft. Choosing <strong>Sign &amp; Seal</strong>{" "}
+                  officially signs and verifies the prescription for the patient.
                 </span>
               </div>
             </div>

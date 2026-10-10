@@ -168,7 +168,7 @@ export const DoctorAppShell = () => {
     return (
       <main className="doctor-content">
         <div className="container">
-          <p>Verifying clinician session…</p>
+          <p>Verifying doctor session…</p>
         </div>
       </main>
     );
@@ -227,7 +227,7 @@ export const DoctorAppShell = () => {
             to="/doctor/dashboard"
             onClick={closeMobile}
             className="app-sidebar-brand-link"
-            aria-label="LifeLink clinician home"
+            aria-label="LifeLink doctor home"
             style={{
               display: "inline-flex",
               alignItems: "center",
@@ -249,7 +249,7 @@ export const DoctorAppShell = () => {
                 color: "var(--color-doctor-primary)",
               }}
             >
-              Doctor Workstation
+              Doctor Portal
             </span>
             <span
               style={{
@@ -259,7 +259,7 @@ export const DoctorAppShell = () => {
                 borderRadius: "50%",
                 background: "var(--color-doctor-primary)",
               }}
-              title="Provider Session Active"
+              title="Doctor Session Active"
             />
           </div>
         </div>
@@ -337,7 +337,7 @@ export const DoctorAppShell = () => {
               textAlign: "left",
               transition: "background 0.15s, color 0.15s",
             }}
-            title="Sign out of clinician workspace"
+            title="Sign out of doctor portal"
           >
             <LogOut size={18} />
             <span>Log Out</span>
@@ -369,7 +369,7 @@ export const DoctorAppShell = () => {
             <NavLink
               to="/doctor/dashboard"
               className="app-mobile-brand"
-              aria-label="LifeLink clinician home"
+              aria-label="LifeLink doctor home"
             >
               <LifeLinkLogo
                 variant="symbol"
@@ -457,7 +457,7 @@ export const DoctorAppShell = () => {
                 <div
                   role="region"
                   className="notification-panel"
-                  aria-label="Clinician Notifications Panel"
+                  aria-label="Doctor Notifications Panel"
                   style={{
                     position: "absolute",
                     top: "calc(100% + 8px)",

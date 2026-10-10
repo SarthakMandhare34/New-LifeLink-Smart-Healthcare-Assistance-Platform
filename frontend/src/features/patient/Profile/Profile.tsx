@@ -476,7 +476,7 @@ export const Profile = () => {
                   color: "var(--color-text-muted)",
                 }}
               >
-                Managed by system authentication credentials
+                Linked to your LifeLink sign-in account
               </span>
             </div>
 

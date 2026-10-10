@@ -1019,8 +1019,7 @@ export const SpecialistFinder = () => {
                 placeholder="Briefly describe what you would like the specialist to review."
               />
               <p className="caption">
-                This reason is visible only to you and the assigned clinician
-                workspace.
+                This reason is visible only to you and your assigned doctor.
               </p>
             </div>
           </div>

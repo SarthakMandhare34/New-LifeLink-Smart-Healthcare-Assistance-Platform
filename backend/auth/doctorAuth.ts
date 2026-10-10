@@ -352,7 +352,7 @@ export const doctorAuthRouter = router({
       if (!record) {
         throw new TRPCError({
           code: "UNAUTHORIZED",
-          message: "Invalid email or Password",
+          message: "Invalid email or password.",
         }); // Authentication failure
       }
 
@@ -369,7 +369,7 @@ export const doctorAuthRouter = router({
       ) {
         throw new TRPCError({
           code: "UNAUTHORIZED",
-          message: "Invalid email or Password",
+          message: "Invalid email or password.",
         }); // Authentication failure
       }
       return establishDoctorSession(ctx, record.user.openId); // Set cookie and return doctor session

@@ -91,7 +91,7 @@ export const PatientLogin = () => {
       setError(
         formatUserFriendlyError(
           err,
-          "Unable to sign in. Please check your credentials and try again."
+          "Unable to sign in. Please check your email and password and try again."
         )
       ); // Display user-friendly failure message
       setIsLoading(false); // Reset loading state

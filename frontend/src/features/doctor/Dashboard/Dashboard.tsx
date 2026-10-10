@@ -206,7 +206,7 @@ export const DoctorDashboard = () => {
           minWidth: 0,
           boxSizing: "border-box",
         }}
-        aria-label="Clinician identity and schedule overview"
+        aria-label="Doctor profile and schedule overview"
       >
         <div
           style={{
@@ -230,7 +230,7 @@ export const DoctorDashboard = () => {
                 marginBottom: "2px",
               }}
             >
-              Clinical Practice Workstation &bull; Licensed Provider Session
+              Doctor Portal &bull; Active Session
             </span>
             <h1
               style={{
@@ -251,8 +251,7 @@ export const DoctorDashboard = () => {
                 margin: 0,
               }}
             >
-              Authorized consultation schedule, assigned patient charts, and
-              clinical decision support
+              View your consultation schedule, patient records, and health assessments.
             </p>
           </div>
 
@@ -461,7 +460,7 @@ export const DoctorDashboard = () => {
             <span
               style={{ fontSize: "0.75rem", color: "var(--color-text-muted)" }}
             >
-              Authorized medical charts
+              Assigned patient charts
             </span>
           </div>
         </div>
@@ -484,7 +483,7 @@ export const DoctorDashboard = () => {
                 letterSpacing: "0.06em",
               }}
             >
-              Triage Assessments
+              Health Assessments
             </span>
             <Activity size={18} color="var(--color-doctor-primary)" />
           </div>
@@ -504,7 +503,7 @@ export const DoctorDashboard = () => {
             <span
               style={{ fontSize: "0.75rem", color: "var(--color-text-muted)" }}
             >
-              Submitted clinical records
+              Patient health assessments
             </span>
           </div>
         </div>
@@ -522,7 +521,7 @@ export const DoctorDashboard = () => {
           width: "100%",
           minWidth: 0,
         }}
-        aria-label="Clinical operational panels"
+        aria-label="Doctor workspace panels"
       >
         {/* LEFT COLUMN: UPCOMING CONSULTATIONS & RECENT ASSESSMENTS */}
         <div style={{ display: "flex", flexDirection: "column", gap: "28px" }}>
@@ -772,7 +771,7 @@ export const DoctorDashboard = () => {
                     background: "var(--color-doctor-primary)",
                   }}
                 >
-                  Review Appointment Ledger
+                  View All Appointments
                 </Button>
               </div>
             )}
@@ -800,7 +799,7 @@ export const DoctorDashboard = () => {
                     letterSpacing: "-0.01em",
                   }}
                 >
-                  Triage Assessments
+                  Health Assessments
                 </h2>
                 <p
                   style={{
@@ -809,7 +808,7 @@ export const DoctorDashboard = () => {
                     color: "var(--color-text-muted)",
                   }}
                 >
-                  Clinical decision support from assigned patients
+                  Patient symptom assessments and AI guidance
                 </p>
               </div>
               <button
@@ -1015,7 +1014,7 @@ export const DoctorDashboard = () => {
                     letterSpacing: "-0.01em",
                   }}
                 >
-                  Authorized Patient Registry
+                  Assigned Patients
                 </h2>
                 <p
                   style={{
@@ -1024,7 +1023,7 @@ export const DoctorDashboard = () => {
                     color: "var(--color-text-muted)",
                   }}
                 >
-                  Appointment-authorized charts
+                  Patients with scheduled appointments
                 </p>
               </div>
               <button

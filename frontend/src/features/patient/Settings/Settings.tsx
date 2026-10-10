@@ -116,7 +116,7 @@ export const Settings = () => {
               fontFamily: "Inter, sans-serif",
             }}
           >
-            Workspace Preferences
+            Settings
           </h1>
           <p
             style={{
@@ -125,8 +125,7 @@ export const Settings = () => {
               fontSize: "0.92rem",
             }}
           >
-            Manage notification alerts, session preferences, and security
-            options for your health portal.
+            Manage your notifications, account security, and portal preferences.
           </p>
         </div>
       </section>

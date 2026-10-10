@@ -949,7 +949,7 @@ The Specialist Finder maps accredited clinics to the **Mumbai Suburban Railway N
 
 ### Current Regional Scope & Pan-India Extensibility Design
 
-While LifeLink's active range and directory coverage are currently deployed in the **Mumbai Metropolitan Region** (using railway stations as convenient local proximity landmarks for commuters), the entire subsystem is architectured for straightforward **Pan-India** scaling:
+While LifeLink's active range and directory coverage are currently deployed in the **Mumbai Metropolitan Region** (using railway stations as convenient local proximity landmarks for commuters), the entire subsystem is architected for straightforward **Pan-India** scaling:
 
 1. **Decoupled Relational Schema**: The MySQL `doctors` table in [`database/schema.ts`](database/schema.ts) models physical clinic locations generically via `stationCode`, `stationName`, `line`, `address`, `latitude`, and `longitude`. The schema contains zero city-specific or railway-specific hardcoded constraints, allowing any Indian city, district, municipality, or PIN code to be populated without database migrations.
 2. **Location-Based Registry Architecture**: Regional location catalogs follow a standardized dictionary structure. Expanding to new regions across India (e.g., Delhi-NCR, Bengaluru, Hyderabad, Chennai, Kolkata, Pune, Tier-2/Tier-3 cities, and rural health districts) requires only introducing corresponding location and clinic registries without modifying core scheduling, triage, or security engines.

@@ -30,10 +30,10 @@ const patientHighlights = [
   "Use protected assessment, medicine, and emergency tools", // AI triage and SOS quick-dial
 ];
 
-// Feature highlights displayed on the clinician workspace card
+// Feature highlights displayed on the doctor portal card
 const doctorHighlights = [
-  "Open the protected clinician workspace", // Clinician-authenticated portal
-  "Review only appointments assigned to your account", // Privacy boundary protecting patient records
+  "Open the secure doctor portal", // Doctor-authenticated portal
+  "Review appointments and patients assigned to your account", // Privacy protection for patient records
 ];
 
 type Workspace = "patient" | "clinician"; // Available portal destinations
@@ -160,7 +160,7 @@ export const WorkspaceSelector = () => {
                 <Stethoscope size={22} />
               </span>
               <span className="workspace-choice-label doctor">
-                Doctor Workstation
+                Doctor Portal
               </span>
             </div>
             <h2>Clinician workspace</h2>
@@ -200,9 +200,9 @@ export const WorkspaceSelector = () => {
         <aside className="workspace-entry-note">
           <ShieldCheck size={18} aria-hidden="true" />
           <p>
-            <strong>Privacy boundary:</strong> patient records remain
-            patient-owned. The controlled clinician workspace can access only
-            server-authorized, assigned appointment information.
+            <strong>Privacy protection:</strong> Patient records remain
+            private. The doctor portal can access only appointments and patients
+            assigned to that doctor.
           </p>
         </aside>
       </section>
@@ -215,7 +215,7 @@ export const WorkspaceSelector = () => {
         >
           <LoaderCircle size={20} className="workspace-choice-spinner" />{" "}
           Opening{" "}
-          {switchingTo === "patient" ? "Patient Portal" : "Doctor Workstation"}…
+          {switchingTo === "patient" ? "Patient Portal" : "Doctor Portal"}…
         </div>
       ) : null}
     </main>

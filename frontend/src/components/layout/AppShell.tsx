@@ -187,7 +187,7 @@ export const AppShell = () => {
             fontWeight: 600,
           }}
         >
-          Loading your LifeLink workspaceâ€¦
+          Loading your LifeLink workspace...
         </p>
       </div>
     );

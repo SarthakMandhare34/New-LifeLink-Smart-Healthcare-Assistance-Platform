@@ -56,7 +56,7 @@ export const DoctorLogin = () => {
       await utils.auth.me.invalidate(); // Invalidate stale user context
       navigate("/doctor/dashboard", { replace: true }); // Navigate to clinician dashboard
     },
-    onError: () => setError("Invalid email or Password"), // Display error message
+    onError: () => setError("Invalid email or password."), // Display error message
   });
 
   // Form submission handler
@@ -84,7 +84,7 @@ export const DoctorLogin = () => {
           </span>
           <span>
             <strong>LifeLink</strong>
-            <small>Doctor workstation</small>
+            <small>Doctor portal</small>
           </span>
         </div>
         <div className="workspace-portal-assurance">
@@ -164,8 +164,8 @@ export const DoctorLogin = () => {
                   maxWidth: "380px",
                 }}
               >
-                Streamlined clinical platform for patient appointments,
-                intelligent triage insights, and digital prescriptions.
+                Streamlined platform for patient appointments,
+                intelligent health insights, and digital prescriptions.
               </p>
             </div>
           </div>

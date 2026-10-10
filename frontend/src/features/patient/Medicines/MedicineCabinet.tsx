@@ -263,7 +263,7 @@ export const MedicineCabinet = () => {
                   setFormData({ ...formData, name: e.target.value })
                 }
                 required
-                placeholder="E.g., Lisinopril, Amoxicillin..."
+                placeholder="e.g. Lisinopril, Amoxicillin"
               />
             </div>
             <div className="flex flex-col sm:flex-row gap-4">
@@ -456,7 +456,7 @@ export const MedicineCabinet = () => {
                       display: "block",
                     }}
                   >
-                    Registered Clinical Item
+                    Active Medication
                   </span>
                 </div>
               </div>

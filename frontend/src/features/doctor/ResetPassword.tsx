@@ -78,7 +78,7 @@ export const DoctorResetPassword = () => {
           </span>
           <span>
             <strong>LifeLink</strong>
-            <small>Doctor workstation</small>
+            <small>Doctor portal</small>
           </span>
         </div>
         <div className="workspace-portal-assurance">
@@ -159,8 +159,7 @@ export const DoctorResetPassword = () => {
                   maxWidth: "380px",
                 }}
               >
-                Secure account recovery for verified medical practitioners using
-                your owner provisioning code.
+                Secure account recovery for doctors using your doctor access code.
               </p>
             </div>
           </div>
@@ -221,7 +220,7 @@ export const DoctorResetPassword = () => {
                   margin: 0,
                 }}
               >
-                Use your owner provisioning code to set a new password
+                Use your doctor access code to set a new password
               </p>
             </header>
 
@@ -368,7 +367,7 @@ export const DoctorResetPassword = () => {
                     color: "var(--color-text)",
                   }}
                 >
-                  Owner Provisioning Code
+                  Doctor Access Code
                 </label>
                 <div
                   style={{
@@ -389,7 +388,7 @@ export const DoctorResetPassword = () => {
                   <Input
                     id="reset-provisioning-code"
                     type="password"
-                    placeholder="Enter owner code"
+                    placeholder="Enter doctor access code"
                     value={provisioningCode}
                     onChange={event => setProvisioningCode(event.target.value)}
                     autoComplete="off"

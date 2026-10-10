@@ -405,7 +405,7 @@ export const PatientDashboard = () => {
           width: "100%",
           minWidth: 0,
         }}
-        aria-label="Clinical visits and triage"
+        aria-label="Appointments and assessments"
       >
         {/* Upcoming Appointment */}
         <div className="dashboard-card">
@@ -578,7 +578,7 @@ export const PatientDashboard = () => {
                 letterSpacing: "0.06em",
               }}
             >
-              Recent AI Triage Assessment
+              Recent AI Health Assessment
             </h2>
             <Activity size={18} color="var(--lifelink-blue)" />
           </div>
@@ -791,7 +791,7 @@ export const PatientDashboard = () => {
                     fontWeight: 600,
                   }}
                 >
-                  +{medicines.length - 3} more on register
+                  +{medicines.length - 3} more medications
                 </p>
               )}
             </div>
@@ -935,7 +935,7 @@ export const PatientDashboard = () => {
                   }}
                 >
                   <CheckCircle2 size={13} color="var(--lifelink-success)" />{" "}
-                  SHA-256 Verified
+                  Officially Verified
                 </span>
               </div>
             </div>
@@ -1028,8 +1028,8 @@ export const PatientDashboard = () => {
                   margin: 0,
                 }}
               >
-                Immediate hotline dispatch &bull; 2-Step Emergency Protocol
-                &bull; Verified Hotlines
+                Fast SOS dialer &bull; Emergency contacts &bull; Verified
+                hotlines
               </p>
             </div>
           </div>
@@ -1047,7 +1047,7 @@ export const PatientDashboard = () => {
               fontSize: "0.90rem",
             }}
           >
-            <TriangleAlert size={16} /> Open Emergency Protocol
+            <TriangleAlert size={16} /> Open Emergency Help
           </Button>
         </div>
       </section>
