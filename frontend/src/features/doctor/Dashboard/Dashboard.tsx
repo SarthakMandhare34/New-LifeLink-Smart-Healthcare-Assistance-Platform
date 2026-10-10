@@ -276,8 +276,7 @@ export const DoctorDashboard = () => {
                 fontWeight: 600,
               }}
             >
-              <Stethoscope size={15} color="var(--color-doctor-primary)" /> Open
-              Examination Room
+              <Stethoscope size={15} color="var(--color-doctor-primary)" /> Consultation
             </Button>
             <Button
               variant="primary"

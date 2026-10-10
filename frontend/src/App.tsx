@@ -223,7 +223,7 @@ function App() {
           <Route path="appointments" element={<DoctorAppointments />} />{" "}
           {/* Consultation scheduling & status updates */}
           <Route path="consultation" element={<Consultation />} />{" "}
-          {/* Live clinical examination workspace */}
+          {/* Live clinical consultation workspace */}
           <Route path="prescriptions" element={<DoctorPrescriptions />} />{" "}
           {/* Issued prescription archive */}
           <Route
