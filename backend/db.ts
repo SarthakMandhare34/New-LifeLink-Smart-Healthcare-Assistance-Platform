@@ -1034,6 +1034,7 @@ export async function createPatientAppointment(
           scheduledAt,
           reason,
           status: "Requested",
+          activeSlotKey: sql`CONCAT(${doctorId}, ':', DATE_FORMAT(${scheduledAt}, '%Y-%m-%d %H:%i:%s'))`,
         });
         return Number(result[0].insertId);
       } catch (insertErr: any) {
@@ -1335,7 +1336,7 @@ export async function cancelOwnedPatientAppointment(
 
   await db
     .update(patientAppointments)
-    .set({ status: "Cancelled" })
+    .set({ status: "Cancelled", activeSlotKey: null })
     .where(
       and(
         eq(patientAppointments.id, appointmentId),
@@ -1405,7 +1406,13 @@ export async function updateDoctorAppointmentStatus(
 
   await db
     .update(patientAppointments)
-    .set({ status })
+    .set({
+      status,
+      activeSlotKey:
+        status === "Cancelled"
+          ? null
+          : sql`CONCAT(${doctorId}, ':', DATE_FORMAT(${patientAppointments.scheduledAt}, '%Y-%m-%d %H:%i:%s'))`,
+    })
     .where(
       and(
         eq(patientAppointments.id, appointmentId),

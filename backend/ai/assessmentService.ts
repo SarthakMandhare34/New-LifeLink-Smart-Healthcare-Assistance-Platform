@@ -457,16 +457,15 @@ async function invokeGemini(
     throw new Error("Gemini API key is not configured");
   }
 
-  // List of Gemini models to attempt sequentially in case of rate limits or service deprecation
-  // Note: gemini-2.5-flash and gemini-3.5-flash are intentionally excluded to preserve their quota for exam day
+  // List of active, verified Gemini models to attempt sequentially in case of rate limits or service load
   const candidateModels = [
-    "gemini-3.5-flash-lite", // 15 RPM, 500 RPD — highest daily quota, ultra-fast
-    "gemini-3.1-flash-lite", // 15 RPM, 500 RPD — second Lite fallback
-    "gemini-3.8-flash", // 5 RPM, 20 RPD — latest generation Flash
-    "gemini-3.7-flash", // 5 RPM, 20 RPD — stable Flash
-    "gemini-3.6-flash", // 5 RPM, 20 RPD — solid Flash fallback
-    "gemini-3-flash", // 5 RPM, 20 RPD — older Flash fallback
-    "gemini-2.5-flash-lite", // 10 RPM, 20 RPD — emergency Lite fallback
+    "gemini-3.5-flash-lite", // 15 RPM, 500 RPD — latest ultra-fast Flash-Lite (~1s)
+    "gemini-3.1-flash-lite", // 15 RPM, 500 RPD — high quota Flash-Lite fallback
+    "gemini-flash-lite-latest", // Canonical alias to latest active Flash-Lite
+    "gemini-3.6-flash", // Stable high-intelligence Flash model
+    "gemini-3-flash-preview", // Active Flash preview fallback
+    "gemini-flash-latest", // Canonical alias to latest active Flash
+    "gemini-3.5-flash", // High-capacity Flash model fallback
   ];
   let lastError: Error | null = null;
 
@@ -480,6 +479,7 @@ async function invokeGemini(
           headers: {
             "content-type": "application/json", // JSON payload
           },
+          signal: AbortSignal.timeout(7000), // 7s timeout per model before auto-cascading
           body: JSON.stringify({
             contents: [
               {

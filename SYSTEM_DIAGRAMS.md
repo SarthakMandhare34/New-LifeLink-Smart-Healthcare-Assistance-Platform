@@ -513,7 +513,7 @@ graph TB
     end
 
     subgraph GoogleCloud["External Google Cloud Services"]
-        GeminiAI["Google Gemini 1.5/2.0 Flash AI API"]
+        GeminiAI["Google Gemini Flash AI API (3.5 / 3.1 / Latest)"]
         GoogleOAuth["Google Cloud OAuth 2.0 Auth Server"]
     end
 

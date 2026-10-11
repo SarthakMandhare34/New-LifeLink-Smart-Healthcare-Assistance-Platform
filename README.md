@@ -1,8 +1,9 @@
 # 🏥 LifeLink — Smart Healthcare Assistance Platform
 
-> **[PROTOTYPE]** A prototype healthcare platform demonstrating secure patient records, AI triage, and dedicated clinical workspaces. Uses Server-Sent Events (SSE) to simulate real-time doctor appointment scheduling for testing purposes (No real doctors involved).
+> [!IMPORTANT]
+> **PROTOTYPE NOTICE:** LifeLink is an academic engineering **prototype** built for testing and demonstration purposes. It is **not** a real medical provider, commercial clinic, or emergency service. All doctor profiles, clinic listings, and appointment schedules are simulated for demonstration (no real doctors or real patients are involved).
 
-🌍 **Live Demo:** [https://new-lifelink-smart-healthcare-assistance.onrender.com/](https://new-lifelink-smart-healthcare-assistance.onrender.com/)
+🌍 **Live Prototype Demo:** [https://new-lifelink-smart-healthcare-assistance.onrender.com/](https://new-lifelink-smart-healthcare-assistance.onrender.com/)
 
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg?style=for-the-badge)](LICENSE)
@@ -58,15 +59,18 @@
 
 ## 1. Project Overview
 
+> [!NOTE]
+> **Prototype Status:** LifeLink is an interactive **software prototype** created to demonstrate how AI symptom triage, transit-anchored doctor discovery, and digital clinical records can work together. All doctor profiles, clinics, and appointment schedules are simulated for demonstration and testing purposes.
+
 ### 🚀 2026 Latest Updates: Production Architecture & Deployment
-This project has undergone a complete architectural upgrade to support production-level deployment:
-- **Cloud Infrastructure:** Successfully deployed as a live full-stack application on **Render.com** (See [Section 26](#26-production-cloud-deployment--live-infrastructure-rendercom--tidb-serverless)).
+This prototype project has undergone a complete architectural upgrade to demonstrate cloud deployment:
+- **Cloud Infrastructure:** Successfully deployed as a live full-stack prototype application on **Render.com** (See [Section 26](#26-production-cloud-deployment--live-infrastructure-rendercom--tidb-serverless)).
 - **Serverless Database:** Migrated from local MySQL to **TiDB Serverless Cloud** for 24/7 high-availability and zero-downtime scaling.
 - **Single-Page Application (SPA):** Completely refactored the frontend routing to support isolated, concurrent session states for Patient and Doctor workspaces without requiring tab isolation.
 - **Google OAuth 2.0:** Hardened authentication with strict URI callbacks matching the production cloud environment.
-- **Database Synchronization:** Securely seeded 52 Doctor workstation accounts into the live production database while preserving patient privacy constraints.
+- **Database Synchronization:** Securely seeded 52 Doctor workstation test accounts into the live production database while preserving patient privacy constraints.
 
-**LifeLink** is a full-stack smart healthcare assistance platform whose initial operational range and live coverage are centered on the **Mumbai Metropolitan Region (MMR)**. In Mumbai, the platform uses major suburban railway stations as practical local landmarks, connecting daily train commuters and residents with fast health guidance and verified medical specialists near their transit stops. While current operational coverage is focused on Mumbai, the platform architecture has been deliberately designed to be location-agnostic, enabling seamless future expansion to a **Pan-India** healthcare network across cities, districts, and rural regions.
+**LifeLink** is a full-stack smart healthcare assistance **prototype platform** whose initial operational range and demonstration coverage are centered on the **Mumbai Metropolitan Region (MMR)**. In Mumbai, the platform uses major suburban railway stations as practical local landmarks, connecting daily train commuters and residents with fast health guidance and verified medical specialists near their transit stops. While current operational coverage is focused on Mumbai, the platform architecture has been deliberately designed to be location-agnostic, enabling seamless future expansion to a **Pan-India** healthcare network across cities, districts, and rural regions.
 
 In large metropolitan cities like Mumbai, over 7.5 million passengers travel daily across the suburban railway network. When commuters experience sudden health symptoms during transit, they face three common challenges:
 - They do not know whether their condition is an emergency or something that can wait.
@@ -83,7 +87,7 @@ LifeLink addresses these challenges by combining:
 
 ## 2. Problem Statement
 
-Navigating urban healthcare in high-density transit corridors presents several practical difficulties for everyday citizens:
+Navigating urban healthcare in high-density transit corridors presents several practical difficulties for everyday citizens, which this prototype explores through software demonstration:
 
 - **Symptom Confusion & Self-Diagnosis Anxiety**: Patients often turn to search engines when feeling unwell. Search results can cause unnecessary panic or downplay critical conditions. Patients need structured, non-diagnostic guidance that directs them to the right medical department.
 - **Geographic Mismatch in Transit**: Commuters spend significant time traveling between home and work. Finding a clinic near an interchange station (such as Dadar, Kurla, or Andheri) during a commute is difficult without localized transit-aware directories.
@@ -94,64 +98,66 @@ Navigating urban healthcare in high-density transit corridors presents several p
 
 ## 3. Project Objectives
 
-LifeLink was designed and built to fulfill the following specific objectives:
+LifeLink was designed and built as an engineering prototype to fulfill the following specific objectives:
 
-1. **Provide Safe, Structured Health Guidance**: Deliver structured, preliminary triage guidance using artificial intelligence, backed by deterministic emergency overrides and biological consistency checks.
+1. **Provide Safe, Structured Health Guidance**: Deliver structured, preliminary triage guidance using artificial intelligence, backed by instant emergency safety rules and biological consistency checks.
 2. **Map Specialists to Mumbai Localities**: Map verified clinics to 19 major suburban railway stations in Mumbai, enabling commuters to locate doctors near their transit routes and destination stops.
-3. **Enforce Doctor-Specific Appointment Scheduling**: Guarantee that appointment slots belong strictly to specific doctors, preventing cross-doctor scheduling conflicts and ensuring atomicity.
-4. **Digitize Personal Health Records Securely**: Allow patients to maintain an Emergency Health Passport, an active medicine cabinet, and digital prescriptions with cryptographic integrity checks.
-5. **Implement Strict Healthcare Security**: Enforce Scrypt password hashing with individual random salts, dual HTTP-only session cookies, 5-minute inactivity termination, and comprehensive IDOR protections.
+3. **Enforce Doctor-Specific Appointment Scheduling**: Guarantee that appointment slots belong strictly to specific doctors, preventing scheduling conflicts and avoiding double bookings.
+4. **Digitize Personal Health Records Securely**: Allow patients to maintain an Emergency Health Passport, an active medicine cabinet, and digital prescriptions with secure digital verification seals.
+5. **Implement Strict Healthcare Security**: Enforce Scrypt password hashing with individual random salts, dual HTTP-only session cookies, 5-minute inactivity timeout, and strict account protections.
 6. **Support Real-Time Communication**: Push live appointment and prescription status changes to connected browsers instantly using lightweight Server-Sent Events (SSE).
-7. **Architect for Pan-India Scalability**: Maintain clean separation between regional location datasets and core clinical business logic, ensuring straightforward expansion to any city, district, or state across India.
+7. **Built for Pan-India Scalability**: Maintain clean separation between regional location datasets and core clinical business logic, ensuring straightforward expansion to any city, district, or state across India.
 
 ---
 
 ## 4. Project Scope
 
-To provide an accurate assessment of the platform, the project boundary is clearly divided into what is currently implemented and what lies outside the current release scope:
+To provide an accurate assessment of the platform, the project boundary is clearly divided into what is currently implemented in this prototype and what lies outside the current release scope:
 
-### Currently Implemented
+### Currently Implemented (Prototype System)
 
-- **Regional Operational Range (Mumbai Metropolitan Region)**: Full specialist discovery and transit directory currently active across 19 major railway stations (Western, Central, and Harbour lines) with calibrated GPS coordinates and verified clinic listings.
+- **Interactive Prototype Workflows**: A complete working software prototype demonstrating patient triage, specialist discovery, appointment booking simulation, and secure digital prescription signing.
+- **Regional Operational Range (Mumbai Metropolitan Region)**: Specialist discovery and transit directory currently active across 19 major railway stations (Western, Central, and Harbour lines) with calibrated GPS coordinates and simulated clinic listings.
 - **Dual Workspaces**: Dedicated, isolated workspaces for patients (`/patient/*`) and clinicians (`/doctor/*`).
-- **Authentication**: Native email/password authentication with memory-hard Scrypt hashing (16-byte random salts), timing-safe verification, and optional Google OAuth 2.0.
-- **AI Symptom Triage**: 5-layer triage pipeline utilizing Google Gemini Flash models with deterministic 0ms emergency regex overrides, biological checks, and offline fallbacks.
-- **Transit Specialist Directory**: 52 doctor profiles across 19 railway stations with interactive Leaflet map rendering and client-side geodesic distance calculations.
+- **Authentication**: Native email/password authentication with secure Scrypt password hashing (16-byte random salts), timing-safe verification, and optional Google OAuth 2.0.
+- **AI Symptom Triage**: 5-layer symptom check pipeline using Google Gemini Flash models with instant emergency safety rules, biological checks, and offline backup guidance.
+- **Transit Specialist Directory**: 52 doctor profiles across 19 railway stations with interactive Leaflet map view and direct walking distance calculations.
 - **Appointment Scheduling**: Complete 5-stage lifecycle (`Requested`, `Pending`, `Confirmed`, `Completed`, `Cancelled`) with doctor-specific slot conflict detection and database unique constraints.
-- **Medicine Cabinet**: CRUD operations for prescribed and personal medications with dosage, frequency, and adherence tracking.
+- **Medicine Cabinet**: Create, view, edit, and delete prescribed and personal medications with dosage, daily timing, and schedule tracking.
 - **Emergency Health Passport**: Digital medical ID storing blood group, contact phone, uploaded photo avatar, structured allergies, and chronic conditions.
-- **Digital Prescriptions**: Two-phase prescription lifecycle (drafting in `UNSIGNED / CONTROLLED WORKSPACE` $\rightarrow$ explicit execution of `doctorWorkspace.prescriptions.sign` mutation $\rightarrow$ `SIGNED — CONTROLLED STATE`) generating an immutable canonical SHA-256 integrity seal, with UI presentation using verified tamper-evident security badges.
-- **Emergency Assistance View**: Immediate access to India's national emergency helpline (`112`) and ambulance contacts with confirmation dialogues.
-- **Real-Time Push Updates**: Server-Sent Events (SSE) streaming updates across 5 patient event types and 3 clinician event types with `Last-Event-ID` reconnection replay.
-- **Design System & Contrast**: Swiss Clinical Humanist UI theme supporting light and dark modes with WCAG 2.1 AA compliant contrast ratios.
+- **Digital Prescriptions**: Two-phase prescription lifecycle (drafting in `UNSIGNED` workspace $\rightarrow$ explicit doctor signing) generating a standard SHA-256 digital seal, displayed with verified security badges.
+- **Emergency Assistance View**: Immediate access to India's national emergency helpline (`112`) and ambulance contacts with confirmation dialogs.
+- **Real-Time Push Updates**: Server-Sent Events (SSE) streaming updates across 5 patient event types and 3 clinician event types with automatic reconnection replay.
+- **Clean Medical Interface**: High-contrast, clean medical interface with full light and dark mode parity.
 
 ### Outside Current Scope (Future Roadmap)
 
 - **Pan-India Geographic Coverage**: The active directory, range, and clinic listings are currently deployed exclusively for Mumbai. Expanding live clinical listings to other Indian cities, districts, and states (Delhi-NCR, Bengaluru, Hyderabad, Chennai, Kolkata, Pune, tier-2/tier-3 cities, and rural health centers) via location-based mapping is planned as a modular extension.
 - **Financial Transactions**: In-app payment gateways, billing collections, and health insurance claim processing.
 - **Live Telemedicine Video**: WebRTC-based video or audio calls between patients and doctors.
-- **Automated Emergency Dispatch**: Automatic GPS dispatch of municipal ambulances or emergency vehicles without user confirmation.
+- **Automated Emergency Vehicle Dispatch**: Automatically sending or calling city ambulances or emergency vehicles without user confirmation.
 - **Official Government EHR Integration**: Integration with the Ayushman Bharat Digital Mission (ABDM) or external hospital HL7/FHIR servers.
-- **Real Doctor Directory**: The 52 doctors are realistic synthetic profiles created for testing and demonstration; they do not represent real licensed clinicians.
+- **Real Medical Practice & Licensed Doctors**: This project is strictly an engineering prototype. The 52 doctors and medical facilities are realistic synthetic profiles created for software evaluation; they do not represent real licensed clinicians, and the platform does not provide actual medical care.
 
 ---
 
 ## 5. User Roles
 
-LifeLink defines two distinct user roles, each operating in an isolated environment with dedicated session cookies:
+LifeLink defines two distinct user roles for this prototype, each operating in an isolated environment with dedicated session cookies:
 
 ### 1. Patient (`role: "user"`)
-A patient is any individual seeking medical triage, specialist discovery, or health management.
+A prototype user seeking simulated medical triage, specialist discovery, or personal health record management.
 - **Registration & Login**: Signs up natively with email and password or authenticates using Google OAuth.
-- **Symptom Assessment**: Inputs symptoms, duration, age, gender, and preexisting conditions to receive non-diagnostic guidance.
-- **Doctor Discovery**: Searches 52 specialists by station, railway line, medical discipline, or keyword, and views clinic locations on an interactive map.
-- **Appointments**: Books consultations, selects specific 30-minute time slots, views booking status, and cancels appointments.
+- **Symptom Assessment**: Inputs symptoms, duration, age, gender, and preexisting conditions to receive preliminary non-diagnostic guidance.
+- **Doctor Discovery**: Searches 52 simulated specialists by station, railway line, medical discipline, or keyword, and views clinic locations on an interactive map.
+- **Appointments**: Books simulated consultations, selects specific 30-minute time slots, views booking status, and cancels appointments.
 - **Personal Records**: Manages medicine schedules, updates blood group and allergy records, and reviews doctor-issued prescriptions.
 - **Session Cookie**: Managed via `app_session_id`.
 
 ### 2. Doctor (`role: "doctor"`)
-A clinician operating from an accredited clinic or hospital workstation.
-- **Workstation Login**: Signs in using verified institutional credentials (`@lifelink.com` or `@accounts.lifelink.test`).
+A demonstration clinician workstation used to showcase doctor-side workflows in the prototype.
+- **Workstation Login**: Signs in using pre-configured test credentials (`@lifelink.com` or `@accounts.lifelink.test`).
+- **Simulated Clinician Profiles**: All 52 doctor accounts are test profiles designed to demonstrate appointments, triage review, and digital prescription workflows without connecting to real clinics.
 - **Dashboard & Queue**: Views upcoming visits, completed consultation totals, pending patient requests, and specialty-relevant triage summaries.
 - **Appointment Lifecycle**: Reviews requested appointments, confirms bookings, marks visits completed, or cancels appointments.
 - **Patient Roster**: Views detailed medical profiles, chronic conditions, and allergy histories for patients with active bookings.
@@ -162,20 +168,22 @@ A clinician operating from an accredited clinic or hospital workstation.
 
 ## 6. Main Features
 
+All features listed below are fully implemented as interactive demonstrations within this prototype:
+
 | Feature | User Role | Description |
 |:---|:---:|:---|
 | **Workspace Selector** | Public | Initial entry gateway allowing users to choose between the Patient Portal and Doctor Workstation. |
-| **Native Authentication** | Both | Secure sign-up and login utilizing Scrypt password hashing with individual random salts and constant-time equality checks. |
+| **Native Authentication** | Both | Secure sign-up and login using Scrypt password hashing with individual random salts and constant-time equality checks. |
 | **Google OAuth 2.0** | Patient | Alternative authentication flow using Google identity with CSRF nonce verification and role isolation. |
-| **5-Layer AI Triage** | Patient | Symptom evaluation evaluating biological plausibility, deterministic emergency overrides, pediatric safeguards, and structured output. |
+| **5-Layer AI Triage** | Patient | Symptom check checking biological accuracy, instant emergency rules, age safety checks, and structured output. |
 | **Specialist Finder** | Patient | Directory search filtering by 19 stations, 3 rail lines, and 12 specialties with Leaflet map markers. |
-| **Appointment Booking** | Both | Doctor-specific consultation scheduling with active-slot concurrency protection and status management. |
-| **Medicine Cabinet** | Patient | Virtual medicine cabinet tracking dosage, administration frequency, refill quantity, and expiration dates. |
+| **Appointment Booking** | Both | Doctor-specific consultation scheduling with double-booking conflict protection and status management. |
+| **Medicine Cabinet** | Patient | Virtual medicine cabinet tracking dosage, daily schedule, refill quantity, and expiration dates. |
 | **Health Passport** | Patient | Digital emergency ID recording blood group, allergies, chronic conditions, and emergency contact details. |
-| **Digital Prescriptions** | Both | Two-stage prescription authoring (unsigned draft $\rightarrow$ explicit digital signing mutation) with tamper-evident SHA-256 cryptographic sealing and secure verification badges. |
+| **Digital Prescriptions** | Both | Two-stage prescription authoring (unsigned draft $\rightarrow$ doctor signing) with secure SHA-256 digital seals and verification badges. |
 | **Emergency SOS Hub** | Patient | Quick-access emergency protocol with explicit user confirmation for dialing national emergency (`112`) and ambulance services. |
 | **Realtime Event Stream** | Both | Server-Sent Events (SSE) pushing database changes to connected clients with automatic reconnection replay. |
-| **Swiss Clinical Humanist UI** | Both | High-contrast, clean medical interface with full light and dark mode parity. |
+| **Clean Medical Interface** | Both | High-contrast, clean medical interface with full light and dark mode parity. |
 
 ---
 
@@ -494,7 +502,7 @@ LifeLink-Smart-Healthcare-Assistance-Platform/
 
 ## 12. Frontend Architecture & UI Design System
 
-The LifeLink frontend is designed around the **Swiss Clinical Humanist** design philosophy. It balances high clinical legibility with accessible, modern web interfaces:
+The LifeLink frontend is designed around a clean, humanist medical design. It balances high clinical clarity with accessible, modern web interfaces:
 
 - **Typography**: Uses modern sans-serif typography (`Inter`, system UI font stacks) with tabular numeric alignment for medical metrics, dates, and dosages.
 - **Curated Medical Palette**:
@@ -505,13 +513,13 @@ The LifeLink frontend is designed around the **Swiss Clinical Humanist** design 
 - **Dark Mode Contrast Parity**: Dark mode uses curated dark slate backgrounds (`#0F172A`, `#1E293B`) with high-contrast text (`#F8FAFC`, `#E2E8F0`) to ensure all patient data and doctor queues exceed the WCAG 2.1 AA minimum contrast ratio of 4.5:1.
 - **Layout Shells**:
   - `AppShell.tsx`: Wraps patient views with a persistent header, mobile navigation drawer, theme toggle, and 5-minute inactivity monitor.
-  - `DoctorAppShell.tsx`: Wraps clinician views with a clinical workstation navigation bar, status indicator, and quick sign-out control.
+  - `DoctorAppShell.tsx`: Wraps doctor views with a doctor workstation navigation bar, status indicator, and quick sign-out control.
 
 ---
 
 ## 13. Patient Portal Walkthrough
 
-The Patient Portal provides an integrated interface for managing health journeys across Mumbai:
+The Patient Portal provides an interactive prototype interface for managing simulated health journeys across Mumbai:
 
 1. **Dashboard (`/patient/dashboard`)**: Displays a personalized overview showing upcoming confirmed appointments, scheduled medications for the day, recent AI symptom checks, and quick-action navigation cards.
 2. **AI Health Assessment (`/patient/assessment`)**: A multi-step symptom checker where patients input their current symptoms, age, gender, duration, and chronic conditions. The system runs client-side biological validation, executes the 5-layer triage pipeline, and displays the urgency level, clinical reasoning, guidance, and a 1-click button to find matching specialists.
@@ -519,7 +527,7 @@ The Patient Portal provides an integrated interface for managing health journeys
 4. **Appointments (`/patient/appointments`)**: Allows patients to select an available future 30-minute time slot for their chosen specialist. Shows active bookings with statuses (`Requested`, `Pending`, `Confirmed`, `Completed`, `Cancelled`) and allows instant cancellation.
 5. **Medicine Cabinet (`/patient/medicines`)**: A virtual medicine cabinet where patients record daily medications, dosage amounts, time schedules (e.g., "Morning & Evening"), remaining pill counts, and expiration dates.
 6. **Health Passport (`/patient/health-passport`)**: A digital medical passport storing blood group, contact phone, uploaded profile photo, verified allergies, and chronic conditions.
-7. **Digital Prescriptions (`/patient/prescriptions`)**: Displays official prescriptions issued by assigned clinicians with active status badges (`SIGNED — CONTROLLED STATE` vs `UNSIGNED / CONTROLLED WORKSPACE`), itemized medication lines, dosage instructions, and tamper-evident cryptographic verification indicators.
+7. **Digital Prescriptions (`/patient/prescriptions`)**: Displays official prescriptions issued by assigned doctors with clear status badges (`SIGNED` vs `UNSIGNED`), itemized medication lines, dosage instructions, and secure digital verification indicators.
 8. **Emergency Hub (`/patient/emergency`)**: Rapid emergency assistance providing direct links to India's national emergency number (`112`) and ambulance helplines, complete with confirmation dialogs to prevent accidental calls.
 9. **Profile & Settings (`/patient/profile`, `/patient/settings`)**: Account management interface for uploading avatar photos (validated via binary magic bytes), changing account passwords, executing permanent account deletion (with cascading database removal), and toggling dark/light theme preferences.
 
@@ -527,7 +535,7 @@ The Patient Portal provides an integrated interface for managing health journeys
 
 ## 14. Doctor Workspace Walkthrough
 
-The Doctor Workspace is a focused clinical environment designed for healthcare professionals:
+The Doctor Workspace is a focused clinical environment designed to demonstrate clinician workflows within the prototype:
 
 1. **Clinician Authentication (`/doctor/login`)**: Workstation login accepting official `@lifelink.com` credentials. Sessions are stored in a dedicated `doctor_session_id` cookie.
 2. **Workstation Dashboard (`/doctor/dashboard`)**: Displays key clinical operational metrics: total completed consultations, pending requests requiring review, upcoming scheduled appointments for the day, and recent triage assessments submitted for the doctor's specialty.
@@ -535,10 +543,13 @@ The Doctor Workspace is a focused clinical environment designed for healthcare p
 4. **Patient Roster (`/doctor/patients`)**: Lists all patients who have booked consultations with this clinician. Clicking a patient opens their detailed medical record (`/doctor/patients/:id`).
 5. **Patient Detail View (`/doctor/patients/:id`)**: Displays the patient's Emergency Health Passport (blood group, allergies, chronic conditions) and past consultation history. **Enforces IDOR security**: doctors can only view patients who have an active or historical appointment with them.
 6. **Consultation Workspace (`/doctor/consultation`)**: A clinical consultation workspace where doctors review active appointments and initiate prescriptions.
-7. **Digital Prescription Lifecycle & Sealing (`/doctor/prescriptions`)**: Clinicians author multi-item prescriptions by specifying medication names, dosages, and administration instructions. Saving as a draft invokes `prescriptions.create`, maintaining the record in `UNSIGNED / CONTROLLED WORKSPACE` with a clear status indicator. Choosing **Sign & Seal** triggers the explicit `prescriptions.sign` mutation, which verifies clinician authorization, transitions the status to `SIGNED — CONTROLLED STATE`, generates a canonical SHA-256 integrity seal, and emits an instant Server-Sent Event (SSE) to the patient's portal.
+7. **Digital Prescription Signing (`/doctor/prescriptions`)**: Doctors author multi-item prescriptions by specifying medication names, dosages, and administration instructions. Saving as a draft maintains the prescription in an unsigned workspace with a clear status indicator. Choosing **Sign & Seal** verifies doctor authorization, transitions the status to `SIGNED`, generates a standard SHA-256 digital seal, and emits an instant Server-Sent Event (SSE) to the patient's portal.
 8. **Credential Setup & Reset (`/doctor/reset`)**: Administrative tool allowing clinicians to reset workstation passwords using the administrative master secret code (`LIFELINK_DEMO_DOCTOR_ACCESS_CODE`).
 
 ### 14.1 Clinician Workstation Login Credentials (Mumbai Medical Directory)
+
+> [!NOTE]
+> **Prototype Demonstration Credentials:** All 52 doctor accounts listed below are synthetic test profiles created exclusively for testing the prototype. They do not represent real medical practices or licensed physicians.
 
 LifeLink seeds **52 verified clinician workstations** across the Western, Central, and Harbour railway corridors of the Mumbai Metropolitan Region (MMR). These accounts are permanently synchronized in the database (via `scripts/sync-doctors.ts` and `database/seed_doctors.sql`) to enable comprehensive clinical testing without requiring external healthcare infrastructure.
 
@@ -652,7 +663,7 @@ The following table provides verified, ready-to-test logins representing every m
 
 ## 15. Appointment System & Doctor-Specific Availability
 
-Appointment scheduling in LifeLink enforces strict doctor-level scoping and concurrency protection:
+Appointment scheduling in the LifeLink prototype simulates a real-time clinical booking engine with strict doctor-level scoping and concurrency protection:
 
 ```
 [ Patient Requests Slot ]
@@ -677,7 +688,7 @@ Appointment scheduling in LifeLink enforces strict doctor-level scoping and conc
                            ▼
 ┌────────────────────────────────────────────────────────┐
 │ Status: "Requested"                                    │
-│ SSE Notification dispatched to Doctor Workstation      │
+│ SSE Notification sent to Doctor Workstation            │
 └────────────────────────────────────────────────────────┘
 ```
 
@@ -693,8 +704,8 @@ Appointment scheduling in LifeLink enforces strict doctor-level scoping and conc
    - Any appointment request with a timestamp in the past is rejected during input validation with a clear error: `"Invalid date or time. Please select a future date and time for your appointment."`
 4. **Cancellation & Slot Reopening**:
    - When an appointment is cancelled (by either the patient or the clinician), the system sets `activeSlotKey = NULL` and updates `status = "Cancelled"`.
-   - This atomically reopens the time slot, allowing other patients to book that slot immediately.
-5. **Real-Time Notification Dispatch**:
+   - This automatically reopens the time slot, allowing other patients to book that slot immediately.
+5. **Sending Real-Time Notifications**:
    - Every booking, status confirmation, and cancellation triggers an internal event that sends an SSE update to both the patient and the clinician in real time.
 
 ---
@@ -733,7 +744,7 @@ users (Central Identity Registry)
 | 7 | `patientMedicines` | Virtual medicine cabinet | `id`, `userId`, `name`, `dosage`, `frequency`, `schedule`, `quantity`, `expiry` | Foreign key to `users.id` (cascade); tracks active medications, dosages, and schedules. |
 | 8 | `patientAssessments` | AI triage record | `id`, `userId`, `symptoms`, `age`, `gender`, `urgency`, `specialty`, `reason`, `guidance` | Foreign key to `users.id` (cascade); records raw inputs and AI triage output. |
 | 9 | `patientAppointments` | Doctor consultations | `id`, `userId`, `doctorId`, `scheduledAt`, `status`, `activeSlotKey` | Unique index on `activeSlotKey`; composite index on `(doctorId, scheduledAt, status)`. |
-| 10 | `patientPrescriptions` | Official prescriptions | `id`, `userId`, `doctorId`, `issuedAt`, `status`, `clinicalNotes`, `integrityReference` | Foreign key to `users.id` (cascade); status tracks 'UNSIGNED / CONTROLLED WORKSPACE' or 'SIGNED — CONTROLLED STATE'; stores canonical SHA-256 seal upon explicit signing. |
+| 10 | `patientPrescriptions` | Official prescriptions | `id`, `userId`, `doctorId`, `issuedAt`, `status`, `clinicalNotes`, `integrityReference` | Foreign key to `users.id` (cascade); status tracks 'UNSIGNED' or 'SIGNED'; stores standard SHA-256 seal upon signing. |
 | 11 | `patientPrescriptionItems` | Prescription line items | `id`, `prescriptionId`, `name`, `dosage`, `instructions` | Foreign key to `patientPrescriptions.id` (cascade); deletes automatically if prescription is deleted. |
 | 12 | `patientEvents` | Patient SSE backlog | `id`, `userId`, `type`, `entityId`, `createdAt` | Foreign key to `users.id` (cascade); queried for event replay using `Last-Event-ID`. |
 | 13 | `doctorEvents` | Doctor SSE backlog | `id`, `doctorId`, `patientUserId`, `type`, `entityId`, `createdAt` | Foreign key to `users.id` (cascade); streams appointment and patient updates to clinicians. |
@@ -748,7 +759,7 @@ The backend runs on Node.js using Express and tRPC v11:
 ### tRPC Middleware & Procedure Types
 
 - `publicProcedure`: Open endpoints accessible to unauthenticated visitors (e.g., login, registration, doctor discovery search).
-- `protectedProcedure`: Requires a valid `app_session_id` cookie. Derives patient identity strictly from `ctx.user.id`. Client-provided IDs are ignored, mitigating IDOR risks.
+- `protectedProcedure`: Requires a valid `app_session_id` cookie. Derives patient identity strictly from `ctx.user.id`. Client-provided IDs are ignored, preventing unauthorized access (IDOR).
 - `doctorProcedure`: Requires a valid `doctor_session_id` cookie and `role: "doctor"`. Derives clinician identity strictly from `ctx.user.openId`.
 
 ### Key API Procedures:
@@ -770,7 +781,7 @@ The backend runs on Node.js using Express and tRPC v11:
 | `patientAppointment`| `patientAppointment.request`| Mutation | Books appointment slot with doctor-specific conflict detection and concurrency key. |
 | `patientAppointment`| `patientAppointment.cancel` | Mutation | Cancels patient appointment and reopens time slot. |
 | `patientMedicine`| `patientMedicine.list` | Query | Lists all active medicines in patient's cabinet. |
-| `patientMedicine`| `patientMedicine.create` | Mutation | Adds a new medication regimen with dosage and schedule. |
+| `patientMedicine`| `patientMedicine.create` | Mutation | Adds a new medication schedule with dosage and timing. |
 | `patientProfile`| `patientProfile.get` | Query | Retrieves patient's complete Emergency Health Passport. |
 | `patientProfile`| `patientProfile.update` | Mutation | Updates blood group, phone, allergies, and chronic conditions. |
 | `patientPrescription`| `patientPrescription.list` | Query | Retrieves patient's list of issued prescriptions. |
@@ -782,8 +793,8 @@ The backend runs on Node.js using Express and tRPC v11:
 | `doctorWorkspace`| `doctorWorkspace.patientDetail` | Query | Retrieves medical history for an assigned patient (IDOR protected). |
 | `doctorWorkspace`| `doctorWorkspace.prescriptions.list` | Query | Lists prescriptions authored by authenticated clinician. |
 | `doctorWorkspace`| `doctorWorkspace.prescriptions.getById` | Query | Retrieves itemized prescription details for clinician (IDOR protected). |
-| `doctorWorkspace`| `doctorWorkspace.prescriptions.create` | Mutation | Authors unsigned draft prescription in `UNSIGNED / CONTROLLED WORKSPACE`. |
-| `doctorWorkspace`| `doctorWorkspace.prescriptions.sign` | Mutation | Explicitly signs and seals prescription, transitioning to `SIGNED — CONTROLLED STATE` with SHA-256 hash. |
+| `doctorWorkspace`| `doctorWorkspace.prescriptions.create` | Mutation | Authors unsigned draft prescription with unsigned status. |
+| `doctorWorkspace`| `doctorWorkspace.prescriptions.sign` | Mutation | Signs and seals prescription, transitioning to `SIGNED` status with standard SHA-256 seal. |
 
 ---
 
@@ -804,15 +815,15 @@ LifeLink incorporates strict security controls to protect sensitive healthcare d
   - Doctor Cookie: `doctor_session_id` (`httpOnly: true`, `sameSite: "lax"`, `secure` in production).
 - A user can be signed into a patient account in one tab and a doctor workstation in another tab without session collision or permission leakage.
 
-### 3. Automated 5-Minute Inactivity Session Termination
+### 3. Automated 5-Minute Inactivity Session Timeout
 - The client-side hook (`patientInactivity.ts`) monitors user interaction events: `mousemove`, `keydown`, `mousedown`, `touchstart`, and `scroll`.
-- If no interaction occurs for 300,000 milliseconds (5 minutes), the session is automatically terminated.
-- The client clears local authentication state, calls the server logout mutation, and redirects the browser to the login screen with an inactivity notice, preventing unauthorized access on unattended hospital terminals.
+- If no interaction occurs for 300,000 milliseconds (5 minutes), the session is automatically ended.
+- The client clears local authentication state, calls the server logout mutation, and redirects the browser to the login screen with an inactivity notice, preventing unauthorized access on unattended computer terminals.
 
-### 4. Insecure Direct Object Reference (IDOR) Mitigation
+### 4. Preventing Insecure Direct Object Reference (IDOR)
 - In all patient procedures (`protectedProcedure`), the targeted user ID is derived strictly from the verified session payload (`ctx.user.id`). Client-provided IDs in request bodies are ignored.
-- In doctor procedures (`doctorProcedure`), the clinician identity is derived strictly from `ctx.user.openId`.
-- Access to patient records and medical passport data requires an active, verified appointment linking the patient to the requesting clinician.
+- In doctor procedures (`doctorProcedure`), the doctor identity is derived strictly from `ctx.user.openId`.
+- Access to patient records and medical passport data requires an active, verified appointment linking the patient to the requesting doctor.
 
 ### 5. Google OAuth 2.0 with CSRF Protection
 - During OAuth initialization, a cryptographically random 32-byte state and nonce are generated and signed into a short-lived (10-minute) `httpOnly` cookie (`lifelink_google_oauth_state`).
@@ -836,7 +847,7 @@ LifeLink incorporates strict security controls to protect sensitive healthcare d
 
 ## 19. Artificial Intelligence & Clinical Safety Triage
 
-The LifeLink AI symptom triage engine evaluates natural language symptoms using Google Gemini with a 5-layer safety architecture ([`backend/ai/assessmentService.ts`](backend/ai/assessmentService.ts)):
+The LifeLink prototype AI symptom triage engine evaluates natural language symptoms using Google Gemini with a 5-layer safety architecture ([`backend/ai/assessmentService.ts`](backend/ai/assessmentService.ts)):
 
 ```
 [ Patient Inputs Symptoms ]
@@ -871,38 +882,38 @@ The LifeLink AI symptom triage engine evaluates natural language symptoms using 
                            │ Post-Processed
                            ▼
 ┌────────────────────────────────────────────────────────┐
-│ LAYER 5: Deterministic Safe Offline Fallback           │
-│ If Gemini API is unreachable, deterministic keyword    │
-│ fallback guarantees patient receives safe triage advice│
+│ LAYER 5: Safe Offline Fallback                         │
+│ If Gemini API is unreachable, built-in keyword fallback│
+│ ensures the patient receives safe triage advice        │
 └────────────────────────────────────────────────────────┘
 ```
 
 ### The 5 Triage Layers Explained:
 
 1. **Layer 1 — Biological Consistency Validation**:
-   - Symptoms are evaluated using [`shared/biologicalValidation.ts`](shared/biologicalValidation.ts) before invoking AI models.
-   - If a male patient enters female-exclusive anatomical symptoms (such as pregnancy, ovarian pain, or menstrual cramps), the system rejects the input with an educational clarification rather than hallucinating a clinical diagnosis.
-   - Legitimate male conditions (such as gynecomastia or prostate health) are explicitly recognized and permitted.
-2. **Layer 2 — 0ms Deterministic Emergency Regex Overrides**:
-   - Life-threatening symptoms bypass the AI model entirely to ensure instantaneous response times (0 ms).
-   - Pre-compiled regular expressions detect acute emergencies: crushing chest pain, difficulty breathing, slurred speech/facial droop (stroke indicators), severe hemorrhage, anaphylaxis, and suicidal ideation.
+   - Symptoms are checked using [`shared/biologicalValidation.ts`](shared/biologicalValidation.ts) before calling AI models.
+   - If a male patient enters female-exclusive anatomical symptoms (such as pregnancy, ovarian pain, or menstrual cramps), the system rejects the input with a helpful explanation rather than guessing an incorrect diagnosis.
+   - Real male health conditions (such as gynecomastia or prostate health) are clearly recognized and accepted.
+2. **Layer 2 — Instant Emergency Safety Rules (0 ms)**:
+   - Life-threatening symptoms bypass the AI model entirely to ensure immediate response times (0 ms).
+   - Fast pattern checks detect acute emergencies: crushing chest pain, difficulty breathing, slurred speech/facial droop (stroke signs), severe bleeding, anaphylaxis, and suicidal thoughts.
    - Automatically assigns `urgency = "EMERGENCY"`, recommends `"Emergency Care"`, and directs the patient to immediate medical facilities or `112`.
 3. **Layer 3 — Google Gemini Structured JSON Evaluation**:
-   - For general symptoms, the backend issues an HTTPS request to Google Gemini Flash using a strict JSON response schema.
-   - The response is constrained to four machine-readable fields: `urgency` (`LOW`, `MODERATE`, `EMERGENCY`), `specialty` (must match one of the 12 recognized clinical specialties), `reason` (objective non-diagnostic explanation), and `guidance` (actionable recommendations).
+   - For general symptoms, the backend makes a secure request to Google Gemini Flash using a strict JSON format.
+   - The response is limited to four clear fields: `urgency` (`LOW`, `MODERATE`, `EMERGENCY`), `specialty` (must match one of the 12 recognized clinical specialties), `reason` (clear non-diagnostic explanation), and `guidance` (helpful recommendations).
 4. **Layer 4 — Pediatric Safeguards**:
-   - If the patient is a child or adolescent under 18 years of age, the post-processor routes the recommended specialty to **Pediatrics** unless an emergency override takes precedence.
-5. **Layer 5 — Deterministic Offline Fallback**:
-   - If the Google Gemini API is unreachable, times out, or exhausts quota, an internal keyword triage algorithm takes over automatically. The patient is never left stranded with a broken screen.
+   - If the patient is a child or teenager under 18 years of age, the system automatically selects **Pediatrics** unless an emergency override takes priority.
+5. **Layer 5 — Safe Offline Fallback**:
+   - If the Google Gemini API is unreachable, times out, or runs out of quota, an internal keyword triage algorithm takes over automatically. The patient is never left stranded with a broken screen.
 
-### Medical Boundaries & Non-Diagnostic Disclaimer:
-> **IMPORTANT CLINICAL NOTICE**: LifeLink's AI triage engine provides **preliminary guidance only**. It **does NOT provide a medical diagnosis**, prescribe treatments, or replace an in-person evaluation by a licensed physician. If a patient experiences severe symptoms, they must seek emergency care at the nearest hospital immediately.
+### Prototype & Clinical Guidance Notice:
+> **IMPORTANT PROTOTYPE & CLINICAL NOTICE**: LifeLink is an academic engineering prototype. Its AI triage engine provides **preliminary guidance only for testing and demonstration**. It **does NOT provide a medical diagnosis**, prescribe treatments, or replace an in-person evaluation by a licensed physician. If a patient experiences severe symptoms, they must seek emergency care at the nearest hospital immediately.
 
 ---
 
 ## 20. Realtime Communication (Server-Sent Events)
 
-Rather than polling the server every few seconds, LifeLink uses **Server-Sent Events (SSE)** for unidirectional real-time updates from server to client:
+Rather than polling the server every few seconds, LifeLink uses **Server-Sent Events (SSE)** for one-way live updates from server to client:
 
 ```
 Browser (Patient or Doctor)                     Express Server
@@ -941,7 +952,7 @@ The Specialist Finder maps accredited clinics to the **Mumbai Suburban Railway N
   - **Central Line**: CSMT, Ghatkopar, Bhandup, Mulund, Thane, Diva Junction, Kopar, Dombivli, Thakurli.
   - **Harbour Line**: Sewri, Chembur, Vashi, Nerul, Panvel.
 - **General Practitioner (GP) Guarantee**: Every single one of the 19 stations includes at least 1 verified General Practitioner, ensuring primary care availability throughout Mumbai.
-- **Geodesic Distance Calculation**: Distance from the patient to clinics is calculated entirely on the client browser using the **Haversine formula**:
+- **Direct Distance Calculation**: Distance from the patient to clinics is calculated entirely on the client browser using the **Haversine formula**:
   $$\Delta\sigma = 2 \arcsin \left( \sqrt{\sin^2\left(\frac{\Delta\phi}{2}\right) + \cos(\phi_1)\cos(\phi_2)\sin^2\left(\frac{\Delta\lambda}{2}\right)} \right)$$
   $$d = R \cdot \Delta\sigma$$
   where $R = 6371\text{ km}$ (Earth's radius), $\phi$ is latitude, and $\lambda$ is longitude.
@@ -949,11 +960,11 @@ The Specialist Finder maps accredited clinics to the **Mumbai Suburban Railway N
 
 ### Current Regional Scope & Pan-India Extensibility Design
 
-While LifeLink's active range and directory coverage are currently deployed in the **Mumbai Metropolitan Region** (using railway stations as convenient local proximity landmarks for commuters), the entire subsystem is architected for straightforward **Pan-India** scaling:
+While LifeLink's active range and directory coverage are currently deployed in the **Mumbai Metropolitan Region** (using railway stations as convenient local proximity landmarks for commuters), the entire system is designed for straightforward **Pan-India** scaling:
 
-1. **Decoupled Relational Schema**: The MySQL `doctors` table in [`database/schema.ts`](database/schema.ts) models physical clinic locations generically via `stationCode`, `stationName`, `line`, `address`, `latitude`, and `longitude`. The schema contains zero city-specific or railway-specific hardcoded constraints, allowing any Indian city, district, municipality, or PIN code to be populated without database migrations.
-2. **Location-Based Registry Architecture**: Regional location catalogs follow a standardized dictionary structure. Expanding to new regions across India (e.g., Delhi-NCR, Bengaluru, Hyderabad, Chennai, Kolkata, Pune, Tier-2/Tier-3 cities, and rural health districts) requires only introducing corresponding location and clinic registries without modifying core scheduling, triage, or security engines.
-3. **Universal Mathematical Geodesics**: The client-side Haversine distance engine calculates physical separation on standard spherical Earth coordinates ($R = 6371\text{ km}$). It functions with equal mathematical accuracy anywhere across India or globally.
+1. **Flexible Database Schema**: The MySQL `doctors` table in [`database/schema.ts`](database/schema.ts) models physical clinic locations flexibly via `stationCode`, `stationName`, `line`, `address`, `latitude`, and `longitude`. The schema contains zero city-specific or railway-specific hardcoded constraints, allowing any Indian city, district, municipality, or PIN code to be populated without database migrations.
+2. **Location-Based Directory Design**: Regional location catalogs follow a standardized dictionary structure. Expanding to new regions across India (e.g., Delhi-NCR, Bengaluru, Hyderabad, Chennai, Kolkata, Pune, Tier-2/Tier-3 cities, and rural health districts) requires only introducing corresponding location and clinic registries without modifying core scheduling, triage, or security engines.
+3. **Universal Mathematical Distance**: The client-side Haversine distance engine calculates physical distance on standard spherical Earth coordinates ($R = 6371\text{ km}$). It functions with equal mathematical accuracy anywhere across India or globally.
 
 ---
 
@@ -1075,7 +1086,7 @@ Verified against [`.env.example`](.env.example):
 | `GEMINI_API_KEY` | Optional | `AIzaSy...` | Google Gemini API key used for clinical symptom triage and urgency scoring. |
 | `GOOGLE_OAUTH_CLIENT_ID` | Optional | `...apps.googleusercontent.com` | Google Cloud OAuth Client ID for patient Google Sign-In. |
 | `GOOGLE_OAUTH_CLIENT_SECRET` | Optional | `GOCSPX-...` | Google Cloud OAuth Client Secret for authenticating Google authorization codes. |
-| `AUTH_PUBLIC_BASE_URL` | Optional | `http://localhost:5173` | Canonical public URL used to validate OAuth redirect origins. |
+| `AUTH_PUBLIC_BASE_URL` | Optional | `http://localhost:5173` | Standard public URL used to validate OAuth redirect origins. |
 | `VITE_API_PORT` | Auto | *Injected by dev runner* | Injected automatically during development to route Vite API requests to Express. |
 
 ---
@@ -1114,7 +1125,10 @@ npm run db:studio
 
 LifeLink is engineered as a unified, production-ready cloud application deployed on **Render.com** and powered by a distributed **TiDB Serverless Cloud** database cluster. This architecture replaces local developer instances with high-availability, zero-downtime, and geographically resilient infrastructure.
 
-🌍 **Live Production URL:** [https://new-lifelink-smart-healthcare-assistance.onrender.com/](https://new-lifelink-smart-healthcare-assistance.onrender.com/)
+> [!NOTE]
+> **Prototype Demonstration Notice:** The live cloud deployment is an interactive prototype showcase. All doctor workstations, consultation records, and appointment schedules operate in a simulated test environment.
+
+🌍 **Live Prototype URL:** [https://new-lifelink-smart-healthcare-assistance.onrender.com/](https://new-lifelink-smart-healthcare-assistance.onrender.com/)
 
 ---
 
@@ -1131,10 +1145,10 @@ The production deployment leverages a modern cloud stack decoupling stateless we
                                      ▼
 ┌─────────────────────────────────────────────────────────────────────────────┐
 │                         RENDER.COM CLOUD EDGE LAYER                         │
-│   • Global Anycast Ingress & Cloudflare-backed DDoS Mitigation              │
-│   • Managed Automatic TLS/SSL Termination (Let's Encrypt Wildcard)          │
+│   • Global Anycast Ingress & Cloudflare-backed DDoS Protection              │
+│   • Managed Automatic TLS/SSL Security (Let's Encrypt Wildcard)             │
 │   • HTTP/2 Multiplexing & Reverse Proxy Gateway Routing                     │
-│   • Non-buffered Server-Sent Events (SSE) Streaming Pipeline                │
+│   • Fast Unbuffered Server-Sent Events (SSE) Streaming Pipeline             │
 └──────────────────────────────────────┬──────────────────────────────────────┘
                                        │ Internal Reverse Proxy ($PORT)
                                        ▼
@@ -1162,7 +1176,7 @@ The production deployment leverages a modern cloud stack decoupling stateless we
 ┌───────────────────────────────────────────┐   ┌─────────────────────────────┐
 │          TiDB SERVERLESS CLUSTER          │   │    GOOGLE CLOUD PLATFORM    │
 │      (AWS ap-southeast-1 Singapore)       │   │                             │
-│                                           │   │  • Gemini 1.5/2.0 Flash AI  │
+│                                           │   │  • Gemini Flash AI (3.5/3.1)│
 │   ┌───────────────────────────────────┐   │   │    (Symptom Triage Pipeline)│
 │   │       TiDB SQL Parser Layer       │   │   │                             │
 │   │   • MySQL 8.0 Protocol Parser     │   │   │  • Google Cloud OAuth 2.0   │
@@ -1190,7 +1204,7 @@ graph TB
 
     subgraph RenderEdge["Render.com Global Cloud Edge"]
         Anycast["Anycast DNS & DDoS Protection"]
-        TLS["TLS 1.3 Termination (Let's Encrypt Wildcard)"]
+        TLS["TLS 1.3 Security (Let's Encrypt Wildcard)"]
         RevProxy["HTTP/2 Reverse Proxy Router"]
     end
 
@@ -1209,7 +1223,7 @@ graph TB
     end
 
     subgraph GoogleCloud["External Google Cloud Services"]
-        GeminiAI["Google Gemini 1.5/2.0 Flash AI API"]
+        GeminiAI["Google Gemini Flash AI API (3.5 / 3.1 / Latest)"]
         GoogleOAuth["Google Cloud OAuth 2.0 Auth Server"]
     end
 
@@ -1242,9 +1256,9 @@ graph TB
 ### 26.2 Render.com Web Service Hosting Mechanics
 
 #### 1. Single-Container Full-Stack Architecture
-Unlike traditional deployments that split client and server across separate hosts (such as Vercel for frontend and AWS/Heroku for backend), LifeLink utilizes a unified single-container architecture:
-- **Zero CORS Friction**: Because API endpoints (`/api/*`, `/trpc/*`, `/sse/*`) and frontend assets reside on the same origin (`https://new-lifelink-smart-healthcare-assistance.onrender.com`), the browser eliminates pre-flight `OPTIONS` overhead and cross-origin blocking.
-- **Cryptographic Cookie Sharing**: Authentication cookies (`app_session_id` and `doctor_session_id`) operate seamlessly across both frontend and backend within the same domain scope under `SameSite=Lax` and `Secure=true`.
+Unlike traditional deployments that split client and server across separate hosts (such as Vercel for frontend and AWS/Heroku for backend), LifeLink uses a unified single-container design:
+- **Zero CORS Issues**: Because API endpoints (`/api/*`, `/trpc/*`, `/sse/*`) and frontend assets reside on the same web domain (`https://new-lifelink-smart-healthcare-assistance.onrender.com`), the browser avoids pre-flight checks and cross-origin blocking.
+- **Secure Cookie Sharing**: Authentication cookies (`app_session_id` and `doctor_session_id`) operate smoothly across both frontend and backend within the same domain under `SameSite=Lax` and `Secure=true`.
 - **SPA Fallback Routing**: Express serves pre-compiled Vite assets from `dist/public/`. Any incoming GET request not matching an API endpoint or static file is automatically routed to `dist/public/index.html`, allowing client-side React Router navigation (`/patient/*`, `/doctor/*`, `/workspace`) to resolve without 404 errors.
 
 #### 2. Dual Build Pipeline (`npm run build`)
@@ -1278,7 +1292,7 @@ The Render service is connected directly to the repository's `main` branch:
 #### 1. Why TiDB Serverless?
 Local MySQL instances (`127.0.0.1:3306`) cannot be accessed from cloud containers without complex tunneling. Rather than provisioning a costly fixed-size cloud MySQL instance, LifeLink integrates **TiDB Serverless Cloud** (hosted on AWS `ap-southeast-1`, Singapore):
 - **100% MySQL 8.0 Protocol Wire Compatibility**: Uses the existing `mysql2` driver and Drizzle ORM configuration without modifying any database queries, schema definitions, or migration files.
-- **Stateless Compute & Distributed Storage Separation**: Query execution is handled by stateless TiDB nodes, while persistent state is sharded across distributed TiKV storage engines utilizing the Multi-Raft replication consensus algorithm.
+- **Stateless Compute & Distributed Storage Separation**: Query execution is handled by stateless TiDB nodes, while persistent state is sharded across distributed TiKV storage engines using the Multi-Raft replication algorithm.
 - **Elastic Serverless Scaling**: Automatically scales Request Units (RU) from zero to accommodate fluctuating patient traffic without manual provision sizing or cost overhead.
 - **Enterprise-Grade Availability**: Automatic cross-availability zone replication ensures continuous clinical record persistence even during cloud node failures.
 
@@ -1340,14 +1354,14 @@ To support both local development and live cloud production, Google Cloud Consol
 | **Authorized Redirect URIs** | `http://localhost:5173/api/auth/google/callback` | `https://new-lifelink-smart-healthcare-assistance.onrender.com/api/auth/google/callback` |
 
 #### 2. The Role of `AUTH_PUBLIC_BASE_URL`
-In production on Render, the backend must construct the absolute OAuth redirect URI sent to Google. Because Render proxies traffic through an internal port (`process.env.PORT`), inspecting `req.headers.host` can sometimes resolve to internal network IPs or loopbacks.
+In production on Render, the backend must construct the absolute OAuth redirect URI sent to Google. Because Render forwards traffic through an internal port (`process.env.PORT`), inspecting `req.headers.host` can sometimes resolve to internal network IPs or loopbacks.
 Setting:
 ```ini
 AUTH_PUBLIC_BASE_URL="https://new-lifelink-smart-healthcare-assistance.onrender.com"
 ```
-forces the backend to construct the exact canonical redirect URL:
+forces the backend to construct the exact official redirect URL:
 `https://new-lifelink-smart-healthcare-assistance.onrender.com/api/auth/google/callback`
-guaranteeing 100% cryptographic handshake agreement with Google Cloud identity servers.
+guaranteeing complete agreement with Google Cloud identity servers.
 
 ---
 
@@ -1367,7 +1381,7 @@ X-Accel-Buffering: no
 The `X-Accel-Buffering: no` header instructs Render and upstream Nginx proxies to flush SSE chunks immediately to the connected client.
 
 #### 2. 25-Second Keep-Alive Heartbeat Strategy
-Render's cloud edge terminates any HTTP connection that remains idle with no byte transmission for longer than **100 seconds**.
+Render's cloud edge closes any HTTP connection that remains idle with no data sent for longer than **100 seconds**.
 LifeLink's real-time event bus ([`backend/realtime/eventBus.ts`](backend/realtime/eventBus.ts)) runs an automated heartbeat timer:
 - Every **25 seconds**, a comment packet is broadcast to all active SSE streams:
   ```text
@@ -1387,10 +1401,10 @@ To configure the live application on Render, the following environment variables
 | `DATABASE_URL` | **Yes** | `mysql://...tidbcloud.com:4000/test?ssl={"rejectUnauthorized":true}` | **CRITICAL** | Encrypted TLS connection URI to TiDB Serverless cloud cluster. |
 | `JWT_SECRET` | **Yes** | *(High-entropy 64+ char random string)* | **CRITICAL** | Cryptographic key used to sign HMAC-SHA256 session tokens. |
 | `LIFELINK_DEMO_DOCTOR_ACCESS_CODE` | **Yes** | `lifelink-controlled-clinician-secret-key-2026` | **RESTRICTED** | Master clinician authorization code for workstation reset and verification. |
-| `GEMINI_API_KEY` | **Yes** | `AIzaSy...` | **RESTRICTED** | Google Gemini 1.5/2.0 API key for AI symptom assessment & urgency triage. |
+| `GEMINI_API_KEY` | **Yes** | `AIzaSy...` | **RESTRICTED** | Google Gemini Flash API key for AI symptom assessment & urgency triage. |
 | `GOOGLE_OAUTH_CLIENT_ID` | Optional | `420856394354-...apps.googleusercontent.com` | Public | Google Cloud OAuth 2.0 Client ID for patient Google Sign-In. |
 | `GOOGLE_OAUTH_CLIENT_SECRET` | Optional | `GOCSPX-...` | **CRITICAL** | Google Cloud OAuth Client Secret for token exchange. |
-| `AUTH_PUBLIC_BASE_URL` | **Yes** | `https://new-lifelink-smart-healthcare-assistance.onrender.com` | Public | Public origin used for canonical Google OAuth callbacks. |
+| `AUTH_PUBLIC_BASE_URL` | **Yes** | `https://new-lifelink-smart-healthcare-assistance.onrender.com` | Public | Public web address used for standard Google OAuth callbacks. |
 | `PORT` | Auto | *Assigned dynamically by Render (e.g. 10000)* | Internal | Listen port assigned by Render container supervisor. Express binds to `0.0.0.0:$PORT`. |
 
 ---
@@ -1400,11 +1414,11 @@ To configure the live application on Render, the following environment variables
 #### 1. Free Tier Lifecycle & Hibernation
 When deployed on Render's free compute tier:
 - **Inactivity Spin-Down**: The container automatically spins down (hibernates) after **15 minutes** of zero incoming HTTP requests to conserve cloud resources.
-- **Cold Boot Recovery**: When a new request arrives, Render boots the container within **30 to 50 seconds**. Subsequent requests are served immediately with sub-millisecond response times.
+- **Cold Boot Recovery**: When a new request arrives, Render boots the container within **30 to 50 seconds**. Following requests are served immediately with sub-millisecond response times.
 
 #### 2. Stateless Architecture & Zero Data Loss
-Because LifeLink is designed with strict **stateless container semantics**:
-- All patient records, consultations, prescriptions, and audit events reside durably in TiDB Serverless Cloud.
+Because LifeLink is built with a **stateless container design**:
+- All patient records, consultations, prescriptions, and audit events reside safely in TiDB Serverless Cloud.
 - No medical or operational data is lost during container hibernation, restart, or rolling deploy.
 - The `/api/health` endpoint allows external uptime monitors (such as UptimeRobot or Cron-Job.org) to ping the instance periodically (e.g. every 10 minutes) if zero-downtime hot standby is desired.
 
@@ -1426,12 +1440,12 @@ npm test
 | `backend/realtime/security.realtime.test.ts` | **32 tests** | Real-time Server-Sent Events (SSE) packet delivery, listener error handling, stream reconnection, and cleanup. |
 | `backend/appointmentLifecycle.test.ts` | **26 tests** | 5-stage appointment state machine: `Requested` $\rightarrow$ `Pending` $\rightarrow$ `Confirmed` $\rightarrow$ `Completed` / `Cancelled`, slot conflicts, and past dates. |
 | `backend/auth/security.idor.test.ts` | **15 tests** | IDOR boundaries ensuring patients cannot access or modify records belonging to other users. |
-| `backend/prescriptionLifecycle.test.ts` | **15 tests** | Multi-item prescriptions, two-stage signing workflow (`UNSIGNED` $\rightarrow$ `SIGNED`), canonical SHA-256 seal calculation, anti-tampering proofs, duplicate signing prevention, clinician isolation, input validation, and real-time SSE event emission. |
+| `backend/prescriptionLifecycle.test.ts` | **15 tests** | Multi-item prescriptions, two-stage signing workflow (`UNSIGNED` $\rightarrow$ `SIGNED`), standard SHA-256 seal calculation, anti-tampering proofs, duplicate signing prevention, doctor isolation, input validation, and real-time SSE event emission. |
 | `backend/routers/doctor.test.ts` | **13 tests** | Doctor workstation endpoints, appointment status updates, consultation metrics, authorized patient detail, draft prescription creation, and explicit prescription signing mutation (`prescriptions.sign`). |
 | `backend/healthPassport.test.ts` | **12 tests** | Emergency Health Passport: blood group validation, serialized allergy/condition lists, and profile updates. |
 | `frontend/src/features/patient/Emergency/Emergency.test.tsx` | **11 tests** | Emergency assistance UI flows, SOS triggers, transit navigation, and modal management. |
 | `backend/auth/doctorAuth.test.ts` | **8 tests** | Doctor Scrypt password checks, institutional email login, timing-safe password resets, and session cookies. |
-| `backend/medicine.test.ts` | **7 tests** | Medicine cabinet operations, daily schedules, adherence tracking, and inventory counts. |
+| `backend/medicine.test.ts` | **7 tests** | Medicine cabinet operations, daily schedules, schedule tracking, and inventory counts. |
 | `frontend/src/responsiveLayout.test.ts` | **6 tests** | Responsive rendering across 320px, 360px, 390px, 430px, 480px, 768px, and 4K screens with safe-area insets. |
 | `frontend/src/features/patient/Specialists/SpecialistFinder.test.ts` | **5 tests** | Station filter, transit line filter, distance calculation, and doctor profile display. |
 | `backend/discovery/mockDoctorDirectory.test.ts` | **4 tests** | Verifies 52 doctors, 1 GP per station guarantee across 19 stations, GPS coordinates, and line filters. |
@@ -1452,7 +1466,7 @@ npm test
 | `backend/auth/simultaneousAuth.test.ts` | **1 test** | Dual session cookie isolation (`app_session_id` vs `doctor_session_id`). |
 | `frontend/src/components/EntryThemeToggle.test.ts` | **1 test** | Theme toggle switch interaction and persistence tests. |
 | `frontend/src/backgroundBranding.test.ts` | **1 test** | Official brand asset existence and path integrity tests. |
-| `frontend/src/features/patient/Specialists/discoveryLocation.test.ts` | **1 test** | Client-side Haversine geodesic calculation tests. |
+| `frontend/src/features/patient/Specialists/discoveryLocation.test.ts` | **1 test** | Client-side Haversine distance calculation tests. |
 | `frontend/src/features/patient/patientAuthRoutes.test.ts` | **1 test** | Patient authentication route configuration tests. |
 | `backend/auth/auth.logout.test.ts` | **1 test** | Session cookie invalidation and logout tests. |
 | **Total** | **248 tests (247 passed, 1 skipped)** | **100% Passing Test Suite (33 Test Files)** |
@@ -1478,7 +1492,7 @@ Verification checks executed on the current repository codebase:
 
 ### 2. Backend Port Collision (`EADDRINUSE: 4000`)
 - **Cause**: Another process is occupying port 4000.
-- **Solution**: The development orchestrator (`node scripts/dev.mjs`) automatically scans and binds to ports 4000-4004. If all ports are occupied, terminate orphaned Node processes via Task Manager or run `netstat -ano | findstr 4000`.
+- **Solution**: The development orchestrator (`node scripts/dev.mjs`) automatically scans and binds to ports 4000-4004. If all ports are occupied, close running Node processes via Task Manager or run `netstat -ano | findstr 4000`.
 
 ### 3. Doctor Login Fails ("Invalid Credentials")
 - **Cause**: Doctor accounts have not been synchronized into your local MySQL database.
@@ -1490,19 +1504,26 @@ Verification checks executed on the current repository codebase:
 
 ### 5. AI Health Assessment Returns Fallback Advice
 - **Cause**: `GEMINI_API_KEY` is missing, expired, or rate-limited.
-- **Solution**: Add a valid Gemini API key from [Google AI Studio](https://aistudio.google.com/) to your `.env` file under `GEMINI_API_KEY`. If left unset, LifeLink's deterministic Layer 5 safety fallback operates automatically.
+- **Solution**: Add a valid Gemini API key from [Google AI Studio](https://aistudio.google.com/) to your `.env` file under `GEMINI_API_KEY`. If left unset, LifeLink's Layer 5 safe fallback operates automatically.
 
 ---
 
 ## 30. Medical Safety & Privacy Disclaimers
 
-### 1. Non-Diagnostic Medical Guidance Disclaimer
-LifeLink is an educational and clinical assistance software platform. The AI symptom triage module generates **preliminary health guidance only**. It **does not formulate a clinical diagnosis**, prescribe pharmaceutical treatments, or replace formal medical evaluations by a qualified physician. Users experiencing severe or acute symptoms must seek immediate medical care at a hospital emergency room.
+### 1. Prototype Demonstration Disclaimer (No Real Medical Services)
+**LifeLink is an educational and engineering prototype built exclusively for demonstration, research, and technical evaluation.**
+- **Not a Healthcare Provider:** LifeLink is not a certified hospital, clinic, pharmacy, or emergency responder.
+- **Simulated Doctors & Clinics:** All 52 doctor profiles, facility names, and consultation schedules are simulated demonstration data. No real doctors or clinics are associated with this system.
+- **Simulated Appointments:** Booking an appointment within this prototype does not schedule or confirm a visit with an actual physician.
+- **No Emergency Dispatch:** LifeLink does not automatically call or dispatch ambulances or emergency responders. In a real medical emergency, call **112** or go to the nearest hospital immediately.
 
-### 2. Emergency Calling Boundaries
-LifeLink provides quick-dial telephone links to emergency services (`112`). It **does not automatically dispatch ambulances, emergency vehicles, or medical responders**. Calling requires explicit user confirmation on the device.
+### 2. Non-Diagnostic Medical Guidance Disclaimer
+The AI symptom triage module generates **preliminary educational guidance only**. It **does not give a medical diagnosis**, prescribe treatments, or replace medical evaluations by a qualified physician. Users experiencing severe or acute symptoms must seek immediate medical care at a hospital emergency room.
 
-### 3. Geolocation Data Privacy
+### 3. Emergency Calling Boundaries
+LifeLink provides quick-dial telephone links to emergency services (`112`). It **does not automatically call or dispatch ambulances, emergency vehicles, or medical responders**. Calling requires explicit user confirmation on the device.
+
+### 4. Geolocation Data Privacy
 Patient GPS coordinates are processed entirely in-memory within the user's web browser using client-side JavaScript. **Patient location data is never sent to the backend server, never written to server log files, and never stored in the database**.
 
 ---
@@ -1510,7 +1531,7 @@ Patient GPS coordinates are processed entirely in-memory within the user's web b
 ## 31. Current Limitations & Future Enhancements
 
 ### Current Limitations
-1. **Synthetic Clinical Directory**: The 52 Mumbai railway doctors are realistic synthetic profiles created for testing and demonstration. Production deployment would require official credential verification and clinical onboarding.
+1. **Prototype Nature & Synthetic Clinical Directory**: The platform is an engineering prototype. The 52 Mumbai railway doctors and clinic facilities are realistic synthetic profiles created for testing and demonstration. No real clinical appointments or medical consultations take place.
 2. **Fixed Consultation Slots**: The scheduling engine uses predefined 30-minute intervals and does not integrate with external calendar systems (e.g., Google Calendar, Outlook).
 3. **Regional Operational Range (Mumbai Only)**: The existing range, live specialist directory, and physical clinic coordinates are currently available only within the Mumbai Metropolitan Region (using 19 key railway stations as local landmark anchors). Specialists and healthcare facilities in other Indian cities, districts, and states are not yet populated in the active database.
 4. **No Financial Processing**: Payment gateway integration, co-pays, and insurance verification are outside the current release scope.

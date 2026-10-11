@@ -712,7 +712,7 @@ export const DoctorAppShell = () => {
                     whiteSpace: "nowrap",
                   }}
                 >
-                  Active Clinician
+                  Active Doctor
                 </span>
               </div>
               <ChevronDown size={14} className="app-header-chevron" />
