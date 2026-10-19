@@ -42,3 +42,7 @@ Thumbs.db
 frontend/src/index.css
 frontend/src/features/patient/Specialists/specialistFinder.css
 
+# Backups and temporary scratchpads
+backups/
+scratch/
+

@@ -105,14 +105,16 @@ jspm_packages/
 tmp/
 temp/
 uploads/
+scratch/
 
-# Database
+# Database & runtime
 *.db
 *.sqlite
 *.sqlite3
 
-# Webdev artifacts (checkpoint zips, migrations, etc.)
+# Webdev & IDE artifacts
 .webdev/
+.agents/
 
 
 
