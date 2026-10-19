@@ -1,20 +1,17 @@
 /**
  * ============================================================================
  * LifeLink Smart Healthcare Assistance Platform
- * Client Bundling, Development Proxy & Build Configuration (v1.3.0)
+ * Client Bundling, Development Proxy & Build Configuration (v1.3.2)
  * ============================================================================
  */
 
-import tailwindcss from "@tailwindcss/vite";                   // Vite plugin for compiling Tailwind CSS utility classes
-import react from "@vitejs/plugin-react";                        // Official Vite plugin providing React Fast Refresh and JSX support
-import path from "node:path";                                    // Node.js built-in module for resolving cross-platform file paths
-import { defineConfig } from "vite";                             // Helper function providing full TypeScript type-hinting for Vite config
+import tailwindcss from "@tailwindcss/vite";
+import react from "@vitejs/plugin-react";
+import path from "node:path";
+import { defineConfig } from "vite";
 
-// --- Cluster: Build Plugins ---
-const plugins = [
-  react(),                                                       // Enables React 19 JSX compilation and hot module reloading (HMR)
-  tailwindcss()                                                  // Processes and bundles modern Tailwind CSS styles automatically
-];
+// Build plugins: React 19 fast refresh + Tailwind CSS compiler
+const plugins = [react(), tailwindcss()];
 
 // --- Cluster: Dynamic API Port Configuration ---
 // In development, scripts/dev.mjs finds an open port and injects VITE_API_PORT.
