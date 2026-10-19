@@ -1883,18 +1883,74 @@ export async function deleteUserById(input: any) {
 }
 
 /** Admin booking errors audit query helper */
-export async function getAdminBookingErrors(params?: any) {
-  return [] as Array<{
-    id: number;
-    patientId: number;
-    doctorId: string;
-    errorType: string;
-    errorMessage: string;
-    timestamp: Date;
-  }>;
+export async function getAdminBookingErrors(params?: { limit?: number }) {
+  const db = await getDb();
+  if (!db) return [];
+  await ensureBookingErrorsTable();
+  const limit = params?.limit ?? 100;
+  return db
+    .select({
+      id: bookingErrors.id,
+      patientId: bookingErrors.userId,
+      doctorId: bookingErrors.doctorId,
+      errorType: bookingErrors.errorCode,
+      errorMessage: bookingErrors.errorMessage,
+      timestamp: bookingErrors.createdAt,
+      attemptedAt: bookingErrors.attemptedAt,
+    })
+    .from(bookingErrors)
+    .orderBy(desc(bookingErrors.createdAt))
+    .limit(limit);
 }
 
 /** Admin booking errors audit log clear helper */
-export async function clearBookingErrorsAudit(params?: any) {
-  return { success: true, clearedCount: 0 };
+export async function clearBookingErrorsAudit() {
+  const db = await getDb();
+  if (!db) return { success: false, clearedCount: 0 };
+  await ensureBookingErrorsTable();
+  await db.delete(bookingErrors);
+  return { success: true, clearedCount: 1 };
 }
+
+/** Ensure an active system administrator user exists in the database */
+export async function ensureAdminUser(): Promise<typeof users.$inferSelect> {
+  const db = await getDb();
+  if (!db) throw new Error("Database is not available");
+
+  const existing = await db
+    .select()
+    .from(users)
+    .where(eq(users.role, "admin"))
+    .limit(1);
+
+  if (existing.length > 0) return existing[0];
+
+  const adminOpenId = "admin:system-master";
+  const userByOpenId = await db
+    .select()
+    .from(users)
+    .where(eq(users.openId, adminOpenId))
+    .limit(1);
+
+  if (userByOpenId.length > 0) {
+    await db
+      .update(users)
+      .set({ role: "admin", updatedAt: new Date(), lastSignedIn: new Date() })
+      .where(eq(users.id, userByOpenId[0].id));
+    return { ...userByOpenId[0], role: "admin" as const };
+  }
+
+  await db.insert(users).values({
+    openId: adminOpenId,
+    name: "LifeLink System Administrator",
+    email: "admin@lifelink.com",
+    role: "admin",
+    loginMethod: "admin-access-code",
+    lastSignedIn: new Date(),
+  });
+
+  const created = await getUserByOpenId(adminOpenId);
+  if (!created) throw new Error("Failed to initialize administrator user account");
+  return created;
+}
+
