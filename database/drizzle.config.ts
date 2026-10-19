@@ -1,18 +1,17 @@
 /**
  * ============================================================================
- * RELATIONAL DATABASE SCHEMA (DRIZZLE ORM)
+ * LifeLink Smart Healthcare Assistance Platform
+ * Relational Database Schema & Drizzle Kit Configuration (v1.3.2)
  * ============================================================================
- *
- * WHY THIS FILE IS SPECIAL:
- * This file is the absolute blueprint of how data is stored permanently.
- * We use a tool called Drizzle ORM. It prevents SQL Injection attacks (hackers typing malicious code).
- * It guarantees that if we expect a 'number' for an Age, nobody can accidentally save a 'string'.
+ * 
+ * Configures Drizzle ORM migration generation, schema push, and introspection.
+ * Connects directly to MySQL 8.0 / TiDB Cloud instance specified via DATABASE_URL.
  */
 import { defineConfig } from "drizzle-kit";
 
 const connectionString = process.env.DATABASE_URL;
 if (!connectionString) {
-  throw new Error("DATABASE_URL is required to run drizzle commands");
+  throw new Error("DATABASE_URL is required to run drizzle commands. Check your .env file.");
 }
 
 export default defineConfig({
@@ -22,6 +21,8 @@ export default defineConfig({
   dbCredentials: {
     url: connectionString,
   },
+  verbose: false,
+  strict: true,
 });
 
 

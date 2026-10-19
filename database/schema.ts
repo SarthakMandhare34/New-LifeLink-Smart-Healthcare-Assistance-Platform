@@ -1,15 +1,15 @@
 /**
  * ============================================================================
  * LifeLink Smart Healthcare Assistance Platform
- * Relational Database Schema & Type Contracts (v1.3.0 — Drizzle ORM)
+ * Relational Database Schema & Type Contracts (v1.3.2 — Drizzle ORM)
  * ============================================================================
  *
  * 14 Relational Tables with ACID integrity & foreign key constraints:
- * - Central Identity: users, patientCredentials, syntheticDoctorCredentials, patientProviderIdentities
+ * - Central Identity: users (Patient, Doctor, Admin), patientCredentials, syntheticDoctorCredentials, patientProviderIdentities
  * - Medical Profiles & Safety: patientProfiles, patientEmergencyContacts, patientMedicines
  * - Clinical Triage & Care: patientAssessments, patientAppointments, patientConsultations
  * - Tamper-Evident Rx: patientPrescriptions, patientPrescriptionItems
- * - Realtime Event Bus: patientEvents, doctorEvents
+ * - Realtime Event Bus & Governance: patientEvents, doctorEvents, bookingErrors
  * ============================================================================
  */
 import { foreignKey, index, int, mysqlEnum, mysqlTable, text, timestamp, unique, uniqueIndex, varchar } from "drizzle-orm/mysql-core";
