@@ -14,7 +14,7 @@
 [![Google Gemini AI](https://img.shields.io/badge/Google%20Gemini-AI-4285F4?style=for-the-badge&logo=google&logoColor=white)](https://ai.google.dev/)
 [![MySQL](https://img.shields.io/badge/MySQL-8.0-4479A1?style=for-the-badge&logo=mysql&logoColor=white)](https://www.mysql.com/)
 [![Drizzle ORM](https://img.shields.io/badge/Drizzle-ORM-C5F74F?style=for-the-badge&logo=drizzle&logoColor=black)](https://orm.drizzle.team/)
-[![Tests Passing](https://img.shields.io/badge/Vitest-247%20Tests%20Passed-success?style=for-the-badge&logo=vitest&logoColor=white)](#27-automated-testing-framework--test-breakdown)
+[![Tests Passing](https://img.shields.io/badge/Vitest-253%20Tests%20Passed-success?style=for-the-badge&logo=vitest&logoColor=white)](#27-automated-testing-framework--test-breakdown)
 
 ---
 
