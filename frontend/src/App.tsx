@@ -5,12 +5,15 @@
  *
  * WHY THIS FILE IS SPECIAL:
  * This is the root configuration of the React application.
- * It sets up the Routing (which URL goes to which page) and global Theme Contexts.
+ * It sets up the Routing (which URL goes to which page), global Theme Contexts,
+ * and role-based route authentication guards for Patients, Clinicians, and Administrators.
  */
 import React, { Suspense } from "react";
 import { BrowserRouter, Navigate, Route, Routes } from "react-router-dom";
 import { AppShell } from "./components/layout/AppShell";
 import { DoctorAppShell } from "./components/layout/DoctorAppShell";
+import { AdminAppShell } from "./components/layout/AdminAppShell";
+import { ProtectedRoute } from "./components/layout/ProtectedRoute";
 import { RouteLoader } from "./components/ui/RouteLoader";
 import { WorkspaceSelector } from "./features/entry/WorkspaceSelector";
 
@@ -110,6 +113,11 @@ const DoctorPrescriptions = React.lazy(() =>
     default: m.DoctorPrescriptions,
   }))
 );
+const CreatePrescription = React.lazy(() =>
+  import("./features/doctor/Prescriptions/CreatePrescription").then(m => ({
+    default: m.CreatePrescription,
+  }))
+);
 const Assessments = React.lazy(() =>
   import("./features/doctor/Assessments/Assessments").then(m => ({
     default: m.Assessments,
@@ -131,6 +139,18 @@ const PatientView = React.lazy(() =>
   }))
 );
 
+// --- Cluster 3: Code-Split Admin Portal Feature Modules ---
+const AdminLogin = React.lazy(() =>
+  import("./features/admin/AdminLogin").then(m => ({
+    default: m.AdminLogin,
+  }))
+);
+const AdminDashboard = React.lazy(() =>
+  import("./features/admin/AdminDashboard").then(m => ({
+    default: m.AdminDashboard,
+  }))
+);
+
 /**
  * Main Application Router Component
  * Renders the router and declares all route mappings.
@@ -138,14 +158,14 @@ const PatientView = React.lazy(() =>
 function App() {
   return (
     <BrowserRouter>
-      {" "}
       {/* HTML5 history pushState navigation container */}
       <Routes>
-        {" "}
         {/* Declarative client-side route matcher */}
+
         {/* Public Entry Routes */}
-        <Route path="/" element={<WorkspaceSelector />} />{" "}
+        <Route path="/" element={<WorkspaceSelector />} />
         {/* Portal selector for patient vs clinician workspace */}
+
         <Route
           path="/login"
           element={
@@ -153,8 +173,9 @@ function App() {
               <PatientLogin />
             </Suspense>
           }
-        />{" "}
+        />
         {/* Patient sign-in form */}
+
         <Route
           path="/register"
           element={
@@ -162,8 +183,9 @@ function App() {
               <PatientRegistration />
             </Suspense>
           }
-        />{" "}
+        />
         {/* Patient new account registration form */}
+
         <Route
           path="/doctor/login"
           element={
@@ -171,8 +193,9 @@ function App() {
               <DoctorLogin />
             </Suspense>
           }
-        />{" "}
+        />
         {/* Clinician credential authentication screen */}
+
         <Route
           path="/doctor/reset"
           element={
@@ -180,69 +203,115 @@ function App() {
               <DoctorResetPassword />
             </Suspense>
           }
-        />{" "}
+        />
         {/* Administrative clinician password reset */}
-        {/* Patient Portal Routes - Uses AppShell for layout */}
-        <Route path="/patient" element={<AppShell />}>
-          {" "}
+
+        <Route
+          path="/admin/login"
+          element={
+            <Suspense fallback={<RouteLoader />}>
+              <AdminLogin />
+            </Suspense>
+          }
+        />
+        {/* System administrator authentication gateway */}
+
+        {/* Patient Portal Routes - Protected by role="patient" */}
+        <Route
+          path="/patient"
+          element={
+            <ProtectedRoute role="patient">
+              <AppShell />
+            </ProtectedRoute>
+          }
+        >
           {/* Patient navigation shell with sidebar & header */}
-          <Route path="dashboard" element={<PatientDashboard />} />{" "}
+          <Route path="dashboard" element={<PatientDashboard />} />
           {/* Patient home dashboard with live statistics */}
-          <Route path="health-passport" element={<HealthPassport />} />{" "}
+          <Route path="health-passport" element={<HealthPassport />} />
           {/* Emergency medical ID card & patient profile */}
-          <Route path="assessment" element={<AIAssessment />} />{" "}
+          <Route path="assessment" element={<AIAssessment />} />
           {/* AI symptom triage & specialist recommendation */}
-          <Route path="specialists" element={<SpecialistFinder />} />{" "}
+          <Route path="specialists" element={<SpecialistFinder />} />
           {/* Mumbai railway corridor specialist discovery */}
-          <Route path="appointments" element={<Appointments />} />{" "}
+          <Route path="appointments" element={<Appointments />} />
           {/* Patient consultation booking & appointment management */}
-          <Route path="medicines" element={<MedicineCabinet />} />{" "}
+          <Route path="medicines" element={<MedicineCabinet />} />
           {/* Medication tracking & dosage adherence */}
-          <Route path="prescriptions" element={<Prescriptions />} />{" "}
+          <Route path="prescriptions" element={<Prescriptions />} />
           {/* Digital prescriptions issued by clinicians */}
-          <Route path="emergency" element={<Emergency />} />{" "}
+          <Route path="emergency" element={<Emergency />} />
           {/* Quick-dial SOS emergency contacts & alerts */}
-          <Route path="profile" element={<Profile />} />{" "}
+          <Route path="profile" element={<Profile />} />
           {/* Personal account & avatar settings */}
-          <Route path="settings" element={<Settings />} />{" "}
+          <Route path="settings" element={<Settings />} />
           {/* Appearance & application preferences */}
           {/* Default redirect for /patient */}
-          <Route index element={<Navigate to="dashboard" replace />} />{" "}
+          <Route index element={<Navigate to="dashboard" replace />} />
           {/* Redirect /patient to /patient/dashboard */}
         </Route>
-        {/* Doctor Portal Routes - Uses DoctorAppShell for layout */}
-        <Route path="/doctor" element={<DoctorAppShell />}>
-          {" "}
+
+        {/* Doctor Portal Routes - Protected by role="doctor" */}
+        <Route
+          path="/doctor"
+          element={
+            <ProtectedRoute role="doctor">
+              <DoctorAppShell />
+            </ProtectedRoute>
+          }
+        >
           {/* Clinician workspace layout shell */}
-          <Route path="dashboard" element={<DoctorDashboard />} />{" "}
+          <Route path="dashboard" element={<DoctorDashboard />} />
           {/* Doctor clinic dashboard with patient queues */}
-          <Route path="patients" element={<Patients />} />{" "}
+          <Route path="patients" element={<Patients />} />
           {/* Assigned patient roster */}
-          <Route path="patients/:patientId" element={<PatientView />} />{" "}
+          <Route path="patients/:patientId" element={<PatientView />} />
           {/* Full medical record for single patient */}
-          <Route path="appointments" element={<DoctorAppointments />} />{" "}
+          <Route path="appointments" element={<DoctorAppointments />} />
           {/* Consultation scheduling & status updates */}
-          <Route path="consultation" element={<Consultation />} />{" "}
-          {/* Live clinical consultation workspace */}
-          <Route path="prescriptions" element={<DoctorPrescriptions />} />{" "}
-          {/* Issued prescription archive */}
+          <Route path="consultation" element={<Consultation />} />
+          {/* Active clinical consultations queue */}
+          <Route
+            path="consultation/:appointmentId"
+            element={<Consultation />}
+          />
+          {/* Dedicated patient-appointment encounter consultation view */}
+          <Route path="prescriptions" element={<DoctorPrescriptions />} />
+          {/* Issued prescription archive ledger */}
           <Route
             path="prescriptions/create"
-            element={<DoctorPrescriptions />}
-          />{" "}
-          {/* Digital prescription creator */}
-          <Route path="assessments" element={<Assessments />} />{" "}
+            element={<CreatePrescription />}
+          />
+          {/* Dedicated digital prescription creator view */}
+          <Route path="assessments" element={<Assessments />} />
           {/* AI triage reports submitted by patients */}
-          <Route path="profile" element={<DoctorProfile />} />{" "}
+          <Route path="profile" element={<DoctorProfile />} />
           {/* Clinician credentials & specialty information */}
-          <Route path="settings" element={<DoctorSettings />} />{" "}
+          <Route path="settings" element={<DoctorSettings />} />
           {/* Clinician workspace preferences */}
           {/* Default redirect for /doctor */}
-          <Route index element={<Navigate to="dashboard" replace />} />{" "}
+          <Route index element={<Navigate to="dashboard" replace />} />
           {/* Redirect /doctor to /doctor/dashboard */}
         </Route>
+
+        {/* Admin Portal Routes - Protected by role="admin" */}
+        <Route
+          path="/admin"
+          element={
+            <ProtectedRoute role="admin">
+              <AdminAppShell />
+            </ProtectedRoute>
+          }
+        >
+          <Route path="dashboard" element={<AdminDashboard initialTab="users" />} />
+          <Route path="users" element={<AdminDashboard initialTab="users" />} />
+          <Route path="doctors" element={<AdminDashboard initialTab="doctors" />} />
+          <Route path="audits" element={<AdminDashboard initialTab="errors" />} />
+          <Route index element={<Navigate to="dashboard" replace />} />
+        </Route>
+
         {/* Fallback route for unknown paths */}
-        <Route path="*" element={<Navigate to="/" replace />} />{" "}
+        <Route path="*" element={<Navigate to="/" replace />} />
         {/* Catch-all route redirecting back to home selector */}
       </Routes>
     </BrowserRouter>
