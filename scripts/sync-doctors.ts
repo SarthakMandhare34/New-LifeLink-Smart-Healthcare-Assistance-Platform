@@ -13,7 +13,7 @@
  * 4. Ensures all 52 workstations remain completely in sync with official directory records.
  */
 import "dotenv/config";                                                               // Loads .env credentials (DATABASE_URL) into process.env
-import { getDb, createSyntheticDoctorCredential, refreshSyntheticDoctorCredentialByDoctorId } from "../backend/db"; // DB client and doctor persistence methods
+import { getDb, createSyntheticDoctorCredential, refreshSyntheticDoctorCredentialByDoctorId, ensureAdminUser } from "../backend/db"; // DB client and doctor persistence methods
 import { mockDoctorDirectory } from "../backend/discovery/mockDoctorDirectory";             // Official clinical registry of specialists
 import { hashPatientPassword, verifyPatientPassword } from "../backend/auth/nativePatientAuth"; // Cryptographic scrypt password hashing functions
 import { syntheticDoctorCredentials, users } from "../database/schema";                     // Drizzle ORM table definitions
@@ -57,10 +57,12 @@ async function syncDoctors() {
 
   console.log(`Currently found ${existingRows.length} doctor account(s) in the database.\n`);
 
-  // Purge any non-doctor accounts to ensure database strictly contains only the 52 official doctors
+  // Purge any non-doctor accounts to ensure database strictly contains only the 52 official doctors and the admin
   const validDoctorOpenIds = mockDoctorDirectory.map((d) => `synthetic-doctor:${d.id}`);
   const allCurrentUsers = await db.select().from(users);
-  const nonDoctorUsers = allCurrentUsers.filter((u) => !validDoctorOpenIds.includes(u.openId));
+  const nonDoctorUsers = allCurrentUsers.filter(
+    (u) => !validDoctorOpenIds.includes(u.openId) && u.role !== "admin" && !u.openId.startsWith("admin:")
+  );
 
   if (nonDoctorUsers.length > 0) {
     console.log(`🧹 Purging ${nonDoctorUsers.length} non-doctor account(s) from database...`);
@@ -70,7 +72,7 @@ async function syncDoctors() {
     }
     console.log("");
   } else {
-    console.log(`✨ Database integrity: Zero non-doctor accounts present. Only verified 52 doctors exist.\n`);
+    console.log(`✨ Database integrity: Zero invalid accounts present. Only verified 52 doctors and admin exist.\n`);
   }
 
   // Report accumulator for audit summary display
@@ -155,7 +157,8 @@ async function syncDoctors() {
   console.log("=========================================================================\n");
   console.table(report);
 
-  console.log(`\n✅ All ${EXPECTED_DOCTORS.length} Mumbai doctor accounts are 100% verified and active in the database.`);
+  await ensureAdminUser();
+  console.log(`\n✅ All ${EXPECTED_DOCTORS.length} Mumbai doctor accounts and administrator account are 100% verified and active in the database.`);
   console.log("👉 Clinicians can log in at: http://localhost:5173/doctor/login\n");
   process.exit(0);                                                                          // Clean exit code 0
 }
