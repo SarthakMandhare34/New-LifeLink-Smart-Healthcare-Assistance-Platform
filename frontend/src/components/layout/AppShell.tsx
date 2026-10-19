@@ -42,6 +42,7 @@ import {
   X,
   Bell,
   ChevronDown,
+  ShieldAlert,
 } from "lucide-react"; // Comprehensive application iconography
 
 // Canonical navigation items rendered in the patient portal sidebar
@@ -316,8 +317,32 @@ export const AppShell = () => {
           style={{
             padding: "12px 10px",
             borderTop: "1px solid var(--color-border)",
+            display: "flex",
+            flexDirection: "column",
+            gap: "6px",
           }}
         >
+          {user?.role === "admin" && (
+            <NavLink
+              to="/admin/dashboard"
+              onClick={closeMobileNavigation}
+              style={{
+                display: "flex",
+                alignItems: "center",
+                gap: "10px",
+                padding: "8px 12px",
+                borderRadius: "var(--border-radius-btn)",
+                background: "rgba(14, 165, 233, 0.12)",
+                color: "var(--lifelink-blue)",
+                fontSize: "0.84rem",
+                fontWeight: 600,
+                textDecoration: "none",
+              }}
+            >
+              <ShieldAlert size={16} />
+              <span>Admin Console</span>
+            </NavLink>
+          )}
           <button
             type="button"
             onClick={handleLogout}
