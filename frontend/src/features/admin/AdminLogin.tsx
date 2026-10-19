@@ -47,8 +47,8 @@ export const AdminLogin: React.FC = () => {
     }
   }, [adminMeQuery.data, navigate, redirectTarget]);
 
-  const [email, setEmail] = useState("admin@lifelink.com");
-  const [password, setPassword] = useState("admin");
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
   const [showPassword, setShowPassword] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
@@ -307,7 +307,7 @@ export const AdminLogin: React.FC = () => {
                     type="text"
                     value={email}
                     onChange={e => setEmail(e.target.value)}
-                    placeholder="admin@lifelink.com"
+                    placeholder="Enter email or username"
                     autoComplete="username"
                     required
                     style={{
