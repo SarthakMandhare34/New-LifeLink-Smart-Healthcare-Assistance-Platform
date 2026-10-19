@@ -28,7 +28,7 @@ LifeLink is architected as an **isomorphic, type-safe full-stack web application
 
 ### Architectural Tenets:
 - **End-to-End Type Safety**: Shared TypeScript types ensure that a schema modification in the database is automatically validated by the TypeScript compiler on both the backend API and frontend React components.
-- **Dual-Session Isolation**: Patient accounts and clinician workstations operate in isolated execution domains with dedicated cryptographic session cookies.
+- **Multi-Session Isolation**: Patient accounts, clinician workstations, and administrative operations operate in isolated execution domains with dedicated cryptographic session cookies (`app_session_id`, `doctor_session_id`, `admin_session_id`).
 - **Privacy-Bounded Geolocation**: Sensitive patient GPS coordinates are evaluated strictly in-memory on the client browser and are never transmitted to or logged on the backend.
 - **Defensive Clinical AI**: Symptom analysis is bounded by deterministic regular expressions, biological consistency validators, and pediatric post-processors before model evaluation.
 

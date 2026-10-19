@@ -33,7 +33,8 @@ LifeLink-Smart-Healthcare-Assistance-Platform/
 │   ├── backend/routers.ts                 <-- [EDIT] Master tRPC appRouter definition
 │   ├── backend/routers/
 │   │   ├── patient.ts                     <-- [EDIT] Patient APIs (auth, health passport, appointments, medicines)
-│   │   └── doctor.ts                      <-- [EDIT] Doctor APIs (queue triage, consultations, digital prescriptions)
+│   │   ├── doctor.ts                      <-- [EDIT] Doctor APIs (queue triage, consultations, digital prescriptions)
+│   │   └── admin.ts                       <-- [EDIT] Admin APIs (governance metrics, user directory, booking errors)
 │   ├── backend/db.ts                      <-- [EDIT] Type-safe Drizzle SQL queries & relational helpers
 │   ├── backend/ai/assessmentService.ts    <-- [EDIT] 5-layer AI symptom triage & Gemini Flash cascade engine
 │   ├── backend/realtime/eventBus.ts       <-- [EDIT] Scoped Server-Sent Events (SSE) notification broadcaster
@@ -42,11 +43,13 @@ LifeLink-Smart-Healthcare-Assistance-Platform/
 │   └── backend/auth/                      <-- [READ] Scrypt hashing with 16-byte random salts, JWT issuance, Google OAuth
 │
 ├── 💻 FRONTEND CLIENT INTERFACE LAYER [Related to: Section 3 Component & Section 4 Activity Diagrams]
-│   ├── frontend/src/App.tsx               <-- [EDIT] React Router hierarchy (/patient/*, /doctor/*, /workspace)
+│   ├── frontend/src/App.tsx               <-- [EDIT] React Router hierarchy (/patient/*, /doctor/*, /admin/*)
 │   ├── frontend/src/index.css             <-- [EDIT] Swiss Clinical Humanist design tokens, high-contrast dark mode, WCAG 2.1 AA rules
+│   ├── frontend/src/features/admin/       <-- [EDIT] Administrative governance dashboard & single secure login
 │   ├── frontend/src/components/layout/
 │   │   ├── AppShell.tsx                   <-- [EDIT] Patient portal navigation, drawer & header shell
-│   │   └── DoctorAppShell.tsx             <-- [EDIT] Clinician workspace navigation, drawer & header shell
+│   │   ├── DoctorAppShell.tsx             <-- [EDIT] Clinician workspace navigation, drawer & header shell
+│   │   └── AdminAppShell.tsx              <-- [EDIT] Administrative governance layout shell
 │   ├── frontend/src/components/ui/
 │   │   ├── Card.tsx                       <-- [EDIT] High-contrast clinical container primitive
 │   │   ├── Button.tsx                     <-- [EDIT] Accessible button primitive
