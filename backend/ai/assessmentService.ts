@@ -459,13 +459,12 @@ async function invokeGemini(
 
   // List of active, verified Gemini models to attempt sequentially in case of rate limits or service load
   const candidateModels = [
-    "gemini-3.5-flash-lite", // 15 RPM, 500 RPD — latest ultra-fast Flash-Lite (~1s)
-    "gemini-3.1-flash-lite", // 15 RPM, 500 RPD — high quota Flash-Lite fallback
-    "gemini-flash-lite-latest", // Canonical alias to latest active Flash-Lite
-    "gemini-3.6-flash", // Stable high-intelligence Flash model
-    "gemini-3-flash-preview", // Active Flash preview fallback
+    "gemini-2.5-flash", // Official Gemini 2.5 Flash model
+    "gemini-2.0-flash", // Official Gemini 2.0 Flash model
+    "gemini-1.5-flash", // High-throughput, stable 1.5 Flash model
+    "gemini-1.5-flash-8b", // High-capacity lightweight Flash fallback
+    "gemini-1.5-pro", // Advanced reasoning model fallback
     "gemini-flash-latest", // Canonical alias to latest active Flash
-    "gemini-3.5-flash", // High-capacity Flash model fallback
   ];
   let lastError: Error | null = null;
 
