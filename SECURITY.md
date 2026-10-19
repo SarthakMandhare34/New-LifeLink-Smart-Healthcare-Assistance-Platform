@@ -36,10 +36,11 @@ If you identify a security vulnerability, please disclose it responsibly:
 
 ## 3. Core Architectural Security Controls
 
-### 3.1. Dual-Session Cookie Isolation
-LifeLink enforces strict cryptographic separation between patient and clinician contexts within the same browser:
+### 3.1. Multi-Session Cookie Isolation
+LifeLink enforces strict cryptographic separation between patient, clinician, and administrator contexts within the same browser:
 - **Patient Session**: Issued as `app_session_id` (`httpOnly: true`, `sameSite: "lax"`, `secure` in production).
 - **Doctor Session**: Issued as `doctor_session_id` (`httpOnly: true`, `sameSite: "lax"`, `secure` in production).
+- **Admin Session**: Issued as `admin_session_id` (`httpOnly: true`, `sameSite: "lax"`, `secure` in production).
 - Each tRPC procedure independently verifies the corresponding session token in `backend/_core/context.ts`, preventing session token confusion and cross-role privilege leakage.
 
 ### 3.2. Automated 5-Minute Inactivity Session Termination

@@ -18,9 +18,9 @@ LifeLink is designed, architected, and maintained by:
 
 We welcome contributions to the LifeLink platform. When submitting pull requests, ensure adherence to the following architectural standards:
 
-### 1. Dual Authentication & Session Safety
-* Never mix patient and clinician session tokens. Use `COOKIE_NAME = "app_session_id"` for patient procedures and `DOCTOR_COOKIE_NAME = "doctor_session_id"` for clinician procedures.
-* Enforce strict authorization on all tRPC endpoints. Patient procedures must use `protectedProcedure` and derive identity from `ctx.user.id`; clinician procedures must use `doctorProcedure` and validate `ctx.user.openId`.
+### 1. Multi-Session Isolation & Role Safety
+* Maintain strict session separation across roles: `app_session_id` for patients, `doctor_session_id` for clinicians, and `admin_session_id` for administrative operations.
+* Enforce role authorization guards on all tRPC procedures: `protectedProcedure` validates `ctx.user.id`, `doctorProcedure` validates `ctx.user.openId`, and `adminProcedure` validates administrative rights.
 
 ### 2. Clinical AI Triage Safety
 * All AI evaluation must pass through the 5-layer safety cascade in `backend/ai/assessmentService.ts`:
@@ -37,7 +37,7 @@ We welcome contributions to the LifeLink platform. When submitting pull requests
 
 ### 4. Code Hygiene & Testing
 * Run `npm run verify` prior to submitting commits.
-* Ensure 0 TypeScript compilation errors (`npm run check`) and 241 passing automated tests across 33 test files (`npm test`) with 100% pass rate.
+* Ensure 0 TypeScript compilation errors (`npm run check`) and 253 passing automated tests across 34 test files (`npm test`) with 100% pass rate.
 
 ### 5. Atomic Commit Conventions
 * Format commit messages according to Conventional Commits (`feat:`, `fix:`, `docs:`, `perf:`, `build:`, `refactor:`) to maintain a clean, readable git history.
