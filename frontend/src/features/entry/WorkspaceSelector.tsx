@@ -14,6 +14,7 @@ import {
   ArrowRight,
   HeartPulse,
   LoaderCircle,
+  ShieldAlert,
   ShieldCheck,
   Stethoscope,
 } from "lucide-react"; // Healthcare and action icons
@@ -82,7 +83,31 @@ export const WorkspaceSelector = () => {
           <ShieldCheck size={16} aria-hidden="true" />
           <span>Patient-owned records</span>
         </div>
-        <EntryThemeToggle />
+        <div style={{ display: "flex", alignItems: "center", gap: "10px" }}>
+          <button
+            type="button"
+            className="auth-link-button"
+            onClick={() => navigate("/admin/login")}
+            style={{
+              display: "inline-flex",
+              alignItems: "center",
+              gap: "6px",
+              padding: "6px 12px",
+              fontSize: "0.82rem",
+              fontWeight: 600,
+              borderRadius: "var(--border-radius-badge)",
+              border: "1px solid var(--color-border)",
+              background: "var(--color-surface-white)",
+              color: "var(--color-text)",
+              cursor: "pointer",
+            }}
+            aria-label="Administrator Console"
+          >
+            <ShieldAlert size={14} color="var(--lifelink-blue)" />
+            <span>Admin Login</span>
+          </button>
+          <EntryThemeToggle />
+        </div>
       </header>
 
       <section className="workspace-entry-shell">
