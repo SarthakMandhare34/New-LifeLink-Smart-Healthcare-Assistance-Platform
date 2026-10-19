@@ -12,6 +12,7 @@
 // --- Cluster: Session & Cookie Identifiers ---
 export const COOKIE_NAME = "app_session_id";                     // Name of the secure HTTP cookie storing patient login sessions
 export const DOCTOR_COOKIE_NAME = "doctor_session_id";           // Name of the secure HTTP cookie storing clinician workstation sessions
+export const ADMIN_COOKIE_NAME = "admin_session_id";             // Name of the secure HTTP cookie storing administrator console sessions
 export const ONE_YEAR_MS = 1000 * 60 * 60 * 24 * 365;           // One full year in milliseconds (used for persistent session duration)
 export const AXIOS_TIMEOUT_MS = 30_000;                          // Maximum 30-second network timeout for external API requests
 export const UNAUTHED_ERR_MSG = 'Please login (10001)';          // Error message displayed when an unauthenticated user calls a protected route
