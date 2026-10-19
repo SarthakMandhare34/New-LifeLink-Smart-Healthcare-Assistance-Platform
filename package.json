@@ -20,6 +20,8 @@
     "db:push": "drizzle-kit generate --config database/drizzle.config.ts && drizzle-kit migrate --config database/drizzle.config.ts",
     "db:studio": "drizzle-kit studio --config database/drizzle.config.ts",
     "db:clear": "tsx scripts/clear-users.ts",
+    "db:backup": "tsx scripts/clear-users.ts --backup",
+    "db:restore": "tsx scripts/clear-users.ts --restore",
     "db:delete-user": "tsx scripts/delete-user.ts",
     "db:sync:doctors": "tsx scripts/sync-doctors.ts",
     "verify": "npm run check && npm test && npm run build"
