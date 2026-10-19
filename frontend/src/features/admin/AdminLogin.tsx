@@ -44,17 +44,20 @@ export const AdminLogin: React.FC = () => {
     }
   }, [adminMeQuery.data, navigate, redirectTarget]);
 
-  const [accessCode, setAccessCode] = useState(
-    "lifelink-controlled-clinician-secret-key-2026"
-  );
+  const utils = trpc.useUtils();
+  const [accessCode, setAccessCode] = useState("admin");
   const [showKey, setShowKey] = useState(false);
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
 
   const loginMutation = trpc.admin.login.useMutation({
-    onSuccess: () => {
+    onSuccess: async data => {
       if (typeof window !== "undefined") {
         sessionStorage.setItem("lifelink_admin_session", "active");
       }
+      if (data?.user) {
+        utils.admin.me.setData(undefined, data.user as any);
+      }
+      await utils.admin.me.refetch();
       navigate(redirectTarget, { replace: true });
     },
     onError: error => {
@@ -251,7 +254,7 @@ export const AdminLogin: React.FC = () => {
                 </button>
               </div>
               <p style={{ fontSize: "0.75rem", color: "var(--color-text-muted)", margin: "4px 0 0" }}>
-                Default key is provided for authorized administrator access.
+                Accepts default key: <code style={{ color: "var(--lifelink-blue)", fontWeight: 600 }}>admin</code> or <code style={{ color: "var(--lifelink-blue)", fontWeight: 600 }}>admin123</code>.
               </p>
             </div>
 

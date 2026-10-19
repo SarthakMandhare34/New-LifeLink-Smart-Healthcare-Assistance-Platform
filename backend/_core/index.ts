@@ -54,6 +54,7 @@ async function findAvailablePort(startPort: number = 4000): Promise<number> {
 // --- Cluster: Master Server Bootstrap ---
 async function startServer() {
   const app = express(); // 1. Initialize Express application instance
+  app.set("trust proxy", 1); // Enable proxy trust for Render, Cloudflare, and cloud HTTPS load balancers
   const server = createServer(app); // 2. Wrap Express in Node's HTTP server
 
   // Configure body parsers with a generous 50MB limit for medical reports, scans, and photos

@@ -1917,6 +1917,24 @@ export async function ensureAdminUser(): Promise<typeof users.$inferSelect> {
   const db = await getDb();
   if (!db) throw new Error("Database is not available");
 
+  // Ensure remote databases (like TiDB on Render) support the 'admin' role enum
+  try {
+    await db.execute(
+      sql.raw(
+        "ALTER TABLE `users` MODIFY COLUMN `role` ENUM('user', 'doctor', 'admin') NOT NULL DEFAULT 'user';"
+      )
+    );
+  } catch {
+    // Ignore if already applied or user lacks ALTER privilege
+  }
+
+  // Ensure bookingErrors table exists on remote instances
+  try {
+    await ensureBookingErrorsTable();
+  } catch {
+    // Ignore if table already exists
+  }
+
   const existing = await db
     .select()
     .from(users)

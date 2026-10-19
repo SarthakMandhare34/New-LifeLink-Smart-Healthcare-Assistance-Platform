@@ -111,7 +111,11 @@ function AdminRouteGuard({
     refetchOnWindowFocus: false,
   });
 
-  if (adminQuery.isLoading) {
+  const hasAdminSession =
+    typeof window !== "undefined" &&
+    sessionStorage.getItem("lifelink_admin_session") === "active";
+
+  if (adminQuery.isLoading || (hasAdminSession && adminQuery.isFetching && !adminQuery.data)) {
     return <RouteLoader />;
   }
 
