@@ -4,6 +4,24 @@ All notable changes to the LifeLink Smart Healthcare Assistance Platform will be
 
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/), and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [1.3.2] - 2026-10-19
+
+### Added & Enhanced
+- **Administrative Governance Portal & Unified Single Login**:
+  - Implemented the dedicated Admin Portal under `frontend/src/features/admin/` with unified access controls and clean layout (`AdminAppShell`).
+  - Added secure session isolation via `admin_session_id` and strict role authorization procedures (`adminProcedure`).
+  - Streamlined user entry with a single clean Admin Login button in the landing header (`WorkspaceSelector.tsx`), replacing scattered login cards.
+  - Simplified all user-facing interface copy and instructions using plain, standardized dictionary English.
+- **Enterprise Database Synchronization & Resilient Backup/Recovery**:
+  - Engineered automated JSON database snapshot engine (`npm run db:backup`) backing up all 14 relational tables with timestamped and latest pointers.
+  - Added 1-click full database state restoration (`npm run db:restore`) for rapid disaster recovery and test isolation.
+  - Hardened clean database reset (`npm run db:clear`) to preserve the 52 Mumbai railway clinician workstations and administrative governance credentials while clearing patient activity data.
+- **Automated Testing Suite Expansion**:
+  - Added `frontend/src/features/admin/adminPortal.test.ts` expanding test coverage to **253 automated tests across 34 test suites** with 100% pass rate.
+  - Refined AI assessment models to the Google Gemini stable catalog.
+
+---
+
 ## [1.3.1] - 2026-10-10
 
 ### Added & Deployed
