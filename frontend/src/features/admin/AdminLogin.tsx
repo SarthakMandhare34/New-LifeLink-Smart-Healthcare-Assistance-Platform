@@ -3,31 +3,34 @@
  * ADMINISTRATOR LOGIN (frontend/src/features/admin/AdminLogin.tsx)
  * ============================================================================
  *
- * Secure single sign-in for the authorized platform administrator:
- * - Simple, clear English labels and messages
- * - Single secure input for the administrator key
- * - Automatic redirection if already signed in
+ * Dedicated authentication portal for platform administrators:
+ * - Matches the layout, styling, and design system of Patient & Doctor login pages
+ * - Standard Email/Username and Password inputs
+ * - Automatic redirection if already authenticated
  * ============================================================================
  */
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useNavigate, useSearchParams } from "react-router-dom";
+import { Card } from "../../components/ui/Card";
+import { Button } from "../../components/ui/Button";
+import { Input } from "../../components/ui/Input";
 import { LifeLinkLogo } from "../../components/brand/LifeLinkLogo";
 import { EntryThemeToggle } from "../../components/EntryThemeToggle";
-import { Button } from "../../components/ui/Button";
-import { Card } from "../../components/ui/Card";
 import { trpc } from "../../lib/trpc";
 import {
-  ShieldAlert,
+  Lock,
+  Mail,
   Eye,
   EyeOff,
-  ArrowRight,
   ShieldCheck,
   AlertCircle,
+  ArrowRight,
 } from "lucide-react";
 
 export const AdminLogin: React.FC = () => {
   const navigate = useNavigate();
   const [searchParams] = useSearchParams();
+  const utils = trpc.useUtils();
   const redirectTarget = searchParams.get("redirect") || "/admin/dashboard";
 
   const adminMeQuery = trpc.admin.me.useQuery(undefined, {
@@ -35,7 +38,7 @@ export const AdminLogin: React.FC = () => {
     refetchOnWindowFocus: false,
   });
 
-  React.useEffect(() => {
+  useEffect(() => {
     if (adminMeQuery.data && adminMeQuery.data.role === "admin") {
       if (typeof window !== "undefined") {
         sessionStorage.setItem("lifelink_admin_session", "active");
@@ -44,10 +47,10 @@ export const AdminLogin: React.FC = () => {
     }
   }, [adminMeQuery.data, navigate, redirectTarget]);
 
-  const utils = trpc.useUtils();
-  const [accessCode, setAccessCode] = useState("admin");
-  const [showKey, setShowKey] = useState(false);
-  const [errorMessage, setErrorMessage] = useState<string | null>(null);
+  const [email, setEmail] = useState("admin@lifelink.com");
+  const [password, setPassword] = useState("admin");
+  const [showPassword, setShowPassword] = useState(false);
+  const [error, setError] = useState<string | null>(null);
 
   const loginMutation = trpc.admin.login.useMutation({
     onSuccess: async data => {
@@ -60,261 +63,401 @@ export const AdminLogin: React.FC = () => {
       await utils.admin.me.refetch();
       navigate(redirectTarget, { replace: true });
     },
-    onError: error => {
-      setErrorMessage(
-        error.message || "Invalid administrator key. Please check your key and try again."
+    onError: err => {
+      setError(
+        err.message || "Invalid administrator credentials. Please check your email and password."
       );
     },
   });
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleLogin = (e: React.FormEvent) => {
     e.preventDefault();
-    setErrorMessage(null);
-    if (!accessCode.trim()) {
-      setErrorMessage("Please enter your administrator key.");
+    setError(null);
+
+    if (!email.trim()) {
+      setError("Please enter your administrator email or username.");
       return;
     }
-    loginMutation.mutate({ accessCode: accessCode.trim() });
+    if (!password.trim()) {
+      setError("Please enter your administrator password.");
+      return;
+    }
+
+    loginMutation.mutate({
+      email: email.trim(),
+      password: password.trim(),
+      accessCode: password.trim(),
+    });
   };
 
   return (
     <main
-      className="auth-split-layout"
-      style={{
-        minHeight: "100vh",
-        display: "flex",
-        alignItems: "center",
-        justifyContent: "center",
-        padding: "24px",
-        background: "var(--color-surface-ground)",
-      }}
+      className="auth-page admin-auth-page"
+      aria-labelledby="admin-login-heading"
+      style={{ minHeight: "100vh", display: "flex", flexDirection: "column" }}
     >
-      <div
-        style={{
-          width: "100%",
-          maxWidth: "460px",
-          display: "flex",
-          flexDirection: "column",
-          gap: "24px",
-        }}
+      {/* Top Header Bar */}
+      <header
+        className="workspace-portal-header"
+        aria-label="LifeLink portal header"
       >
-        {/* Top Header Bar */}
-        <div
-          style={{
-            display: "flex",
-            alignItems: "center",
-            justifyContent: "space-between",
-          }}
-        >
+        <div className="workspace-portal-brand">
+          <span className="workspace-portal-mark" aria-hidden="true">
+            <LifeLinkLogo
+              variant="symbol"
+              style={{ width: "100%", height: "100%", objectFit: "contain" }}
+            />
+          </span>
+          <span>
+            <strong>LifeLink</strong>
+            <small>Admin portal</small>
+          </span>
+        </div>
+        <div className="workspace-portal-assurance">
+          <ShieldCheck size={16} aria-hidden="true" />
+          <span>Authorized admin portal</span>
+        </div>
+        <EntryThemeToggle />
+      </header>
+
+      {/* Split Layout: Branding Panel + Login Card */}
+      <div className="doctor-setup-layout auth-split-layout" style={{ flex: 1 }}>
+        {/* Left Branding Panel */}
+        <div className="auth-branding-panel">
           <div
-            onClick={() => navigate("/")}
             style={{
+              textAlign: "center",
+              maxWidth: "440px",
               display: "flex",
+              flexDirection: "column",
               alignItems: "center",
-              gap: "8px",
-              cursor: "pointer",
             }}
           >
             <div
               style={{
-                width: "32px",
-                height: "32px",
-                borderRadius: "var(--border-radius-badge)",
-                background: "#FFFFFF",
-                display: "grid",
-                placeItems: "center",
-                padding: "2px",
-              }}
-            >
-              <LifeLinkLogo variant="symbol" style={{ width: "24px", height: "24px" }} />
-            </div>
-            <strong style={{ fontSize: "1rem", color: "var(--color-text)" }}>
-              LifeLink
-            </strong>
-          </div>
-          <EntryThemeToggle />
-        </div>
-
-        {/* Auth Card */}
-        <Card
-          variant="solid"
-          style={{
-            padding: "clamp(24px, 4vw, 36px)",
-            borderRadius: "var(--border-radius-card)",
-            border: "1px solid var(--color-border)",
-            background: "var(--color-surface-white)",
-            boxShadow: "0 8px 30px rgba(0, 0, 0, 0.06)",
-          }}
-        >
-          <div style={{ textAlign: "center", marginBottom: "24px" }}>
-            <div
-              style={{
-                width: "48px",
-                height: "48px",
-                borderRadius: "var(--border-radius-badge)",
-                background: "rgba(14, 165, 233, 0.12)",
-                color: "var(--lifelink-blue)",
-                display: "grid",
-                placeItems: "center",
-                margin: "0 auto 12px",
-              }}
-            >
-              <ShieldAlert size={26} />
-            </div>
-            <h1
-              style={{
-                fontSize: "1.4rem",
-                fontWeight: 700,
-                color: "var(--color-text)",
-                margin: "0 0 6px",
-              }}
-            >
-              Administrator Login
-            </h1>
-            <p
-              className="caption"
-              style={{ margin: 0, color: "var(--color-text-muted)", fontSize: "0.88rem" }}
-            >
-              Enter your secret administrator key to open the dashboard.
-            </p>
-          </div>
-
-          {errorMessage && (
-            <div
-              style={{
-                display: "flex",
-                alignItems: "center",
-                gap: "10px",
-                padding: "12px 16px",
-                background: "var(--lifelink-red-soft)",
-                color: "var(--lifelink-red)",
-                border: "1px solid var(--lifelink-red-border)",
-                borderRadius: "var(--border-radius-badge)",
-                fontSize: "0.85rem",
-                marginBottom: "20px",
-              }}
-              role="alert"
-            >
-              <AlertCircle size={18} style={{ flexShrink: 0 }} />
-              <span>{errorMessage}</span>
-            </div>
-          )}
-
-          <form onSubmit={handleSubmit} style={{ display: "flex", flexDirection: "column", gap: "18px" }}>
-            <div>
-              <label
-                htmlFor="admin-access-code"
-                style={{
-                  display: "block",
-                  fontSize: "0.85rem",
-                  fontWeight: 600,
-                  color: "var(--color-text)",
-                  marginBottom: "6px",
-                }}
-              >
-                Administrator Key
-              </label>
-              <div style={{ position: "relative" }}>
-                <input
-                  id="admin-access-code"
-                  type={showKey ? "text" : "password"}
-                  value={accessCode}
-                  onChange={e => setAccessCode(e.target.value)}
-                  placeholder="Enter administrator key"
-                  style={{
-                    width: "100%",
-                    padding: "10px 42px 10px 14px",
-                    borderRadius: "var(--border-radius-btn)",
-                    border: "1px solid var(--color-border)",
-                    background: "var(--color-surface-ground)",
-                    color: "var(--color-text)",
-                    fontSize: "0.9rem",
-                    fontFamily: showKey ? "monospace" : "inherit",
-                    outline: "none",
-                  }}
-                  autoComplete="current-password"
-                />
-                <button
-                  type="button"
-                  onClick={() => setShowKey(!showKey)}
-                  style={{
-                    position: "absolute",
-                    right: "12px",
-                    top: "50%",
-                    transform: "translateY(-50%)",
-                    background: "none",
-                    border: "none",
-                    color: "var(--color-text-muted)",
-                    cursor: "pointer",
-                    padding: 0,
-                  }}
-                  aria-label={showKey ? "Hide key" : "Show key"}
-                >
-                  {showKey ? <EyeOff size={18} /> : <Eye size={18} />}
-                </button>
-              </div>
-              <p style={{ fontSize: "0.75rem", color: "var(--color-text-muted)", margin: "4px 0 0" }}>
-                Accepts default key: <code style={{ color: "var(--lifelink-blue)", fontWeight: 600 }}>admin</code> or <code style={{ color: "var(--lifelink-blue)", fontWeight: 600 }}>admin123</code>.
-              </p>
-            </div>
-
-            <Button
-              type="submit"
-              variant="primary"
-              disabled={loginMutation.isPending}
-              style={{
-                width: "100%",
-                padding: "12px",
+                marginBottom: "24px",
                 display: "flex",
                 alignItems: "center",
                 justifyContent: "center",
-                gap: "8px",
-                background: "var(--lifelink-blue)",
-                borderRadius: "var(--border-radius-btn)",
-                fontWeight: 600,
+                width: "100%",
               }}
             >
-              {loginMutation.isPending ? (
-                "Signing In…"
-              ) : (
-                <>
-                  Sign In as Administrator <ArrowRight size={18} />
-                </>
-              )}
-            </Button>
-          </form>
+              <LifeLinkLogo className="lifelink-logo-auth" />
+            </div>
 
-          <div
-            style={{
-              marginTop: "24px",
-              paddingTop: "20px",
-              borderTop: "1px solid var(--color-border)",
-              display: "flex",
-              justifyContent: "space-between",
-              alignItems: "center",
-              fontSize: "0.82rem",
-            }}
-          >
-            <button
-              type="button"
-              onClick={() => navigate("/")}
+            <div
               style={{
-                background: "none",
-                border: "none",
-                color: "var(--lifelink-blue)",
-                cursor: "pointer",
-                padding: 0,
-                textDecoration: "underline",
+                display: "flex",
+                flexDirection: "column",
+                alignItems: "center",
+                gap: "14px",
               }}
             >
-              Back to Home
-            </button>
-            <div style={{ display: "flex", alignItems: "center", gap: "6px", color: "var(--color-text-muted)" }}>
-              <ShieldCheck size={14} />
-              <span>Secure Access</span>
+              <span
+                style={{
+                  background: "var(--swiss-blue-soft)",
+                  color: "var(--lifelink-blue)",
+                  fontSize: "0.74rem",
+                  fontWeight: 600,
+                  letterSpacing: "0.06em",
+                  textTransform: "uppercase",
+                  padding: "5px 14px",
+                  borderRadius: "var(--border-radius-badge)",
+                  border: "1px solid var(--color-border)",
+                }}
+              >
+                Governance Console
+              </span>
+
+              <h2
+                style={{
+                  fontSize: "1.6rem",
+                  fontWeight: 700,
+                  margin: "6px 0 0",
+                  color: "var(--color-text)",
+                  letterSpacing: "-0.02em",
+                }}
+              >
+                Control. Monitor. Protect.
+              </h2>
+              <p
+                style={{
+                  fontSize: "0.92rem",
+                  color: "var(--color-text-muted)",
+                  margin: 0,
+                  lineHeight: 1.5,
+                  maxWidth: "380px",
+                }}
+              >
+                Secure management console for user registries, transit doctor workstations, and platform audit records.
+              </p>
             </div>
           </div>
-        </Card>
+        </div>
+
+        {/* Right Form Card Column */}
+        <div
+          className="auth-card-column"
+          style={{
+            flex: 1.1,
+            display: "flex",
+            justifyContent: "center",
+            alignItems: "center",
+            padding: "clamp(8px, 1.5vw, 20px)",
+            zIndex: 1,
+            width: "100%",
+          }}
+        >
+          <Card
+            className="card auth-card"
+            style={{
+              width: "100%",
+              maxWidth: "480px",
+              padding: "clamp(20px, 3.2vw, 32px)",
+              background: "var(--color-surface-white)",
+              border: "1px solid var(--color-border)",
+              borderRadius: "var(--border-radius-card)",
+              boxShadow: "none",
+              boxSizing: "border-box",
+            }}
+          >
+            {/* Form Card Header */}
+            <div style={{ marginBottom: "22px" }}>
+              <div
+                style={{
+                  display: "inline-flex",
+                  alignItems: "center",
+                  justifyContent: "center",
+                  width: "40px",
+                  height: "40px",
+                  borderRadius: "10px",
+                  background: "var(--swiss-blue-soft)",
+                  color: "var(--lifelink-blue)",
+                  marginBottom: "12px",
+                }}
+              >
+                <ShieldCheck size={22} />
+              </div>
+              <h1
+                id="admin-login-heading"
+                style={{
+                  fontSize: "1.45rem",
+                  fontWeight: 700,
+                  margin: "0 0 6px 0",
+                  color: "var(--color-text)",
+                  letterSpacing: "-0.01em",
+                }}
+              >
+                Administrator Sign In
+              </h1>
+              <p
+                style={{
+                  fontSize: "0.88rem",
+                  color: "var(--color-text-muted)",
+                  margin: 0,
+                  lineHeight: 1.4,
+                }}
+              >
+                Enter your administrative credentials to continue.
+              </p>
+            </div>
+
+            {/* Error Message */}
+            {error && (
+              <div
+                role="alert"
+                style={{
+                  display: "flex",
+                  alignItems: "flex-start",
+                  gap: "10px",
+                  padding: "12px 14px",
+                  borderRadius: "var(--border-radius-btn)",
+                  background: "#FEF2F2",
+                  border: "1px solid #FECACA",
+                  color: "#991B1B",
+                  fontSize: "0.85rem",
+                  lineHeight: 1.4,
+                  marginBottom: "18px",
+                }}
+              >
+                <AlertCircle size={18} style={{ flexShrink: 0, marginTop: "1px" }} />
+                <span>{error}</span>
+              </div>
+            )}
+
+            {/* Login Form */}
+            <form onSubmit={handleLogin} style={{ display: "flex", flexDirection: "column", gap: "16px" }}>
+              {/* Email / Username Field */}
+              <div>
+                <label
+                  htmlFor="admin-email"
+                  style={{
+                    display: "block",
+                    fontSize: "0.85rem",
+                    fontWeight: 600,
+                    color: "var(--color-text)",
+                    marginBottom: "6px",
+                  }}
+                >
+                  Email or Username
+                </label>
+                <div style={{ position: "relative" }}>
+                  <Input
+                    id="admin-email"
+                    type="text"
+                    value={email}
+                    onChange={e => setEmail(e.target.value)}
+                    placeholder="admin@lifelink.com"
+                    autoComplete="username"
+                    required
+                    style={{
+                      paddingLeft: "38px",
+                      background: "var(--color-surface-ground)",
+                    }}
+                  />
+                  <Mail
+                    size={16}
+                    style={{
+                      position: "absolute",
+                      left: "12px",
+                      top: "50%",
+                      transform: "translateY(-50%)",
+                      color: "var(--color-text-muted)",
+                      pointerEvents: "none",
+                    }}
+                  />
+                </div>
+              </div>
+
+              {/* Password Field */}
+              <div>
+                <label
+                  htmlFor="admin-password"
+                  style={{
+                    display: "block",
+                    fontSize: "0.85rem",
+                    fontWeight: 600,
+                    color: "var(--color-text)",
+                    marginBottom: "6px",
+                  }}
+                >
+                  Password
+                </label>
+                <div style={{ position: "relative" }}>
+                  <Input
+                    id="admin-password"
+                    type={showPassword ? "text" : "password"}
+                    value={password}
+                    onChange={e => setPassword(e.target.value)}
+                    placeholder="Enter password"
+                    autoComplete="current-password"
+                    required
+                    style={{
+                      paddingLeft: "38px",
+                      paddingRight: "40px",
+                      background: "var(--color-surface-ground)",
+                    }}
+                  />
+                  <Lock
+                    size={16}
+                    style={{
+                      position: "absolute",
+                      left: "12px",
+                      top: "50%",
+                      transform: "translateY(-50%)",
+                      color: "var(--color-text-muted)",
+                      pointerEvents: "none",
+                    }}
+                  />
+                  <button
+                    type="button"
+                    onClick={() => setShowPassword(!showPassword)}
+                    style={{
+                      position: "absolute",
+                      right: "12px",
+                      top: "50%",
+                      transform: "translateY(-50%)",
+                      background: "none",
+                      border: "none",
+                      color: "var(--color-text-muted)",
+                      cursor: "pointer",
+                      padding: 0,
+                    }}
+                    aria-label={showPassword ? "Hide password" : "Show password"}
+                  >
+                    {showPassword ? <EyeOff size={17} /> : <Eye size={17} />}
+                  </button>
+                </div>
+              </div>
+
+              {/* Submit Button */}
+              <Button
+                type="submit"
+                variant="primary"
+                disabled={loginMutation.isPending}
+                style={{
+                  width: "100%",
+                  padding: "12px",
+                  display: "flex",
+                  alignItems: "center",
+                  justifyContent: "center",
+                  gap: "8px",
+                  background: "var(--lifelink-blue)",
+                  borderRadius: "var(--border-radius-btn)",
+                  fontWeight: 600,
+                  marginTop: "6px",
+                }}
+              >
+                {loginMutation.isPending ? (
+                  "Signing In…"
+                ) : (
+                  <>
+                    Sign In as Administrator <ArrowRight size={18} />
+                  </>
+                )}
+              </Button>
+            </form>
+
+            {/* Footer Navigation */}
+            <div
+              style={{
+                marginTop: "24px",
+                paddingTop: "20px",
+                borderTop: "1px solid var(--color-border)",
+                display: "flex",
+                justifyContent: "space-between",
+                alignItems: "center",
+                fontSize: "0.82rem",
+              }}
+            >
+              <button
+                type="button"
+                onClick={() => navigate("/")}
+                style={{
+                  background: "none",
+                  border: "none",
+                  color: "var(--lifelink-blue)",
+                  cursor: "pointer",
+                  padding: 0,
+                  textDecoration: "underline",
+                }}
+              >
+                ← Back to Home
+              </button>
+              <div
+                style={{
+                  display: "flex",
+                  alignItems: "center",
+                  gap: "6px",
+                  color: "var(--color-text-muted)",
+                }}
+              >
+                <ShieldCheck size={14} />
+                <span>Protected admin workspace</span>
+              </div>
+            </div>
+          </Card>
+        </div>
       </div>
     </main>
   );

@@ -52,15 +52,34 @@ export const adminRouter = router({
   login: publicProcedure
     .input(
       z.object({
-        accessCode: z.string().min(1, "Administrator key is required"),
+        email: z.string().optional(),
+        password: z.string().optional(),
+        accessCode: z.string().optional(),
       })
     )
     .mutation(async ({ ctx, input }) => {
-      const isValid = verifyAdminAccessCode(input.accessCode);
+      const codeOrPassword = (input.password || input.accessCode || "").trim();
+      const emailOrUser = (input.email || "").trim().toLowerCase();
+
+      if (!codeOrPassword) {
+        throw new TRPCError({
+          code: "BAD_REQUEST",
+          message: "Please enter your administrator password.",
+        });
+      }
+
+      if (emailOrUser && !["admin", "admin@lifelink.com"].includes(emailOrUser)) {
+        throw new TRPCError({
+          code: "UNAUTHORIZED",
+          message: "Invalid administrator email or username.",
+        });
+      }
+
+      const isValid = verifyAdminAccessCode(codeOrPassword);
       if (!isValid) {
         throw new TRPCError({
           code: "UNAUTHORIZED",
-          message: "Invalid administrator key.",
+          message: "Invalid administrator password.",
         });
       }
 
