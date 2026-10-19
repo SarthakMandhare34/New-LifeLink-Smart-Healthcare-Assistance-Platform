@@ -1,6 +1,6 @@
 # 🧪 LifeLink — Automated Testing Framework & Verification Guide
 
-This document provides a comprehensive technical guide to the **LifeLink Automated Testing Suite**. The project utilizes **Vitest 5.0.1** and **React Testing Library 16.3.3** ([`vitest.config.ts`](vitest.config.ts)), executing **248 automated unit and integration tests (247 passed, 1 skipped) across 33 test files with a 100% pass rate**.
+This document provides a comprehensive technical guide to the **LifeLink Automated Testing Suite**. The project utilizes **Vitest 5.0.1** and **React Testing Library 16.3.3** ([`vitest.config.ts`](vitest.config.ts)), executing **254 automated unit and integration tests (253 passed, 1 skipped) across 34 test files with a 100% pass rate**.
 
 ---
 
@@ -8,7 +8,7 @@ This document provides a comprehensive technical guide to the **LifeLink Automat
 
 1. [Testing Philosophy & Architecture](#1-testing-philosophy--architecture)
 2. [Test Execution Commands](#2-test-execution-commands)
-3. [Complete Test Suite Breakdown (33 Test Files)](#3-complete-test-suite-breakdown-33-test-files)
+3. [Complete Test Suite Breakdown (34 Test Files)](#3-complete-test-suite-breakdown-34-test-files)
 4. [Domain Testing Deep Dives](#4-domain-testing-deep-dives)
    - [4.1. Clinical AI Triage Safety (54 Tests)](#41-clinical-ai-triage-safety-54-tests)
    - [4.2. Realtime SSE Deep Audit (32 Tests)](#42-realtime-sse-deep-audit-32-tests)

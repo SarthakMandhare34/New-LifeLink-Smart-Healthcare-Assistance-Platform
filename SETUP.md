@@ -180,6 +180,14 @@ Clinician accounts are generated deterministically from the Mumbai Medical Speci
 
 *To inspect all 52 doctor credentials across all 19 stations, run `npm run db:sync:doctors` or refer to [README.md Section 14.1](README.md#141-clinician-workstation-login-credentials-mumbai-medical-directory).*
 
+#### 🛡️ Administrative Governance Portal Test Account
+
+| Role | Portal URL | Username / Email | Password |
+|:---|:---|:---|:---|
+| **System Administrator** | `/admin/login` | `admin@lifelink.com` (or `admin`) | `admin` (or `admin123`) |
+
+*Administrative privileges allow viewing live server metrics, user directories, specialist rosters, and booking failure audit logs.*
+
 ---
 
 ## 8. Comprehensive Troubleshooting Guide
