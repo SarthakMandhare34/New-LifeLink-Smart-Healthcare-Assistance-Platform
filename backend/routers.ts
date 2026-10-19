@@ -25,6 +25,7 @@ import { getSessionCookieOptions } from "./_core/cookies"; // Secure cookie attr
 import { getProviderAvailability } from "./auth/providerAuth"; // Google OAuth availability detector
 import { doctorAuthRouter } from "./auth/doctorAuth"; // Doctor authentication routes
 import { doctorWorkspaceRouter } from "./routers/doctor"; // Doctor clinical workspace endpoints
+import { adminRouter } from "./routers/admin"; // Admin management and audit endpoints
 import { systemRouter } from "./_core/systemRouter"; // System liveness and healthcheck routes
 import { protectedProcedure, publicProcedure, router } from "./_core/trpc"; // Foundation tRPC constructors
 import {
@@ -70,6 +71,7 @@ export const appRouter = router({
   patientPrescription: patientPrescriptionRouter, // Patient digital prescription viewing
   patientNotification: patientNotificationRouter, // Centralized notification feed
   patientDiscovery: patientDiscoveryRouter, // Mumbai specialist search and directory filtering
+  admin: adminRouter, // Admin management, audit logs, and system metrics
   assessment: router({
     list: protectedProcedure.query(async ({ ctx }) => {
       const user = await getUserById(ctx.user.id);
