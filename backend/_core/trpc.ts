@@ -64,5 +64,20 @@ export const doctorProcedure = t.procedure.use(
   })
 );
 
-// Admin-procedure export for backward-compatibility with standalone tooling
-export const adminProcedure = protectedProcedure;
+// Admin-only procedure: strictly requires an admin session with role === 'admin'
+export const adminProcedure = t.procedure.use(
+  t.middleware(async opts => {
+    const { ctx, next } = opts;
+    const user = ctx.user;
+
+    if (!user || user.role !== "admin") {
+      throw new TRPCError({
+        code: "FORBIDDEN",
+        message: "An authorized administrator session is required.",
+      });
+    }
+
+    return next({ ctx: { ...ctx, user } });
+  })
+);
+
