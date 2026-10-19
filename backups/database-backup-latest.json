@@ -1,0 +1,1073 @@
+{
+  "timestamp": "2026-10-19T17:45:09.629Z",
+  "version": "1.3.0",
+  "tables": {
+    "users": [
+      {
+        "id": 1,
+        "openId": "synthetic-doctor:mock-central-general-practice-csmt",
+        "name": "Controlled General Practice Specialist — CSMT",
+        "email": "central-general-practice-csmt@lifelink.com",
+        "loginMethod": "synthetic-clinician",
+        "role": "doctor",
+        "createdAt": "2026-10-09 18:40:01",
+        "updatedAt": "2026-10-09 18:40:01",
+        "lastSignedIn": "2026-10-09 18:40:00"
+      },
+      {
+        "id": 2,
+        "openId": "synthetic-doctor:mock-central-general-practice-ghatkopar",
+        "name": "Controlled General Practice Specialist — Ghatkopar",
+        "email": "central-general-practice-ghatkopar@lifelink.com",
+        "loginMethod": "synthetic-clinician",
+        "role": "doctor",
+        "createdAt": "2026-10-09 18:40:02",
+        "updatedAt": "2026-10-09 18:40:02",
+        "lastSignedIn": "2026-10-09 18:40:01"
+      },
+      {
+        "id": 3,
+        "openId": "synthetic-doctor:mock-central-general-practice-bhandup",
+        "name": "Controlled General Practice Specialist — Bhandup",
+        "email": "central-general-practice-bhandup@lifelink.com",
+        "loginMethod": "synthetic-clinician",
+        "role": "doctor",
+        "createdAt": "2026-10-09 18:40:02",
+        "updatedAt": "2026-10-09 18:40:02",
+        "lastSignedIn": "2026-10-09 18:40:01"
+      },
+      {
+        "id": 4,
+        "openId": "synthetic-doctor:mock-central-general-practice-thane",
+        "name": "Controlled General Practice Specialist — Thane",
+        "email": "central-general-practice-thane@lifelink.com",
+        "loginMethod": "synthetic-clinician",
+        "role": "doctor",
+        "createdAt": "2026-10-09 18:40:03",
+        "updatedAt": "2026-10-09 18:40:03",
+        "lastSignedIn": "2026-10-09 18:40:02"
+      },
+      {
+        "id": 5,
+        "openId": "synthetic-doctor:mock-central-general-practice-mulund",
+        "name": "Controlled General Practice Specialist — Mulund",
+        "email": "central-general-practice-mulund@lifelink.com",
+        "loginMethod": "synthetic-clinician",
+        "role": "doctor",
+        "createdAt": "2026-10-09 18:40:03",
+        "updatedAt": "2026-10-09 18:40:03",
+        "lastSignedIn": "2026-10-09 18:40:02"
+      },
+      {
+        "id": 6,
+        "openId": "synthetic-doctor:mock-central-general-practice-diva",
+        "name": "Controlled General Practice Specialist — Diva Junction",
+        "email": "central-general-practice-diva@lifelink.com",
+        "loginMethod": "synthetic-clinician",
+        "role": "doctor",
+        "createdAt": "2026-10-09 18:40:04",
+        "updatedAt": "2026-10-09 18:40:04",
+        "lastSignedIn": "2026-10-09 18:40:03"
+      },
+      {
+        "id": 7,
+        "openId": "synthetic-doctor:mock-central-general-practice-kopar",
+        "name": "Controlled General Practice Specialist — Kopar",
+        "email": "central-general-practice-kopar@lifelink.com",
+        "loginMethod": "synthetic-clinician",
+        "role": "doctor",
+        "createdAt": "2026-10-09 18:40:05",
+        "updatedAt": "2026-10-09 18:40:05",
+        "lastSignedIn": "2026-10-09 18:40:04"
+      },
+      {
+        "id": 8,
+        "openId": "synthetic-doctor:mock-central-general-practice-dombivli",
+        "name": "Controlled General Practice Specialist — Dombivli",
+        "email": "central-general-practice-dombivli@lifelink.com",
+        "loginMethod": "synthetic-clinician",
+        "role": "doctor",
+        "createdAt": "2026-10-09 18:40:05",
+        "updatedAt": "2026-10-09 18:40:05",
+        "lastSignedIn": "2026-10-09 18:40:04"
+      },
+      {
+        "id": 9,
+        "openId": "synthetic-doctor:mock-central-general-practice-thakurli",
+        "name": "Controlled General Practice Specialist — Thakurli",
+        "email": "central-general-practice-thakurli@lifelink.com",
+        "loginMethod": "synthetic-clinician",
+        "role": "doctor",
+        "createdAt": "2026-10-09 18:40:06",
+        "updatedAt": "2026-10-09 18:40:06",
+        "lastSignedIn": "2026-10-09 18:40:05"
+      },
+      {
+        "id": 10,
+        "openId": "synthetic-doctor:mock-western-general-practice-churchgate",
+        "name": "Dr. Devendra C. Sawant, MBBS, MD",
+        "email": "western-general-practice-churchgate@lifelink.com",
+        "loginMethod": "synthetic-clinician",
+        "role": "doctor",
+        "createdAt": "2026-10-09 18:40:06",
+        "updatedAt": "2026-10-10 19:15:00",
+        "lastSignedIn": "2026-10-09 18:40:05"
+      },
+      {
+        "id": 11,
+        "openId": "synthetic-doctor:mock-western-general-practice-dadar",
+        "name": "Dr. Shalini K. Pillai, MBBS",
+        "email": "western-general-practice-dadar@lifelink.com",
+        "loginMethod": "synthetic-clinician",
+        "role": "doctor",
+        "createdAt": "2026-10-09 18:40:07",
+        "updatedAt": "2026-10-10 19:15:00",
+        "lastSignedIn": "2026-10-09 18:40:06"
+      },
+      {
+        "id": 12,
+        "openId": "synthetic-doctor:mock-western-general-practice-andheri",
+        "name": "Dr. Prakash J. Menon, MBBS",
+        "email": "western-general-practice-andheri@lifelink.com",
+        "loginMethod": "synthetic-clinician",
+        "role": "doctor",
+        "createdAt": "2026-10-09 18:40:08",
+        "updatedAt": "2026-10-10 19:15:00",
+        "lastSignedIn": "2026-10-09 18:40:07"
+      },
+      {
+        "id": 13,
+        "openId": "synthetic-doctor:mock-western-general-practice-goregaon",
+        "name": "Controlled General Practice Specialist — Goregaon",
+        "email": "western-general-practice-goregaon@lifelink.com",
+        "loginMethod": "synthetic-clinician",
+        "role": "doctor",
+        "createdAt": "2026-10-09 18:40:08",
+        "updatedAt": "2026-10-09 18:40:08",
+        "lastSignedIn": "2026-10-09 18:40:07"
+      },
+      {
+        "id": 14,
+        "openId": "synthetic-doctor:mock-western-general-practice-borivali",
+        "name": "Controlled General Practice Specialist — Borivali",
+        "email": "western-general-practice-borivali@lifelink.com",
+        "loginMethod": "synthetic-clinician",
+        "role": "doctor",
+        "createdAt": "2026-10-09 18:40:09",
+        "updatedAt": "2026-10-09 18:40:09",
+        "lastSignedIn": "2026-10-09 18:40:08"
+      },
+      {
+        "id": 15,
+        "openId": "synthetic-doctor:mock-harbour-general-practice-sewri",
+        "name": "Controlled General Practice Specialist — Sewri",
+        "email": "harbour-general-practice-sewri@lifelink.com",
+        "loginMethod": "synthetic-clinician",
+        "role": "doctor",
+        "createdAt": "2026-10-09 18:40:10",
+        "updatedAt": "2026-10-09 18:40:10",
+        "lastSignedIn": "2026-10-09 18:40:08"
+      },
+      {
+        "id": 16,
+        "openId": "synthetic-doctor:mock-harbour-general-practice-chembur",
+        "name": "Controlled General Practice Specialist — Chembur",
+        "email": "harbour-general-practice-chembur@lifelink.com",
+        "loginMethod": "synthetic-clinician",
+        "role": "doctor",
+        "createdAt": "2026-10-09 18:40:10",
+        "updatedAt": "2026-10-09 18:40:10",
+        "lastSignedIn": "2026-10-09 18:40:09"
+      },
+      {
+        "id": 17,
+        "openId": "synthetic-doctor:mock-harbour-general-practice-vashi",
+        "name": "Controlled General Practice Specialist — Vashi",
+        "email": "harbour-general-practice-vashi@lifelink.com",
+        "loginMethod": "synthetic-clinician",
+        "role": "doctor",
+        "createdAt": "2026-10-09 18:40:11",
+        "updatedAt": "2026-10-09 18:40:11",
+        "lastSignedIn": "2026-10-09 18:40:10"
+      },
+      {
+        "id": 18,
+        "openId": "synthetic-doctor:mock-harbour-general-practice-nerul",
+        "name": "Controlled General Practice Specialist — Nerul",
+        "email": "harbour-general-practice-nerul@lifelink.com",
+        "loginMethod": "synthetic-clinician",
+        "role": "doctor",
+        "createdAt": "2026-10-09 18:40:11",
+        "updatedAt": "2026-10-09 18:40:11",
+        "lastSignedIn": "2026-10-09 18:40:10"
+      },
+      {
+        "id": 19,
+        "openId": "synthetic-doctor:mock-harbour-general-practice-panvel",
+        "name": "Controlled General Practice Specialist — Panvel",
+        "email": "harbour-general-practice-panvel@lifelink.com",
+        "loginMethod": "synthetic-clinician",
+        "role": "doctor",
+        "createdAt": "2026-10-09 18:40:12",
+        "updatedAt": "2026-10-09 18:40:12",
+        "lastSignedIn": "2026-10-09 18:40:11"
+      },
+      {
+        "id": 20,
+        "openId": "synthetic-doctor:mock-central-cardiology-csmt",
+        "name": "Controlled Cardiology Specialist — CSMT",
+        "email": "central-cardiology-csmt@lifelink.com",
+        "loginMethod": "synthetic-clinician",
+        "role": "doctor",
+        "createdAt": "2026-10-09 18:40:13",
+        "updatedAt": "2026-10-19 17:06:16",
+        "lastSignedIn": "2026-10-19 17:06:16"
+      },
+      {
+        "id": 21,
+        "openId": "synthetic-doctor:mock-western-cardiology-andheri",
+        "name": "Controlled Cardiology Specialist — Andheri",
+        "email": "western-cardiology-andheri@lifelink.com",
+        "loginMethod": "synthetic-clinician",
+        "role": "doctor",
+        "createdAt": "2026-10-09 18:40:13",
+        "updatedAt": "2026-10-09 18:40:13",
+        "lastSignedIn": "2026-10-09 18:40:12"
+      },
+      {
+        "id": 22,
+        "openId": "synthetic-doctor:mock-harbour-cardiology-vashi",
+        "name": "Controlled Cardiology Specialist — Vashi",
+        "email": "harbour-cardiology-vashi@lifelink.com",
+        "loginMethod": "synthetic-clinician",
+        "role": "doctor",
+        "createdAt": "2026-10-09 18:40:14",
+        "updatedAt": "2026-10-09 18:40:14",
+        "lastSignedIn": "2026-10-09 18:40:13"
+      },
+      {
+        "id": 23,
+        "openId": "synthetic-doctor:mock-central-dermatology-ghatkopar",
+        "name": "Controlled Dermatology Specialist — Ghatkopar",
+        "email": "central-dermatology-ghatkopar@lifelink.com",
+        "loginMethod": "synthetic-clinician",
+        "role": "doctor",
+        "createdAt": "2026-10-09 18:40:14",
+        "updatedAt": "2026-10-09 18:40:14",
+        "lastSignedIn": "2026-10-09 18:40:13"
+      },
+      {
+        "id": 24,
+        "openId": "synthetic-doctor:mock-western-dermatology-churchgate",
+        "name": "Controlled Dermatology Specialist — Churchgate",
+        "email": "western-dermatology-churchgate@lifelink.com",
+        "loginMethod": "synthetic-clinician",
+        "role": "doctor",
+        "createdAt": "2026-10-09 18:40:15",
+        "updatedAt": "2026-10-09 18:40:15",
+        "lastSignedIn": "2026-10-09 18:40:14"
+      },
+      {
+        "id": 25,
+        "openId": "synthetic-doctor:mock-harbour-dermatology-chembur",
+        "name": "Controlled Dermatology Specialist — Chembur",
+        "email": "harbour-dermatology-chembur@lifelink.com",
+        "loginMethod": "synthetic-clinician",
+        "role": "doctor",
+        "createdAt": "2026-10-09 18:40:15",
+        "updatedAt": "2026-10-09 18:40:15",
+        "lastSignedIn": "2026-10-09 18:40:14"
+      },
+      {
+        "id": 26,
+        "openId": "synthetic-doctor:mock-central-orthopedics-bhandup",
+        "name": "Controlled Orthopedics Specialist — Bhandup",
+        "email": "central-orthopedics-bhandup@lifelink.com",
+        "loginMethod": "synthetic-clinician",
+        "role": "doctor",
+        "createdAt": "2026-10-09 18:40:16",
+        "updatedAt": "2026-10-09 18:40:16",
+        "lastSignedIn": "2026-10-09 18:40:15"
+      },
+      {
+        "id": 27,
+        "openId": "synthetic-doctor:mock-western-orthopedics-dadar",
+        "name": "Controlled Orthopedics Specialist — Dadar",
+        "email": "western-orthopedics-dadar@lifelink.com",
+        "loginMethod": "synthetic-clinician",
+        "role": "doctor",
+        "createdAt": "2026-10-09 18:40:17",
+        "updatedAt": "2026-10-09 18:40:17",
+        "lastSignedIn": "2026-10-09 18:40:16"
+      },
+      {
+        "id": 28,
+        "openId": "synthetic-doctor:mock-harbour-orthopedics-panvel",
+        "name": "Controlled Orthopedics Specialist — Panvel",
+        "email": "harbour-orthopedics-panvel@lifelink.com",
+        "loginMethod": "synthetic-clinician",
+        "role": "doctor",
+        "createdAt": "2026-10-09 18:40:17",
+        "updatedAt": "2026-10-09 18:40:17",
+        "lastSignedIn": "2026-10-09 18:40:16"
+      },
+      {
+        "id": 29,
+        "openId": "synthetic-doctor:mock-central-neurology-thane",
+        "name": "Controlled Neurology Specialist — Thane",
+        "email": "central-neurology-thane@lifelink.com",
+        "loginMethod": "synthetic-clinician",
+        "role": "doctor",
+        "createdAt": "2026-10-09 18:40:18",
+        "updatedAt": "2026-10-09 18:40:18",
+        "lastSignedIn": "2026-10-09 18:40:17"
+      },
+      {
+        "id": 30,
+        "openId": "synthetic-doctor:mock-western-neurology-borivali",
+        "name": "Controlled Neurology Specialist — Borivali",
+        "email": "western-neurology-borivali@lifelink.com",
+        "loginMethod": "synthetic-clinician",
+        "role": "doctor",
+        "createdAt": "2026-10-09 18:40:18",
+        "updatedAt": "2026-10-09 18:40:18",
+        "lastSignedIn": "2026-10-09 18:40:17"
+      },
+      {
+        "id": 31,
+        "openId": "synthetic-doctor:mock-harbour-neurology-nerul",
+        "name": "Controlled Neurology Specialist — Nerul",
+        "email": "harbour-neurology-nerul@lifelink.com",
+        "loginMethod": "synthetic-clinician",
+        "role": "doctor",
+        "createdAt": "2026-10-09 18:40:19",
+        "updatedAt": "2026-10-09 18:40:19",
+        "lastSignedIn": "2026-10-09 18:40:18"
+      },
+      {
+        "id": 32,
+        "openId": "synthetic-doctor:mock-western-pediatrics-andheri",
+        "name": "Controlled Pediatrics Specialist — Andheri",
+        "email": "western-pediatrics-andheri@lifelink.com",
+        "loginMethod": "synthetic-clinician",
+        "role": "doctor",
+        "createdAt": "2026-10-09 18:40:20",
+        "updatedAt": "2026-10-09 18:40:20",
+        "lastSignedIn": "2026-10-09 18:40:19"
+      },
+      {
+        "id": 33,
+        "openId": "synthetic-doctor:mock-central-pediatrics-mulund",
+        "name": "Controlled Pediatrics Specialist — Mulund",
+        "email": "central-pediatrics-mulund@lifelink.com",
+        "loginMethod": "synthetic-clinician",
+        "role": "doctor",
+        "createdAt": "2026-10-09 18:40:20",
+        "updatedAt": "2026-10-09 18:40:20",
+        "lastSignedIn": "2026-10-09 18:40:19"
+      },
+      {
+        "id": 34,
+        "openId": "synthetic-doctor:mock-harbour-pediatrics-vashi",
+        "name": "Controlled Pediatrics Specialist — Vashi",
+        "email": "harbour-pediatrics-vashi@lifelink.com",
+        "loginMethod": "synthetic-clinician",
+        "role": "doctor",
+        "createdAt": "2026-10-09 18:40:21",
+        "updatedAt": "2026-10-09 18:40:21",
+        "lastSignedIn": "2026-10-09 18:40:20"
+      },
+      {
+        "id": 35,
+        "openId": "synthetic-doctor:mock-western-ophthalmology-goregaon",
+        "name": "Controlled Ophthalmology Specialist — Goregaon",
+        "email": "western-ophthalmology-goregaon@lifelink.com",
+        "loginMethod": "synthetic-clinician",
+        "role": "doctor",
+        "createdAt": "2026-10-09 18:40:22",
+        "updatedAt": "2026-10-09 18:40:22",
+        "lastSignedIn": "2026-10-09 18:40:21"
+      },
+      {
+        "id": 36,
+        "openId": "synthetic-doctor:mock-central-ophthalmology-csmt",
+        "name": "Controlled Ophthalmology Specialist — CSMT",
+        "email": "central-ophthalmology-csmt@lifelink.com",
+        "loginMethod": "synthetic-clinician",
+        "role": "doctor",
+        "createdAt": "2026-10-09 18:40:22",
+        "updatedAt": "2026-10-09 18:40:22",
+        "lastSignedIn": "2026-10-09 18:40:21"
+      },
+      {
+        "id": 37,
+        "openId": "synthetic-doctor:mock-harbour-ophthalmology-chembur",
+        "name": "Controlled Ophthalmology Specialist — Chembur",
+        "email": "harbour-ophthalmology-chembur@lifelink.com",
+        "loginMethod": "synthetic-clinician",
+        "role": "doctor",
+        "createdAt": "2026-10-09 18:40:23",
+        "updatedAt": "2026-10-09 18:40:23",
+        "lastSignedIn": "2026-10-09 18:40:22"
+      },
+      {
+        "id": 38,
+        "openId": "synthetic-doctor:mock-western-gastroenterology-borivali",
+        "name": "Controlled Gastroenterology Specialist — Borivali",
+        "email": "western-gastroenterology-borivali@lifelink.com",
+        "loginMethod": "synthetic-clinician",
+        "role": "doctor",
+        "createdAt": "2026-10-09 18:40:23",
+        "updatedAt": "2026-10-09 18:40:23",
+        "lastSignedIn": "2026-10-09 18:40:22"
+      },
+      {
+        "id": 39,
+        "openId": "synthetic-doctor:mock-central-gastroenterology-thane",
+        "name": "Controlled Gastroenterology Specialist — Thane",
+        "email": "central-gastroenterology-thane@lifelink.com",
+        "loginMethod": "synthetic-clinician",
+        "role": "doctor",
+        "createdAt": "2026-10-09 18:40:24",
+        "updatedAt": "2026-10-09 18:40:24",
+        "lastSignedIn": "2026-10-09 18:40:23"
+      },
+      {
+        "id": 40,
+        "openId": "synthetic-doctor:mock-harbour-gastroenterology-sewri",
+        "name": "Controlled Gastroenterology Specialist — Sewri",
+        "email": "harbour-gastroenterology-sewri@lifelink.com",
+        "loginMethod": "synthetic-clinician",
+        "role": "doctor",
+        "createdAt": "2026-10-09 18:40:25",
+        "updatedAt": "2026-10-09 18:40:25",
+        "lastSignedIn": "2026-10-09 18:40:24"
+      },
+      {
+        "id": 41,
+        "openId": "synthetic-doctor:mock-harbour-psychiatry-sewri",
+        "name": "Controlled Psychiatry Specialist — Sewri",
+        "email": "harbour-psychiatry-sewri@lifelink.com",
+        "loginMethod": "synthetic-clinician",
+        "role": "doctor",
+        "createdAt": "2026-10-09 18:40:25",
+        "updatedAt": "2026-10-09 18:40:25",
+        "lastSignedIn": "2026-10-09 18:40:24"
+      },
+      {
+        "id": 42,
+        "openId": "synthetic-doctor:mock-western-psychiatry-dadar",
+        "name": "Controlled Psychiatry Specialist — Dadar",
+        "email": "western-psychiatry-dadar@lifelink.com",
+        "loginMethod": "synthetic-clinician",
+        "role": "doctor",
+        "createdAt": "2026-10-09 18:40:26",
+        "updatedAt": "2026-10-09 18:40:26",
+        "lastSignedIn": "2026-10-09 18:40:25"
+      },
+      {
+        "id": 43,
+        "openId": "synthetic-doctor:mock-central-psychiatry-ghatkopar",
+        "name": "Controlled Psychiatry Specialist — Ghatkopar",
+        "email": "central-psychiatry-ghatkopar@lifelink.com",
+        "loginMethod": "synthetic-clinician",
+        "role": "doctor",
+        "createdAt": "2026-10-09 18:40:26",
+        "updatedAt": "2026-10-09 18:40:26",
+        "lastSignedIn": "2026-10-09 18:40:25"
+      },
+      {
+        "id": 44,
+        "openId": "synthetic-doctor:mock-harbour-endocrinology-chembur",
+        "name": "Controlled Endocrinology Specialist — Chembur",
+        "email": "harbour-endocrinology-chembur@lifelink.com",
+        "loginMethod": "synthetic-clinician",
+        "role": "doctor",
+        "createdAt": "2026-10-09 18:40:27",
+        "updatedAt": "2026-10-09 18:40:27",
+        "lastSignedIn": "2026-10-09 18:40:26"
+      },
+      {
+        "id": 45,
+        "openId": "synthetic-doctor:mock-western-endocrinology-churchgate",
+        "name": "Controlled Endocrinology Specialist — Churchgate",
+        "email": "western-endocrinology-churchgate@lifelink.com",
+        "loginMethod": "synthetic-clinician",
+        "role": "doctor",
+        "createdAt": "2026-10-09 18:40:28",
+        "updatedAt": "2026-10-09 18:40:28",
+        "lastSignedIn": "2026-10-09 18:40:27"
+      },
+      {
+        "id": 46,
+        "openId": "synthetic-doctor:mock-central-endocrinology-bhandup",
+        "name": "Controlled Endocrinology Specialist — Bhandup",
+        "email": "central-endocrinology-bhandup@lifelink.com",
+        "loginMethod": "synthetic-clinician",
+        "role": "doctor",
+        "createdAt": "2026-10-09 18:40:28",
+        "updatedAt": "2026-10-09 18:40:28",
+        "lastSignedIn": "2026-10-09 18:40:27"
+      },
+      {
+        "id": 47,
+        "openId": "synthetic-doctor:mock-harbour-pulmonology-vashi",
+        "name": "Controlled Pulmonology Specialist — Vashi",
+        "email": "harbour-pulmonology-vashi@lifelink.com",
+        "loginMethod": "synthetic-clinician",
+        "role": "doctor",
+        "createdAt": "2026-10-09 18:40:29",
+        "updatedAt": "2026-10-09 18:40:29",
+        "lastSignedIn": "2026-10-09 18:40:28"
+      },
+      {
+        "id": 48,
+        "openId": "synthetic-doctor:mock-central-pulmonology-thane",
+        "name": "Controlled Pulmonology Specialist — Thane",
+        "email": "central-pulmonology-thane@lifelink.com",
+        "loginMethod": "synthetic-clinician",
+        "role": "doctor",
+        "createdAt": "2026-10-09 18:40:29",
+        "updatedAt": "2026-10-09 18:40:29",
+        "lastSignedIn": "2026-10-09 18:40:28"
+      },
+      {
+        "id": 49,
+        "openId": "synthetic-doctor:mock-western-pulmonology-andheri",
+        "name": "Controlled Pulmonology Specialist — Andheri",
+        "email": "western-pulmonology-andheri@lifelink.com",
+        "loginMethod": "synthetic-clinician",
+        "role": "doctor",
+        "createdAt": "2026-10-09 18:40:30",
+        "updatedAt": "2026-10-09 18:40:30",
+        "lastSignedIn": "2026-10-09 18:40:29"
+      },
+      {
+        "id": 50,
+        "openId": "synthetic-doctor:mock-harbour-gynecology-panvel",
+        "name": "Controlled Gynecology Specialist — Panvel",
+        "email": "harbour-gynecology-panvel@lifelink.com",
+        "loginMethod": "synthetic-clinician",
+        "role": "doctor",
+        "createdAt": "2026-10-09 18:40:31",
+        "updatedAt": "2026-10-09 18:40:31",
+        "lastSignedIn": "2026-10-09 18:40:29"
+      },
+      {
+        "id": 51,
+        "openId": "synthetic-doctor:mock-western-gynecology-goregaon",
+        "name": "Controlled Gynecology Specialist — Goregaon",
+        "email": "western-gynecology-goregaon@lifelink.com",
+        "loginMethod": "synthetic-clinician",
+        "role": "doctor",
+        "createdAt": "2026-10-09 18:40:31",
+        "updatedAt": "2026-10-09 18:40:31",
+        "lastSignedIn": "2026-10-09 18:40:30"
+      },
+      {
+        "id": 52,
+        "openId": "synthetic-doctor:mock-central-gynecology-dombivli",
+        "name": "Controlled Gynecology Specialist — Dombivli",
+        "email": "central-gynecology-dombivli@lifelink.com",
+        "loginMethod": "synthetic-clinician",
+        "role": "doctor",
+        "createdAt": "2026-10-09 18:40:32",
+        "updatedAt": "2026-10-09 18:40:32",
+        "lastSignedIn": "2026-10-09 18:40:31"
+      },
+      {
+        "id": 53,
+        "openId": "admin:system-master",
+        "name": "LifeLink System Administrator",
+        "email": "admin@lifelink.com",
+        "loginMethod": "admin-access-code",
+        "role": "admin",
+        "createdAt": "2026-10-19 17:44:59",
+        "updatedAt": "2026-10-19 17:44:59",
+        "lastSignedIn": "2026-10-19 17:44:59"
+      }
+    ],
+    "syntheticDoctorCredentials": [
+      {
+        "id": 1,
+        "userId": 1,
+        "doctorId": "mock-central-general-practice-csmt",
+        "email": "central-general-practice-csmt@lifelink.com",
+        "passwordHash": "940e967f41be696afb4fe710a1865ee9:38fb27287482399304fd8b97f21dd05903af6dadf9cce556bd7eda6ecb9c8b74b372584e94f76e7a073069acd18ff35ede71efe1496bde03c8f095e7f3b8e1a3",
+        "createdAt": "2026-10-09 18:40:01",
+        "updatedAt": "2026-10-09 18:40:01"
+      },
+      {
+        "id": 2,
+        "userId": 2,
+        "doctorId": "mock-central-general-practice-ghatkopar",
+        "email": "central-general-practice-ghatkopar@lifelink.com",
+        "passwordHash": "e390e30df417f96261a1857549cde1ab:6ef30bd72c012b8a7ce6e043d8d809bf4a80fc5a074049c89870add11d5b894697474f3539df7bc4c17d89b0c5e704b718f778c41ec1a795501841880d2b007e",
+        "createdAt": "2026-10-09 18:40:02",
+        "updatedAt": "2026-10-09 18:40:02"
+      },
+      {
+        "id": 3,
+        "userId": 3,
+        "doctorId": "mock-central-general-practice-bhandup",
+        "email": "central-general-practice-bhandup@lifelink.com",
+        "passwordHash": "2676c337726c659d1c4f30ed1a97830a:8b483924a8222e0a65db31a2ba993b3d23f34d44342124232f43827ad38f4ae9cad2e00a425705fb95176f757bc2f54aecd4941918cf1823454ff12157826532",
+        "createdAt": "2026-10-09 18:40:03",
+        "updatedAt": "2026-10-09 18:40:03"
+      },
+      {
+        "id": 4,
+        "userId": 4,
+        "doctorId": "mock-central-general-practice-thane",
+        "email": "central-general-practice-thane@lifelink.com",
+        "passwordHash": "55ef41327deadde8c1221a5a5308498f:39ca9aa65b390d03ac717c4edace6a360e7a9565b3af0c413c1d1ced6b12d267a9fd1270ba5774821891663318e7dfa956002bf73bd90a035ec7aa691153b12f",
+        "createdAt": "2026-10-09 18:40:03",
+        "updatedAt": "2026-10-09 18:40:03"
+      },
+      {
+        "id": 5,
+        "userId": 5,
+        "doctorId": "mock-central-general-practice-mulund",
+        "email": "central-general-practice-mulund@lifelink.com",
+        "passwordHash": "8884e8f784bcf03063b503a4484c0207:b43943ec7b60aab0d31a46aecb62ea575b3143be1ec4dad7f134c65df1e6561be366007d523df62c0bc8010b434e6f44be77e086b73eda858870ae958c0f876c",
+        "createdAt": "2026-10-09 18:40:04",
+        "updatedAt": "2026-10-09 18:40:04"
+      },
+      {
+        "id": 6,
+        "userId": 6,
+        "doctorId": "mock-central-general-practice-diva",
+        "email": "central-general-practice-diva@lifelink.com",
+        "passwordHash": "279cc049c7a513902ef9c42f8c1f7320:a60c557e93ac6b96327a852aeb22786ae268f477a044e8aadb4166ddfa919ee8ecf82d1662e9c17cbf9de8e58ee3a7d051d676fc1b7e21fc06caa0f6acf7b72a",
+        "createdAt": "2026-10-09 18:40:04",
+        "updatedAt": "2026-10-09 18:40:04"
+      },
+      {
+        "id": 7,
+        "userId": 7,
+        "doctorId": "mock-central-general-practice-kopar",
+        "email": "central-general-practice-kopar@lifelink.com",
+        "passwordHash": "971c8cb23f9563b55b438b96be114528:e0e72ed2d7917bc15a30f74acabfdbba2de4de6b1d2355ae81632490fc7c96b7c4b096de9d3ca41d2879b2a3aa0b668725cc0e954906f688c0c79d783782041e",
+        "createdAt": "2026-10-09 18:40:05",
+        "updatedAt": "2026-10-09 18:40:05"
+      },
+      {
+        "id": 8,
+        "userId": 8,
+        "doctorId": "mock-central-general-practice-dombivli",
+        "email": "central-general-practice-dombivli@lifelink.com",
+        "passwordHash": "073d78bbcb3af371b508834b1367dda1:6e98daba8f14c7db53bd3ec7e6619e243345660fcd99469c500ae5b9af4cc587a2bb263a4b3450d7b054172b8d0b80191694a6a820cdebb807a05282ec35d021",
+        "createdAt": "2026-10-09 18:40:06",
+        "updatedAt": "2026-10-09 18:40:06"
+      },
+      {
+        "id": 9,
+        "userId": 9,
+        "doctorId": "mock-central-general-practice-thakurli",
+        "email": "central-general-practice-thakurli@lifelink.com",
+        "passwordHash": "9fe6c50cf19c6e2edcd72ff945826a47:0f50afb5ca8c7ad0706d74267d08f39a398ae0f2fe6ecb8a68cc3345c1ff5d8971912f2a71b74cfb2ffccc9ac279a8512fdc2ab36cb6a0e0baea40f4c6ca82b9",
+        "createdAt": "2026-10-09 18:40:06",
+        "updatedAt": "2026-10-09 18:40:06"
+      },
+      {
+        "id": 10,
+        "userId": 10,
+        "doctorId": "mock-western-general-practice-churchgate",
+        "email": "western-general-practice-churchgate@lifelink.com",
+        "passwordHash": "60cc0ccafeda7dd4a6cec3b4ea323702:ef118efbbb2c1ac9f4a20508807bc0f613a1b16beb0c24a4f8e444e0ae36f37ebc827272eff73bd2f5d302342db6f65fc5a35d9fee38264dfeb27f5f41d4ab16",
+        "createdAt": "2026-10-09 18:40:07",
+        "updatedAt": "2026-10-09 18:40:07"
+      },
+      {
+        "id": 11,
+        "userId": 11,
+        "doctorId": "mock-western-general-practice-dadar",
+        "email": "western-general-practice-dadar@lifelink.com",
+        "passwordHash": "cab9689a5e1de2a663b20125ce50df4e:f1fc6e0abf67296f6fc46c3160863a4e2651a1d5d9186d1360cd97cc7fe3c93d9e383b2d5850748d3518587ad5e4066f6e620b207d59c5fbd2384f05fcda6cca",
+        "createdAt": "2026-10-09 18:40:07",
+        "updatedAt": "2026-10-09 18:40:07"
+      },
+      {
+        "id": 12,
+        "userId": 12,
+        "doctorId": "mock-western-general-practice-andheri",
+        "email": "western-general-practice-andheri@lifelink.com",
+        "passwordHash": "aa6b48b23c87df2ec053af0f9d2ff95f:a6cf8bf4444abe181d39a50974c1176f1809e09a5ebf8b43b572174336c5e04d77094a01d4f0a62e950b3b516314adc3e0477a1f12f957ec3adbe7436b31c6c4",
+        "createdAt": "2026-10-09 18:40:08",
+        "updatedAt": "2026-10-09 18:40:08"
+      },
+      {
+        "id": 13,
+        "userId": 13,
+        "doctorId": "mock-western-general-practice-goregaon",
+        "email": "western-general-practice-goregaon@lifelink.com",
+        "passwordHash": "c249463dcf2fa93f741c47a8220016e2:bbb1fe3fad460088b3af5c8ccc4ec92671168de4addb355baf4832cbfac3c31cf39a51219737c0e62b20dad8dc2b31a234cbd26c5479c36296b75ba8bfb700e6",
+        "createdAt": "2026-10-09 18:40:09",
+        "updatedAt": "2026-10-09 18:40:09"
+      },
+      {
+        "id": 14,
+        "userId": 14,
+        "doctorId": "mock-western-general-practice-borivali",
+        "email": "western-general-practice-borivali@lifelink.com",
+        "passwordHash": "cadd166fcc4266a32549c379886c7406:f713b2e52638410aaf929d59ecc93915e3cb224927cca5aa988d69a42cc3909830650d1b15d8f816cb33f109ce55029bd53e7f9721743de06a6733619d5cd75f",
+        "createdAt": "2026-10-09 18:40:09",
+        "updatedAt": "2026-10-09 18:40:09"
+      },
+      {
+        "id": 15,
+        "userId": 15,
+        "doctorId": "mock-harbour-general-practice-sewri",
+        "email": "harbour-general-practice-sewri@lifelink.com",
+        "passwordHash": "89d6af1f096d4f710c6ce2781767f437:d470afa0b9a7da3b055905bbe44f536c4d5fc45adefc7d336e2055df51e85ed388442fc513e976e8e4bf9d95aa5747f05ec4b46c27dc93a79880bd3862d8e965",
+        "createdAt": "2026-10-09 18:40:10",
+        "updatedAt": "2026-10-09 18:40:10"
+      },
+      {
+        "id": 16,
+        "userId": 16,
+        "doctorId": "mock-harbour-general-practice-chembur",
+        "email": "harbour-general-practice-chembur@lifelink.com",
+        "passwordHash": "31da3ee301189ce3f03d9d1ff15c159a:165382a2d144c9bb880f9f24139023e622470fcdd0e146637bd3897b35863d2ca008366f7e13a85f3327ef4f2691031d2aff4c341765dfad5412f4b8b91a8075",
+        "createdAt": "2026-10-09 18:40:10",
+        "updatedAt": "2026-10-09 18:40:10"
+      },
+      {
+        "id": 17,
+        "userId": 17,
+        "doctorId": "mock-harbour-general-practice-vashi",
+        "email": "harbour-general-practice-vashi@lifelink.com",
+        "passwordHash": "eb4dd695f69718facac534efd0cefcd1:bf672353b60856245a1d81c878a357f4014d679b2acf7b427701c268402472eb2175464facc1a248ab8c52cb7164b3166a331488a9c62b3061759d687796403c",
+        "createdAt": "2026-10-09 18:40:11",
+        "updatedAt": "2026-10-09 18:40:11"
+      },
+      {
+        "id": 18,
+        "userId": 18,
+        "doctorId": "mock-harbour-general-practice-nerul",
+        "email": "harbour-general-practice-nerul@lifelink.com",
+        "passwordHash": "bb68561fae1ea40362cd832a37aac233:61b9e3e275af0fd6b37e241190e584f6959d3b161f310723b269f19f520d2df9bc0f35bbb4cf4ea15e3d9948f6744756e07b6672e855c45de13d842e8def4a87",
+        "createdAt": "2026-10-09 18:40:12",
+        "updatedAt": "2026-10-09 18:40:12"
+      },
+      {
+        "id": 19,
+        "userId": 19,
+        "doctorId": "mock-harbour-general-practice-panvel",
+        "email": "harbour-general-practice-panvel@lifelink.com",
+        "passwordHash": "98a44fe6c64e2206565de4fbc2f5de95:c46a0151dba9b5dc7ad9cbe5092b69db9773187fadaa2cb8a0bb05b7833ac4e47be581c24f088b901d145cbb5022956e777958d2961daee85b7357298e378ff3",
+        "createdAt": "2026-10-09 18:40:12",
+        "updatedAt": "2026-10-09 18:40:12"
+      },
+      {
+        "id": 20,
+        "userId": 20,
+        "doctorId": "mock-central-cardiology-csmt",
+        "email": "central-cardiology-csmt@lifelink.com",
+        "passwordHash": "bf088746eb0b6928cc69a86de85d081b:4de39d261feca2596b6e7a6f85b5109289e7377e21e4617ad7f714a2e36f6823d44c56920eed96224ca9fc5a135451dd3fedd7eccb42aa99dc914ec21bcea9f7",
+        "createdAt": "2026-10-09 18:40:13",
+        "updatedAt": "2026-10-09 18:40:13"
+      },
+      {
+        "id": 21,
+        "userId": 21,
+        "doctorId": "mock-western-cardiology-andheri",
+        "email": "western-cardiology-andheri@lifelink.com",
+        "passwordHash": "826dee52e6c2402d70d386071eebba0a:7b078dcce9af2f892b941aff72a5ae288a977daa2d4e1e76a289c99704d653c34b664137a4a5fdc7e52a4fea46066862f427591c40e43d32e3823e4958b0c372",
+        "createdAt": "2026-10-09 18:40:13",
+        "updatedAt": "2026-10-09 18:40:13"
+      },
+      {
+        "id": 22,
+        "userId": 22,
+        "doctorId": "mock-harbour-cardiology-vashi",
+        "email": "harbour-cardiology-vashi@lifelink.com",
+        "passwordHash": "08c1aef98cdd1996320376ab7fd53316:2ad9536e2279101d95a975e5249514fd7338df2360c4aeaf07e0d4f76f16148629ee5f6c09c4a3d3976e1cd0ba1cb5ba70647bd8b6cdb0fe06553ebceeccb193",
+        "createdAt": "2026-10-09 18:40:14",
+        "updatedAt": "2026-10-09 18:40:14"
+      },
+      {
+        "id": 23,
+        "userId": 23,
+        "doctorId": "mock-central-dermatology-ghatkopar",
+        "email": "central-dermatology-ghatkopar@lifelink.com",
+        "passwordHash": "6180d0aa7b4cb6b9878b221bec52c09e:ce2af2d05e662d5e0223540f8f25f5d173250adff39f107a38ff3595ed9e767f2743ed1f02ec93cc11160fe5e070867e67760d6b8ab42f28d041aa8fa899f0ac",
+        "createdAt": "2026-10-09 18:40:15",
+        "updatedAt": "2026-10-09 18:40:15"
+      },
+      {
+        "id": 24,
+        "userId": 24,
+        "doctorId": "mock-western-dermatology-churchgate",
+        "email": "western-dermatology-churchgate@lifelink.com",
+        "passwordHash": "06cdb2c87b0ffd3d3a81c75bd9ca3a3c:ad35539523b55ac3e5ed53aa4ec95d177614a26fa53b43977360590dc0ebb02d86df4cea622cf6f91f0a3ac11aba4014b465beca183b582938311dc3b756b39b",
+        "createdAt": "2026-10-09 18:40:15",
+        "updatedAt": "2026-10-09 18:40:15"
+      },
+      {
+        "id": 25,
+        "userId": 25,
+        "doctorId": "mock-harbour-dermatology-chembur",
+        "email": "harbour-dermatology-chembur@lifelink.com",
+        "passwordHash": "3c2a9f64015cd9172907af7051a4bcb2:78889fe65adf689d4fda5e7f0a9dd38ea4d76e0d89e580ac4f25f053aa1e532070507f109ca1f6d82103860cd6479d1271549e58c5cdb8a02e4b250f5c035c2f",
+        "createdAt": "2026-10-09 18:40:16",
+        "updatedAt": "2026-10-09 18:40:16"
+      },
+      {
+        "id": 26,
+        "userId": 26,
+        "doctorId": "mock-central-orthopedics-bhandup",
+        "email": "central-orthopedics-bhandup@lifelink.com",
+        "passwordHash": "c771316e4700d34b5d3f7f9122c44281:da2ef71a439d258f01f7ef8d007baf6fe273a35a5a330a1b83b486d126bd73b1eaab318b09a322506cb369d1f202cbb8d8f8afd24de8eb52e1c5f61557a64fc1",
+        "createdAt": "2026-10-09 18:40:16",
+        "updatedAt": "2026-10-09 18:40:16"
+      },
+      {
+        "id": 27,
+        "userId": 27,
+        "doctorId": "mock-western-orthopedics-dadar",
+        "email": "western-orthopedics-dadar@lifelink.com",
+        "passwordHash": "21e30c10a92c03c30700a0a58047c9bd:d7f16671972d3cd730f5448be7f74686006d412bd512963a747daf52e6a288ad74544dceb2febf2166ad003030419cce5721f741a8e6f1289111b4a9ba4423e7",
+        "createdAt": "2026-10-09 18:40:17",
+        "updatedAt": "2026-10-09 18:40:17"
+      },
+      {
+        "id": 28,
+        "userId": 28,
+        "doctorId": "mock-harbour-orthopedics-panvel",
+        "email": "harbour-orthopedics-panvel@lifelink.com",
+        "passwordHash": "77021731416d8d62449a996a9eba15b0:bf998f5708073052a9276b3917e0c2f693e4bdab80380b5bd0cabf1f44d6b2145765e3b67e499c9839ef9d740ee34ff75ce76a3ba7e3025ad4c5004ecb5de727",
+        "createdAt": "2026-10-09 18:40:18",
+        "updatedAt": "2026-10-09 18:40:18"
+      },
+      {
+        "id": 29,
+        "userId": 29,
+        "doctorId": "mock-central-neurology-thane",
+        "email": "central-neurology-thane@lifelink.com",
+        "passwordHash": "d79e6ee3401b373bb2e60022062a3569:bcaa3427991f8465918b123c8f7879b8a4af3ce8c93bef1cb555cf44ab11fce6cb7f14f5d1b294b96ffdaedd2861c3796e1fc42985c69d2a7017237de4d7f3ce",
+        "createdAt": "2026-10-09 18:40:18",
+        "updatedAt": "2026-10-09 18:40:18"
+      },
+      {
+        "id": 30,
+        "userId": 30,
+        "doctorId": "mock-western-neurology-borivali",
+        "email": "western-neurology-borivali@lifelink.com",
+        "passwordHash": "877c8b34773627f75c65f99d09f762f8:b5069e4ceb5461fd6fd17405ac015d7b72b87582ed2fa224dc581488c9c11832e5ae2254ef6cb411166a8e7b7880d6f24da48a1a3cf31521f95f1d52595b8a8b",
+        "createdAt": "2026-10-09 18:40:19",
+        "updatedAt": "2026-10-09 18:40:19"
+      },
+      {
+        "id": 31,
+        "userId": 31,
+        "doctorId": "mock-harbour-neurology-nerul",
+        "email": "harbour-neurology-nerul@lifelink.com",
+        "passwordHash": "1e1cb2299130d29534e7f502380da8d9:b58c7d8945786f1f4af9329edad82134faad135dad42cf0c182eb4b0b7523034739ec2ba7229ff2e81f51304f6a0d769c3419a2ba8c5047f9a2a8e7e89f8fdb4",
+        "createdAt": "2026-10-09 18:40:19",
+        "updatedAt": "2026-10-09 18:40:19"
+      },
+      {
+        "id": 32,
+        "userId": 32,
+        "doctorId": "mock-western-pediatrics-andheri",
+        "email": "western-pediatrics-andheri@lifelink.com",
+        "passwordHash": "1c003f87f7fefffe83e962f1602a3e16:6ced18a0929ff7c95899d104098af5fc0f84fdfb498f2139711400eee8d1f97db47a3bd79a99e29a0563acafc483af0783637721b3e1c4ffe20797d7a8289c08",
+        "createdAt": "2026-10-09 18:40:20",
+        "updatedAt": "2026-10-09 18:40:20"
+      },
+      {
+        "id": 33,
+        "userId": 33,
+        "doctorId": "mock-central-pediatrics-mulund",
+        "email": "central-pediatrics-mulund@lifelink.com",
+        "passwordHash": "4472d8e900cfc209bee1f2a01f8ed664:59900da3ac4dd3a089fd0aba77ed65edb04e40ed6b0a54a82fd9144f400c9f522322d361f553838369b59e148e5e435321c47685dbf13352e940825e0a02f191",
+        "createdAt": "2026-10-09 18:40:21",
+        "updatedAt": "2026-10-09 18:40:21"
+      },
+      {
+        "id": 34,
+        "userId": 34,
+        "doctorId": "mock-harbour-pediatrics-vashi",
+        "email": "harbour-pediatrics-vashi@lifelink.com",
+        "passwordHash": "978950c06ecff7e32329894819487c41:0391b804d443d03eee7c41add6f2deeef32dd2920410b467e89b45d34b9813fc1005b3ed276062387fd75a36495e1761643439200a3cf45cddc310750c383fa4",
+        "createdAt": "2026-10-09 18:40:21",
+        "updatedAt": "2026-10-09 18:40:21"
+      },
+      {
+        "id": 35,
+        "userId": 35,
+        "doctorId": "mock-western-ophthalmology-goregaon",
+        "email": "western-ophthalmology-goregaon@lifelink.com",
+        "passwordHash": "19e24517a75007d81d62eaf10548abf1:c8518a2d490d99f29be8269adfcad131cd9e47b4fd6c61d5d918d8627110563285bfe08366cb9771740ff3c8956628b9bd60b658f0fdabf12486c7abe09044e7",
+        "createdAt": "2026-10-09 18:40:22",
+        "updatedAt": "2026-10-09 18:40:22"
+      },
+      {
+        "id": 36,
+        "userId": 36,
+        "doctorId": "mock-central-ophthalmology-csmt",
+        "email": "central-ophthalmology-csmt@lifelink.com",
+        "passwordHash": "9f17bbde8c12e07877d911fc805ed5e8:826a90e2881ff14a645388fefdc2a734e0bf6e1f908ea7a36dde0861306b4238c2330c9e0de44d4890aa9186b2d459993f00f3c9984861d4b3fb7539143017b1",
+        "createdAt": "2026-10-09 18:40:22",
+        "updatedAt": "2026-10-09 18:40:22"
+      },
+      {
+        "id": 37,
+        "userId": 37,
+        "doctorId": "mock-harbour-ophthalmology-chembur",
+        "email": "harbour-ophthalmology-chembur@lifelink.com",
+        "passwordHash": "bcf256d8bfc51acf97852b77145034a2:dcd4fa234f0bd2ffde8f4045de52ae69ed5e4582d758731c75bef539a7bf90716ddf2a4755341d76b53b4482895d3abd3c90b0061e40efdc58126335368e98b3",
+        "createdAt": "2026-10-09 18:40:23",
+        "updatedAt": "2026-10-09 18:40:23"
+      },
+      {
+        "id": 38,
+        "userId": 38,
+        "doctorId": "mock-western-gastroenterology-borivali",
+        "email": "western-gastroenterology-borivali@lifelink.com",
+        "passwordHash": "f08cfe92aa69e6e816e9ef9e9f3cef15:ae5a9cbc9bdc7df7d73fbce1c9d908c608c82d48ed6d61f4df7793f29e0278c83cbcd31b6e37b80e6df2730fdcc613e668a33b52157ab7114ba96021561dfa6e",
+        "createdAt": "2026-10-09 18:40:24",
+        "updatedAt": "2026-10-09 18:40:24"
+      },
+      {
+        "id": 39,
+        "userId": 39,
+        "doctorId": "mock-central-gastroenterology-thane",
+        "email": "central-gastroenterology-thane@lifelink.com",
+        "passwordHash": "0432def01d7119ed29e27e94c86378b2:0bd506f7fc2a6a15b12097ff344b274ad5c3c38534a46a467624b3ebd892bc2848ecad71ab4e2c25a9f2f41d535ad281c3c5d439c332494cf8fb717d9e810edb",
+        "createdAt": "2026-10-09 18:40:24",
+        "updatedAt": "2026-10-09 18:40:24"
+      },
+      {
+        "id": 40,
+        "userId": 40,
+        "doctorId": "mock-harbour-gastroenterology-sewri",
+        "email": "harbour-gastroenterology-sewri@lifelink.com",
+        "passwordHash": "9202797f9d92bb0734ed21225bf7955e:68d7b1c1137c2b705d666f3b3bc7f57bb6298f2bbc27aa19afbd2f3d9aaddce53ca049255883155f5a3a12c835e39dbe4b2e894969ab45cb13c59ea66137a6f3",
+        "createdAt": "2026-10-09 18:40:25",
+        "updatedAt": "2026-10-09 18:40:25"
+      },
+      {
+        "id": 41,
+        "userId": 41,
+        "doctorId": "mock-harbour-psychiatry-sewri",
+        "email": "harbour-psychiatry-sewri@lifelink.com",
+        "passwordHash": "79e55bc54408d7be2e18d189e46866ec:4053aae28508463de6db80118d0e65b27aede6d4105abc3781b36203546260aaff2b02d2adc27e8b1ab31b1f9f56d18b41c83e525829bdbc45965ffa276cf28b",
+        "createdAt": "2026-10-09 18:40:25",
+        "updatedAt": "2026-10-09 18:40:25"
+      },
+      {
+        "id": 42,
+        "userId": 42,
+        "doctorId": "mock-western-psychiatry-dadar",
+        "email": "western-psychiatry-dadar@lifelink.com",
+        "passwordHash": "36ddba3f0f740c690f9ffdae92e7aa0d:cea163aadab36c27ef7f00596bb113e25425a49e3a761d32ab780fc499f9dffea4f0bbb758bf49b0dda9117080ba238f2902baddbcdc9cfa7cb33338a7b40415",
+        "createdAt": "2026-10-09 18:40:26",
+        "updatedAt": "2026-10-09 18:40:26"
+      },
+      {
+        "id": 43,
+        "userId": 43,
+        "doctorId": "mock-central-psychiatry-ghatkopar",
+        "email": "central-psychiatry-ghatkopar@lifelink.com",
+        "passwordHash": "dd0cf0a73f889cc678363c08af05102b:a21b8fc2db6e7e84b92c5e9ab11db2d09856e6574daea4af781672275dcbcd45834e3c5ae4e31862e3c6731fbe1cc884664b48e8dea481a256d055b6c7a5b9c0",
+        "createdAt": "2026-10-09 18:40:27",
+        "updatedAt": "2026-10-09 18:40:27"
+      },
+      {
+        "id": 44,
+        "userId": 44,
+        "doctorId": "mock-harbour-endocrinology-chembur",
+        "email": "harbour-endocrinology-chembur@lifelink.com",
+        "passwordHash": "dc726718033d92702151363aa46c5b00:449e35c6b0b9a8cdb8c32a7f9e629b2bdc711af9ea70036c40177c3e6e49bdd234be7c0672a2194fb5c38fd901ea7f6e7d40c8e12c3950f79e26fa186289bfbd",
+        "createdAt": "2026-10-09 18:40:27",
+        "updatedAt": "2026-10-09 18:40:27"
+      },
+      {
+        "id": 45,
+        "userId": 45,
+        "doctorId": "mock-western-endocrinology-churchgate",
+        "email": "western-endocrinology-churchgate@lifelink.com",
+        "passwordHash": "66bdd79f331f79bfa9cba100e0f1c687:b3a7bc6b7d9f94b2634d10a21e5905c7d0e9c7c76ae26803a77c1eef260915b70619c2f0ac8e7faec78d197ac7b74b9b17ec64c2a85c9a53b53b7f61286505e1",
+        "createdAt": "2026-10-09 18:40:28",
+        "updatedAt": "2026-10-09 18:40:28"
+      },
+      {
+        "id": 46,
+        "userId": 46,
+        "doctorId": "mock-central-endocrinology-bhandup",
+        "email": "central-endocrinology-bhandup@lifelink.com",
+        "passwordHash": "681661621f41107e3186d56d7fd28752:538cf93b290496247a58631a9cb51e8811ed7d6c9148aa2791a37a4b71721d4ad789cd6f75f894998d58eceb5c7ca30b316ce367f3bf685dfb0e5d3b4ceed8fe",
+        "createdAt": "2026-10-09 18:40:28",
+        "updatedAt": "2026-10-09 18:40:28"
+      },
+      {
+        "id": 47,
+        "userId": 47,
+        "doctorId": "mock-harbour-pulmonology-vashi",
+        "email": "harbour-pulmonology-vashi@lifelink.com",
+        "passwordHash": "6bcdf3f1b02bd06349df39f3e28ef7e7:b59639d2b16aa2ae0ef6511d57bb28a45b3103e3058b2244f89d55418d9cff0ff8dde0a51977ce0e7d4ebe5b54f2a04893b9435ddc52db7323706f835431265b",
+        "createdAt": "2026-10-09 18:40:29",
+        "updatedAt": "2026-10-09 18:40:29"
+      },
+      {
+        "id": 48,
+        "userId": 48,
+        "doctorId": "mock-central-pulmonology-thane",
+        "email": "central-pulmonology-thane@lifelink.com",
+        "passwordHash": "3e532d621c0d0320322ceeefe3ec548d:e0d4eb89749b2bd3bbead6a8cc47068dd1eedb7ebbf196089e69055036883f81640be35fefbadb867ead93f93b8a7afbcf33ed3898220be07a968b06b9a1ee18",
+        "createdAt": "2026-10-09 18:40:30",
+        "updatedAt": "2026-10-09 18:40:30"
+      },
+      {
+        "id": 49,
+        "userId": 49,
+        "doctorId": "mock-western-pulmonology-andheri",
+        "email": "western-pulmonology-andheri@lifelink.com",
+        "passwordHash": "3fd9ab6186448f25026e2ebfa662d1ca:44f58913ccd92af821bf1d5c669ba81bd945b39167960d86586b9fa56b3780aeb679a6935e7644ed36eb398bd10e9705814f8c25055b819789a54e6a16303bbc",
+        "createdAt": "2026-10-09 18:40:30",
+        "updatedAt": "2026-10-09 18:40:30"
+      },
+      {
+        "id": 50,
+        "userId": 50,
+        "doctorId": "mock-harbour-gynecology-panvel",
+        "email": "harbour-gynecology-panvel@lifelink.com",
+        "passwordHash": "cf68bca734512cb2051477494d82a0f5:bdca338f1be24e63b5e70d6d2c90584c64aa8540a3652b0f0bffd9c58c5c96552438149cbbaac3723f84d3ab3655c832ff5563b932f42bb3a3feab62f55d2da1",
+        "createdAt": "2026-10-09 18:40:31",
+        "updatedAt": "2026-10-09 18:40:31"
+      },
+      {
+        "id": 51,
+        "userId": 51,
+        "doctorId": "mock-western-gynecology-goregaon",
+        "email": "western-gynecology-goregaon@lifelink.com",
+        "passwordHash": "194ff691e45f59f211e9e03df35ce542:159c6bdd9f450e36f104d7fd5401f33d5bb2c80f953b0c5080e544af9e3331c8b533457d88841e94c86bd9cdf2a021763674e36ce6de5aaaa85706dcc1e55616",
+        "createdAt": "2026-10-09 18:40:31",
+        "updatedAt": "2026-10-09 18:40:31"
+      },
+      {
+        "id": 52,
+        "userId": 52,
+        "doctorId": "mock-central-gynecology-dombivli",
+        "email": "central-gynecology-dombivli@lifelink.com",
+        "passwordHash": "50bff9e179f1c3e3fd59394075abf0a4:ad8337e7480f40c86924683f4dd0d7e320da7c9ba814bf79d58cb297c76b0796a968665e5f589181253c87275fcf811936482879a927ee956d57c9fe34a8c418",
+        "createdAt": "2026-10-09 18:40:32",
+        "updatedAt": "2026-10-09 18:40:32"
+      }
+    ],
+    "patientCredentials": [],
+    "patientProviderIdentities": [],
+    "patientProfiles": [],
+    "patientEmergencyContacts": [],
+    "patientMedicines": [],
+    "patientAssessments": [],
+    "patientAppointments": [],
+    "patientPrescriptions": [],
+    "patientPrescriptionItems": [],
+    "patientEvents": [],
+    "doctorEvents": [],
+    "bookingErrors": []
+  }
+}
