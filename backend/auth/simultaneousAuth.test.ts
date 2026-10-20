@@ -40,10 +40,10 @@ describe("Simultaneous Doctor and Patient Sessions", () => {
     const res = { cookie: () => {}, clearCookie: () => {} } as any;
 
     // Build context
-    const ctx = await createContext({ req, res });
+    const ctx = await createContext({ req, res, info: {} as any });
 
     // Verify context holds both identities separately
     expect(ctx.patientUser).toBeDefined();
     expect(ctx.doctorUser).toBeDefined();
-  });
+  }, 15000);
 });

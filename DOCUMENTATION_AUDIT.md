@@ -43,11 +43,11 @@ The current source code and active database schema served as the **primary sourc
 | [`ARCHITECTURE.md`](ARCHITECTURE.md) | Root | Did not exist as a dedicated guide | Created comprehensive architecture guide with layered diagrams, tRPC tiers, and sequence flows | **Newly Created** |
 | [`DATABASE.md`](DATABASE.md) | Root | Did not exist as a dedicated guide | Created comprehensive relational database guide documenting all 14 tables, indexes, and constraints | **Newly Created** |
 | [`SETUP.md`](SETUP.md) | Root | Did not exist as a dedicated guide | Created step-by-step local development setup, environment guide, and troubleshooting reference | **Newly Created** |
-| [`TESTING.md`](TESTING.md) | Root | Did not exist as a dedicated guide | Created automated testing guide with full breakdown of all 33 test files and 241 passed tests | **Newly Created** |
-| [`SECURITY.md`](SECURITY.md) | Root | Listed `1.2.x` max, duplicate section numbering, mentioned bcrypt | Updated to `1.3.x`, fixed numbering, documented Scrypt 16-byte random salting and IDOR controls | **Updated & Verified** |
-| [`SYSTEM_DIAGRAMS.md`](SYSTEM_DIAGRAMS.md) | Root | Listed 11 tables, 24 doctors, and old script names | Updated to 14 tables, 52 Mumbai railway doctors, Scrypt hashing, and verified script names | **Updated & Verified** |
-| [`CONTRIBUTORS.md`](CONTRIBUTORS.md) | Root | Referenced old "Liquid-Glass" theme and 225 tests | Updated to Swiss Clinical Humanist UI standards, high contrast, and 241 passing tests | **Updated & Verified** |
-| [`CHANGELOG.md`](CHANGELOG.md) | Root | Only documented up to v1.2.0 | Documented `v1.3.0` release notes with Swiss UI transformation, clean database, and 241 tests | **Updated & Verified** |
+| [`TESTING.md`](TESTING.md) | Root | Did not exist as a dedicated guide | Created automated testing guide with full breakdown of all 34 test files and 253 passed tests | **Newly Created** |
+| [`SECURITY.md`](SECURITY.md) | Root | Listed `1.2.x` max, duplicate section numbering, mentioned bcrypt | Updated to `1.3.x`, fixed numbering, documented Scrypt 16-byte random salting, IDOR controls, and tri-role session cookies | **Updated & Verified** |
+| [`SYSTEM_DIAGRAMS.md`](SYSTEM_DIAGRAMS.md) | Root | Listed 11 tables, 24 doctors, and old script names | Updated to 14 tables, 52 Mumbai railway doctors, Scrypt hashing, tri-role auth, and verified script names | **Updated & Verified** |
+| [`CONTRIBUTORS.md`](CONTRIBUTORS.md) | Root | Referenced old "Liquid-Glass" theme and 225 tests | Updated to Swiss Clinical Humanist UI standards, high contrast, and 253 passing tests | **Updated & Verified** |
+| [`CHANGELOG.md`](CHANGELOG.md) | Root | Only documented up to v1.2.0 | Documented `v1.3.2` release notes with Admin Portal, backup/restore engine, and 253 tests | **Updated & Verified** |
 | [`LICENSE`](LICENSE) | Root | Raw MIT license text | Added formal project title and repository identification block | **Updated & Verified** |
 
 ---
@@ -58,8 +58,8 @@ During the code audit, several discrepancies between legacy documentation and th
 
 1. **Test Suite Count**:
    - *Legacy Documentation*: Stated "225 automated tests".
-   - *Current Reality*: The test suite contains **241 passing tests across 33 test files**.
-   - *Correction*: Updated all references across `README.md`, `TESTING.md`, `CONTRIBUTORS.md`, and badges to 241 tests.
+   - *Current Reality*: The test suite contains **254 tests (253 passed, 1 skipped) across 34 test files**.
+   - *Correction*: Updated all references across `README.md`, `TESTING.md`, `CONTRIBUTORS.md`, and badges to 253 passing tests.
 2. **Database Table Count**:
    - *Legacy Documentation*: Stated "11 relational tables".
    - *Current Reality*: [`database/schema.ts`](database/schema.ts) defines **14 relational tables** (including `bookingErrors`, `patientEvents`, and `doctorEvents`).
@@ -192,7 +192,7 @@ All checks were executed directly in the project environment:
 | Verification Suite | Target | Status | Result Summary |
 |:---|:---|:---:|:---|
 | **TypeScript Typecheck** | `npm run check` | **PASS** | `0 errors` (`tsc --noEmit`) |
-| **Automated Tests** | `npm test` | **PASS** | `241 passed, 1 skipped (242 total)` across 33 test files (5.28s) |
+| **Automated Tests** | `npm test` | **PASS** | `253 passed, 1 skipped (254 total)` across 34 test files |
 | **Production Build** | `npm run build` | **PASS** | Vite client bundle + backend esbuild bundle compiled successfully in 3.54s |
 | **Browser Verification** | Interactive UI | **NOT COMPLETED** | Browser verification was not completed because a supported browser environment was unavailable. |
 

@@ -17,6 +17,7 @@ This document provides a comprehensive technical guide to the **LifeLink Automat
    - [4.5. Digital Prescriptions & Cryptographic Integrity Seals (15 Tests)](#45-digital-prescriptions--cryptographic-integrity-seals-15-tests)
    - [4.6. Emergency Health Passport (12 Tests)](#46-emergency-health-passport-12-tests)
    - [4.7. Responsive Layout & Accessibility (6 Tests)](#47-responsive-layout--accessibility-6-tests)
+   - [4.8. Administrative Portal & Governance Verification (6 Tests)](#48-administrative-portal--governance-verification-6-tests)
 5. [Verified Test Results Audit](#5-verified-test-results-audit)
 
 ---
@@ -27,7 +28,7 @@ Healthcare software requires rigorous automated testing to prevent clinical misd
 
 - **Hermetic Testing**: Tests run independently without relying on third-party cloud services or live internet connections.
 - **Defensive Boundary Testing**: Security tests deliberately attempt unauthorized cross-patient data access (IDOR attacks), expired session exploitation, and biological contradictions to ensure the backend rejects malicious or anomalous requests.
-- **Fast Feedback Cycle**: Tests execute in Node.js using Vitest's parallel worker threads, completing all 241 tests in under 6 seconds.
+- **Fast Feedback Cycle**: Tests execute in Node.js using Vitest's parallel worker threads, completing all 253 tests in under 6 seconds.
 
 ---
 
@@ -39,7 +40,7 @@ All test commands are declared in [`package.json`](package.json) and executed vi
 ```bash
 npm test
 ```
-*Executes all 248 automated tests across 33 test files (247 passed, 1 skipped) and prints the summary report.*
+*Executes all 254 automated tests across 34 test files (253 passed, 1 skipped) and prints the summary report.*
 
 ### Run Tests in Watch Mode (Development)
 ```bash
@@ -62,7 +63,7 @@ npm run verify
 
 ---
 
-## 3. Complete Test Suite Breakdown (33 Test Files)
+## 3. Complete Test Suite Breakdown (34 Test Files)
 
 | # | Test Suite Path | Tests | Verified Behavior & Coverage |
 |:---:|:---|:---:|:---|
@@ -77,29 +78,30 @@ npm run verify
 | 9 | `backend/auth/doctorAuth.test.ts` | **8 tests** | Doctor Scrypt password checks, institutional email login, timing-safe password resets, and session cookies. |
 | 10 | `backend/medicine.test.ts` | **7 tests** | Medicine cabinet operations, daily schedules, adherence tracking, and inventory counts. |
 | 11 | `frontend/src/responsiveLayout.test.ts` | **6 tests** | Responsive rendering across 320px, 360px, 390px, 430px, 480px, 768px, and 4K screens with safe-area insets. |
-| 12 | `frontend/src/features/patient/Specialists/SpecialistFinder.test.ts` | **5 tests** | Station filter, transit line filter, distance calculation, and doctor profile display. |
-| 13 | `backend/discovery/mockDoctorDirectory.test.ts` | **4 tests** | Verifies 52 doctors, 1 GP per station guarantee across 19 stations, GPS coordinates, and line filters. |
-| 14 | `frontend/src/features/entry/WorkspaceSelector.test.ts` | **4 tests** | Multi-role workspace switching, contrast verification, and responsive landing layout. |
-| 15 | `backend/auth/providerAuth.test.ts` | **4 tests (3 passed, 1 skipped)** | Clinician authorization middleware, Google OAuth availability detector, and role enforcement (1 test skipped when external Google credentials are intentionally unconfigured). |
-| 16 | `frontend/src/components/layout/AppShell.test.ts` | **3 tests** | Global navigation shell, dark/light theme switching, and safe header rendering. |
-| 17 | `backend/realtime/patientRealtime.test.ts` | **3 tests** | SSE connection management and patient channel subscription isolation. |
-| 18 | `backend/auth/nativePatientAuth.test.ts` | **2 tests** | Native patient signup, password complexity, unique Scrypt random salting, and `timingSafeEqual` login. |
-| 19 | `backend/geminiKey.test.ts` | **2 tests** | Gemini API key environment configuration and connection tests. |
-| 20 | `backend/ai/assessment.validation.test.ts` | **2 tests** | Zod input schema validation for triage requests (symptoms length, age limits, gender values). |
-| 21 | `frontend/src/hooks/patientInactivity.test.ts` | **2 tests** | Inactivity timeout detection and automatic session locking after 5 minutes of idle time. |
-| 22 | `frontend/src/features/patient/activeCopyAudit.test.ts` | **2 tests** | Copy audit ensuring professional clinical terminology across views. |
-| 23 | `frontend/src/styles.motion.test.ts` | **2 tests** | Framer motion animation token validation and reduced motion compliance. |
-| 24 | `frontend/src/typography.test.ts` | **2 tests** | Typography scale and tabular font rendering tests. |
-| 25 | `scripts/dev.test.ts` | **2 tests** | Development server port scanner and proxy configuration tests. |
-| 26 | `backend/emergencyContact.validation.test.ts` | **2 tests** | Zod schema validation for emergency contact inputs. |
-| 27 | `backend/profilePhoto.test.ts` | **2 tests** | Avatar photo upload validation, magic byte verification, and size limits. |
-| 28 | `backend/auth/simultaneousAuth.test.ts` | **1 test** | Dual session cookie isolation (`app_session_id` vs `doctor_session_id`). |
-| 29 | `frontend/src/components/EntryThemeToggle.test.ts` | **1 test** | Theme toggle switch interaction and persistence tests. |
-| 30 | `frontend/src/backgroundBranding.test.ts` | **1 test** | Official brand asset existence and path integrity tests. |
-| 31 | `frontend/src/features/patient/Specialists/discoveryLocation.test.ts` | **1 test** | Client-side Haversine geodesic calculation tests. |
-| 32 | `frontend/src/features/patient/patientAuthRoutes.test.ts` | **1 test** | Patient authentication route configuration tests. |
-| 33 | `backend/auth/auth.logout.test.ts` | **1 test** | Session cookie invalidation and logout tests. |
-| **Total** | **33 Test Files** | **248 Tests** | **100% Pass Rate (247 passed, 1 skipped)** |
+| 12 | `frontend/src/features/admin/adminPortal.test.ts` | **6 tests** | Administrative portal rendering, metrics card display, user directory roster, doctor directory roster, audit logs view, and secure login workflows. |
+| 13 | `frontend/src/features/patient/Specialists/SpecialistFinder.test.ts` | **5 tests** | Station filter, transit line filter, distance calculation, and doctor profile display. |
+| 14 | `backend/discovery/mockDoctorDirectory.test.ts` | **4 tests** | Verifies 52 doctors, 1 GP per station guarantee across 19 stations, GPS coordinates, and line filters. |
+| 15 | `frontend/src/features/entry/WorkspaceSelector.test.ts` | **4 tests** | Multi-role workspace switching, contrast verification, and responsive landing layout. |
+| 16 | `backend/auth/providerAuth.test.ts` | **4 tests (3 passed, 1 skipped)** | Clinician authorization middleware, Google OAuth availability detector, and role enforcement (1 test skipped when external Google credentials are intentionally unconfigured). |
+| 17 | `frontend/src/components/layout/AppShell.test.ts` | **3 tests** | Global navigation shell, dark/light theme switching, and safe header rendering. |
+| 18 | `backend/realtime/patientRealtime.test.ts` | **3 tests** | SSE connection management and patient channel subscription isolation. |
+| 19 | `backend/auth/nativePatientAuth.test.ts` | **2 tests** | Native patient signup, password complexity, unique Scrypt random salting, and `timingSafeEqual` login. |
+| 20 | `backend/geminiKey.test.ts` | **2 tests** | Gemini API key environment configuration and connection tests. |
+| 21 | `backend/ai/assessment.validation.test.ts` | **2 tests** | Zod input schema validation for triage requests (symptoms length, age limits, gender values). |
+| 22 | `frontend/src/hooks/patientInactivity.test.ts` | **2 tests** | Inactivity timeout detection and automatic session locking after 5 minutes of idle time. |
+| 23 | `frontend/src/features/patient/activeCopyAudit.test.ts` | **2 tests** | Copy audit ensuring professional clinical terminology across views. |
+| 24 | `frontend/src/styles.motion.test.ts` | **2 tests** | Framer motion animation token validation and reduced motion compliance. |
+| 25 | `frontend/src/typography.test.ts` | **2 tests** | Typography scale and tabular font rendering tests. |
+| 26 | `scripts/dev.test.ts` | **2 tests** | Development server port scanner and proxy configuration tests. |
+| 27 | `backend/emergencyContact.validation.test.ts` | **2 tests** | Zod schema validation for emergency contact inputs. |
+| 28 | `backend/profilePhoto.test.ts` | **2 tests** | Avatar photo upload validation, magic byte verification, and size limits. |
+| 29 | `backend/auth/simultaneousAuth.test.ts` | **1 test** | Dual session cookie isolation (`app_session_id` vs `doctor_session_id`). |
+| 30 | `frontend/src/components/EntryThemeToggle.test.ts` | **1 test** | Theme toggle switch interaction and persistence tests. |
+| 31 | `frontend/src/backgroundBranding.test.ts` | **1 test** | Official brand asset existence and path integrity tests. |
+| 32 | `frontend/src/features/patient/Specialists/discoveryLocation.test.ts` | **1 test** | Client-side Haversine geodesic calculation tests. |
+| 33 | `frontend/src/features/patient/patientAuthRoutes.test.ts` | **1 test** | Patient authentication route configuration tests. |
+| 34 | `backend/auth/auth.logout.test.ts` | **1 test** | Session cookie invalidation and logout tests. |
+| **Total** | **34 Test Files** | **254 Tests** | **100% Pass Rate (253 passed, 1 skipped)** |
 
 ---
 
@@ -143,15 +145,23 @@ npm run verify
 - Validates layout behavior at 320px, 360px, 390px, 430px, 480px, 768px, and 4K viewports.
 - Verifies safe-area insets for mobile browser navigation bars.
 
+### 4.8. Administrative Portal & Governance Verification (6 Tests)
+- Verifies clean rendering of the central Administrative Governance Dashboard (`/admin/dashboard`).
+- Validates system health telemetry cards (Registered Users, Clinicians, Appointments, SSE Stream Status).
+- Validates real-time patient directory and doctor directory data population.
+- Verifies booking error log audit table rendering with error codes (`APPOINTMENT_SLOT_UNAVAILABLE`, `INVALID_PAST_DATE_TIME`).
+- Asserts administrative session cookie guard isolation (`admin_session_id`) and route protection.
+- Validates the single clean Admin Login interface (`/admin/login`) with non-preloaded inputs for security.
+
 ---
 
 ## 5. Verified Test Results Audit
 
 ```text
-Test Files  33 passed (33)
-     Tests  247 passed | 1 skipped (248)
+Test Files  34 passed (34)
+     Tests  253 passed | 1 skipped (254)
 ```
 
-All 247 active tests pass consistently with 0 failures (1 test skipped when optional external Google OAuth credentials are unconfigured in local development).
+All 253 active tests pass consistently with 0 failures (1 test skipped when optional external Google OAuth credentials are unconfigured in local development).
 
 
