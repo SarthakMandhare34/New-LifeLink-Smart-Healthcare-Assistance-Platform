@@ -296,7 +296,7 @@ All database maintenance tasks are performed via NPM scripts:
 |:---|:---|:---|
 | `npm run db:push` | `drizzle-kit` | Generates schema diffs and applies them directly to MySQL. |
 | `npm run db:studio` | `drizzle-kit studio` | Launches interactive browser GUI at `https://local.drizzle.studio`. |
-| `npm run db:backup` | [`scripts/clear-users.ts`](scripts/clear-users.ts) | Creates full JSON snapshot of all 14 relational tables in `backups/`. |
+| `npm run db:backup` | [`scripts/clear-users.ts --backup`](scripts/clear-users.ts) | Creates full JSON snapshot of all 14 relational tables in `backups/`. |
 | `npm run db:restore` | [`scripts/db-restore.ts`](scripts/db-restore.ts) | Restores complete database state from the latest JSON snapshot. |
 | `npm run db:sync:doctors` | [`scripts/sync-doctors.ts`](scripts/sync-doctors.ts) | Audits MySQL and seeds all 52 Mumbai railway doctors and admin accounts. |
 | `npm run db:clear` | [`scripts/clear-users.ts`](scripts/clear-users.ts) | Clears patient test records with auto-backup, preserving doctors & admin. |

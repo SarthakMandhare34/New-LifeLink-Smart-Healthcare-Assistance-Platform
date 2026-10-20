@@ -37,51 +37,53 @@ LifeLink is architected as an **isomorphic, type-safe full-stack web application
 ## 2. Layered Architecture Diagram
 
 ```text
-┌─────────────────────────────────────────────────────────────────────────────┐
-│                          CLIENT PRESENTATION LAYER                          │
-│                                                                             │
-│   ┌────────────────────────────────┐     ┌──────────────────────────────┐   │
-│   │   Patient Portal (/patient/*)  │     │  Doctor Workspace (/doctor/*)│   │
-│   │   • Triage Symptom Checker     │     │  • Workstation Queue         │   │
-│   │   • Transit Specialist Finder  │     │  • Patient Medical Records   │   │
-│   │   • Appointment Booking        │     │  • Clinical Consultations    │   │
-│   │   • Medicine Cabinet & SOS     │     │  • SHA-256 Prescriptions     │   │
-│   └───────────────┬────────────────┘     └──────────────┬───────────────┘   │
-│                   │                                     │                   │
-│                   ▼                                     ▼                   │
-│         TanStack React Query Cache ◄───► tRPC Batch Client Link             │
-└──────────────────────────────────────┬──────────────────────────────────────┘
-                                       │ HTTPS / JSON-RPC
-                                       ▼
-┌─────────────────────────────────────────────────────────────────────────────┐
-│                       SERVER APPLICATION & API LAYER                        │
-│                                                                             │
-│   ┌─────────────────────────────────────────────────────────────────────┐   │
-│   │                       Express HTTP Pipeline                         │   │
-│   │   • Port scanner & loopback proxy listener (4000-4004)              │   │
-│   │   • Body parsers (50 MB limit for medical assets)                   │   │
-│   │   • Dual session cookie verification & context extraction           │   │
-│   │   • Binary magic byte profile avatar upload route                   │   │
-│   └──────────────────────────────────┬──────────────────────────────────┘   │
-│                                      │                                      │
-│                                      ▼                                      │
-│   ┌─────────────────────────────────────────────────────────────────────┐   │
-│   │                        tRPC App Router Engine                       │   │
-│   │   • publicProcedure      (Unauthenticated endpoints)                │   │
-│   │   • protectedProcedure   (Patient-authenticated, IDOR-protected)    │   │
-│   │   • doctorProcedure      (Clinician-authenticated, role-checked)    │   │
-│   └──────────────┬───────────────────┬───────────────────┬──────────────┘   │
-└──────────────────┼───────────────────┼───────────────────┼──────────────────┘
-                   │                   │                   │
-                   ▼                   ▼                   ▼
-┌────────────────────────┐  ┌────────────────────┐  ┌─────────────────────────┐
-│     AI TRIAGE ENGINE   │  │   REALTIME SSE BUS │  │  DATABASE PERSISTENCE   │
-│  (backend/ai/)         │  │ (backend/realtime/)│  │  (Drizzle ORM / MySQL)  │
-│  • Biological Checks   │  │ • Node EventBus    │  │  • 14 Relational Tables │
-│  • Emergency Regex     │  │ • SSE Streamer     │  │  • Foreign Keys         │
-│  • Gemini Flash JSON   │  │ • Replay Mechanism │  │  • Unique Slot Keys     │
-│  • Pediatric Safeguards│  │ • Heartbeat Ping   │  │  • Connection Pooling   │
-└────────────────────────┘  └────────────────────┘  └─────────────────────────┘
+┌─────────────────────────────────────────────────────────────────────────────────────────┐
+│                              CLIENT PRESENTATION LAYER                                  │
+│                                                                                         │
+│   ┌───────────────────────────┐ ┌───────────────────────────┐ ┌──────────────────────┐ │
+│   │ Patient Portal (/patient) │ │ Doctor Workstation (/doc) │ │ Admin Portal (/admin)│ │
+│   │ • Triage Symptom Checker  │ │ • Workstation Queue       │ │ • Governance Metrics │ │
+│   │ • Transit Specialist Find │ │ • Patient Medical Records │ │ • User/Doctor Directory│
+│   │ • Appointment Booking     │ │ • Clinical Consultations  │ │ • Booking Error Logs │ │
+│   │ • Medicine Cabinet & SOS  │ │ • SHA-256 Prescriptions   │ │ • Database Backup/Res│ │
+│   └─────────────┬─────────────┘ └─────────────┬─────────────┘ └───────────┬──────────┘ │
+│                 │                             │                           │            │
+│                 ▼                             ▼                           ▼            │
+│            TanStack React Query Cache ◄──────────────► tRPC Batch Client Link          │
+└───────────────────────────────────────────┬─────────────────────────────────────────────┘
+                                            │ HTTPS / JSON-RPC
+                                            ▼
+┌─────────────────────────────────────────────────────────────────────────────────────────┐
+│                           SERVER APPLICATION & API LAYER                                │
+│                                                                                         │
+│   ┌─────────────────────────────────────────────────────────────────────────────────┐   │
+│   │                            Express HTTP Pipeline                                │   │
+│   │   • Port scanner & loopback proxy listener (4000-4004)                          │   │
+│   │   • Reverse proxy header resolution: trust proxy (1) for Render HTTPS cookies   │   │
+│   │   • Body parsers (50 MB limit for medical assets)                               │   │
+│   │   • Tri-role session cookie verification (app_, doctor_, admin_session_id)      │   │
+│   │   • Binary magic byte profile avatar upload route                               │   │
+│   └───────────────────────────────────────┬─────────────────────────────────────────┘   │
+│                                           │                                             │
+│                                           ▼                                             │
+│   ┌─────────────────────────────────────────────────────────────────────────────────┐   │
+│   │                             tRPC App Router Engine                              │   │
+│   │   • publicProcedure      (Unauthenticated public endpoints)                     │   │
+│   │   • protectedProcedure   (Patient-authenticated, IDOR-protected)                │   │
+│   │   • doctorProcedure      (Clinician-authenticated, workstation-checked)         │   │
+│   │   • adminProcedure       (Administrative governance, role-verified)             │   │
+│   └───────────────┬───────────────────────┬───────────────────────┬─────────────────┘   │
+└───────────────────┼───────────────────────┼───────────────────────┼─────────────────────┘
+                    │                       │                       │
+                    ▼                       ▼                       ▼
+┌────────────────────────┐      ┌────────────────────┐      ┌─────────────────────────┐
+│    AI TRIAGE ENGINE    │      │  REALTIME SSE BUS  │      │  DATABASE PERSISTENCE   │
+│  (backend/ai/)         │      │ (backend/realtime/)│      │  (Drizzle ORM / MySQL)  │
+│  • Biological Checks   │      │ • Node EventBus    │      │  • 14 Relational Tables │
+│  • Emergency Regex     │      │ • SSE Streamer     │      │  • Foreign Keys         │
+│  • Gemini Flash JSON   │      │ • Replay Mechanism │      │  • Unique Slot Keys     │
+│  • Pediatric Safeguards│      │ • Heartbeat Ping   │      │  • JSON Backup/Restore  │
+└────────────────────────┘      └────────────────────┘      └─────────────────────────┘
 ```
 
 ---
@@ -97,9 +99,10 @@ The client root initializes in [`frontend/src/main.tsx`](frontend/src/main.tsx):
 - **ThemeProvider**: Global React Context managing clinical dark and light mode themes with `localStorage` persistence.
 
 ### 2. Route Layout Shells
-- **Public Gateway (`/`)**: Renders `WorkspaceSelector.tsx`, guiding users to select their designated role.
+- **Public Gateway (`/`)**: Renders `WorkspaceSelector.tsx`, guiding users to select their designated role or access the single clean administrative login header link.
 - **Patient Shell (`AppShell.tsx`)**: Wraps patient routes (`/patient/*`). Houses the top clinical brand navigation, responsive drawer, emergency quick-dial access, and the automated 5-minute inactivity tracker.
 - **Doctor Shell (`DoctorAppShell.tsx`)**: Wraps clinician routes (`/doctor/*`). Displays clinician credentials, specialty badges, clinic station localities, and secure sign-out controls.
+- **Admin Shell (`AdminAppShell.tsx`)**: Wraps administrative governance routes (`/admin/*`). Houses the system health telemetry indicators, user and doctor directories, booking audit tables, and manual database backup/restore triggers.
 
 ---
 
@@ -108,7 +111,7 @@ The client root initializes in [`frontend/src/main.tsx`](frontend/src/main.tsx):
 The [`shared/`](shared/) directory contains code executed by both the browser and Node.js:
 
 - **`shared/biologicalValidation.ts`**: Contains deterministic anatomical keyword lists (`FEMALE_EXCLUSIVE_PATTERNS`, `MALE_EXCLUSIVE_PATTERNS`). Validates symptom input against biological gender before API calls occur.
-- **`shared/const.ts`**: Single source of truth for session cookie names (`app_session_id`, `doctor_session_id`), timeouts, and the 12 recognized clinical specialties.
+- **`shared/const.ts`**: Single source of truth for session cookie names (`app_session_id`, `doctor_session_id`, `admin_session_id`), timeouts, and the 12 recognized clinical specialties.
 - **`shared/mumbaiRailNetwork.ts`**: Declares suburban railway lines (Western, Central, Harbour), corridor sequences, and station definitions.
 - **`shared/mumbaiStationCoordinates.ts`**: Defines calibrated GPS latitude and longitude coordinates for all 19 transit stations.
 
@@ -131,10 +134,11 @@ The backend server is initialized in [`backend/_core/index.ts`](backend/_core/in
 ### 1. Dynamic Port Binding & Scanner
 In development mode, `scripts/dev.mjs` scans ports sequentially starting at `4000` (up to `4004`) using socket probing to guarantee clean boot even if another background process is occupying port 4000. It injects `VITE_API_PORT` into the environment for Vite reverse proxying.
 
-### 2. HTTP Pipeline Middleware
+### 2. HTTP Pipeline Middleware & Cloud Proxy Handling
+- `app.set("trust proxy", 1)`: Configured for Render and upstream reverse proxies, ensuring client IP address and secure HTTPS cookie transmission flags are respected over TLS termination proxies.
 - `express.json({ limit: "50mb" })`: High capacity body parser supporting medical profile images and rich clinical records.
 - `express.urlencoded({ limit: "50mb", extended: true })`: Form payload decoding.
-- Cookie parser extracting `app_session_id` and `doctor_session_id`.
+- Cookie parser extracting `app_session_id`, `doctor_session_id`, and `admin_session_id` into typed context records.
 
 ### 3. Dedicated REST Endpoints
 Beyond tRPC, Express mounts dedicated REST endpoints:
@@ -169,6 +173,14 @@ export const doctorProcedure = t.procedure.use(async ({ ctx, next }) => {
     throw new TRPCError({ code: "FORBIDDEN", message: "This action requires an authorized doctor workstation session." });
   }
   return next({ ctx: { ...ctx, user: ctx.user } });
+});
+
+// 4. Admin Procedure: Strictly validates administrative governance session
+export const adminProcedure = t.procedure.use(async ({ ctx, next }) => {
+  if (!ctx.adminUser || ctx.adminUser.role !== "admin") {
+    throw new TRPCError({ code: "FORBIDDEN", message: "Administrative authorization required." });
+  }
+  return next({ ctx: { ...ctx, adminUser: ctx.adminUser } });
 });
 ```
 
@@ -355,9 +367,10 @@ LifeLink is engineered for production deployment utilizing a cloud-native, decou
 
 ```mermaid
 graph TB
-    subgraph Clients["Patient & Clinician Endpoints"]
+    subgraph Clients["Patient, Clinician & Governance Endpoints"]
         PatBrowser["Patient Browser (/patient/*)"]
         DocBrowser["Doctor Workstation (/doctor/*)"]
+        AdminBrowser["Admin Governance (/admin/*)"]
     end
 
     subgraph RenderEdge["Render.com Global Cloud Edge"]
@@ -371,7 +384,7 @@ graph TB
         StaticVite["Static Assets (/dist/public React 19 SPA)"]
         tRPCRouter["tRPC v11 JSON-RPC Router (/trpc)"]
         SSEBus["EventBus Real-Time Stream (/sse/*)"]
-        AuthHandler["Dual-Cookie & Google OAuth Handlers"]
+        AuthHandler["Tri-Role Cookie & Google OAuth Handlers"]
     end
 
     subgraph TiDBCloud["TiDB Serverless Cloud (AWS ap-southeast-1 Singapore)"]
@@ -387,6 +400,7 @@ graph TB
 
     PatBrowser -->|HTTPS 443| Anycast
     DocBrowser -->|HTTPS 443| Anycast
+    AdminBrowser -->|HTTPS 443| Anycast
     Anycast --> TLS
     TLS --> RevProxy
     RevProxy -->|Internal Proxy| Express

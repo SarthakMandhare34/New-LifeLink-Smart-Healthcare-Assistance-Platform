@@ -28,8 +28,8 @@ LifeLink-Smart-Healthcare-Assistance-Platform/
 │
 ├── ⚙️ BACKEND API & SERVICES LAYER [Related to: Section 3 Class & Section 5 Sequence Diagrams]
 │   ├── backend/_core/index.ts             <-- [READ] Express entry point, cookie parsers, Vite dev middleware
-│   ├── backend/_core/context.ts           <-- [READ] Dual session context parser (app_session_id & doctor_session_id)
-│   ├── backend/_core/trpc.ts              <-- [READ] tRPC procedures (publicProcedure, protectedProcedure, doctorProcedure)
+│   ├── backend/_core/context.ts           <-- [READ] Tri-role session context parser (app_session_id, doctor_session_id, admin_session_id)
+│   ├── backend/_core/trpc.ts              <-- [READ] tRPC procedures (publicProcedure, protectedProcedure, doctorProcedure, adminProcedure)
 │   ├── backend/routers.ts                 <-- [EDIT] Master tRPC appRouter definition
 │   ├── backend/routers/
 │   │   ├── patient.ts                     <-- [EDIT] Patient APIs (auth, health passport, appointments, medicines)
@@ -45,7 +45,7 @@ LifeLink-Smart-Healthcare-Assistance-Platform/
 ├── 💻 FRONTEND CLIENT INTERFACE LAYER [Related to: Section 3 Component & Section 4 Activity Diagrams]
 │   ├── frontend/src/App.tsx               <-- [EDIT] React Router hierarchy (/patient/*, /doctor/*, /admin/*)
 │   ├── frontend/src/index.css             <-- [EDIT] Swiss Clinical Humanist design tokens, high-contrast dark mode, WCAG 2.1 AA rules
-│   ├── frontend/src/features/admin/       <-- [EDIT] Administrative governance dashboard & single secure login
+│   ├── frontend/src/features/admin/       <-- [EDIT] Administrative governance dashboard (telemetry, users, doctors, audits, backups) & login
 │   ├── frontend/src/components/layout/
 │   │   ├── AppShell.tsx                   <-- [EDIT] Patient portal navigation, drawer & header shell
 │   │   ├── DoctorAppShell.tsx             <-- [EDIT] Clinician workspace navigation, drawer & header shell
@@ -97,7 +97,8 @@ LifeLink-Smart-Healthcare-Assistance-Platform/
     ├── scripts/init-db.ts                 <-- [RUN] Idempotently provisions 'lifelink' database in MySQL
     ├── scripts/sync-doctors.ts            <-- [RUN] Audits & synchronizes 52 doctor accounts in MySQL
     ├── scripts/generate-sql-seed.ts       <-- [RUN] Generates zero-dependency seed_doctors.sql script
-    ├── scripts/clear-users.ts             <-- [RUN] Atomically wipes test patient data while preserving 52 doctors
+    ├── scripts/clear-users.ts             <-- [RUN] Creates JSON backup (npm run db:backup) & wipes test patients (npm run db:clear)
+    ├── scripts/db-restore.ts              <-- [RUN] Restores complete database state from snapshot (npm run db:restore)
     ├── scripts/delete-user.ts             <-- [RUN] Selectively deletes a single user account by email
     ├── scripts/list-doctor-credentials.ts <-- [RUN] Displays verified clinician credentials for login
     ├── scripts/seed-doctors.ts            <-- [RUN] Seeds 52 doctor accounts via Drizzle ORM
@@ -490,9 +491,10 @@ npm run verify
 
 ```mermaid
 graph TB
-    subgraph Clients["Patient & Doctor Endpoints"]
+    subgraph Clients["Patient, Doctor & Administrator Endpoints"]
         PatBrowser["Patient Browser (/patient/*)"]
         DocBrowser["Doctor Workstation (/doctor/*)"]
+        AdminBrowser["Admin Governance (/admin/*)"]
     end
 
     subgraph RenderEdge["Render.com Global Cloud Edge"]
@@ -506,7 +508,7 @@ graph TB
         StaticVite["Static Assets (/dist/public - React 19 SPA)"]
         tRPCRouter["tRPC v11 JSON-RPC Router (/trpc)"]
         SSEBus["EventBus Real-time SSE (/sse/*)"]
-        AuthHandler["Dual-Cookie & Google OAuth Handlers"]
+        AuthHandler["Tri-Role Cookie & Google OAuth Handlers"]
     end
 
     subgraph TiDBCloud["TiDB Serverless Cloud (AWS ap-southeast-1 Singapore)"]
@@ -522,6 +524,7 @@ graph TB
 
     PatBrowser -->|HTTPS 443| Anycast
     DocBrowser -->|HTTPS 443| Anycast
+    AdminBrowser -->|HTTPS 443| Anycast
     Anycast --> TLS
     TLS --> RevProxy
     RevProxy -->|Internal Proxy| Express
