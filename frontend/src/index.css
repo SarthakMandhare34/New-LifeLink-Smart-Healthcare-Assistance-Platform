@@ -1739,9 +1739,23 @@ select:focus {
   display: flex;
   flex-direction: column;
   background: var(--color-background);
+  background-image: 
+    radial-gradient(ellipse at 15% 15%, rgba(2, 132, 199, 0.08) 0%, transparent 60%),
+    radial-gradient(ellipse at 85% 85%, rgba(15, 118, 110, 0.06) 0%, transparent 55%),
+    radial-gradient(ellipse at 50% 50%, rgba(2, 132, 199, 0.03) 0%, transparent 70%);
   color: var(--color-text);
   padding: clamp(10px, 1.8vw, 20px);
   box-sizing: border-box;
+  position: relative;
+  overflow-x: hidden;
+}
+
+:root[data-theme="dark"] .auth-page {
+  background-color: #070B14;
+  background-image: 
+    radial-gradient(ellipse at 50% 10%, rgba(2, 132, 199, 0.16) 0%, transparent 65%),
+    radial-gradient(ellipse at 85% 85%, rgba(15, 118, 110, 0.12) 0%, transparent 60%),
+    radial-gradient(ellipse at 15% 75%, rgba(14, 165, 233, 0.08) 0%, transparent 50%);
 }
 
 .auth-split-layout {
@@ -1754,6 +1768,8 @@ select:focus {
   padding: clamp(8px, 1.5vh, 20px) 0;
   flex: 1 1 auto;
   box-sizing: border-box;
+  position: relative;
+  z-index: 2;
 }
 
 .auth-branding-panel {
@@ -1766,12 +1782,29 @@ select:focus {
 
 .auth-card {
   width: min(100%, 480px);
-  padding: clamp(24px, 4vw, 36px);
+  padding: clamp(26px, 4vw, 38px);
   background: var(--color-surface-white);
   border: 1px solid var(--color-border);
-  border-radius: var(--border-radius-md);
-  box-shadow: none;
+  border-radius: 16px;
+  box-shadow: 
+    0 4px 6px -1px rgba(0, 0, 0, 0.04),
+    0 20px 40px -8px rgba(11, 60, 93, 0.08),
+    0 0 0 1px rgba(2, 132, 199, 0.06);
   box-sizing: border-box;
+  transition: transform 0.25s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+  position: relative;
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+}
+
+:root[data-theme="dark"] .auth-card {
+  background: rgba(13, 21, 39, 0.85);
+  border: 1px solid rgba(56, 189, 248, 0.22);
+  box-shadow: 
+    0 24px 60px -12px rgba(0, 0, 0, 0.7),
+    0 0 0 1px rgba(2, 132, 199, 0.25),
+    inset 0 1px 1px 0 rgba(255, 255, 255, 0.12),
+    0 0 40px -10px rgba(2, 132, 199, 0.18);
 }
 
 /* 13. Notification System */
