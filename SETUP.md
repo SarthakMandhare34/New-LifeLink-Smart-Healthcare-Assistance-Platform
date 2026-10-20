@@ -226,6 +226,11 @@ Clinician accounts are generated deterministically from the Mumbai Medical Speci
 - **Diagnosis**: The image is either larger than 10 MB or the binary header does not match its file extension.
 - **Fix**: Ensure the image is under 10 MB and is a genuine JPEG, PNG, or WebP file.
 
+### Issue 6: Administrator Sign In on Cloud or Local Deployments
+- **Symptom**: Unsure of administrator credentials or encountering authorization errors at `/admin/login`.
+- **Diagnosis**: Admin inputs are intentionally left empty by default for security so credentials are not exposed in the browser.
+- **Fix**: Enter email `admin@lifelink.com` (or `admin`) and password `admin` (or `admin123`). The backend automatically verifies administrative authority and self-heals database permissions if needed.
+
 ---
 
 ## 9. Production Deployment Guide: Render.com & TiDB Serverless Cloud

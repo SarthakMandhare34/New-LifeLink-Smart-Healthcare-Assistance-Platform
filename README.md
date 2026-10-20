@@ -143,7 +143,7 @@ To provide an accurate assessment of the platform, the project boundary is clear
 
 ## 5. User Roles
 
-LifeLink defines two distinct user roles for this prototype, each operating in an isolated environment with dedicated session cookies:
+LifeLink defines three distinct user roles for this prototype, each operating in an isolated environment with dedicated session cookies:
 
 ### 1. Patient (`role: "user"`)
 A prototype user seeking simulated medical triage, specialist discovery, or personal health record management.
@@ -164,6 +164,15 @@ A demonstration clinician workstation used to showcase doctor-side workflows in 
 - **Prescription Lifecycle & Sealing**: Authors draft prescriptions with medication line items, dosages, and instructions (`UNSIGNED / CONTROLLED WORKSPACE`), then explicitly executes the dedicated signing mutation to seal the record with an immutable SHA-256 integrity reference (`SIGNED — CONTROLLED STATE`).
 - **Session Cookie**: Managed via `doctor_session_id`.
 
+### 3. Administrator (`role: "admin"`)
+An authorized governance portal providing platform-wide administrative controls, system observability, and user directory management.
+- **Administrative Login**: Authenticates via `/admin/login` using standard credentials (`admin@lifelink.com` or `admin`). Inputs are empty by default for security.
+- **System Metrics**: Monitors real-time counts of registered users, Mumbai specialists, appointments, and prescriptions.
+- **User Directory**: Reviews registered patient accounts and securely removes invalid or test profiles with cascading cleanup.
+- **Specialist Registry**: Reviews all 52 clinicians stationed along Mumbai transit corridors with active status tracking.
+- **Audit Logs**: Inspects and clears table 14 booking validation and scheduling conflict logs.
+- **Session Cookie**: Managed via `admin_session_id` and guarded by `adminProcedure`.
+
 ---
 
 ## 6. Main Features
@@ -172,7 +181,8 @@ All features listed below are fully implemented as interactive demonstrations wi
 
 | Feature | User Role | Description |
 |:---|:---:|:---|
-| **Workspace Selector** | Public | Initial entry gateway allowing users to choose between the Patient Portal and Doctor Workstation. |
+| **Workspace Selector** | Public | Initial entry gateway allowing users to choose between the Patient Portal, Doctor Workstation, and Admin Portal. |
+| **Admin Portal** | Admin | Unified management dashboard for platform metrics, user directory, specialist roster, and scheduling audit logs. |
 | **Native Authentication** | Both | Secure sign-up and login using Scrypt password hashing with individual random salts and constant-time equality checks. |
 | **Google OAuth 2.0** | Patient | Alternative authentication flow using Google identity with CSRF nonce verification and role isolation. |
 | **5-Layer AI Triage** | Patient | Symptom check checking biological accuracy, instant emergency rules, age safety checks, and structured output. |
@@ -1558,13 +1568,15 @@ All scripts verified directly from [`package.json`](package.json):
 | `npm run build` | `vite build && esbuild backend/_core/index.ts --platform=node --packages=external --bundle --format=esm --outdir=dist` | Builds production frontend into `dist/public` and bundles backend into `dist/index.js`. |
 | `npm start` | `node dist/index.js` | Runs production server serving both the Express API and compiled frontend assets. |
 | `npm run check` | `tsc --noEmit` | Executes TypeScript type-checking without emitting files (0 errors). |
-| `npm test` | `vitest run` | Runs all 248 automated unit and integration tests across 33 test files (247 passed, 1 skipped). |
+| `npm test` | `vitest run` | Runs all 254 automated unit and integration tests across 34 test files (253 passed, 1 skipped). |
 | `npm run format` | `prettier --write .` | Formats all code and documentation files according to Prettier formatting standards. |
 | `npm run verify` | `npm run check && npm test && npm run build` | Sequentially runs type checking, test suites, and production build verification. |
 | `npm run db:push` | `drizzle-kit generate --config database/drizzle.config.ts && drizzle-kit migrate --config database/drizzle.config.ts` | Generates and applies schema migrations directly to MySQL. |
 | `npm run db:studio` | `drizzle-kit studio --config database/drizzle.config.ts` | Launches interactive Drizzle Studio database GUI. |
-| `npm run db:sync:doctors` | `tsx scripts/sync-doctors.ts` | Populates and synchronizes all 52 Mumbai railway doctors and Scrypt password hashes. |
-| `npm run db:clear` | `tsx scripts/clear-users.ts` | Safely purges test patient records while preserving all 52 doctor accounts. |
+| `npm run db:backup` | `tsx scripts/clear-users.ts --backup` | Creates full JSON snapshot of all 14 relational tables in `backups/`. |
+| `npm run db:restore` | `tsx scripts/db-restore.ts` | Restores complete database state from the latest JSON snapshot. |
+| `npm run db:sync:doctors` | `tsx scripts/sync-doctors.ts` | Populates and synchronizes all 52 Mumbai railway doctors and admin accounts. |
+| `npm run db:clear` | `tsx scripts/clear-users.ts` | Auto-backups then purges test records while preserving all 52 doctors and admin. |
 | `npm run db:delete-user` | `tsx scripts/delete-user.ts` | Selectively deletes a single user account by email. |
 
 ---

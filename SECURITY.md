@@ -51,6 +51,7 @@ LifeLink enforces strict cryptographic separation between patient, clinician, an
 ### 3.3. Insecure Direct Object Reference (IDOR) Mitigation
 - All database queries and mutations executed under `protectedProcedure` derive the target patient ID strictly from the verified session payload (`ctx.user.id`).
 - All clinician actions executed under `doctorProcedure` derive the clinician's identity strictly from `ctx.user.openId`.
+- All administrative actions executed under `adminProcedure` derive authority strictly from `ctx.adminUser` with `role === "admin"`.
 - Access to patient records and medical passport data requires an active, verified appointment linking the patient to the requesting clinician. Client-provided user IDs are strictly rejected.
 
 ### 3.4. Multi-Layer Clinical AI Safety & Hallucination Prevention
