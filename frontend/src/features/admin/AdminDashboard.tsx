@@ -6,9 +6,10 @@
  * Single unified management center for authorized administrators:
  * 1. Platform Metrics: Real-time counts of users, doctors, appointments, and prescriptions
  * 2. User Directory: View registered users and remove inactive or invalid accounts
- * 3. Mumbai Specialist Registry: Complete list of all 52 specialists across Mumbai transit lines
+ * 3. Mumbai Specialist Registry: Provision, reset passwords, and delete doctor accounts
  * 4. Booking Audit Records: View and clear appointment scheduling conflicts and errors
  *
+ * All doctor CRUD operations are persisted to the database.
  * All text uses simple, standard English words for clarity and ease of use.
  * ============================================================================
  */
@@ -17,6 +18,7 @@ import { trpc } from "../../lib/trpc";
 import { Card } from "../../components/ui/Card";
 import { Button } from "../../components/ui/Button";
 import { Badge } from "../../components/ui/Badge";
+import { Input } from "../../components/ui/Input";
 import {
   Users,
   Stethoscope,
@@ -30,6 +32,9 @@ import {
   Train,
   CheckCircle2,
   Clock,
+  KeyRound,
+  UserPlus,
+  ShieldCheck,
 } from "lucide-react";
 import { toast } from "sonner";
 
@@ -53,6 +58,14 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({
   const [searchQuery, setSearchQuery] = useState<string>("");
   const [userToDelete, setUserToDelete] = useState<{ id: number; name: string } | null>(null);
 
+  // Doctor management state
+  const [doctorToProvision, setDoctorToProvision] = useState<{ id: string; name: string } | null>(null);
+  const [doctorToReset, setDoctorToReset] = useState<{ email: string; name: string } | null>(null);
+  const [doctorToDelete, setDoctorToDelete] = useState<{ id?: number; doctorId?: string; name: string; email?: string } | null>(null);
+  const [provisionEmail, setProvisionEmail] = useState("");
+  const [provisionPassword, setProvisionPassword] = useState("");
+  const [resetPassword, setResetPassword] = useState("");
+
   // Queries
   const metricsQuery = trpc.admin.metrics.useQuery(undefined, {
     staleTime: 10_000,
@@ -61,7 +74,7 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({
     staleTime: 10_000,
   });
   const doctorsQuery = trpc.admin.doctors.list.useQuery(undefined, {
-    staleTime: 60_000,
+    staleTime: 30_000,
   });
   const errorsQuery = trpc.admin.bookingErrors.list.useQuery(undefined, {
     staleTime: 5_000,
@@ -88,6 +101,43 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({
     },
     onError: err => {
       toast.error(err.message || "Failed to clear audit records.");
+    },
+  });
+
+  // Doctor CRUD mutations
+  const provisionDoctorMutation = trpc.admin.doctors.provision.useMutation({
+    onSuccess: data => {
+      toast.success(`Doctor account for ${data.displayName} provisioned successfully.`);
+      setDoctorToProvision(null);
+      setProvisionEmail("");
+      setProvisionPassword("");
+      utils.admin.doctors.list.invalidate();
+    },
+    onError: err => {
+      toast.error(err.message || "Failed to provision doctor account.");
+    },
+  });
+
+  const resetDoctorPasswordMutation = trpc.admin.doctors.resetPassword.useMutation({
+    onSuccess: () => {
+      toast.success("Doctor password reset successfully.");
+      setDoctorToReset(null);
+      setResetPassword("");
+    },
+    onError: err => {
+      toast.error(err.message || "Failed to reset doctor password.");
+    },
+  });
+
+  const deleteDoctorMutation = trpc.admin.doctors.delete.useMutation({
+    onSuccess: () => {
+      toast.success("Doctor account deleted from the database.");
+      setDoctorToDelete(null);
+      utils.admin.doctors.list.invalidate();
+      utils.admin.metrics.invalidate();
+    },
+    onError: err => {
+      toast.error(err.message || "Failed to delete doctor account.");
     },
   });
 
@@ -398,9 +448,12 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({
           </div>
         )}
 
-        {/* Tab 2: Mumbai Specialists Registry */}
+        {/* Tab 2: Mumbai Specialists Registry with CRUD */}
         {activeTab === "doctors" && (
           <div>
+            <p style={{ margin: "0 0 16px", fontSize: "0.85rem", color: "var(--color-text-muted)" }}>
+              Provision or manage credentials for specialist doctors. All changes are saved to the database.
+            </p>
             {filteredDoctors.length === 0 ? (
               <EmptyState message="No Mumbai doctors match the search criteria." />
             ) : (
@@ -413,55 +466,123 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({
                       <th style={{ padding: "10px 12px", color: "var(--color-text-muted)", fontWeight: 600 }}>Station</th>
                       <th style={{ padding: "10px 12px", color: "var(--color-text-muted)", fontWeight: 600 }}>Railway Line</th>
                       <th style={{ padding: "10px 12px", color: "var(--color-text-muted)", fontWeight: 600 }}>Work Email</th>
+                      <th style={{ padding: "10px 12px", color: "var(--color-text-muted)", fontWeight: 600 }}>Status</th>
+                      <th style={{ padding: "10px 12px", color: "var(--color-text-muted)", fontWeight: 600, textAlign: "right" }}>Actions</th>
                     </tr>
                   </thead>
                   <tbody>
-                    {filteredDoctors.map(doctor => (
-                      <tr key={doctor.id} style={{ borderBottom: "1px solid var(--color-border)" }}>
-                        <td style={{ padding: "12px", fontWeight: 600, color: "var(--color-text)" }}>
-                          <div style={{ display: "flex", alignItems: "center", gap: "8px" }}>
-                            <Stethoscope size={16} color="var(--lifelink-blue)" />
-                            <span>{doctor.name}</span>
-                          </div>
-                        </td>
-                        <td style={{ padding: "12px", color: "var(--color-text)" }}>
-                          <Badge variant="neutral">{doctor.specialty}</Badge>
-                        </td>
-                        <td style={{ padding: "12px", color: "var(--color-text-muted)" }}>
-                          <div style={{ display: "flex", alignItems: "center", gap: "6px" }}>
-                            <Train size={14} color="var(--color-text-muted)" />
-                            <span>{doctor.station}</span>
-                          </div>
-                        </td>
-                        <td style={{ padding: "12px", color: "var(--color-text-muted)" }}>
-                          <span
-                            style={{
-                              padding: "2px 8px",
-                              borderRadius: "4px",
-                              fontSize: "0.75rem",
-                              fontWeight: 600,
-                              background:
-                                doctor.railLine === "Western"
-                                  ? "rgba(14, 165, 233, 0.12)"
-                                  : doctor.railLine === "Central"
-                                  ? "rgba(239, 68, 68, 0.12)"
-                                  : "rgba(16, 185, 129, 0.12)",
-                              color:
-                                doctor.railLine === "Western"
-                                  ? "#0284C7"
-                                  : doctor.railLine === "Central"
-                                  ? "#DC2626"
-                                  : "#059669",
-                            }}
-                          >
-                            {doctor.railLine} Line
-                          </span>
-                        </td>
-                        <td style={{ padding: "12px", color: "var(--color-text-muted)", fontFamily: "monospace", fontSize: "0.82rem" }}>
-                          {doctor.workEmail}
-                        </td>
-                      </tr>
-                    ))}
+                    {filteredDoctors.map(doctor => {
+                      // Find matching user record from users list for deletion
+                      const matchingUser = rawUsers.find(u => u.email === doctor.workEmail || u.role === "doctor");
+                      return (
+                        <tr key={doctor.id} style={{ borderBottom: "1px solid var(--color-border)" }}>
+                          <td style={{ padding: "12px", fontWeight: 600, color: "var(--color-text)" }}>
+                            <div style={{ display: "flex", alignItems: "center", gap: "8px" }}>
+                              <Stethoscope size={16} color="var(--lifelink-blue)" />
+                              <span>{doctor.name}</span>
+                            </div>
+                          </td>
+                          <td style={{ padding: "12px", color: "var(--color-text)" }}>
+                            <Badge variant="neutral">{doctor.specialty}</Badge>
+                          </td>
+                          <td style={{ padding: "12px", color: "var(--color-text-muted)" }}>
+                            <div style={{ display: "flex", alignItems: "center", gap: "6px" }}>
+                              <Train size={14} color="var(--color-text-muted)" />
+                              <span>{doctor.station}</span>
+                            </div>
+                          </td>
+                          <td style={{ padding: "12px", color: "var(--color-text-muted)" }}>
+                            <span
+                              style={{
+                                padding: "2px 8px",
+                                borderRadius: "4px",
+                                fontSize: "0.75rem",
+                                fontWeight: 600,
+                                background:
+                                  doctor.railLine === "Western"
+                                    ? "rgba(14, 165, 233, 0.12)"
+                                    : doctor.railLine === "Central"
+                                    ? "rgba(239, 68, 68, 0.12)"
+                                    : "rgba(16, 185, 129, 0.12)",
+                                color:
+                                  doctor.railLine === "Western"
+                                    ? "#0284C7"
+                                    : doctor.railLine === "Central"
+                                    ? "#DC2626"
+                                    : "#059669",
+                              }}
+                            >
+                              {doctor.railLine} Line
+                            </span>
+                          </td>
+                          <td style={{ padding: "12px", color: "var(--color-text-muted)", fontFamily: "monospace", fontSize: "0.82rem" }}>
+                            {doctor.workEmail}
+                          </td>
+                          <td style={{ padding: "12px" }}>
+                            <Badge variant={(doctor as any).isProvisioned ? "success" : "neutral"}>
+                              {(doctor as any).status ?? "Unknown"}
+                            </Badge>
+                          </td>
+                          <td style={{ padding: "12px", textAlign: "right" }}>
+                            <div style={{ display: "flex", gap: "6px", justifyContent: "flex-end" }}>
+                              <Button
+                                variant="outline"
+                                onClick={() => {
+                                  setDoctorToProvision({ id: doctor.id, name: doctor.name });
+                                  setProvisionEmail(doctor.workEmail);
+                                  setProvisionPassword("");
+                                }}
+                                style={{ padding: "4px 8px", fontSize: "0.75rem", display: "inline-flex", alignItems: "center", gap: "4px" }}
+                                title={(doctor as any).isProvisioned ? "Update credentials" : "Provision account"}
+                              >
+                                <UserPlus size={13} />
+                                <span>{(doctor as any).isProvisioned ? "Update" : "Provision"}</span>
+                              </Button>
+                              {(doctor as any).isProvisioned && (
+                                <>
+                                  <Button
+                                    variant="outline"
+                                    onClick={() => {
+                                      setDoctorToReset({ email: doctor.workEmail, name: doctor.name });
+                                      setResetPassword("");
+                                    }}
+                                    style={{ padding: "4px 8px", fontSize: "0.75rem", display: "inline-flex", alignItems: "center", gap: "4px" }}
+                                    title="Reset password"
+                                  >
+                                    <KeyRound size={13} />
+                                    <span>Reset PW</span>
+                                  </Button>
+                                  <Button
+                                    variant="outline"
+                                    onClick={() => {
+                                      setDoctorToDelete({
+                                        doctorId: doctor.id,
+                                        name: doctor.name,
+                                        email: doctor.workEmail,
+                                        id: (doctor as any).userId ?? undefined,
+                                      });
+                                    }}
+                                    style={{
+                                      padding: "4px 8px",
+                                      fontSize: "0.75rem",
+                                      display: "inline-flex",
+                                      alignItems: "center",
+                                      gap: "4px",
+                                      color: "var(--lifelink-red)",
+                                      borderColor: "var(--lifelink-red-border)",
+                                    }}
+                                    title="Delete doctor account"
+                                  >
+                                    <Trash2 size={13} />
+                                    <span>Delete</span>
+                                  </Button>
+                                </>
+                              )}
+                            </div>
+                          </td>
+                        </tr>
+                      );
+                    })}
                   </tbody>
                 </table>
               </div>
@@ -598,7 +719,7 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({
                   Confirm Delete User
                 </h3>
                 <p style={{ margin: "2px 0 0", fontSize: "0.82rem", color: "var(--color-text-muted)" }}>
-                  This action permanently removes the user account.
+                  This action permanently removes the user account from the database.
                 </p>
               </div>
             </div>
@@ -626,6 +747,282 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({
                 }}
               >
                 {deleteUserMutation.isPending ? "Deleting…" : "Delete Account"}
+              </Button>
+            </div>
+          </Card>
+        </div>
+      )}
+
+      {/* Provision Doctor Modal */}
+      {doctorToProvision && (
+        <div
+          style={{
+            position: "fixed",
+            inset: 0,
+            background: "rgba(0, 0, 0, 0.55)",
+            display: "grid",
+            placeItems: "center",
+            zIndex: 100,
+            padding: "16px",
+          }}
+        >
+          <Card
+            variant="solid"
+            style={{
+              maxWidth: "440px",
+              width: "100%",
+              padding: "24px",
+              borderRadius: "var(--border-radius-card)",
+              background: "var(--color-surface-white)",
+            }}
+          >
+            <div style={{ display: "flex", alignItems: "center", gap: "12px", marginBottom: "16px" }}>
+              <div
+                style={{
+                  width: "40px",
+                  height: "40px",
+                  borderRadius: "50%",
+                  background: "rgba(14, 165, 233, 0.12)",
+                  display: "grid",
+                  placeItems: "center",
+                  color: "var(--lifelink-blue)",
+                }}
+              >
+                <UserPlus size={20} />
+              </div>
+              <div>
+                <h3 style={{ margin: 0, fontSize: "1.1rem", color: "var(--color-text)" }}>
+                  Provision Doctor Account
+                </h3>
+                <p style={{ margin: "2px 0 0", fontSize: "0.82rem", color: "var(--color-text-muted)" }}>
+                  {doctorToProvision.name}
+                </p>
+              </div>
+            </div>
+
+            <div style={{ display: "flex", flexDirection: "column", gap: "12px", marginBottom: "20px" }}>
+              <div>
+                <label style={{ display: "block", fontSize: "0.82rem", fontWeight: 600, color: "var(--color-text-muted)", marginBottom: "4px" }}>
+                  Work Email
+                </label>
+                <Input
+                  type="email"
+                  value={provisionEmail}
+                  onChange={e => setProvisionEmail(e.target.value)}
+                  placeholder="doctor@lifelink.com"
+                  id="provision-email"
+                />
+              </div>
+              <div>
+                <label style={{ display: "block", fontSize: "0.82rem", fontWeight: 600, color: "var(--color-text-muted)", marginBottom: "4px" }}>
+                  Password (min. 10 characters)
+                </label>
+                <Input
+                  type="password"
+                  value={provisionPassword}
+                  onChange={e => setProvisionPassword(e.target.value)}
+                  placeholder="Enter a secure password"
+                  id="provision-password"
+                />
+              </div>
+            </div>
+
+            <div style={{ display: "flex", justifyContent: "flex-end", gap: "10px" }}>
+              <Button
+                variant="outline"
+                onClick={() => { setDoctorToProvision(null); setProvisionEmail(""); setProvisionPassword(""); }}
+                disabled={provisionDoctorMutation.isPending}
+              >
+                Cancel
+              </Button>
+              <Button
+                variant="primary"
+                onClick={() => {
+                  if (!provisionEmail.trim() || !provisionPassword.trim()) {
+                    toast.error("Please enter both email and password.");
+                    return;
+                  }
+                  provisionDoctorMutation.mutate({
+                    doctorId: doctorToProvision.id,
+                    email: provisionEmail.trim(),
+                    password: provisionPassword,
+                  });
+                }}
+                disabled={provisionDoctorMutation.isPending}
+              >
+                {provisionDoctorMutation.isPending ? "Saving…" : "Save to Database"}
+              </Button>
+            </div>
+          </Card>
+        </div>
+      )}
+
+      {/* Reset Doctor Password Modal */}
+      {doctorToReset && (
+        <div
+          style={{
+            position: "fixed",
+            inset: 0,
+            background: "rgba(0, 0, 0, 0.55)",
+            display: "grid",
+            placeItems: "center",
+            zIndex: 100,
+            padding: "16px",
+          }}
+        >
+          <Card
+            variant="solid"
+            style={{
+              maxWidth: "440px",
+              width: "100%",
+              padding: "24px",
+              borderRadius: "var(--border-radius-card)",
+              background: "var(--color-surface-white)",
+            }}
+          >
+            <div style={{ display: "flex", alignItems: "center", gap: "12px", marginBottom: "16px" }}>
+              <div
+                style={{
+                  width: "40px",
+                  height: "40px",
+                  borderRadius: "50%",
+                  background: "rgba(245, 158, 11, 0.12)",
+                  display: "grid",
+                  placeItems: "center",
+                  color: "#D97706",
+                }}
+              >
+                <KeyRound size={20} />
+              </div>
+              <div>
+                <h3 style={{ margin: 0, fontSize: "1.1rem", color: "var(--color-text)" }}>
+                  Reset Doctor Password
+                </h3>
+                <p style={{ margin: "2px 0 0", fontSize: "0.82rem", color: "var(--color-text-muted)" }}>
+                  {doctorToReset.name} — {doctorToReset.email}
+                </p>
+              </div>
+            </div>
+
+            <div style={{ marginBottom: "20px" }}>
+              <label style={{ display: "block", fontSize: "0.82rem", fontWeight: 600, color: "var(--color-text-muted)", marginBottom: "4px" }}>
+                New Password (min. 10 characters)
+              </label>
+              <Input
+                type="password"
+                value={resetPassword}
+                onChange={e => setResetPassword(e.target.value)}
+                placeholder="Enter new password"
+                id="reset-doctor-password"
+              />
+            </div>
+
+            <div style={{ display: "flex", justifyContent: "flex-end", gap: "10px" }}>
+              <Button
+                variant="outline"
+                onClick={() => { setDoctorToReset(null); setResetPassword(""); }}
+                disabled={resetDoctorPasswordMutation.isPending}
+              >
+                Cancel
+              </Button>
+              <Button
+                variant="primary"
+                onClick={() => {
+                  if (!resetPassword.trim() || resetPassword.length < 10) {
+                    toast.error("Password must be at least 10 characters.");
+                    return;
+                  }
+                  resetDoctorPasswordMutation.mutate({
+                    email: doctorToReset.email,
+                    newPassword: resetPassword,
+                  });
+                }}
+                disabled={resetDoctorPasswordMutation.isPending}
+                style={{ background: "#D97706", borderColor: "#D97706", color: "#FFFFFF" }}
+              >
+                {resetDoctorPasswordMutation.isPending ? "Resetting…" : "Reset Password"}
+              </Button>
+            </div>
+          </Card>
+        </div>
+      )}
+
+      {/* Delete Doctor Modal */}
+      {doctorToDelete && (
+        <div
+          style={{
+            position: "fixed",
+            inset: 0,
+            background: "rgba(0, 0, 0, 0.55)",
+            display: "grid",
+            placeItems: "center",
+            zIndex: 100,
+            padding: "16px",
+          }}
+        >
+          <Card
+            variant="solid"
+            style={{
+              maxWidth: "420px",
+              width: "100%",
+              padding: "24px",
+              borderRadius: "var(--border-radius-card)",
+              background: "var(--color-surface-white)",
+            }}
+          >
+            <div style={{ display: "flex", alignItems: "center", gap: "12px", marginBottom: "16px" }}>
+              <div
+                style={{
+                  width: "40px",
+                  height: "40px",
+                  borderRadius: "50%",
+                  background: "var(--lifelink-red-soft)",
+                  display: "grid",
+                  placeItems: "center",
+                  color: "var(--lifelink-red)",
+                }}
+              >
+                <Trash2 size={20} />
+              </div>
+              <div>
+                <h3 style={{ margin: 0, fontSize: "1.1rem", color: "var(--color-text)" }}>
+                  Confirm Delete Doctor Account
+                </h3>
+                <p style={{ margin: "2px 0 0", fontSize: "0.82rem", color: "var(--color-text-muted)" }}>
+                  This removes the doctor credentials and account from the database.
+                </p>
+              </div>
+            </div>
+
+            <p style={{ fontSize: "0.9rem", color: "var(--color-text)", margin: "0 0 20px" }}>
+              Are you sure you want to delete the doctor account for <strong>{doctorToDelete.name}</strong> ({doctorToDelete.email})?
+            </p>
+
+            <div style={{ display: "flex", justifyContent: "flex-end", gap: "10px" }}>
+              <Button
+                variant="outline"
+                onClick={() => setDoctorToDelete(null)}
+                disabled={deleteDoctorMutation.isPending}
+              >
+                Cancel
+              </Button>
+              <Button
+                variant="primary"
+                onClick={() =>
+                  deleteDoctorMutation.mutate({
+                    doctorId: doctorToDelete.doctorId,
+                    email: doctorToDelete.email,
+                    userId: doctorToDelete.id,
+                  })
+                }
+                disabled={deleteDoctorMutation.isPending}
+                style={{
+                  background: "var(--lifelink-red)",
+                  borderColor: "var(--lifelink-red)",
+                  color: "#FFFFFF",
+                }}
+              >
+                {deleteDoctorMutation.isPending ? "Deleting…" : "Delete Account"}
               </Button>
             </div>
           </Card>

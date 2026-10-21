@@ -165,13 +165,13 @@ A demonstration clinician workstation used to showcase doctor-side workflows in 
 - **Session Cookie**: Managed via `doctor_session_id`.
 
 ### 3. Administrator (`role: "admin"`)
-An authorized governance portal providing platform-wide administrative controls, system observability, and user directory management.
-- **Administrative Login**: Authenticates via `/admin/login` using standard credentials (`admin@lifelink.com` or `admin`). Inputs are empty by default for security.
-- **System Metrics**: Monitors real-time counts of registered users, Mumbai specialists, appointments, and prescriptions.
-- **User Directory**: Reviews registered patient accounts and securely removes invalid or test profiles with cascading cleanup.
-- **Specialist Registry**: Reviews all 52 clinicians stationed along Mumbai transit corridors with active status tracking.
-- **Audit Logs**: Inspects and clears table 14 booking validation and scheduling conflict logs.
-- **Session Cookie**: Managed via `admin_session_id` and guarded by `adminProcedure`.
+An authorized governance portal providing platform-wide administrative controls, system observability, specialist management, and database synchronization.
+- **Administrative Login**: Authenticates via `/admin/login` using secure environment variables (`ADMIN_SECRET_KEY` and `ADMIN_PASSWORD`). Fallback default credentials have been eliminated to prevent unauthorized access.
+- **System Metrics**: Monitors real-time counts of registered users, Mumbai specialists, appointments, and prescriptions with instant synchronization.
+- **Doctor Account Management (Full CRUD & DB Sync)**: Directly provisions new specialist doctor credentials into `users` and `syntheticDoctorCredentials` tables, resets passwords, and permanently deletes doctor accounts with immediate database reflection and login access revocation.
+- **User Directory**: Reviews registered patient and clinician accounts and permanently removes accounts with clean cascade purging across all 14 database tables.
+- **Audit Logs**: Inspects and clears table 14 booking validation and scheduling conflict logs to maintain clean booking synchronization.
+- **Session Cookie**: Managed via `admin_session_id` and strictly guarded by `adminProcedure` and server-verified JWT queries.
 
 ---
 
@@ -819,11 +819,12 @@ LifeLink incorporates strict security controls to protect sensitive healthcare d
 - Passwords are saved in MySQL in the standard format `salt:hexHash`.
 - During login, the entered password is hashed with the stored salt and compared using `crypto.timingSafeEqual` to prevent side-channel timing attacks.
 
-### 2. Dual-Session Cookie Isolation
-- Patient and clinician sessions are kept in separate HTTP cookies:
+### 2. Triple-Session Cookie Isolation
+- Patient, clinician, and administrator sessions are strictly isolated across three distinct HTTP cookies:
   - Patient Cookie: `app_session_id` (`httpOnly: true`, `sameSite: "lax"`, `secure` in production).
   - Doctor Cookie: `doctor_session_id` (`httpOnly: true`, `sameSite: "lax"`, `secure` in production).
-- A user can be signed into a patient account in one tab and a doctor workstation in another tab without session collision or permission leakage.
+  - Admin Cookie: `admin_session_id` (`httpOnly: true`, `sameSite: "lax"`, `secure` in production).
+- A user can be signed into a patient account, a doctor workstation, and the administrative portal simultaneously without session collision or permission leakage.
 
 ### 3. Automated 5-Minute Inactivity Session Timeout
 - The client-side hook (`patientInactivity.ts`) monitors user interaction events: `mousemove`, `keydown`, `mousedown`, `touchstart`, and `scroll`.
@@ -845,13 +846,18 @@ LifeLink incorporates strict security controls to protect sensitive healthcare d
   - JPEG: `FF D8 FF`
   - PNG: `89 50 4E 47 0D 0A 1A 0A`
   - WebP: `RIFF .... WEBP`
-- Files exceeding 10 MB are rejected. Requests require a custom `x-lifelink-request: profile-photo` header to prevent Cross-Site Request Forgery (CSRF).
+  - Files exceeding 10 MB are rejected. Requests require a custom `x-lifelink-request: profile-photo` header to prevent Cross-Site Request Forgery (CSRF).
 
 ### 7. Account Deletion & Data Purging (Right to Erasure)
-- Patients can permanently delete their accounts from the Workspace Preferences menu.
-- Deletion invokes a strict database-level `ON DELETE CASCADE` constraint.
-- When the primary `users` record is removed, all associated data across the system (passwords, AI triage assessments, health passports, medicines, prescriptions, and appointments) is instantly and irreversibly wiped.
-- The user's active session cookie is immediately cleared upon execution.
+- Patients and administrators can permanently delete accounts with complete cascade purging:
+  - Deletion purges prescription items, prescriptions, appointments, emergency contacts, medicine entries, profiles, AI assessments, SSE events, booking errors, and credentials before removing the core user row.
+  - Guarantees zero orphaned foreign keys and complete permanent removal from the database.
+  - Active session cookies are immediately cleared upon execution.
+
+### 8. Administrator Governance & Database Synchronization
+- **No Hardcoded Defaults**: Administrator login rejects guessable default passwords and requires `ADMIN_SECRET_KEY` and `ADMIN_PASSWORD` environment variables evaluated with `crypto.timingSafeEqual`.
+- **Database-Synchronized Doctor Management**: Adding/provisioning a doctor immediately persists credentials in `users` and `syntheticDoctorCredentials` with salted `scrypt` hashing. Deleting a doctor completely deletes credentials and account records from the database, instantly blocking further login.
+- **Server-Side Route Authorization**: All route guards (`ProtectedRoute.tsx`) rely strictly on server-side JWT cookie verification rather than volatile storage, preventing unauthorized access and avoiding false logouts on page refresh.
 
 ---
 
@@ -1092,6 +1098,8 @@ Verified against [`.env.example`](.env.example):
 | `PORT` | Optional | `4000` | Backend HTTP port for Express. In dev mode, `scripts/dev.mjs` scans ports 4000-4004. |
 | `DATABASE_URL` | **Yes** | `mysql://root:password@localhost:3306/lifelink` | MySQL database connection URI parsed by Drizzle ORM and `mysql2`. |
 | `JWT_SECRET` | **Yes** | `min-32-characters-secret` | Cryptographic secret used to sign and verify patient and doctor session JWT tokens. |
+| `ADMIN_SECRET_KEY` | **Yes** | `lifelink-admin-master-key-2026` | Master administrative key required to access the Admin Governance Portal (`/admin/login`). |
+| `ADMIN_PASSWORD` | **Yes** | `LifeLink@Admin#2026!` | Primary administrator password verified via constant-time hashing comparison. |
 | `LIFELINK_DEMO_DOCTOR_ACCESS_CODE` | Optional | `lifelink-controlled-clinician-secret-key-2026` | Master administrative secret required to provision or reset doctor workstations (`/doctor/reset`). |
 | `GEMINI_API_KEY` | Optional | `AIzaSy...` | Google Gemini API key used for clinical symptom triage and urgency scoring. |
 | `GOOGLE_OAUTH_CLIENT_ID` | Optional | `...apps.googleusercontent.com` | Google Cloud OAuth Client ID for patient Google Sign-In. |

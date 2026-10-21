@@ -182,9 +182,9 @@ Clinician accounts are generated deterministically from the Mumbai Medical Speci
 
 #### 🛡️ Administrative Governance Portal Test Account
 
-| Role | Portal URL | Username / Email | Password |
+| Role | Portal URL | Username / Email | Password / Access Key |
 |:---|:---|:---|:---|
-| **System Administrator** | `/admin/login` | `admin@lifelink.com` (or `admin`) | `admin` (or `admin123`) |
+| **System Administrator** | `/admin/login` | `admin@lifelink.com` (or `admin`) | Configured via `ADMIN_PASSWORD` or `ADMIN_SECRET_KEY` (e.g. `LifeLink@Admin#2026!`) |
 
 *Administrative privileges allow viewing live server metrics, user directories, specialist rosters, and booking failure audit logs.*
 
@@ -228,8 +228,8 @@ Clinician accounts are generated deterministically from the Mumbai Medical Speci
 
 ### Issue 6: Administrator Sign In on Cloud or Local Deployments
 - **Symptom**: Unsure of administrator credentials or encountering authorization errors at `/admin/login`.
-- **Diagnosis**: Admin inputs are intentionally left empty by default for security so credentials are not exposed in the browser.
-- **Fix**: Enter email `admin@lifelink.com` (or `admin`) and password `admin` (or `admin123`). The backend automatically verifies administrative authority and self-heals database permissions if needed.
+- **Diagnosis**: Weak default passwords (`admin`, `admin123`) have been disabled for security. Admin login requires the environment variables configured in `.env`.
+- **Fix**: Enter email `admin@lifelink.com` (or `admin`) and the password configured under `ADMIN_PASSWORD` (or `ADMIN_SECRET_KEY`) in your `.env` file (e.g. `LifeLink@Admin#2026!`). The backend verifies authority using constant-time hashing comparison.
 
 ---
 

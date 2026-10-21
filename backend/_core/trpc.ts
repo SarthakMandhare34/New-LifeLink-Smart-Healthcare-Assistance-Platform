@@ -68,7 +68,8 @@ export const doctorProcedure = t.procedure.use(
 export const adminProcedure = t.procedure.use(
   t.middleware(async opts => {
     const { ctx, next } = opts;
-    const user = ctx.user;
+    const user =
+      ctx.adminUser || (ctx.user?.role === "admin" ? ctx.user : null);
 
     if (!user || user.role !== "admin") {
       throw new TRPCError({

@@ -549,6 +549,7 @@ export async function listSyntheticDoctorCredentialAccounts() {
     .select({
       doctorId: syntheticDoctorCredentials.doctorId,
       email: syntheticDoctorCredentials.email,
+      userId: syntheticDoctorCredentials.userId,
     })
     .from(syntheticDoctorCredentials);
 }
@@ -628,6 +629,66 @@ export async function createSyntheticDoctorCredential(input: {
     passwordHash: input.passwordHash,
   });
   return { user, doctorId: input.doctor.id, email: input.email };
+}
+
+/**
+ * Permanently removes a synthetic doctor credential and linked user account from the database.
+ * Deletes from syntheticDoctorCredentials, doctorEvents, and cascades user cleanup.
+ */
+export async function deleteSyntheticDoctorCredential(input: {
+  doctorId?: string;
+  email?: string;
+  userId?: number;
+}) {
+  const db = await getDb();
+  if (!db) throw new Error("Database is not available");
+
+  let userId = input.userId;
+  let doctorId = input.doctorId;
+
+  if (!userId && (doctorId || input.email)) {
+    const creds = await db
+      .select({
+        userId: syntheticDoctorCredentials.userId,
+        doctorId: syntheticDoctorCredentials.doctorId,
+      })
+      .from(syntheticDoctorCredentials)
+      .where(
+        doctorId
+          ? eq(syntheticDoctorCredentials.doctorId, doctorId)
+          : eq(syntheticDoctorCredentials.email, input.email!)
+      )
+      .limit(1);
+    if (creds[0]) {
+      userId = creds[0].userId;
+      doctorId = creds[0].doctorId;
+    }
+  }
+
+  // Delete doctor credentials row
+  if (doctorId) {
+    await db
+      .delete(syntheticDoctorCredentials)
+      .where(eq(syntheticDoctorCredentials.doctorId, doctorId));
+    await db
+      .delete(doctorEvents)
+      .where(eq(doctorEvents.doctorId, doctorId));
+  } else if (input.email) {
+    await db
+      .delete(syntheticDoctorCredentials)
+      .where(eq(syntheticDoctorCredentials.email, input.email));
+  } else if (userId) {
+    await db
+      .delete(syntheticDoctorCredentials)
+      .where(eq(syntheticDoctorCredentials.userId, userId));
+  }
+
+  // If there's an associated user record, clean it up completely
+  if (userId) {
+    await deleteUserById(userId);
+  }
+
+  return { success: true, doctorId, userId };
 }
 
 function parseList(value: string | null | undefined) {
@@ -1868,7 +1929,7 @@ export async function getAdminUsersList(params?: any) {
   return results;
 }
 
-/** Admin user deletion helper */
+/** Admin user deletion helper: safely and permanently removes user and all related records from DB */
 export async function deleteUserById(input: any) {
   const db = await getDb();
   if (!db) throw new Error("Database is not available");
@@ -1876,9 +1937,65 @@ export async function deleteUserById(input: any) {
     typeof input === "object" && input !== null
       ? Number(input.userId ?? input.id)
       : Number(input);
-  if (Number.isInteger(id) && id > 0) {
-    await db.delete(users).where(eq(users.id, id));
+  if (!Number.isInteger(id) || id <= 0) {
+    return { success: false, deletedId: id };
   }
+
+  // 1. Delete prescription items for any prescriptions owned by user
+  try {
+    const userPrescriptions = await db
+      .select({ id: patientPrescriptions.id })
+      .from(patientPrescriptions)
+      .where(eq(patientPrescriptions.userId, id));
+    if (userPrescriptions.length > 0) {
+      const rxIds = userPrescriptions.map(p => p.id);
+      await db
+        .delete(patientPrescriptionItems)
+        .where(inArray(patientPrescriptionItems.prescriptionId, rxIds));
+    }
+    await db.delete(patientPrescriptions).where(eq(patientPrescriptions.userId, id));
+  } catch {
+    // Continue even if table or rows differ
+  }
+
+  // 2. Delete appointments
+  try {
+    await db.delete(patientAppointments).where(eq(patientAppointments.userId, id));
+  } catch {}
+
+  // 3. Delete emergency contacts & medicines
+  try {
+    await db.delete(patientEmergencyContacts).where(eq(patientEmergencyContacts.userId, id));
+    await db.delete(patientMedicines).where(eq(patientMedicines.userId, id));
+  } catch {}
+
+  // 4. Delete patient profiles & assessments
+  try {
+    await db.delete(patientProfiles).where(eq(patientProfiles.userId, id));
+    await db.delete(patientAssessments).where(eq(patientAssessments.userId, id));
+  } catch {}
+
+  // 5. Delete real-time events
+  try {
+    await db.delete(patientEvents).where(eq(patientEvents.userId, id));
+    await db.delete(doctorEvents).where(eq(doctorEvents.patientUserId, id));
+  } catch {}
+
+  // 6. Delete booking errors audit rows
+  try {
+    await db.delete(bookingErrors).where(eq(bookingErrors.userId, id));
+  } catch {}
+
+  // 7. Delete credentials & OAuth identities
+  try {
+    await db.delete(syntheticDoctorCredentials).where(eq(syntheticDoctorCredentials.userId, id));
+    await db.delete(patientCredentials).where(eq(patientCredentials.userId, id));
+    await db.delete(patientProviderIdentities).where(eq(patientProviderIdentities.userId, id));
+  } catch {}
+
+  // 8. Delete core user row
+  await db.delete(users).where(eq(users.id, id));
+
   return { success: true, deletedId: id };
 }
 

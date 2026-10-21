@@ -7,6 +7,15 @@
  * - Prevents unauthenticated access to protected dashboard and record views
  * - Enforces role-based isolation (patients cannot enter doctor/admin workspaces)
  * - Preserves requested destination paths for smooth post-login redirection
+ *
+ * SECURITY NOTE: Server-side JWT cookie verification (via tRPC) is the sole
+ * source of truth for authentication. The sessionStorage flags are written
+ * AFTER the server confirms a valid session and are never read to make access
+ * decisions. This prevents:
+ *   1. False-logout: users kicked out on page refresh when they still hold a
+ *      valid HTTP-only cookie (sessionStorage is cleared on tab close).
+ *   2. Bypass attacks: forging a sessionStorage flag granting no access because
+ *      the server query still returns null for unauthenticated users.
  * ============================================================================
  */
 import React from "react";
@@ -43,6 +52,12 @@ export const ProtectedRoute: React.FC<ProtectedRouteProps> = ({
   return <>{children ?? <Outlet />}</>;
 };
 
+/**
+ * PatientRouteGuard
+ *
+ * The server-verified JWT cookie (validated by trpc.auth.me) is the only
+ * access gate. sessionStorage is NOT checked for access decisions.
+ */
 function PatientRouteGuard({
   location,
   children,
@@ -51,24 +66,33 @@ function PatientRouteGuard({
   children?: React.ReactNode;
 }) {
   const { user, loading } = useAuth();
-  const hasPatientSession =
-    typeof window !== "undefined" &&
-    sessionStorage.getItem("lifelink_patient_session") === "active";
 
   if (loading) {
     return <RouteLoader />;
   }
 
-  if (!user || !hasPatientSession) {
+  if (!user) {
     const redirectUrl = `/login?redirect=${encodeURIComponent(
       location.pathname + location.search
     )}`;
     return <Navigate to={redirectUrl} replace />;
   }
 
+  // Write the tab-session hint AFTER confirming server auth (pure UX optimization,
+  // never read as a security gate).
+  if (typeof window !== "undefined") {
+    sessionStorage.setItem("lifelink_patient_session", "active");
+  }
+
   return <>{children ?? <Outlet />}</>;
 }
 
+/**
+ * DoctorRouteGuard
+ *
+ * The server-verified doctor JWT cookie (validated by trpc.doctorAuth.me) is
+ * the sole access gate. No sessionStorage dependency.
+ */
 function DoctorRouteGuard({
   location,
   children,
@@ -81,24 +105,30 @@ function DoctorRouteGuard({
     refetchOnWindowFocus: false,
   });
 
-  const hasDoctorSession =
-    typeof window !== "undefined" &&
-    sessionStorage.getItem("lifelink_doctor_session") === "active";
-
   if (doctorQuery.isLoading) {
     return <RouteLoader />;
   }
 
-  if (!doctorQuery.data || !hasDoctorSession) {
+  if (!doctorQuery.data) {
     const redirectUrl = `/doctor/login?redirect=${encodeURIComponent(
       location.pathname + location.search
     )}`;
     return <Navigate to={redirectUrl} replace />;
   }
 
+  if (typeof window !== "undefined") {
+    sessionStorage.setItem("lifelink_doctor_session", "active");
+  }
+
   return <>{children ?? <Outlet />}</>;
 }
 
+/**
+ * AdminRouteGuard
+ *
+ * The server-verified admin JWT cookie (validated by trpc.admin.me) is the
+ * sole access gate. No sessionStorage dependency.
+ */
 function AdminRouteGuard({
   location,
   children,
@@ -111,15 +141,11 @@ function AdminRouteGuard({
     refetchOnWindowFocus: false,
   });
 
-  const hasAdminSession =
-    typeof window !== "undefined" &&
-    sessionStorage.getItem("lifelink_admin_session") === "active";
-
-  if (adminQuery.isLoading || (hasAdminSession && adminQuery.isFetching && !adminQuery.data)) {
+  if (adminQuery.isLoading) {
     return <RouteLoader />;
   }
 
-  const isAdmin = adminQuery.data && adminQuery.data.role === "admin";
+  const isAdmin = Boolean(adminQuery.data && adminQuery.data.role === "admin");
 
   if (!isAdmin) {
     if (typeof window !== "undefined") {
@@ -131,7 +157,6 @@ function AdminRouteGuard({
     return <Navigate to={redirectUrl} replace />;
   }
 
-  // Synchronize active admin session marker
   if (typeof window !== "undefined") {
     sessionStorage.setItem("lifelink_admin_session", "active");
   }

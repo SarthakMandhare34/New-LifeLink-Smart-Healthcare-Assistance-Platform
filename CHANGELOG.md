@@ -4,6 +4,25 @@ All notable changes to the LifeLink Smart Healthcare Assistance Platform will be
 
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/), and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [1.3.3] - 2026-10-21
+
+### Security Hardened & Database Synchronized
+- **Admin Authentication Overhaul & Elimination of Fallback Defaults**:
+  - Removed all hardcoded weak passwords (`admin`, `admin123`) from `backend/routers/admin.ts`.
+  - Enforced constant-time timing-safe comparison (`crypto.timingSafeEqual`) against mandatory environment variables (`ADMIN_SECRET_KEY` and `ADMIN_PASSWORD`).
+  - Updated `backend/_core/env.ts` with dedicated getters and updated `.env.example` with hardened template variables.
+- **Client Route Guard Resilience (`ProtectedRoute.tsx`)**:
+  - Replaced volatile `sessionStorage` gating with server-verified JWT queries (`useAuth`, `doctorAuth.me`, `admin.me`), preventing false logouts on page refresh and blocking unauthorized bypass attempts.
+  - Enhanced `adminProcedure` in `backend/_core/trpc.ts` to check both `ctx.adminUser` and `ctx.user?.role === "admin"`.
+- **Admin Doctor Account Management with Full Database Synchronization**:
+  - Added full CRUD mutations to `admin.doctors` router: provisioning new doctor accounts, resetting doctor passwords, and permanently deleting doctor accounts.
+  - Added `deleteSyntheticDoctorCredential` in `backend/db.ts` to remove clinician credentials, purge related doctor events, and cascade deletion to the core user table.
+  - Enhanced `AdminDashboard.tsx` with Provision/Update, Reset PW, and Delete actions with full database synchronization and instant UI cache invalidation.
+- **Comprehensive Cascade Deletions (`deleteUserById`)**:
+  - Rewrote user deletion in `backend/db.ts` to safely purge records from all 14 database tables (prescription line items, prescriptions, appointments, emergency contacts, medicines, profiles, assessments, SSE events, booking errors, credentials, and OAuth identities) before removing the core user row, preventing foreign key constraint violations and orphaned records.
+
+---
+
 ## [1.3.2] - 2026-10-19
 
 ### Added & Enhanced

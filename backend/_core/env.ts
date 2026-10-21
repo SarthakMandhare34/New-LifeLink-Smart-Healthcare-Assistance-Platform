@@ -55,4 +55,10 @@ export const ENV = {
       "lifelink-controlled-clinician-secret-key-2026"
     );
   },
+  get adminSecretKey() {
+    return process.env.ADMIN_SECRET_KEY ?? "";
+  },
+  get adminPassword() {
+    return process.env.ADMIN_PASSWORD ?? "";
+  },
 };
