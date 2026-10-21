@@ -519,8 +519,28 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({
                             {doctor.workEmail}
                           </td>
                           <td style={{ padding: "12px" }}>
-                            <Badge variant={(doctor as any).isProvisioned ? "success" : "neutral"}>
-                              {(doctor as any).status ?? "Unknown"}
+                            <Badge
+                              variant={(doctor as any).isProvisioned ? "success" : "neutral"}
+                              style={{
+                                display: "inline-flex",
+                                alignItems: "center",
+                                gap: "6px",
+                                padding: "4px 9px",
+                                fontSize: "0.75rem",
+                                fontWeight: 600,
+                                borderRadius: "9999px",
+                              }}
+                            >
+                              <span
+                                style={{
+                                  width: "6px",
+                                  height: "6px",
+                                  borderRadius: "50%",
+                                  background: (doctor as any).isProvisioned ? "#10B981" : "#94A3B8",
+                                  boxShadow: (doctor as any).isProvisioned ? "0 0 6px #10B981" : "none",
+                                }}
+                              />
+                              <span>{(doctor as any).status ?? "Unknown"}</span>
                             </Badge>
                           </td>
                           <td style={{ padding: "12px", textAlign: "right" }}>
@@ -683,7 +703,9 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({
           style={{
             position: "fixed",
             inset: 0,
-            background: "rgba(0, 0, 0, 0.5)",
+            background: "rgba(15, 23, 42, 0.6)",
+            backdropFilter: "blur(6px)",
+            WebkitBackdropFilter: "blur(6px)",
             display: "grid",
             placeItems: "center",
             zIndex: 100,
@@ -698,6 +720,7 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({
               padding: "24px",
               borderRadius: "var(--border-radius-card)",
               background: "var(--color-surface-white)",
+              boxShadow: "0 20px 25px -5px rgba(0, 0, 0, 0.25), 0 8px 10px -6px rgba(0, 0, 0, 0.1), 0 0 0 1px var(--color-border)",
             }}
           >
             <div style={{ display: "flex", alignItems: "center", gap: "12px", marginBottom: "16px" }}>
@@ -759,7 +782,9 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({
           style={{
             position: "fixed",
             inset: 0,
-            background: "rgba(0, 0, 0, 0.55)",
+            background: "rgba(15, 23, 42, 0.6)",
+            backdropFilter: "blur(6px)",
+            WebkitBackdropFilter: "blur(6px)",
             display: "grid",
             placeItems: "center",
             zIndex: 100,
@@ -774,6 +799,7 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({
               padding: "24px",
               borderRadius: "var(--border-radius-card)",
               background: "var(--color-surface-white)",
+              boxShadow: "0 20px 25px -5px rgba(0, 0, 0, 0.25), 0 8px 10px -6px rgba(0, 0, 0, 0.1), 0 0 0 1px var(--color-border)",
             }}
           >
             <div style={{ display: "flex", alignItems: "center", gap: "12px", marginBottom: "16px" }}>
@@ -863,7 +889,9 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({
           style={{
             position: "fixed",
             inset: 0,
-            background: "rgba(0, 0, 0, 0.55)",
+            background: "rgba(15, 23, 42, 0.6)",
+            backdropFilter: "blur(6px)",
+            WebkitBackdropFilter: "blur(6px)",
             display: "grid",
             placeItems: "center",
             zIndex: 100,
@@ -878,6 +906,7 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({
               padding: "24px",
               borderRadius: "var(--border-radius-card)",
               background: "var(--color-surface-white)",
+              boxShadow: "0 20px 25px -5px rgba(0, 0, 0, 0.25), 0 8px 10px -6px rgba(0, 0, 0, 0.1), 0 0 0 1px var(--color-border)",
             }}
           >
             <div style={{ display: "flex", alignItems: "center", gap: "12px", marginBottom: "16px" }}>
@@ -953,7 +982,9 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({
           style={{
             position: "fixed",
             inset: 0,
-            background: "rgba(0, 0, 0, 0.55)",
+            background: "rgba(15, 23, 42, 0.6)",
+            backdropFilter: "blur(6px)",
+            WebkitBackdropFilter: "blur(6px)",
             display: "grid",
             placeItems: "center",
             zIndex: 100,
@@ -968,6 +999,7 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({
               padding: "24px",
               borderRadius: "var(--border-radius-card)",
               background: "var(--color-surface-white)",
+              boxShadow: "0 20px 25px -5px rgba(0, 0, 0, 0.25), 0 8px 10px -6px rgba(0, 0, 0, 0.1), 0 0 0 1px var(--color-border)",
             }}
           >
             <div style={{ display: "flex", alignItems: "center", gap: "12px", marginBottom: "16px" }}>
@@ -1048,22 +1080,36 @@ function MetricCard({
     <Card
       variant="solid"
       style={{
-        padding: "16px 20px",
+        padding: "18px 20px",
         borderRadius: "var(--border-radius-card)",
         border: "1px solid var(--color-border)",
         background: "var(--color-surface-white)",
         display: "flex",
         flexDirection: "column",
-        gap: "8px",
+        gap: "10px",
+        boxShadow: "0 1px 3px 0 rgba(0, 0, 0, 0.04), 0 1px 2px -1px rgba(0, 0, 0, 0.04)",
+        transition: "transform 0.18s ease, box-shadow 0.18s ease",
       }}
     >
       <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
-        <span style={{ fontSize: "0.82rem", fontWeight: 600, color: "var(--color-text-muted)" }}>
+        <span style={{ fontSize: "0.82rem", fontWeight: 600, color: "var(--color-text-muted)", letterSpacing: "0.01em" }}>
           {title}
         </span>
-        {icon}
+        <div
+          style={{
+            width: "36px",
+            height: "36px",
+            borderRadius: "10px",
+            background: "var(--color-surface-ground)",
+            display: "grid",
+            placeItems: "center",
+            border: "1px solid var(--color-border)",
+          }}
+        >
+          {icon}
+        </div>
       </div>
-      <div style={{ fontSize: "1.75rem", fontWeight: 700, color: "var(--color-text)" }}>
+      <div style={{ fontSize: "1.85rem", fontWeight: 700, color: "var(--color-text)", lineHeight: 1.1 }}>
         {value}
       </div>
       <span style={{ fontSize: "0.75rem", color: "var(--color-text-muted)" }}>
@@ -1093,15 +1139,16 @@ function TabButton({
         display: "inline-flex",
         alignItems: "center",
         gap: "8px",
-        padding: "8px 14px",
+        padding: "9px 16px",
         borderRadius: "var(--border-radius-btn)",
-        border: "none",
-        background: active ? "var(--lifelink-blue)" : "transparent",
+        border: active ? "1px solid var(--lifelink-blue)" : "1px solid transparent",
+        background: active ? "var(--lifelink-blue)" : "var(--color-surface-ground)",
         color: active ? "#FFFFFF" : "var(--color-text-muted)",
         fontSize: "0.85rem",
         fontWeight: active ? 700 : 500,
         cursor: "pointer",
         transition: "all var(--transition-fast)",
+        boxShadow: active ? "0 2px 6px rgba(14, 165, 233, 0.3)" : "none",
       }}
     >
       {icon}
