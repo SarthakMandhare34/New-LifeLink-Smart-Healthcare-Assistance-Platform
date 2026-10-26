@@ -178,7 +178,7 @@ Clinician accounts are generated deterministically from the Mumbai Medical Speci
 | **Ophthalmology** | Goregaon | Western | `western-ophthalmology-goregaon@lifelink.com` | `ophthalmology.goregaon@lifelink` |
 | **Pulmonology** | Vashi | Harbour | `harbour-pulmonology-vashi@lifelink.com` | `pulmonology.vashi@lifelink` |
 
-*To inspect all 52 doctor credentials across all 19 stations, run `npm run db:sync:doctors` or refer to [README.md Section 14.1](README.md#141-clinician-workstation-login-credentials-mumbai-medical-directory).*
+*To inspect all 52 doctor credentials across all 19 stations, run `npm run db:sync:doctors` or refer to [COMPLETE_SETUP_README.md Section 14.1](COMPLETE_SETUP_README.md#141-clinician-workstation-login-credentials-mumbai-medical-directory).*
 
 #### 🛡️ Administrative Governance Portal Test Account
 

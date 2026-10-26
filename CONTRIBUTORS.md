@@ -47,6 +47,7 @@ We welcome contributions to the LifeLink platform. When submitting pull requests
 ## 📄 Related Documentation & Policies
 
 * [**Main Documentation Entry Point (README.md)**](README.md)
+* [**Complete Setup & Architecture Reference (COMPLETE_SETUP_README.md)**](COMPLETE_SETUP_README.md)
 * [**System Architecture & Technical Specifications (ARCHITECTURE.md)**](ARCHITECTURE.md)
 * [**Relational Database Reference (DATABASE.md)**](DATABASE.md)
 * [**Local Development & Installation Guide (SETUP.md)**](SETUP.md)
