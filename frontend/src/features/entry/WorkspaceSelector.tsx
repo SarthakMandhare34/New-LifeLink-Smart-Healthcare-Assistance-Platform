@@ -55,7 +55,7 @@ export const WorkspaceSelector = () => {
   };
 
   const openingPatient = switchingTo === "patient"; // True while loading patient portal
-  const openingClinician = switchingTo === "clinician"; // True while loading clinician portal
+  const openingClinician = switchingTo === "clinic"; // True while loading clinician portal
 
   return (
     <main
@@ -188,7 +188,7 @@ export const WorkspaceSelector = () => {
                 Doctor Portal
               </span>
             </div>
-            <h2>Clinician workspace</h2>
+            <h2>Clinic workspace</h2>
             <p>Review assigned appointments and patient context.</p>
             <ul className="workspace-choice-list">
               {doctorHighlights.map(item => (
