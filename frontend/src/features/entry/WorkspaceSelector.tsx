@@ -37,7 +37,7 @@ const doctorHighlights = [
   "Review appointments and patients assigned to your account", // Privacy protection for patient records
 ];
 
-type Workspace = "patient" | "clinician"; // Available portal destinations
+type Workspace = "patient" | "clinic"; // Available portal destinations
 
 // Gateway landing component enabling users to route between patient and clinician portals
 export const WorkspaceSelector = () => {
