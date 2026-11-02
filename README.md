@@ -116,7 +116,9 @@ All 52 simulated doctor profiles follow a deterministic credential schema:
 | **Orthopedics** | Panvel | Harbour | `harbour-orthopedics-panvel@lifelink.com` | `orthopedics.panvel@lifelink` |
 | **Dermatology** | Ghatkopar | Central | `central-dermatology-ghatkopar@lifelink.com` | `dermatology.ghatkopar@lifelink` |
 
-> *Master Clinician Reset Key (via `/doctor/reset`): `lifelink-controlled-clinician-secret-key-2026`*
+> Password / Access Key:
+Value of ADMIN_PASSWORD or ADMIN_SECRET_KEY in your .env
+(default: LifeLink@Admin#2026!)
 
 ### System Administrator Portal (`/admin/login`)
 - **Username / Email**: `admin@lifelink.com` (or `admin`)
