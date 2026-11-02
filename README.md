@@ -120,9 +120,15 @@ All 52 simulated doctor profiles follow a deterministic credential schema:
 Value of ADMIN_PASSWORD or ADMIN_SECRET_KEY in your .env
 (default: LifeLink@Admin#2026!)
 
-### System Administrator Portal (`/admin/login`)
-- **Username / Email**: `admin@lifelink.com` (or `admin`)
-- **Password / Access Key**: Value of `ADMIN_PASSWORD` or `ADMIN_SECRET_KEY` in your `.env` (default: `LifeLink@Admin#2026!`)
+System Administrator Portal (/admin/login)
+
+Username:
+admin@lifelink.com
+
+Password:
+Configured through ADMIN_PASSWORD or ADMIN_SECRET_KEY in the local .env file.
+
+For security, administrator credentials are not published in this repository.
 
 ---
 
