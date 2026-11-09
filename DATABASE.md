@@ -1,5 +1,8 @@
 # 🗄️ LifeLink — Relational Database Specifications (MySQL 8.0 & Drizzle ORM)
 
+> [!NOTE]
+> **Database Specification Reference:** Technical persistence specification for the 14 relational tables in the LifeLink final prototype build.
+
 This document provides a comprehensive technical reference for the **LifeLink Relational Database**. The persistence layer is built on **MySQL 8.0** and managed using **Drizzle ORM** ([`database/schema.ts`](database/schema.ts)), delivering compile-time type safety, relational foreign key constraints, and transactional consistency.
 
 ---

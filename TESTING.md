@@ -1,5 +1,8 @@
 # 🧪 LifeLink — Automated Testing Framework & Verification Guide
 
+> [!NOTE]
+> **Testing Suite Reference:** Vitest automated verification suite covering 253 passing tests across 34 test files for the LifeLink final prototype build.
+
 This document provides a comprehensive technical guide to the **LifeLink Automated Testing Suite**. The project utilizes **Vitest 5.0.1** and **React Testing Library 16.3.3** ([`vitest.config.ts`](vitest.config.ts)), executing **254 automated unit and integration tests (253 passed, 1 skipped) across 34 test files with a 100% pass rate**.
 
 ---

@@ -1,5 +1,14 @@
 # 🚀 LifeLink — Complete Local Development & Production Setup Guide
 
+> [!CAUTION]
+> ### ⚠️ PROJECT DISCONTINUED — FINAL PROTOTYPE BUILD
+> **Notice:** Active development on this project has been discontinued. This repository represents the final prototype build of the LifeLink Smart Healthcare Assistance Platform and is preserved for academic engineering, architectural reference, and demonstration purposes. No further updates, maintenance, or feature additions will be released.
+>
+> **PROTOTYPE NOTICE:** LifeLink is an academic engineering prototype built for testing and demonstration purposes. It is **not** a real medical provider, commercial clinic, or emergency service. All doctor profiles, clinic listings, and appointment schedules are simulated for demonstration (no real doctors or real patients are involved).
+
+[![Status: Discontinued](https://img.shields.io/badge/Status-Discontinued-red.svg?style=for-the-badge)](#)
+[![Build: Final Prototype](https://img.shields.io/badge/Build-Final%20Prototype-orange.svg?style=for-the-badge)](#)
+
 This guide provides step-by-step instructions for setting up, configuring, running, and troubleshooting the **LifeLink Smart Healthcare Assistance Platform** on your local machine, as well as pushing to the live TiDB/Render production environment.
 
 ---
@@ -235,9 +244,7 @@ Clinician accounts are generated deterministically from the Mumbai Medical Speci
 
 ## 9. Production Deployment Guide: Render.com & TiDB Serverless Cloud
 
-This section covers deploying LifeLink to a 24/7 cloud environment using **Render.com** (for the full-stack web service) and **TiDB Serverless Cloud** (for the distributed MySQL database).
-
-🌍 **Live Production Reference:** [https://new-lifelink-smart-healthcare-assistance.onrender.com/](https://new-lifelink-smart-healthcare-assistance.onrender.com/)
+This section covers deploying LifeLink to a cloud environment using **Render.com** (for the full-stack web service) and **TiDB Serverless Cloud** (for the distributed MySQL database). Note that live hosted instances on Render have been decommissioned as part of project archival, but the instructions remain a validated reference for cloud hosting.
 
 ---
 

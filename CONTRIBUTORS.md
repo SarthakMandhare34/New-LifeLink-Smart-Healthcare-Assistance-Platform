@@ -1,5 +1,8 @@
 # LifeLink — Project Contributors & Development Guidelines
 
+> [!NOTE]
+> **Project Archival Notice:** LifeLink has reached its final prototype build and active development is discontinued. This document is preserved for author attribution, development standards, and community forks.
+
 ## Project Author & Contributors
 
 LifeLink is designed, architected, and maintained by:

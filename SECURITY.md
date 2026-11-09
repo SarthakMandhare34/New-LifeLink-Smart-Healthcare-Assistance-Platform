@@ -1,16 +1,18 @@
 # Security Policy — LifeLink Smart Healthcare Assistance Platform
 
-## 1. Supported Versions
+> [!CAUTION]
+> **PROJECT STATUS: DISCONTINUED (FINAL PROTOTYPE BUILD)**
+> Active development on LifeLink has concluded. The project is an academic prototype and is no longer actively patched or monitored. The table below documents historical milestone coverage.
 
-We provide security updates and patches for the following versions of the LifeLink platform:
+## 1. Supported Versions
 
 | Version | Supported          | Status |
 | :--- | :---: | :--- |
-| **1.3.x** | :white_check_mark: | Active production release |
-| **1.2.x** | :white_check_mark: | Supported maintenance release |
-| **1.1.x** | :white_check_mark: | Supported maintenance release |
-| **1.0.x** | :white_check_mark: | Supported maintenance release |
-| **< 1.0** | :x:                | End of life (development milestones) |
+| **1.3.x** | :warning: | Final prototype build (Archived) |
+| **1.2.x** | :x: | End of life |
+| **1.1.x** | :x: | End of life |
+| **1.0.x** | :x: | End of life |
+| **< 1.0** | :x: | End of life (development milestones) |
 
 ---
 

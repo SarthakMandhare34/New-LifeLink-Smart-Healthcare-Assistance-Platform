@@ -1,5 +1,8 @@
 # 📐 LifeLink — System Architecture & Technical Specifications
 
+> [!NOTE]
+> **Prototype Architecture Reference:** This document details the technical architecture of the final prototype build of LifeLink. It serves as an open-source reference specification.
+
 This document provides a comprehensive technical architecture guide for the **LifeLink Smart Healthcare Assistance Platform**. It details the structural layers, protocol boundaries, remote procedure calls, data flows, and sequence lifecycles that govern the system.
 
 ---

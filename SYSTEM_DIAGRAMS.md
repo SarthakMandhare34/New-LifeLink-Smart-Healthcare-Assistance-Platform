@@ -1,5 +1,8 @@
 # LifeLink — System Architecture & Technical Diagrams
 
+> [!NOTE]
+> **System Diagrams Reference:** Visual diagrams, ER models, and UML sequence lifecycles illustrating the LifeLink final prototype build.
+
 A comprehensive visual and technical reference illustrating the software architecture, database relations, API structures, activity lifecycles, and sequence workflows for the LifeLink Healthcare Platform.
 
 ---
