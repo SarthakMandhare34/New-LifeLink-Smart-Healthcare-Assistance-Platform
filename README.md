@@ -1,11 +1,10 @@
 # 🏥 LifeLink — Smart Healthcare Assistance Platform
 
 > [!CAUTION]
-> **PROJECT DISCONTINUED — FINAL PROTOTYPE BUILD**
+> ### ⚠️ PROJECT DISCONTINUED — FINAL PROTOTYPE BUILD
+> **Notice:** Active development on this project has been discontinued. This repository represents the final prototype build of the LifeLink Smart Healthcare Assistance Platform and is preserved for academic engineering, architectural reference, and demonstration purposes. No further updates, maintenance, or feature additions will be released.
 >
-> **Notice:** Active development on this project has been discontinued. This repository represents the **final prototype build** of the LifeLink Smart Healthcare Assistance Platform and is preserved for academic engineering, architectural reference, and demonstration purposes. No further updates, maintenance, or feature additions will be released.
->
-> **Prototype & Medical Disclaimer:** LifeLink is an academic engineering **prototype** built for testing and demonstration purposes. It is **not** a real medical provider, commercial clinic, or emergency service. All doctor profiles, clinic listings, and appointment schedules are simulated for demonstration (no real doctors or real patients are involved).
+> **PROTOTYPE NOTICE:** LifeLink is an academic engineering prototype built for testing and demonstration purposes. It is **not** a real medical provider, commercial clinic, or emergency service. All doctor profiles, clinic listings, and appointment schedules are simulated for demonstration (no real doctors or real patients are involved).
 
 [![Status: Discontinued](https://img.shields.io/badge/Status-Discontinued-red.svg?style=for-the-badge)](#)
 [![Build: Final Prototype](https://img.shields.io/badge/Build-Final%20Prototype-orange.svg?style=for-the-badge)](#)
