@@ -1,10 +1,16 @@
 # 🏥 LifeLink — Smart Healthcare Assistance Platform
 
+> [!CAUTION]
+> ### ⚠️ PROJECT DISCONTINUED — FINAL PROTOTYPE BUILD
+> **Notice:** Active development on this project has been discontinued. This repository represents the **final prototype build** of the LifeLink Smart Healthcare Assistance Platform and is preserved for academic engineering, architectural reference, and demonstration purposes. No further updates, maintenance, or feature additions will be released.
+
 > [!IMPORTANT]
 > **PROTOTYPE NOTICE:** LifeLink is an academic engineering **prototype** built for testing and demonstration purposes. It is **not** a real medical provider, commercial clinic, or emergency service. All doctor profiles, clinic listings, and appointment schedules are simulated for demonstration (no real doctors or real patients are involved).
 
 🌍 **Live Prototype Demo:** [https://new-lifelink-smart-healthcare-assistance.onrender.com/](https://new-lifelink-smart-healthcare-assistance.onrender.com/)
 
+[![Status: Discontinued](https://img.shields.io/badge/Status-Discontinued-red.svg?style=for-the-badge)](#)
+[![Build: Final Prototype](https://img.shields.io/badge/Build-Final%20Prototype-orange.svg?style=for-the-badge)](#)
 [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg?style=for-the-badge)](LICENSE)
 [![Node.js](https://img.shields.io/badge/Node.js-v22%2B-339933?style=for-the-badge&logo=node.js&logoColor=white)](https://nodejs.org/)
 [![React 19](https://img.shields.io/badge/React-19.2.1-61dafb?style=for-the-badge&logo=react&logoColor=black)](https://react.dev/)
@@ -168,5 +174,6 @@ For in-depth guides, diagrams, and technical specifications, explore our modular
 
 ## ⚖️ License & Medical Disclaimer
 
+- **Project Status**: **Discontinued / Archived**. This repository is the final prototype build and is preserved as an open-source reference.
 - **License**: Released under the [MIT License](LICENSE).
 - **Disclaimer**: LifeLink is strictly an academic software prototype developed for testing, research, and demonstration purposes. It does not provide medical diagnoses, treatment advice, or emergency dispatch services. In a real emergency, call **112** (India) or your local emergency medical service immediately.
